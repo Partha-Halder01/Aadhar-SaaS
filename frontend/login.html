@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retailer Login - Utkal Print Portal</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      background: radial-gradient(circle at 50% 15%, rgba(255, 107, 0, 0.14) 0%, transparent 55%),
+                  radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.1) 0%, transparent 55%),
+                  #fbfbf9;
+    }
+    .auth-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      box-shadow: 0 25px 55px -12px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(226, 232, 240, 0.6);
+      max-width: 460px;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+      backdrop-filter: blur(16px);
+    }
+    .auth-header {
+      background: linear-gradient(135deg, #0b1120 0%, #1e293b 100%);
+      padding: 34px 24px;
+      text-align: center;
+      color: #ffffff;
+      position: relative;
+    }
+    .auth-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ff6b00, #10b981);
+    }
+    .auth-body {
+      padding: 32px 28px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrapper i.icon-lead {
+      position: absolute;
+      left: 14px;
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px 14px 12px 42px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      color: #1e293b;
+      transition: all 0.25s ease;
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: #ff6b00;
+      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
+    }
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      color: #94a3b8;
+      cursor: pointer;
+    }
+    .demo-box {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 22px;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+    .demo-btn {
+      background: #e2e8f0;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #1e293b;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: all 0.2s ease;
+    }
+    .demo-btn:hover {
+      background: #fed7aa;
+      color: #c2410c;
+      transform: translateY(-1px);
+    }
+    @media (max-width: 500px) {
+      .auth-container {
+        padding: 20px 14px;
+      }
+      .auth-header {
+        padding: 24px 18px;
+      }
+      .auth-body {
+        padding: 22px 18px;
+      }
+      .demo-box {
+        padding: 10px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a href="index.html" class="brand-logo" style="justify-content: center; color: #fff; margin-bottom: 8px;">
+          <div class="brand-logo-icon" style="width:38px; height:38px; font-size:1.1rem;">
+            <i class="fa-solid fa-print"></i>
+          </div>
+          <span style="color:#ffffff;">UTKAL<span style="color:#ff8a00;">PRINT</span></span>
+          <span class="brand-badge">PRO</span>
+        </a>
+        <p style="font-size: 0.88rem; color: #cbd5e1; margin: 0;">Sign in to your Retailer & Printing Dashboard</p>
+      </div>
+
+      <div class="auth-body">
+        <form id="loginForm">
+          <!-- Identifier (Email/Phone) -->
+          <div class="form-group">
+            <label class="form-label" for="loginIdentifier">Email or Phone Number</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-user icon-lead"></i>
+              <input type="text" id="loginIdentifier" class="form-control" placeholder="Enter registered email or mobile" required autofocus>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" for="loginPassword" style="margin:0;">Password</label>
+            </div>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock icon-lead"></i>
+              <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
+              <i class="fa-solid fa-eye toggle-password" id="togglePasswordBtn"></i>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="btnSubmit" class="btn-tiranga" style="width: 100%; justify-content: center; padding: 13px; font-size: 1rem; border-radius: 12px; margin-top: 10px;">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Login to Portal
+          </button>
+        </form>
+
+        <!-- Quick Demo Switcher -->
+        <div class="demo-box">
+          <div style="font-weight: 700; margin-bottom: 6px; color:#0f172a;"><i class="fa-solid fa-bolt" style="color:#ff6b00;"></i> Quick 1-Click Demo Access:</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="demo-btn" id="btnFillUser"><i class="fa-solid fa-user"></i> Retailer (demo@utkalprint.com)</button>
+            <button type="button" class="demo-btn" id="btnFillAdmin"><i class="fa-solid fa-shield"></i> Admin (admin@utkalprint.com)</button>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 24px; font-size: 0.9rem; color: #64748b;">
+          Don't have an account? 
+          <a href="register.html" style="color: #ff6b00; font-weight: 700; text-decoration: none;">Register free here</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    const form = document.getElementById('loginForm');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const pwdInput = document.getElementById('loginPassword');
+    const togglePwd = document.getElementById('togglePasswordBtn');
+
+    togglePwd.addEventListener('click', () => {
+      const type = pwdInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      pwdInput.setAttribute('type', type);
+      togglePwd.classList.toggle('fa-eye');
+      togglePwd.classList.toggle('fa-eye-slash');
+    });
+
+    document.getElementById('btnFillUser').addEventListener('click', () => {
+      document.getElementById('loginIdentifier').value = 'demo@utkalprint.com';
+      document.getElementById('loginPassword').value = 'User@123';
+    });
+
+    document.getElementById('btnFillAdmin').addEventListener('click', () => {
+      document.getElementById('loginIdentifier').value = 'admin@utkalprint.com';
+      document.getElementById('loginPassword').value = 'Admin@123';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const identifier = document.getElementById('loginIdentifier').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!identifier || !password) {
+        showToast('Please enter your email/phone and password', 'error');
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+
+      try {
+        const res = await API.login({ identifier, password });
+        if (res.user.role === 'admin') {
+          window.location.href = getAppPath('admin/dashboard.html');
+        } else {
+          window.location.href = getAppPath('user/dashboard.html');
+        }
+      } catch (err) {
+        showToast(err.message || 'Login failed. Please check credentials.', 'error');
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Login to Portal';
+      }
+    });
+  </script>
+</body>
+</html>

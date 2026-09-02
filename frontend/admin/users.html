@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Users - Admin Portal</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <div class="portal-wrapper">
+    <!-- Admin Sidebar Navigation -->
+    <aside class="portal-sidebar" style="background: linear-gradient(180deg, #0b1120 0%, #0f172a 60%, #1e293b 100%); border-right-color: #334155;">
+      <div class="sidebar-header" style="border-bottom-color: rgba(255,255,255,0.12);">
+        <a href="dashboard.html" class="brand-logo" style="font-size: 1.15rem; color:#fff;">
+          <div class="brand-logo-icon" style="width:34px; height:34px; font-size:1rem;">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <span style="color:#fff;">ADMIN</span><span style="color: #ff6b00;">PANEL</span>
+            <span class="brand-badge" style="background:#dc2626;">ROOT</span>
+          </div>
+        </a>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="dashboard.html" class="sidebar-link" style="color:#cbd5e1;">
+            <i class="fa-solid fa-chart-pie" style="color:#ff7a00;"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="orders.html" class="sidebar-link" style="color:#cbd5e1;">
+            <i class="fa-solid fa-list-check" style="color:#38bdf8;"></i>
+            <span>All Orders</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="wallet-requests.html" class="sidebar-link" style="color:#cbd5e1;">
+            <i class="fa-solid fa-money-bill-transfer" style="color:#4ade80;"></i>
+            <span>Wallet Top-ups</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="services.html" class="sidebar-link" style="color:#cbd5e1;">
+            <i class="fa-solid fa-layer-group" style="color:#fbbf24;"></i>
+            <span>Services & Rates</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item active">
+          <a href="users.html" class="sidebar-link active" style="color:#ff7a00 !important;">
+            <i class="fa-solid fa-users" style="color:#a855f7;"></i>
+            <span>Customer List</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="complaints.html" class="sidebar-link" style="color:#cbd5e1;">
+            <i class="fa-solid fa-headset" style="color:#f87171;"></i>
+            <span>Support Tickets</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="settings.html" class="sidebar-link" style="color:#cbd5e1;">
+            <i class="fa-solid fa-sliders" style="color:#94a3b8;"></i>
+            <span>UPI & Settings</span>
+          </a>
+        </li>
+      </ul>
+
+      <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.15);">
+        <a href="#" class="sidebar-link btn-logout-action" style="color: #f87171;">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="portal-main">
+      <header class="portal-topbar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div>
+            <h1 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin: 0;">Customer Directory</h1>
+            <small style="color: #64748b;">Manage registered users, status & wallet balances</small>
+          </div>
+        </div>
+
+        <div>
+          <input type="text" id="userSearchInput" oninput="searchUsers()" class="form-control" placeholder="Search user..." style="width: 220px; padding: 7px 12px;">
+        </div>
+      </header>
+
+      <div class="portal-content">
+        <div class="glass-card">
+          <div class="custom-table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Name & Email</th>
+                  <th>Mobile Number</th>
+                  <th>Role</th>
+                  <th>Wallet Balance</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableTbody">
+                <tr>
+                  <td colspan="7" style="text-align:center; padding:30px; color:#94a3b8;">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Loading users...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Adjust Balance Modal -->
+  <div id="balanceModal" class="modal-backdrop-custom">
+    <div class="modal-dialog-custom" style="max-width: 440px;">
+      <div class="modal-header-custom">
+        <h3 id="balanceModalTitle" style="font-size: 1.15rem; font-weight: 700; margin: 0; color: #1e293b;">Adjust Wallet Balance</h3>
+        <button type="button" onclick="closeBalanceModal()" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:#64748b;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="balanceForm">
+        <input type="hidden" id="adjUserId">
+        <div class="modal-body-custom">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Adjustment Type</label>
+            <select id="adjType" class="form-control" required>
+              <option value="credit">Credit (Add Money)</option>
+              <option value="debit">Debit (Deduct Money)</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Amount (₹) <span style="color:red">*</span></label>
+            <input type="number" id="adjAmount" class="form-control" placeholder="e.g. 100" min="1" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Reason / Description <span style="color:red">*</span></label>
+            <input type="text" id="adjDesc" class="form-control" placeholder="e.g. Admin bonus or Manual adjustment" required>
+          </div>
+        </div>
+
+        <div class="modal-footer-custom">
+          <button type="button" onclick="closeBalanceModal()" class="btn-outline-custom" style="border-radius: 8px;">Cancel</button>
+          <button type="submit" id="btnSubmitAdj" class="btn-tiranga" style="border-radius: 8px;">
+            <i class="fa-solid fa-check"></i> Apply Adjustment
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let userList = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      loadUsers();
+    });
+
+    async function loadUsers() {
+      try {
+        const res = await API.admin.getUsers();
+        userList = res.data || [];
+        renderUsersTable(userList);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function searchUsers() {
+      const q = document.getElementById('userSearchInput').value.toLowerCase();
+      const filtered = userList.filter(u => {
+        return (u.name || '').toLowerCase().includes(q) || 
+               (u.email || '').toLowerCase().includes(q) || 
+               (u.phone || '').toLowerCase().includes(q);
+      });
+      renderUsersTable(filtered);
+    }
+
+    function renderUsersTable(users) {
+      const tbody = document.getElementById('usersTableTbody');
+      if (!users || users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:30px; color:#94a3b8;">No registered users found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = users.map(u => `
+        <tr>
+          <td style="font-weight:700; color:#1e293b;">#${u.id}</td>
+          <td>
+            <div style="font-weight:600;">${u.name}</div>
+            <small style="color:#64748b;">${u.email}</small>
+          </td>
+          <td>${u.phone || '-'}</td>
+          <td>
+            <span style="font-size:0.8rem; font-weight:700; text-transform:uppercase; color:${u.role === 'admin' ? '#dc2626' : '#2563eb'};">
+              ${u.role}
+            </span>
+          </td>
+          <td style="font-weight:800; color:#16a34a; font-size:1.05rem;">${formatINR(u.wallet_balance)}</td>
+          <td>
+            <span class="badge-status ${u.status === 'active' ? 'badge-completed' : 'badge-rejected'}">
+              ${u.status ? u.status.toUpperCase() : 'ACTIVE'}
+            </span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px;">
+              <button onclick='openBalanceModal(${u.id}, "${u.name}")' class="btn-primary-orange" style="padding:4px 10px; font-size:0.78rem;">
+                <i class="fa-solid fa-wallet"></i> Balance
+              </button>
+              <button onclick="toggleUserStatus(${u.id})" class="btn-outline-custom" style="padding:4px 10px; font-size:0.78rem;">
+                ${u.status === 'active' ? '<i class="fa-solid fa-ban"></i> Block' : '<i class="fa-solid fa-check"></i> Activate'}
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openBalanceModal(userId, name) {
+      document.getElementById('adjUserId').value = userId;
+      document.getElementById('balanceModalTitle').textContent = `Adjust Balance for ${name}`;
+      document.getElementById('balanceModal').classList.add('active');
+    }
+
+    function closeBalanceModal() {
+      document.getElementById('balanceModal').classList.remove('active');
+      document.getElementById('balanceForm').reset();
+    }
+
+    async function toggleUserStatus(userId) {
+      try {
+        const res = await API.admin.toggleUserStatus(userId);
+        showToast(res.message || 'User status updated', 'success');
+        loadUsers();
+      } catch (err) {
+        showToast(err.message || 'Failed to update user status', 'error');
+      }
+    }
+
+    document.getElementById('balanceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userId = document.getElementById('adjUserId').value;
+      const type = document.getElementById('adjType').value;
+      const amount = document.getElementById('adjAmount').value;
+      const desc = document.getElementById('adjDesc').value.trim();
+      const btn = document.getElementById('btnSubmitAdj');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+      try {
+        const res = await API.admin.adjustUserBalance(userId, amount, type, desc);
+        showToast(res.message || 'Wallet balance updated!', 'success');
+        closeBalanceModal();
+        loadUsers();
+      } catch (err) {
+        showToast(err.message || 'Failed to adjust balance', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Apply Adjustment';
+      }
+    });
+  </script>
+</body>
+</html>

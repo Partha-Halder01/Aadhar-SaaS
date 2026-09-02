@@ -1,0 +1,470 @@
+/**
+ * Utkal Print Portal - Ultra-High-Speed Unified API Client & Utilities
+ * Features: Zero-Lag In-Memory & Storage Cache, Stale-While-Revalidate (SWR), Instant Response
+ */
+
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
+const STORAGE_BASE_URL = 'http://127.0.0.1:8000/storage';
+
+function getAppPath(path) {
+  const isFrontendDir = window.location.pathname.includes('/frontend/');
+  const clean = path.startsWith('/') ? path.substring(1) : path;
+  return isFrontendDir ? `/frontend/${clean}` : `/${clean}`;
+}
+
+const memoryCache = new Map();
+
+const API = {
+  // Cache Management
+  cache: {
+    get(key) {
+      // 1. Memory Cache
+      if (memoryCache.has(key)) {
+        const item = memoryCache.get(key);
+        if (Date.now() < item.expiry) {
+          return item.data;
+        }
+        memoryCache.delete(key);
+      }
+
+      // 2. Session Storage fallback
+      try {
+        const stored = sessionStorage.getItem(`utkal_cache_${key}`);
+        if (stored) {
+          const item = JSON.parse(stored);
+          if (Date.now() < item.expiry) {
+            memoryCache.set(key, item);
+            return item.data;
+          }
+          sessionStorage.removeItem(`utkal_cache_${key}`);
+        }
+      } catch (e) {}
+
+      return null;
+    },
+
+    set(key, data, ttlSeconds = 60) {
+      const item = {
+        data,
+        expiry: Date.now() + ttlSeconds * 1000,
+      };
+      memoryCache.set(key, item);
+      try {
+        sessionStorage.setItem(`utkal_cache_${key}`, JSON.stringify(item));
+      } catch (e) {}
+    },
+
+    invalidate(pattern) {
+      for (const key of memoryCache.keys()) {
+        if (!pattern || key.includes(pattern)) {
+          memoryCache.delete(key);
+        }
+      }
+      try {
+        for (let i = sessionStorage.length - 1; i >= 0; i--) {
+          const k = sessionStorage.key(i);
+          if (k && k.startsWith('utkal_cache_') && (!pattern || k.includes(pattern))) {
+            sessionStorage.removeItem(k);
+          }
+        }
+      } catch (e) {}
+    }
+  },
+
+  getToken() {
+    return localStorage.getItem('utkal_token');
+  },
+
+  setToken(token) {
+    localStorage.setItem('utkal_token', token);
+  },
+
+  getUser() {
+    const user = localStorage.getItem('utkal_user');
+    return user ? JSON.parse(user) : null;
+  },
+
+  setUser(user) {
+    localStorage.setItem('utkal_user', JSON.stringify(user));
+  },
+
+  clearAuth() {
+    localStorage.removeItem('utkal_token');
+    localStorage.removeItem('utkal_user');
+    this.cache.invalidate();
+  },
+
+  async request(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const token = this.getToken();
+
+    const headers = {
+      'Accept': 'application/json',
+      ...(options.headers || {})
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    if (options.body && !(options.body instanceof FormData)) {
+      headers['Content-Type'] = 'application/json';
+      options.body = JSON.stringify(options.body);
+    }
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        if (response.status === 401 && !endpoint.includes('/login')) {
+          this.clearAuth();
+          if (!window.location.pathname.includes('login.html')) {
+            window.location.href = getAppPath('login.html');
+          }
+        }
+
+        if (response.status === 429) {
+          throw new Error('Too many requests! Please wait a moment and try again.');
+        }
+
+        const message = data.message || (data.errors ? Object.values(data.errors).flat().join('\n') : 'Request failed');
+        throw new Error(message);
+      }
+
+      return data;
+    } catch (error) {
+      console.error(`API Error [${endpoint}]:`, error);
+      throw error;
+    }
+  },
+
+  // Auth Endpoints
+  async login(credentials) {
+    const res = await this.request('/auth/login', {
+      method: 'POST',
+      body: credentials
+    });
+    this.setToken(res.token);
+    this.setUser(res.user);
+    this.cache.invalidate();
+    return res;
+  },
+
+  async register(data) {
+    const res = await this.request('/auth/register', {
+      method: 'POST',
+      body: data
+    });
+    this.setToken(res.token);
+    this.setUser(res.user);
+    this.cache.invalidate();
+    return res;
+  },
+
+  async logout() {
+    try {
+      await this.request('/auth/logout', { method: 'POST' });
+    } catch (e) {}
+    this.clearAuth();
+    window.location.href = getAppPath('login.html');
+  },
+
+  async getProfile() {
+    const res = await this.request('/auth/me');
+    if (res.user) this.setUser(res.user);
+    return res.user;
+  },
+
+  async updateProfile(data) {
+    const res = await this.request('/auth/profile', {
+      method: 'PUT',
+      body: data
+    });
+    if (res.user) this.setUser(res.user);
+    this.cache.invalidate();
+    return res;
+  },
+
+  async changePassword(data) {
+    return await this.request('/auth/change-password', {
+      method: 'PUT',
+      body: data
+    });
+  },
+
+  // Public & User Services (with Instant Cache)
+  async getServices(category = '') {
+    const cacheKey = `services_${category || 'all'}`;
+    const cached = this.cache.get(cacheKey);
+    
+    // Background fetch to refresh
+    const fetchPromise = this.request(`/services${category ? '?category=' + encodeURIComponent(category) : ''}`)
+      .then(res => {
+        this.cache.set(cacheKey, res, 120);
+        return res;
+      });
+
+    return cached ? Promise.resolve(cached) : fetchPromise;
+  },
+
+  async getPublicSettings() {
+    const cacheKey = 'public_settings';
+    const cached = this.cache.get(cacheKey);
+
+    const fetchPromise = this.request('/settings/public').then(res => {
+      this.cache.set(cacheKey, res, 300);
+      return res;
+    });
+
+    return cached ? Promise.resolve(cached) : fetchPromise;
+  },
+
+  // Orders (with Cache Invalidation on Mutation)
+  async createOrder(formData) {
+    const res = await this.request('/orders', {
+      method: 'POST',
+      body: formData
+    });
+    this.cache.invalidate('orders');
+    this.cache.invalidate('documents');
+    this.cache.invalidate('wallet');
+    return res;
+  },
+
+  async getOrders(params = {}) {
+    const qs = new URLSearchParams(params).toString();
+    const cacheKey = `orders_${qs}`;
+    const cached = this.cache.get(cacheKey);
+
+    const fetchPromise = this.request(`/orders${qs ? '?' + qs : ''}`).then(res => {
+      this.cache.set(cacheKey, res, 15);
+      return res;
+    });
+
+    return cached ? Promise.resolve(cached) : fetchPromise;
+  },
+
+  async getOrder(id) {
+    return await this.request(`/orders/${id}`);
+  },
+
+  // Wallet
+  async getWallet() {
+    const cacheKey = 'wallet_txs';
+    const cached = this.cache.get(cacheKey);
+
+    const fetchPromise = this.request('/wallet').then(res => {
+      this.cache.set(cacheKey, res, 15);
+      return res;
+    });
+
+    return cached ? Promise.resolve(cached) : fetchPromise;
+  },
+
+  async getWalletTransactions() {
+    return await this.getWallet();
+  },
+
+  async rechargeWallet(formData) {
+    const res = await this.request('/wallet/recharge', {
+      method: 'POST',
+      body: formData
+    });
+    this.cache.invalidate('wallet');
+    return res;
+  },
+
+  async requestWalletTopup(formData) {
+    return await this.rechargeWallet(formData);
+  },
+
+  // Documents
+  async getDocuments() {
+    const cacheKey = 'documents_list';
+    const cached = this.cache.get(cacheKey);
+
+    const fetchPromise = this.request('/documents').then(res => {
+      this.cache.set(cacheKey, res, 30);
+      return res;
+    });
+
+    return cached ? Promise.resolve(cached) : fetchPromise;
+  },
+
+  // Complaints
+  async getComplaints() {
+    const cacheKey = 'complaints_list';
+    const cached = this.cache.get(cacheKey);
+
+    const fetchPromise = this.request('/complaints').then(res => {
+      this.cache.set(cacheKey, res, 30);
+      return res;
+    });
+
+    return cached ? Promise.resolve(cached) : fetchPromise;
+  },
+
+  async createComplaint(data) {
+    const res = await this.request('/complaints', {
+      method: 'POST',
+      body: data
+    });
+    this.cache.invalidate('complaints');
+    return res;
+  },
+
+  // Admin APIs
+  admin: {
+    async getStats() {
+      return await API.request('/admin/stats');
+    },
+
+    async getOrders(params = {}) {
+      const qs = new URLSearchParams(params).toString();
+      return await API.request(`/admin/orders${qs ? '?' + qs : ''}`);
+    },
+
+    async verifyPayment(orderId, action, data = {}) {
+      const res = await API.request(`/admin/orders/${orderId}/verify-payment`, {
+        method: 'POST',
+        body: { action, ...data }
+      });
+      API.cache.invalidate('orders');
+      return res;
+    },
+
+    async fulfillOrder(orderId, formData) {
+      const res = await API.request(`/admin/orders/${orderId}/fulfill`, {
+        method: 'POST',
+        body: formData
+      });
+      API.cache.invalidate('orders');
+      API.cache.invalidate('documents');
+      return res;
+    },
+
+    async getWalletRequests() {
+      return await API.request('/admin/wallet-requests');
+    },
+
+    async processWalletRequest(txId, action, rejectionReason = '') {
+      const res = await API.request(`/admin/wallet-requests/${txId}/process`, {
+        method: 'POST',
+        body: { action, rejection_reason: rejectionReason }
+      });
+      API.cache.invalidate('wallet');
+      return res;
+    },
+
+    async getUsers() {
+      return await API.request('/admin/users');
+    },
+
+    async toggleUserStatus(userId) {
+      return await API.request(`/admin/users/${userId}/toggle-status`, {
+        method: 'POST'
+      });
+    },
+
+    async adjustUserBalance(userId, amount, type, description) {
+      const res = await API.request(`/admin/users/${userId}/adjust-balance`, {
+        method: 'POST',
+        body: { amount, type, description }
+      });
+      API.cache.invalidate('wallet');
+      return res;
+    },
+
+    async getServices() {
+      return await API.request('/admin/services');
+    },
+
+    async saveService(data) {
+      const isEdit = !!data.id;
+      const res = await API.request(isEdit ? `/admin/services/${data.id}` : '/admin/services', {
+        method: isEdit ? 'PUT' : 'POST',
+        body: data
+      });
+      API.cache.invalidate('services');
+      return res;
+    },
+
+    async toggleService(id) {
+      const res = await API.request(`/admin/services/${id}/toggle`, { method: 'POST' });
+      API.cache.invalidate('services');
+      return res;
+    },
+
+    async getComplaints() {
+      return await API.request('/admin/complaints');
+    },
+
+    async replyComplaint(id, reply, status = 'resolved') {
+      const res = await API.request(`/admin/complaints/${id}/reply`, {
+        method: 'POST',
+        body: { reply, status }
+      });
+      API.cache.invalidate('complaints');
+      return res;
+    },
+
+    async getSettings() {
+      return await API.request('/admin/settings');
+    },
+
+    async updateSettings(formData) {
+      const res = await API.request('/admin/settings', {
+        method: 'POST',
+        body: formData
+      });
+      API.cache.invalidate('public_settings');
+      return res;
+    }
+  },
+
+  // Alias for admin dashboard
+  async getAdminDashboardStats() {
+    return await this.admin.getStats();
+  }
+};
+
+// Toast Alert System
+function showToast(message, type = 'success') {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = `toast-msg toast-${type}`;
+  
+  const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-triangle-exclamation' : 'fa-info-circle');
+  toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.animation = 'slideIn 0.3s ease reverse forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+// Utility: Format currency in INR
+function formatINR(val) {
+  const num = parseFloat(val) || 0;
+  return '₹' + num.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+
+// Utility: Format Date
+function formatDate(dateStr) {
+  if (!dateStr) return '-';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}

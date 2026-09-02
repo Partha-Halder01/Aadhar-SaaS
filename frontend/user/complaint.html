@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complaint & Support - Utkal Print Portal</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <div class="portal-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="portal-sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="brand-logo" style="font-size: 1.15rem;">
+          <div class="brand-logo-icon" style="width:34px; height:34px; font-size:1rem;">
+            <i class="fa-solid fa-print"></i>
+          </div>
+          <div>
+            <span>UTKAL</span><span style="color: #ff6b00;">PRINT</span>
+            <span class="brand-badge">PRO</span>
+          </div>
+        </a>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="dashboard.html" class="sidebar-link">
+            <i class="fa-solid fa-house" style="color:#64748b;"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="print-list.html" class="sidebar-link">
+            <i class="fa-solid fa-id-card" style="color:#ea580c;"></i>
+            <span>Print List</span>
+            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.75rem; opacity:0.5;"></i>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="pan-find.html" class="sidebar-link">
+            <i class="fa-solid fa-magnifying-glass-location" style="color:#059669;"></i>
+            <span>Pan Find List</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="wallet.html" class="sidebar-link">
+            <i class="fa-solid fa-wallet" style="color:#7c3aed;"></i>
+            <span>Wallet Manage</span>
+            <span class="wallet-badge user-wallet-display">₹0</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="profile.html" class="sidebar-link">
+            <i class="fa-solid fa-user" style="color:#0284c7;"></i>
+            <span>My Account</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="documents.html" class="sidebar-link">
+            <i class="fa-solid fa-file-pdf" style="color:#dc2626;"></i>
+            <span>Documents</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item active">
+          <a href="complaint.html" class="sidebar-link active">
+            <i class="fa-solid fa-headset" style="color:#ff6b00;"></i>
+            <span>Complaint</span>
+          </a>
+        </li>
+      </ul>
+
+      <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(226, 232, 240, 0.8);">
+        <a href="#" class="sidebar-link btn-logout-action" style="color: #dc2626;">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="portal-main">
+      <header class="portal-topbar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div>
+            <h1 style="font-size: 1.28rem; font-weight: 800; color: #0f172a; margin: 0;">Support & Complaints</h1>
+            <small style="color: #64748b; font-weight: 500;">Raise tickets for order queries, payment issues, or technical help</small>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <a href="wallet.html" style="text-decoration: none; display: flex; align-items: center; gap: 8px; background: #ecfdf5; border: 1.5px solid #a7f3d0; padding: 7px 16px; border-radius: 9999px; color: #059669; font-weight: 800; font-size: 0.92rem;">
+            <i class="fa-solid fa-wallet"></i>
+            <span class="user-wallet-display">₹0</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="portal-content">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+          <!-- New Ticket Form -->
+          <div class="glass-card">
+            <h2 style="font-size: 1.18rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Raise New Support Ticket</h2>
+            <p style="color: #64748b; font-size: 0.88rem; margin-bottom: 20px;">We usually respond within 15 - 30 minutes</p>
+
+            <form id="createComplaintForm">
+              <div class="form-group">
+                <label class="form-label" for="ticketSubject">Subject / Issue Title <span style="color:red">*</span></label>
+                <input type="text" id="ticketSubject" class="form-control" placeholder="e.g. Delay in Aadhaar PDF formatting" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="ticketOrderNumber">Related Order # (Optional)</label>
+                <input type="text" id="ticketOrderNumber" class="form-control" placeholder="e.g. ORD-2026-XXXX">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="ticketMessage">Detailed Description <span style="color:red">*</span></label>
+                <textarea id="ticketMessage" class="form-control" rows="4" placeholder="Explain what happened in detail..." required style="resize:vertical;"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="ticketAttachment">Attachment / Screenshot (Optional)</label>
+                <input type="file" id="ticketAttachment" class="form-control" accept="image/*,.pdf">
+              </div>
+
+              <button type="submit" id="btnSubmitTicket" class="btn-primary-orange" style="margin-top: 10px; width: 100%; justify-content: center;">
+                <i class="fa-solid fa-paper-plane"></i> Submit Support Ticket
+              </button>
+            </form>
+          </div>
+
+          <!-- Ticket History Table -->
+          <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+              <h2 style="font-size: 1.18rem; font-weight: 800; color: #0f172a; margin: 0;">Your Support History</h2>
+              <button onclick="loadComplaints()" class="btn-secondary" style="font-size:0.82rem;">
+                <i class="fa-solid fa-rotate-right"></i> Refresh
+              </button>
+            </div>
+
+            <div class="custom-table-container">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Ticket / Date</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Admin Reply</th>
+                  </tr>
+                </thead>
+                <tbody id="complaintsTbody">
+                  <tr>
+                    <td colspan="4" style="text-align: center; padding: 30px; color: #94a3b8;">
+                      <i class="fa-solid fa-spinner fa-spin"></i> Loading support history...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadComplaints();
+    });
+
+    async function loadComplaints() {
+      try {
+        const res = await API.getComplaints();
+        const complaints = res.data || [];
+        const tbody = document.getElementById('complaintsTbody');
+
+        if (complaints.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:36px; color:#94a3b8;"><i class="fa-solid fa-circle-check" style="font-size:2rem; margin-bottom:8px; display:block; color:#10b981;"></i>No open tickets or complaints. Everything looks good!</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = complaints.map(c => {
+          let statusBadge = '';
+          if (c.status === 'resolved' || c.status === 'closed') {
+            statusBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-check"></i> Resolved</span>';
+          } else if (c.status === 'in_progress') {
+            statusBadge = '<span class="badge-status badge-processing"><i class="fa-solid fa-clock"></i> In Progress</span>';
+          } else {
+            statusBadge = '<span class="badge-status badge-pending"><i class="fa-solid fa-hourglass-start"></i> Open</span>';
+          }
+
+          return `
+            <tr>
+              <td>
+                <span class="order-num-tag">#${c.id}</span>
+                <div style="font-size:0.78rem; color:#64748b; margin-top:4px;">${formatDate(c.created_at)}</div>
+              </td>
+              <td>
+                <strong>${c.subject}</strong>
+                ${c.order_number ? `<div style="font-size:0.8rem; color:#ff6b00; font-family:'JetBrains Mono', monospace;">Order: ${c.order_number}</div>` : ''}
+              </td>
+              <td>${statusBadge}</td>
+              <td>
+                ${c.admin_reply ? `<div style="background:#f8fafc; padding:8px 12px; border-radius:8px; border:1px solid #e2e8f0; font-size:0.85rem; color:#1e293b;">${c.admin_reply}</div>` : '<span style="color:#94a3b8; font-size:0.82rem;">Awaiting Admin Review</span>'}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    document.getElementById('createComplaintForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const subject = document.getElementById('ticketSubject').value.trim();
+      const order_number = document.getElementById('ticketOrderNumber').value.trim();
+      const message = document.getElementById('ticketMessage').value.trim();
+      const file = document.getElementById('ticketAttachment').files[0];
+      const btn = document.getElementById('btnSubmitTicket');
+
+      const formData = new FormData();
+      formData.append('subject', subject);
+      if (order_number) formData.append('order_number', order_number);
+      formData.append('message', message);
+      if (file) formData.append('attachment', file);
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+      try {
+        const res = await API.createComplaint(formData);
+        showToast(res.message || 'Support ticket submitted successfully!', 'success');
+        document.getElementById('createComplaintForm').reset();
+        loadComplaints();
+      } catch (err) {
+        showToast(err.message || 'Failed to submit support ticket', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Support Ticket';
+      }
+    });
+  </script>
+</body>
+</html>

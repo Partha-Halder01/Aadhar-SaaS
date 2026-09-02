@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Management & Fulfillment - Admin Portal</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <div class="portal-wrapper">
+    <!-- Admin Sidebar Navigation -->
+    <aside class="portal-sidebar" style="background: linear-gradient(180deg, #0b1120 0%, #0f172a 60%, #1e293b 100%); border-right-color: #334155;">
+      <div class="sidebar-header" style="border-bottom-color: rgba(255,255,255,0.12);">
+        <a href="dashboard.html" class="brand-logo" style="font-size: 1.15rem; color:#fff;">
+          <div class="brand-logo-icon" style="width:34px; height:34px; font-size:1rem;">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <span style="color:#fff;">ADMIN</span><span style="color: #ff6b00;">PANEL</span>
+            <span class="brand-badge" style="background:#dc2626;">ROOT</span>
+          </div>
+        </a>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="dashboard.html" class="sidebar-link" style="color:#94a3b8;">
+            <i class="fa-solid fa-chart-pie" style="color:#ff7a00;"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item active">
+          <a href="orders.html" class="sidebar-link active" style="color:#ff6b00 !important; background: rgba(255, 107, 0, 0.12); border-left: 3px solid #ff7a00;">
+            <i class="fa-solid fa-list-check" style="color:#ff6b00;"></i>
+            <span>All Orders</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="wallet-requests.html" class="sidebar-link" style="color:#94a3b8;">
+            <i class="fa-solid fa-money-bill-transfer" style="color:#4ade80;"></i>
+            <span>Wallet Top-ups</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="services.html" class="sidebar-link" style="color:#94a3b8;">
+            <i class="fa-solid fa-layer-group" style="color:#fbbf24;"></i>
+            <span>Services & Rates</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="users.html" class="sidebar-link" style="color:#94a3b8;">
+            <i class="fa-solid fa-users" style="color:#a855f7;"></i>
+            <span>Customer List</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="complaints.html" class="sidebar-link" style="color:#94a3b8;">
+            <i class="fa-solid fa-headset" style="color:#f87171;"></i>
+            <span>Support Tickets</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="settings.html" class="sidebar-link" style="color:#94a3b8;">
+            <i class="fa-solid fa-sliders" style="color:#38bdf8;"></i>
+            <span>UPI & Settings</span>
+          </a>
+        </li>
+      </ul>
+
+      <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.12);">
+        <a href="#" class="sidebar-link btn-logout-action" style="color: #f87171;">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="portal-main">
+      <header class="portal-topbar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div>
+            <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;">Order Management & Fulfillment</h1>
+            <small style="color: #64748b; font-size: 0.84rem;">Verify payments, inspect card data, and upload final documents</small>
+          </div>
+        </div>
+
+        <button onclick="loadOrders()" class="btn-secondary" style="font-size: 0.85rem; padding: 7px 14px;">
+          <i class="fa-solid fa-rotate" id="refreshIcon"></i> Refresh
+        </button>
+      </header>
+
+      <div class="portal-content">
+        <!-- Quick Stats Row -->
+        <div class="quick-stats-row">
+          <div class="quick-stat-pill">
+            <div class="quick-stat-icon" style="background: #fff7ed; color: #ff7a00;">
+              <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+            <div>
+              <div class="quick-stat-label">Total Orders</div>
+              <div class="quick-stat-value" id="statTotalOrders">0</div>
+            </div>
+          </div>
+
+          <div class="quick-stat-pill">
+            <div class="quick-stat-icon" style="background: #fef3c7; color: #d97706;">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <div>
+              <div class="quick-stat-label">Pending Verify</div>
+              <div class="quick-stat-value" id="statPendingOrders">0</div>
+            </div>
+          </div>
+
+          <div class="quick-stat-pill">
+            <div class="quick-stat-icon" style="background: #e0f2fe; color: #0284c7;">
+              <i class="fa-solid fa-arrows-rotate"></i>
+            </div>
+            <div>
+              <div class="quick-stat-label">In Processing</div>
+              <div class="quick-stat-value" id="statProcessingOrders">0</div>
+            </div>
+          </div>
+
+          <div class="quick-stat-pill">
+            <div class="quick-stat-icon" style="background: #dcfce7; color: #16a34a;">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+              <div class="quick-stat-label">Delivered</div>
+              <div class="quick-stat-value" id="statCompletedOrders">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Tabs & Search Header -->
+        <div class="filter-tabs-wrapper">
+          <div class="segmented-tabs-group">
+            <button onclick="filterOrders('')" class="segmented-tab active" id="tabAll">
+              <i class="fa-solid fa-list"></i>
+              <span>All Orders</span>
+              <span class="tab-badge-count" id="countAll">0</span>
+            </button>
+            <button onclick="filterOrders('pending')" class="segmented-tab" id="tabPending">
+              <i class="fa-solid fa-hourglass-half"></i>
+              <span>Pending Verification</span>
+              <span class="tab-badge-count" id="countPending">0</span>
+            </button>
+            <button onclick="filterOrders('processing')" class="segmented-tab" id="tabProcessing">
+              <i class="fa-solid fa-gear"></i>
+              <span>Processing</span>
+              <span class="tab-badge-count" id="countProcessing">0</span>
+            </button>
+            <button onclick="filterOrders('completed')" class="segmented-tab" id="tabCompleted">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Completed</span>
+              <span class="tab-badge-count" id="countCompleted">0</span>
+            </button>
+            <button onclick="filterOrders('rejected')" class="segmented-tab" id="tabRejected">
+              <i class="fa-solid fa-ban"></i>
+              <span>Rejected</span>
+              <span class="tab-badge-count" id="countRejected">0</span>
+            </button>
+          </div>
+
+          <div class="search-box-wrapper">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="searchOrderInput" oninput="searchOrders()" placeholder="Search order #, customer, or phone...">
+          </div>
+        </div>
+
+        <!-- Orders Table Container -->
+        <div class="custom-table-container">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer Info</th>
+                <th>Service Name</th>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th>Payment Status</th>
+                <th>Order Status</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersTbody">
+              <tr>
+                <td colspan="8" style="text-align:center; padding: 45px 20px; color:#94a3b8;">
+                  <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 1.5rem; color:#ff7a00; margin-bottom: 8px; display:block;"></i>
+                  <span>Loading orders...</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Order Details & Payment Review Modal -->
+  <div class="modal-backdrop-custom" id="modalOrderDetails">
+    <div class="modal-dialog-custom" style="max-width: 660px;">
+      <div class="modal-header-custom">
+        <div style="display:flex; align-items:center; gap: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: 8px; background:#fff7ed; color:#ff7a00; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+            <i class="fa-solid fa-file-invoice"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0; color:#0f172a;">Order Details</h3>
+            <span id="modalOrderNumber" class="order-num-tag" style="margin-top: 2px;"></span>
+          </div>
+        </div>
+        <button onclick="closeModal('modalOrderDetails')" style="background:transparent; border:none; font-size: 1.2rem; cursor:pointer; color:#94a3b8;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body-custom" id="modalOrderBody">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="modal-footer-custom" id="modalOrderFooter">
+        <button type="button" class="btn-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fulfill & Upload Delivery Modal -->
+  <div class="modal-backdrop-custom" id="modalFulfill">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom">
+        <div style="display:flex; align-items:center; gap: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: 8px; background:#f0fdf4; color:#16a34a; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0; color:#0f172a;">Deliver Ready Document</h3>
+            <small style="color: #64748b;" id="fulfillOrderSubtitle">Upload finalized PDF or Card image</small>
+          </div>
+        </div>
+        <button onclick="closeModal('modalFulfill')" style="background:transparent; border:none; font-size: 1.2rem; cursor:pointer; color:#94a3b8;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="fulfillForm">
+        <div class="modal-body-custom">
+          <input type="hidden" id="fulfillOrderId">
+
+          <div class="form-group">
+            <label class="form-label" for="deliveryFileInput">Upload Completed File (PDF / JPEG / PNG) <span style="color:red">*</span></label>
+            <div style="border: 2px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center; background: #f8fafc; cursor: pointer;" onclick="document.getElementById('deliveryFileInput').click()">
+              <i class="fa-solid fa-file-arrow-up" style="font-size: 2rem; color: #ff7a00; margin-bottom: 8px;"></i>
+              <div style="font-weight: 600; font-size: 0.9rem; color: #334155;">Click to select delivery file</div>
+              <small style="color: #94a3b8;">Max size: 10 MB (PDF, JPG, PNG)</small>
+              <div id="selectedFileName" style="margin-top: 8px; font-weight: 700; color: #16a34a; font-size: 0.85rem;"></div>
+            </div>
+            <input type="file" id="deliveryFileInput" class="form-control" accept=".pdf,image/*" required style="display:none;" onchange="handleFileSelected(this)">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="adminNotesInput">Admin Remarks / Notes for Customer (Optional)</label>
+            <textarea id="adminNotesInput" class="form-control" rows="2" placeholder="e.g. Card verified with QR & dispatched / ready for print download."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer-custom">
+          <button type="button" class="btn-secondary" onclick="closeModal('modalFulfill')">Cancel</button>
+          <button type="submit" id="btnSubmitFulfill" class="btn-tiranga">
+            <i class="fa-solid fa-check-double"></i> Complete & Deliver Order
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let allOrders = [];
+    // Instant Cache-First Hydration (0ms)
+    try {
+      const cached = sessionStorage.getItem('utkal_admin_orders');
+      if (cached) {
+        allOrders = JSON.parse(cached);
+        updateStatsAndTabs();
+        renderOrdersTable();
+      }
+    } catch (e) {}
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadOrders();
+    });
+
+    async function loadOrders() {
+      const refreshIcon = document.getElementById('refreshIcon');
+      if (refreshIcon) refreshIcon.classList.add('fa-spin');
+
+      try {
+        const res = await API.admin.getOrders();
+        allOrders = res.data || [];
+        sessionStorage.setItem('utkal_admin_orders', JSON.stringify(allOrders));
+        updateStatsAndTabs();
+        renderOrdersTable();
+      } catch (err) {
+        showToast(err.message || 'Failed to load orders', 'error');
+      } finally {
+        if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+      }
+    }
+
+    function updateStatsAndTabs() {
+      const total = allOrders.length;
+      const pending = allOrders.filter(o => o.order_status === 'pending' || o.payment_status === 'pending').length;
+      const processing = allOrders.filter(o => o.order_status === 'processing').length;
+      const completed = allOrders.filter(o => o.order_status === 'completed').length;
+      const rejected = allOrders.filter(o => o.order_status === 'rejected').length;
+
+      document.getElementById('statTotalOrders').textContent = total;
+      document.getElementById('statPendingOrders').textContent = pending;
+      document.getElementById('statProcessingOrders').textContent = processing;
+      document.getElementById('statCompletedOrders').textContent = completed;
+
+      document.getElementById('countAll').textContent = total;
+      document.getElementById('countPending').textContent = pending;
+      document.getElementById('countProcessing').textContent = processing;
+      document.getElementById('countCompleted').textContent = completed;
+      document.getElementById('countRejected').textContent = rejected;
+    }
+
+    function filterOrders(status) {
+      currentFilter = status;
+      document.querySelectorAll('.segmented-tab').forEach(b => b.classList.remove('active'));
+      
+      if (status === '') document.getElementById('tabAll').classList.add('active');
+      if (status === 'pending') document.getElementById('tabPending').classList.add('active');
+      if (status === 'processing') document.getElementById('tabProcessing').classList.add('active');
+      if (status === 'completed') document.getElementById('tabCompleted').classList.add('active');
+      if (status === 'rejected') document.getElementById('tabRejected').classList.add('active');
+
+      renderOrdersTable();
+    }
+
+    function searchOrders() {
+      renderOrdersTable();
+    }
+
+    function renderOrdersTable() {
+      const tbody = document.getElementById('adminOrdersTbody');
+      const searchQuery = (document.getElementById('searchOrderInput').value || '').trim().toLowerCase();
+
+      let filtered = allOrders.filter(o => {
+        if (currentFilter === 'pending') {
+          return o.order_status === 'pending' || o.payment_status === 'pending';
+        }
+        if (currentFilter) {
+          return o.order_status === currentFilter;
+        }
+        return true;
+      });
+
+      if (searchQuery) {
+        filtered = filtered.filter(o => {
+          const ordNo = (o.order_number || '').toLowerCase();
+          const custName = (o.user ? o.user.name : '').toLowerCase();
+          const custPhone = (o.user ? o.user.phone : '').toLowerCase();
+          const srvName = (o.service ? o.service.name : '').toLowerCase();
+          return ordNo.includes(searchQuery) || custName.includes(searchQuery) || custPhone.includes(searchQuery) || srvName.includes(searchQuery);
+        });
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8">
+              <div class="empty-state-box">
+                <div class="empty-state-icon">
+                  <i class="fa-solid fa-box-open"></i>
+                </div>
+                <div class="empty-state-title">No Orders Found</div>
+                <div class="empty-state-desc">There are no orders matching your current filter or search criteria.</div>
+                ${currentFilter || searchQuery ? `<button class="btn-secondary" onclick="filterOrders(''); document.getElementById('searchOrderInput').value=''; renderOrdersTable();"><i class="fa-solid fa-filter-circle-xmark"></i> Clear Filters</button>` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(order => {
+        const user = order.user || { name: 'Customer', phone: '-' };
+        const service = order.service || { name: 'Service' };
+        const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+
+        // Payment status badge
+        let paymentBadge = `<span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending</span>`;
+        if (order.payment_status === 'approved') paymentBadge = `<span class="badge-status badge-completed"><i class="fa-solid fa-circle-check"></i> Approved</span>`;
+        if (order.payment_status === 'rejected') paymentBadge = `<span class="badge-status badge-rejected"><i class="fa-solid fa-circle-xmark"></i> Rejected</span>`;
+
+        // Order status badge
+        let orderBadge = `<span class="badge-status badge-pending"><i class="fa-solid fa-hourglass-half"></i> Pending</span>`;
+        if (order.order_status === 'processing') orderBadge = `<span class="badge-status badge-processing"><i class="fa-solid fa-gear fa-spin"></i> Processing</span>`;
+        if (order.order_status === 'completed') orderBadge = `<span class="badge-status badge-completed"><i class="fa-solid fa-circle-check"></i> Delivered</span>`;
+        if (order.order_status === 'rejected') orderBadge = `<span class="badge-status badge-rejected"><i class="fa-solid fa-ban"></i> Rejected</span>`;
+
+        // Action buttons
+        const isPendingPayment = order.payment_status === 'pending';
+        const isProcessing = order.order_status === 'processing';
+        const isDelivered = order.order_status === 'completed';
+
+        return `
+          <tr>
+            <td>
+              <div class="order-num-tag" title="Click to view details" onclick="openOrderDetailsModal(${order.id})" style="cursor:pointer;">
+                <i class="fa-solid fa-receipt"></i> ${order.order_number}
+              </div>
+              <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 3px;">${formatDate(order.created_at)}</div>
+            </td>
+            <td>
+              <div class="customer-cell">
+                <div class="customer-avatar-initial">${initial}</div>
+                <div>
+                  <div style="font-weight: 700; color: #0f172a;">${user.name}</div>
+                  <div style="font-size: 0.78rem; color: #64748b;"><i class="fa-solid fa-phone" style="font-size:0.7rem;"></i> ${user.phone || '-'}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div style="font-weight: 600; color: #1e293b;">${service.name}</div>
+              <small style="color: #94a3b8; text-transform: uppercase; font-size: 0.72rem; font-weight:700;">${service.category || 'Print'}</small>
+            </td>
+            <td>
+              <div style="font-weight: 800; color: #0f172a; font-size: 0.95rem;">${formatINR(order.amount)}</div>
+            </td>
+            <td>
+              <div class="payment-method-tag">
+                ${order.payment_method === 'wallet' ? '<i class="fa-solid fa-wallet" style="color:#16a34a;"></i> Wallet' : '<i class="fa-solid fa-qrcode" style="color:#ff7a00;"></i> Direct UPI'}
+              </div>
+              ${order.utr_number ? `<div style="font-size:0.74rem; font-family:monospace; color:#64748b;">UTR: ${order.utr_number}</div>` : ''}
+            </td>
+            <td>${paymentBadge}</td>
+            <td>${orderBadge}</td>
+            <td style="text-align: right;">
+              <div style="display: inline-flex; gap: 6px;">
+                <button onclick="openOrderDetailsModal(${order.id})" class="btn-secondary" title="View details" style="padding: 6px 10px; font-size: 0.8rem;">
+                  <i class="fa-solid fa-eye"></i> Details
+                </button>
+                
+                ${isPendingPayment ? `
+                  <button onclick="verifyPaymentModal(${order.id}, 'approve')" class="btn-success-soft" title="Approve Payment">
+                    <i class="fa-solid fa-check"></i> Approve
+                  </button>
+                  <button onclick="verifyPaymentModal(${order.id}, 'reject')" class="btn-danger-soft" title="Reject Payment">
+                    <i class="fa-solid fa-xmark"></i> Reject
+                  </button>
+                ` : ''}
+
+                ${isProcessing ? `
+                  <button onclick="openFulfillModal(${order.id}, '${order.order_number}')" class="btn-blue-soft" title="Fulfill with document">
+                    <i class="fa-solid fa-upload"></i> Deliver
+                  </button>
+                ` : ''}
+
+                ${isDelivered && order.delivery_file ? `
+                  <a href="${STORAGE_BASE_URL}/${order.delivery_file}" target="_blank" class="btn-success-soft" title="View Delivered Document">
+                    <i class="fa-solid fa-download"></i> File
+                  </a>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openOrderDetailsModal(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      document.getElementById('modalOrderNumber').textContent = order.order_number;
+
+      const user = order.user || {};
+      const service = order.service || {};
+      const inputData = order.input_data || {};
+
+      let inputFieldsHtml = '';
+      for (const [key, value] of Object.entries(inputData)) {
+        const isFile = typeof value === 'string' && (value.startsWith('orders/') || value.includes('.pdf') || value.includes('.jpg') || value.includes('.png'));
+        
+        inputFieldsHtml += `
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px;">
+            <div style="font-size: 0.76rem; text-transform: uppercase; font-weight: 700; color: #64748b;">${key.replace(/_/g, ' ')}</div>
+            <div style="font-size: 0.9rem; font-weight: 600; color: #0f172a; margin-top: 2px;">
+              ${isFile ? `<a href="${STORAGE_BASE_URL}/${value}" target="_blank" class="btn-blue-soft" style="padding: 3px 8px; font-size: 0.78rem;"><i class="fa-solid fa-file-arrow-down"></i> View Uploaded File</a>` : value}
+            </div>
+          </div>
+        `;
+      }
+
+      let paymentProofHtml = '';
+      if (order.payment_proof_image) {
+        paymentProofHtml = `
+          <div style="margin-top: 16px; padding: 12px; background: #fff7ed; border: 1px solid #ffedd5; border-radius: 10px;">
+            <div style="font-weight: 700; color: #9a3412; font-size: 0.85rem; margin-bottom: 6px;">
+              <i class="fa-solid fa-receipt"></i> Customer Uploaded Payment Proof:
+            </div>
+            <a href="${STORAGE_BASE_URL}/${order.payment_proof_image}" target="_blank">
+              <img src="${STORAGE_BASE_URL}/${order.payment_proof_image}" style="max-width: 100%; max-height: 180px; border-radius: 6px; border: 1px solid #e2e8f0;" alt="Proof">
+            </a>
+            ${order.utr_number ? `<div style="margin-top: 6px; font-weight: 700; font-size: 0.85rem; color: #c2410c;">UTR: ${order.utr_number}</div>` : ''}
+          </div>
+        `;
+      }
+
+      document.getElementById('modalOrderBody').innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px;">
+            <small style="color: #64748b; font-weight: 600;">Customer Details</small>
+            <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-top: 2px;">${user.name}</div>
+            <div style="font-size: 0.82rem; color: #64748b;">${user.email} | ${user.phone || '-'}</div>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px;">
+            <small style="color: #64748b; font-weight: 600;">Service & Price</small>
+            <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-top: 2px;">${service.name}</div>
+            <div style="font-size: 0.85rem; font-weight: 800; color: #ff7a00;">${formatINR(order.amount)} via ${order.payment_method === 'wallet' ? 'Wallet' : 'Direct UPI'}</div>
+          </div>
+        </div>
+
+        <h4 style="font-size: 0.9rem; font-weight: 700; color: #1e293b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.04em;">
+          <i class="fa-solid fa-list-check" style="color:#ff7a00;"></i> Application Data
+        </h4>
+        ${inputFieldsHtml || '<div style="color:#94a3b8; font-size:0.88rem;">No form fields submitted.</div>'}
+
+        ${paymentProofHtml}
+
+        ${order.delivery_file ? `
+          <div style="margin-top: 16px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;">
+            <div style="font-weight: 700; color: #166534; font-size: 0.85rem; margin-bottom: 4px;">
+              <i class="fa-solid fa-circle-check"></i> Delivered Document File:
+            </div>
+            <a href="${STORAGE_BASE_URL}/${order.delivery_file}" target="_blank" class="btn-success-soft" style="display:inline-flex;">
+              <i class="fa-solid fa-download"></i> Download / View Final File
+            </a>
+            ${order.admin_notes ? `<div style="margin-top: 6px; font-size: 0.82rem; color: #15803d;"><strong>Note:</strong> ${order.admin_notes}</div>` : ''}
+          </div>
+        ` : ''}
+      `;
+
+      let footerActions = `<button type="button" class="btn-secondary" onclick="closeModal('modalOrderDetails')">Close</button>`;
+      if (order.payment_status === 'pending') {
+        footerActions = `
+          <button type="button" class="btn-danger-soft" onclick="closeModal('modalOrderDetails'); verifyPaymentModal(${order.id}, 'reject')">
+            <i class="fa-solid fa-xmark"></i> Reject Payment
+          </button>
+          <button type="button" class="btn-success-soft" onclick="closeModal('modalOrderDetails'); verifyPaymentModal(${order.id}, 'approve')">
+            <i class="fa-solid fa-check"></i> Approve Payment
+          </button>
+        `;
+      } else if (order.order_status === 'processing') {
+        footerActions = `
+          <button type="button" class="btn-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
+          <button type="button" class="btn-tiranga" onclick="closeModal('modalOrderDetails'); openFulfillModal(${order.id}, '${order.order_number}')">
+            <i class="fa-solid fa-upload"></i> Deliver Order Document
+          </button>
+        `;
+      }
+
+      document.getElementById('modalOrderFooter').innerHTML = footerActions;
+      openModal('modalOrderDetails');
+    }
+
+    async function verifyPaymentModal(orderId, action) {
+      let reason = '';
+      if (action === 'reject') {
+        reason = prompt('Please enter the rejection reason for customer:', 'Payment proof could not be verified.');
+        if (reason === null) return;
+      } else {
+        if (!confirm('Are you sure you want to approve this payment and move order to Processing?')) return;
+      }
+
+      try {
+        const res = await API.admin.verifyPayment(orderId, action, { rejection_reason: reason });
+        showToast(res.message || 'Payment status updated', 'success');
+        loadOrders();
+      } catch (err) {
+        showToast(err.message || 'Failed to update payment status', 'error');
+      }
+    }
+
+    function openFulfillModal(orderId, orderNumber) {
+      document.getElementById('fulfillOrderId').value = orderId;
+      document.getElementById('fulfillOrderSubtitle').textContent = `Order: ${orderNumber}`;
+      document.getElementById('deliveryFileInput').value = '';
+      document.getElementById('selectedFileName').textContent = '';
+      document.getElementById('adminNotesInput').value = '';
+      openModal('modalFulfill');
+    }
+
+    function handleFileSelected(input) {
+      if (input.files && input.files[0]) {
+        document.getElementById('selectedFileName').textContent = `Selected: ${input.files[0].name} (${(input.files[0].size / 1024).toFixed(1)} KB)`;
+      }
+    }
+
+    document.getElementById('fulfillForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const orderId = document.getElementById('fulfillOrderId').value;
+      const file = document.getElementById('deliveryFileInput').files[0];
+      const notes = document.getElementById('adminNotesInput').value.trim();
+      const btn = document.getElementById('btnSubmitFulfill');
+
+      if (!file) {
+        showToast('Please select a file to deliver', 'error');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('delivery_file', file);
+      if (notes) formData.append('admin_notes', notes);
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading & Delivering...';
+
+      try {
+        const res = await API.admin.fulfillOrder(orderId, formData);
+        showToast(res.message || 'Order fulfilled successfully!', 'success');
+        closeModal('modalFulfill');
+        loadOrders();
+      } catch (err) {
+        showToast(err.message || 'Failed to fulfill order', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check-double"></i> Complete & Deliver Order';
+      }
+    });
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+  </script>
+</body>
+</html>
