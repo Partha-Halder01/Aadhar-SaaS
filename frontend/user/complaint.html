@@ -166,8 +166,11 @@
                 </thead>
                 <tbody id="complaintsTbody">
                   <tr>
-                    <td colspan="4" style="text-align: center; padding: 30px; color: #94a3b8;">
-                      <i class="fa-solid fa-spinner fa-spin"></i> Loading support history...
+                    <td colspan="4" class="loading-state-cell">
+                      <div class="loading-spinner-wrapper">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Loading support history...</span>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -226,6 +229,10 @@
         }).join('');
       } catch (err) {
         console.error(err);
+        const tbody = document.getElementById('complaintsTbody');
+        if (tbody) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:36px; color:#94a3b8;">No open tickets or complaints.</td></tr>';
+        }
       }
     }
 

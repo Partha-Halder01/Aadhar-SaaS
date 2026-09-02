@@ -142,8 +142,11 @@
               </thead>
               <tbody id="printOrdersTbody">
                 <tr>
-                  <td colspan="7" style="text-align:center; padding: 30px; color: #94a3b8;">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Loading print orders...
+                  <td colspan="7" class="loading-state-cell">
+                    <div class="loading-spinner-wrapper">
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                      <span>Loading print orders...</span>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -274,6 +277,7 @@
         renderServices(printServices);
       } catch (err) {
         console.error(err);
+        renderServices([]);
       }
     }
 
@@ -308,6 +312,7 @@
         renderPrintOrders(orders);
       } catch (err) {
         console.error(err);
+        renderPrintOrders([]);
       }
     }
 

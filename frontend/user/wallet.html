@@ -154,8 +154,11 @@
               </thead>
               <tbody id="walletHistoryTbody">
                 <tr>
-                  <td colspan="5" style="text-align: center; padding: 30px; color: #94a3b8;">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Loading transactions...
+                  <td colspan="5" class="loading-state-cell">
+                    <div class="loading-spinner-wrapper">
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                      <span>Loading transactions...</span>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -229,13 +232,37 @@
     // Instant Zero-Lag Hydration (0ms)
     try {
       const cachedTxs = API.cache.get('wallet_txs');
-      if (cachedTxs && cachedTxs.data) {
-        renderWalletHistory(cachedTxs.data);
+      if (cachedTxs) {
+        const txs = cachedTxs.transactions || cachedTxs.data || (Array.isArray(cachedTxs) ? cachedTxs : []);
+        if (txs.length > 0) renderWalletHistory(txs);
       }
     } catch (e) {}
 
     document.addEventListener('DOMContentLoaded', () => {
       Promise.all([loadWalletSettings(), loadWalletHistory()]);
+
+      // Auto-open recharge modal if navigated with ?recharge=true
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('recharge') === 'true' || window.location.hash === '#recharge') {
+        openRechargeModal();
+      }
+
+      // Close modal on backdrop click
+      const modalEl = document.getElementById('rechargeModal');
+      if (modalEl) {
+        modalEl.addEventListener('click', (e) => {
+          if (e.target.id === 'rechargeModal') {
+            closeRechargeModal();
+          }
+        });
+      }
+
+      // Close modal on Escape key
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeRechargeModal();
+        }
+      });
     });
 
     async function loadWalletSettings() {
@@ -250,7 +277,7 @@
         if (publicSettings.qr_code) {
           document.getElementById('modalQrImage').src = `${STORAGE_BASE_URL}/${publicSettings.qr_code}`;
         } else {
-          document.getElementById('modalQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=' + (publicSettings.upi_id || 'utkalprint@upi');
+          document.getElementById('modalQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=' + encodeURIComponent(publicSettings.upi_id || 'utkalprint@upi');
         }
       } catch (err) {
         console.error(err);
@@ -260,10 +287,11 @@
     async function loadWalletHistory() {
       try {
         const res = await API.getWalletTransactions();
-        const txs = res.data || [];
+        const txs = res.transactions || res.data || (Array.isArray(res) ? res : []);
         renderWalletHistory(txs);
       } catch (err) {
         console.error(err);
+        renderWalletHistory([]);
       }
     }
 
@@ -307,6 +335,7 @@
             <td>${amountDisplay}</td>
             <td>${statusBadge}</td>
           </tr>
+        `;
       }).join('');
     }
 

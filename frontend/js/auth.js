@@ -90,11 +90,12 @@ document.addEventListener('DOMContentLoaded', () => {
       sidebarHeader.appendChild(collapseBtn);
     }
 
-    // Set tooltip titles on all sidebar links for icon-only mode
+    // Set data-tooltip on all sidebar links for smooth custom tooltip in collapsed mode
     portalSidebar.querySelectorAll('.sidebar-link').forEach(link => {
       const label = link.querySelector('span');
-      if (label && !link.getAttribute('title')) {
-        link.setAttribute('title', label.textContent.trim());
+      if (label) {
+        link.removeAttribute('title');
+        link.setAttribute('data-tooltip', label.textContent.trim());
       }
     });
 
@@ -160,9 +161,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     backdrop.addEventListener('click', closeSidebar);
 
-    // Close sidebar when clicking any sidebar link on mobile
+    // Handle clicking sidebar navigation links
     portalSidebar.querySelectorAll('.sidebar-link').forEach(link => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href) {
+          const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+          if (href === currentPage || href === './' + currentPage) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.innerWidth <= 991) {
+              closeSidebar();
+            }
+            return;
+          }
+        }
         if (window.innerWidth <= 991) {
           closeSidebar();
         }

@@ -276,6 +276,7 @@ const API = {
       body: formData
     });
     this.cache.invalidate('wallet');
+    this.cache.invalidate('wallet_txs');
     return res;
   },
 

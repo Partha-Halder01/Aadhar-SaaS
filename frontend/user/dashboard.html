@@ -188,7 +188,7 @@
               </div>
             </a>
 
-            <a href="wallet.html" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #f5f3ff; border: 1.5px solid #ddd6fe; display: flex; align-items: center; gap: 14px; color: #7c3aed; font-weight: 700; transition: transform 0.2s ease;">
+            <a href="wallet.html?recharge=true" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #f5f3ff; border: 1.5px solid #ddd6fe; display: flex; align-items: center; gap: 14px; color: #7c3aed; font-weight: 700; transition: transform 0.2s ease;">
               <i class="fa-solid fa-qrcode" style="font-size: 1.8rem;"></i>
               <div>
                 <div style="font-size: 1rem;">Recharge Wallet</div>
@@ -228,8 +228,11 @@
               </thead>
               <tbody id="recentOrdersTbody">
                 <tr>
-                  <td colspan="7" style="text-align: center; padding: 30px; color: #94a3b8;">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Loading recent orders...
+                  <td colspan="7" class="loading-state-cell">
+                    <div class="loading-spinner-wrapper">
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                      <span>Loading recent orders...</span>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -293,6 +296,7 @@
         renderRecentOrders(orders);
       } catch (err) {
         console.error(err);
+        renderRecentOrders([]);
       }
     }
 

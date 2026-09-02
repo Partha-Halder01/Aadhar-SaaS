@@ -138,8 +138,11 @@
               </thead>
               <tbody id="documentsTbody">
                 <tr>
-                  <td colspan="5" style="text-align: center; padding: 30px; color: #94a3b8;">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Loading ready documents...
+                  <td colspan="5" class="loading-state-cell">
+                    <div class="loading-spinner-wrapper">
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                      <span>Loading ready documents...</span>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -175,6 +178,7 @@
         renderDocuments(allDocuments);
       } catch (err) {
         console.error(err);
+        renderDocuments([]);
       }
     }
 
