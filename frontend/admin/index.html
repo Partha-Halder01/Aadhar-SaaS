@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Portal</title>
+  <script>
+    const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('user_role');
+    if (token && userRole === 'admin') {
+      window.location.replace('dashboard.html');
+    } else {
+      window.location.replace('../admin.html');
+    }
+  </script>
+</head>
+<body style="background:#f8fafc; font-family:sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; margin:0;">
+  <p style="color:#64748b;">Loading Admin Portal...</p>
+</body>
+</html>

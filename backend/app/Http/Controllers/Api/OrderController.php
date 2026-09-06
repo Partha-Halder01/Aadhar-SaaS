@@ -22,8 +22,15 @@ class OrderController extends Controller
             ->where('user_id', $user->id);
 
         if ($request->has('category') && !empty($request->category)) {
-            $query->whereHas('service', function ($q) use ($request) {
-                $q->where('category', $request->category);
+            $cat = $request->category;
+            $query->whereHas('service', function ($q) use ($cat) {
+                if ($cat === 'print' || $cat === 'print_doc') {
+                    $q->whereIn('category', ['print', 'document']);
+                } elseif ($cat === 'pan' || $cat === 'pan_find') {
+                    $q->whereIn('category', ['pan', 'pan_find']);
+                } else {
+                    $q->where('category', $cat);
+                }
             });
         }
 

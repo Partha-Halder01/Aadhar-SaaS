@@ -35,4 +35,25 @@ return [
         ],
     ],
 
+    'sms' => [
+        'driver' => env('SMS_DRIVER', 'apitxt'),
+        'apitxt' => [
+            'auth_key' => env('APITXT_AUTH_KEY', 'vmjlLxnuukyZjiYOf7lg6GOcIfeWbMCVSgycJiLar-I'),
+            'channel' => env('APITXT_CHANNEL', ''),
+            'template_id' => env('APITXT_TEMPLATE_ID', ''),
+            'country' => env('APITXT_COUNTRY', '91'),
+            'template_name' => env('APITXT_TEMPLATE_NAME', ''),
+            'project_ref_id' => env('APITXT_PROJECT_REF_ID', ''),
+        ],
+        'fast2sms' => [
+            'api_key' => env('FAST2SMS_API_KEY'),
+            'route' => env('FAST2SMS_ROUTE', 'otp'),
+        ],
+        'twilio' => [
+            'sid' => env('TWILIO_SID'),
+            'token' => env('TWILIO_TOKEN'),
+            'from' => env('TWILIO_FROM'),
+        ],
+    ],
+
 ];

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Admin\AdminComplaintController;
 use App\Http\Controllers\Api\Admin\AdminDashboardController;
+use App\Http\Controllers\Api\Admin\AdminLandingPageController;
 use App\Http\Controllers\Api\Admin\AdminOrderController;
 use App\Http\Controllers\Api\Admin\AdminServiceController;
 use App\Http\Controllers\Api\Admin\AdminSettingController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Api\Admin\AdminWalletController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ComplaintController;
 use App\Http\Controllers\Api\DocumentController;
+use App\Http\Controllers\Api\LandingPageController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\SettingController;
@@ -24,14 +26,18 @@ use Illuminate\Support\Facades\Route;
 
 // Auth (Rate limited to 10 requests per minute)
 Route::middleware('throttle:10,1')->group(function () {
+    Route::post('/auth/send-otp', [AuthController::class, 'sendOtp']);
+    Route::post('/auth/verify-otp', [AuthController::class, 'verifyOtp']);
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::post('/auth/login', [AuthController::class, 'login']);
+    Route::post('/auth/login-otp', [AuthController::class, 'loginWithOtp']);
 });
 
 // Public Services & Public Portal Settings
 Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/services/{id}', [ServiceController::class, 'show']);
 Route::get('/settings/public', [SettingController::class, 'publicSettings']);
+Route::get('/landing-page', [LandingPageController::class, 'index']);
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +82,7 @@ Route::middleware(['api.auth', 'role:admin'])->prefix('admin')->group(function (
     Route::get('/orders/{id}', [AdminOrderController::class, 'show']);
     Route::post('/orders/{id}/verify-payment', [AdminOrderController::class, 'verifyPayment']);
     Route::post('/orders/{id}/fulfill', [AdminOrderController::class, 'fulfill']);
+    Route::post('/orders/{id}/mark-printed', [AdminOrderController::class, 'markPrinted']);
 
     // Manage Wallet Requests
     Route::get('/wallet-requests', [AdminWalletController::class, 'index']);
@@ -99,4 +106,9 @@ Route::middleware(['api.auth', 'role:admin'])->prefix('admin')->group(function (
     // Manage Settings (UPI, QR Code, Notices)
     Route::get('/settings', [AdminSettingController::class, 'index']);
     Route::post('/settings', [AdminSettingController::class, 'update']);
+
+    // Manage Landing Page CMS
+    Route::get('/landing-page', [AdminLandingPageController::class, 'index']);
+    Route::post('/landing-page', [AdminLandingPageController::class, 'update']);
+    Route::post('/landing-page/reset', [AdminLandingPageController::class, 'reset']);
 });

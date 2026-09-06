@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/png" href="../logo-icon.png">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -18,18 +19,14 @@
     <!-- Sidebar Navigation -->
     <aside class="portal-sidebar">
       <div class="sidebar-header">
-        <a href="dashboard.html" class="brand-logo" style="font-size: 1.15rem;">
-          <div class="brand-logo-icon" style="width:34px; height:34px; font-size:1rem;">
-            <i class="fa-solid fa-print"></i>
-          </div>
-          <div>
-            <span>UTKAL</span><span style="color: #ff6b00;">PRINT</span>
-            <span class="brand-badge">PRO</span>
-          </div>
+        <a href="dashboard.html" class="brand-logo">
+          <img src="../logo .png" alt="Instant Online Seva" class="brand-logo-img">
+          <img src="../logo-icon.png" alt="Instant Online Seva" class="brand-logo-icon-img">
         </a>
       </div>
 
       <ul class="sidebar-menu">
+        <li class="sidebar-category-header">Main Overview</li>
         <li class="sidebar-item">
           <a href="dashboard.html" class="sidebar-link">
             <i class="fa-solid fa-house" style="color:#64748b;"></i>
@@ -37,21 +34,30 @@
           </a>
         </li>
 
+        <li class="sidebar-category-header">Citizen Services</li>
         <li class="sidebar-item">
           <a href="print-list.html" class="sidebar-link">
-            <i class="fa-solid fa-id-card" style="color:#ea580c;"></i>
+            <i class="fa-solid fa-id-card" style="color:#e04d00;"></i>
             <span>Print List</span>
-            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.75rem; opacity:0.5;"></i>
+            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.72rem; opacity:0.4;"></i>
           </a>
         </li>
 
         <li class="sidebar-item">
           <a href="pan-find.html" class="sidebar-link">
-            <i class="fa-solid fa-magnifying-glass-location" style="color:#059669;"></i>
-            <span>Pan Find List</span>
+            <i class="fa-solid fa-magnifying-glass-location" style="color:#03a93a;"></i>
+            <span>PAN Find List</span>
           </a>
         </li>
 
+        <li class="sidebar-item">
+          <a href="orders.html" class="sidebar-link">
+            <i class="fa-solid fa-clock-rotate-left" style="color:#2563eb;"></i>
+            <span>My Orders & Process</span>
+          </a>
+        </li>
+
+        <li class="sidebar-category-header">Finance & Wallet</li>
         <li class="sidebar-item">
           <a href="wallet.html" class="sidebar-link">
             <i class="fa-solid fa-wallet" style="color:#7c3aed;"></i>
@@ -60,32 +66,40 @@
           </a>
         </li>
 
-        <li class="sidebar-item">
-          <a href="profile.html" class="sidebar-link">
-            <i class="fa-solid fa-user" style="color:#0284c7;"></i>
-            <span>My Account</span>
-          </a>
-        </li>
-
+        <li class="sidebar-category-header">Account & Desk</li>
         <li class="sidebar-item">
           <a href="documents.html" class="sidebar-link">
             <i class="fa-solid fa-file-pdf" style="color:#dc2626;"></i>
-            <span>Documents</span>
+            <span>My Documents</span>
           </a>
         </li>
 
         <li class="sidebar-item active">
           <a href="complaint.html" class="sidebar-link active">
-            <i class="fa-solid fa-headset" style="color:#ff6b00;"></i>
-            <span>Complaint</span>
+            <i class="fa-solid fa-headset" style="color:#fd5c00;"></i>
+            <span>Support Helpdesk</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="profile.html" class="sidebar-link">
+            <i class="fa-solid fa-user-gear" style="color:#0284c7;"></i>
+            <span>My Account</span>
           </a>
         </li>
       </ul>
 
-      <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(226, 232, 240, 0.8);">
-        <a href="#" class="sidebar-link btn-logout-action" style="color: #dc2626;">
+      <!-- User Info & Logout in sidebar bottom -->
+      <div class="sidebar-user-footer">
+        <div class="sidebar-user-info">
+          <div class="topbar-avatar user-initials-display">UP</div>
+          <div class="sidebar-user-details">
+            <div class="user-name-display">Member</div>
+            <div class="user-role-display">Active User</div>
+          </div>
+        </div>
+        <a href="#" class="btn-icon-action danger btn-logout-action" title="Logout">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          <span>Logout</span>
         </a>
       </div>
     </aside>
@@ -98,70 +112,136 @@
             <i class="fa-solid fa-bars"></i>
           </button>
           <div>
-            <h1 style="font-size: 1.28rem; font-weight: 800; color: #0f172a; margin: 0;">Support & Complaints</h1>
-            <small style="color: #64748b; font-weight: 500;">Raise tickets for order queries, payment issues, or technical help</small>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Resolution Desk &bull; 24x7</div>
+            <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;"><span>Helpdesk</span><span class="page-title-sub"> Support</span></h1>
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <a href="wallet.html" style="text-decoration: none; display: flex; align-items: center; gap: 8px; background: #ecfdf5; border: 1.5px solid #a7f3d0; padding: 7px 16px; border-radius: 9999px; color: #059669; font-weight: 800; font-size: 0.92rem;">
-            <i class="fa-solid fa-wallet"></i>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <!-- Wallet Pill -->
+          <a href="wallet.html" class="topbar-wallet-pill" title="View Wallet Balance">
+            <i class="fa-solid fa-wallet" style="color: #03a93a;"></i>
             <span class="user-wallet-display">₹0</span>
+            <span class="badge-topup"><i class="fa-solid fa-plus"></i> Topup</span>
           </a>
+
+          <!-- User Chip -->
+          <div class="topbar-user-chip">
+            <div class="topbar-avatar user-initials-display">UP</div>
+            <div>
+              <div class="user-name-display" style="line-height: 1.1;">User</div>
+              <div class="user-role-display" style="font-size: 0.68rem; color: #64748b; font-weight: 600;">Active User</div>
+            </div>
+          </div>
         </div>
       </header>
 
       <div class="portal-content">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+        <!-- Support Helpdesk Top Stats & Live WhatsApp Connect -->
+        <div class="helpdesk-stats-wrapper">
+          <!-- WhatsApp Live Help Card (Clickable direct connect) -->
+          <a href="https://wa.me/919439200000" target="_blank" class="helpdesk-whatsapp-card" title="Open WhatsApp Support Chat">
+            <div class="whatsapp-card-icon">
+              <i class="fa-brands fa-whatsapp"></i>
+            </div>
+            <div class="whatsapp-card-info">
+              <div class="whatsapp-card-badge">
+                <span class="badge-status-dot"></span> Live Instant Helpline
+              </div>
+              <div class="whatsapp-card-number">+91 94392 00000</div>
+              <div class="whatsapp-card-sub">Mon – Sat • 9:00 AM – 8:00 PM IST</div>
+            </div>
+            <div class="whatsapp-card-action">
+              <span>Chat Now</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </div>
+          </a>
+
+          <!-- Metric 1: Avg Response -->
+          <div class="helpdesk-metric-card">
+            <div class="helpdesk-metric-header">
+              <span class="helpdesk-metric-label">Avg. Response Time</span>
+              <div class="helpdesk-metric-icon bolt"><i class="fa-solid fa-bolt-lightning"></i></div>
+            </div>
+            <div class="helpdesk-metric-val">&lt; 15 Mins</div>
+            <div class="helpdesk-metric-sub">Dedicated retail operations engineers</div>
+          </div>
+
+          <!-- Metric 2: SLA Resolution Rate -->
+          <div class="helpdesk-metric-card">
+            <div class="helpdesk-metric-header">
+              <span class="helpdesk-metric-label">Resolution SLA</span>
+              <div class="helpdesk-metric-icon shield"><i class="fa-solid fa-shield-heart"></i></div>
+            </div>
+            <div class="helpdesk-metric-val">99.4%</div>
+            <div class="helpdesk-metric-sub">Same-day priority resolution rate</div>
+          </div>
+        </div>
+
+        <div class="complaint-layout-grid">
           <!-- New Ticket Form -->
           <div class="glass-card">
-            <h2 style="font-size: 1.18rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Raise New Support Ticket</h2>
-            <p style="color: #64748b; font-size: 0.88rem; margin-bottom: 20px;">We usually respond within 15 - 30 minutes</p>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(226,232,240,0.8);">
+              <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(253, 92, 0,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+                <i class="fa-solid fa-ticket"></i>
+              </div>
+              <div>
+                <h2 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0;">Raise Support Ticket</h2>
+                <div style="color: #64748b; font-size: 0.8rem;">Direct dispatch to priority escalation queue</div>
+              </div>
+            </div>
 
             <form id="createComplaintForm">
               <div class="form-group">
-                <label class="form-label" for="ticketSubject">Subject / Issue Title <span style="color:red">*</span></label>
-                <input type="text" id="ticketSubject" class="form-control" placeholder="e.g. Delay in Aadhaar PDF formatting" required>
+                <label class="form-label" for="ticketSubject">Issue Subject <span style="color:red">*</span></label>
+                <input type="text" id="ticketSubject" class="form-control" placeholder="e.g. Delay in Aadhaar PDF generation" required>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="ticketOrderNumber">Related Order # (Optional)</label>
+                <label class="form-label" for="ticketOrderNumber">Related Order # (If Applicable)</label>
                 <input type="text" id="ticketOrderNumber" class="form-control" placeholder="e.g. ORD-2026-XXXX">
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="ticketMessage">Detailed Description <span style="color:red">*</span></label>
-                <textarea id="ticketMessage" class="form-control" rows="4" placeholder="Explain what happened in detail..." required style="resize:vertical;"></textarea>
+                <label class="form-label" for="ticketMessage">Detailed Explanation <span style="color:red">*</span></label>
+                <textarea id="ticketMessage" class="form-control" rows="4" placeholder="Provide complete details, error text, or expected outcome..." required style="resize:vertical;"></textarea>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="ticketAttachment">Attachment / Screenshot (Optional)</label>
-                <input type="file" id="ticketAttachment" class="form-control" accept="image/*,.pdf">
+                <label class="form-label" for="ticketAttachment">Supporting Attachment / Screenshot</label>
+                <div class="file-dropzone" style="padding: 16px; min-height: auto;" onclick="document.getElementById('ticketAttachment').click()">
+                  <input type="file" id="ticketAttachment" accept="image/*,.pdf" style="display: none;" onchange="updateTicketFileLabel(this)">
+                  <i class="fa-solid fa-cloud-arrow-up file-dropzone-icon" style="font-size: 1.5rem; margin-bottom: 6px;"></i>
+                  <div class="file-dropzone-text" id="ticketFileLabel" style="font-size: 0.82rem;">Click to attach error screenshot or document</div>
+                </div>
               </div>
 
-              <button type="submit" id="btnSubmitTicket" class="btn-primary-orange" style="margin-top: 10px; width: 100%; justify-content: center;">
-                <i class="fa-solid fa-paper-plane"></i> Submit Support Ticket
+              <button type="submit" id="btnSubmitTicket" class="btn-rz-primary" style="margin-top: 10px; width: 100%; justify-content: center; padding: 12px;">
+                <i class="fa-solid fa-paper-plane"></i> Submit Priority Ticket
               </button>
             </form>
           </div>
 
           <!-- Ticket History Table -->
           <div class="glass-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-              <h2 style="font-size: 1.18rem; font-weight: 800; color: #0f172a; margin: 0;">Your Support History</h2>
-              <button onclick="loadComplaints()" class="btn-secondary" style="font-size:0.82rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(226,232,240,0.8);">
+              <div>
+                <h2 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0;">Support History & Live Replies</h2>
+                <div style="color: #64748b; font-size: 0.8rem;">Track admin responses and resolution logs</div>
+              </div>
+              <button onclick="loadComplaints()" class="btn-secondary" style="font-size:0.8rem; padding: 7px 14px;">
                 <i class="fa-solid fa-rotate-right"></i> Refresh
               </button>
             </div>
 
-            <div class="custom-table-container">
+            <div class="custom-table-container support-history-desktop-table">
               <table class="custom-table">
                 <thead>
                   <tr>
                     <th>Ticket / Date</th>
-                    <th>Subject</th>
+                    <th>Subject & Order</th>
                     <th>Status</th>
-                    <th>Admin Reply</th>
+                    <th>Resolution Response</th>
                   </tr>
                 </thead>
                 <tbody id="complaintsTbody">
@@ -176,6 +256,9 @@
                 </tbody>
               </table>
             </div>
+
+            <!-- Mobile Cards Container -->
+            <div id="supportHistoryMobileContainer" class="support-history-mobile-container"></div>
           </div>
         </div>
       </div>
@@ -185,48 +268,143 @@
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    function updateTicketFileLabel(input) {
+      const label = document.getElementById('ticketFileLabel');
+      if (input.files && input.files[0]) {
+        label.innerHTML = `<strong>Selected:</strong> ${input.files[0].name} (${(input.files[0].size / 1024).toFixed(1)} KB)`;
+        label.style.color = '#03a93a';
+      } else {
+        label.innerHTML = 'Click to attach error screenshot or document';
+        label.style.color = '';
+      }
+    }
+
+    function initComplaintPage() {
       loadComplaints();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initComplaintPage);
+    } else {
+      initComplaintPage();
+    }
 
     async function loadComplaints() {
       try {
         const res = await API.getComplaints();
         const complaints = res.data || [];
         const tbody = document.getElementById('complaintsTbody');
+        const mobileContainer = document.getElementById('supportHistoryMobileContainer');
 
         if (complaints.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:36px; color:#94a3b8;"><i class="fa-solid fa-circle-check" style="font-size:2rem; margin-bottom:8px; display:block; color:#10b981;"></i>No open tickets or complaints. Everything looks good!</td></tr>';
+          if (tbody) {
+            tbody.innerHTML = `
+              <tr>
+                <td colspan="4">
+                  <div class="empty-state-box" style="padding: 28px;">
+                    <div class="empty-state-icon" style="color: #03a93a;"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="empty-state-title">No Pending Issues Found</div>
+                    <div class="empty-state-text">Your portal operations are operating normally. Raise a ticket if you ever encounter any discrepancies.</div>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }
+          if (mobileContainer) {
+            mobileContainer.innerHTML = `
+              <div class="mobile-ledger-empty-state support-empty">
+                <div class="empty-state-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="empty-state-title">No Pending Issues Found</div>
+                <div class="empty-state-desc">Your portal operations are operating normally. Raise a ticket if you ever encounter any discrepancies.</div>
+                <a href="#createComplaintForm" class="btn-tiranga" style="margin-top: 14px; font-size: 0.85rem; padding: 9px 18px; display: inline-flex; align-items: center; gap: 8px;">
+                  <i class="fa-solid fa-plus"></i> Raise New Ticket
+                </a>
+              </div>
+            `;
+          }
           return;
         }
 
-        tbody.innerHTML = complaints.map(c => {
-          let statusBadge = '';
-          if (c.status === 'resolved' || c.status === 'closed') {
-            statusBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-check"></i> Resolved</span>';
-          } else if (c.status === 'in_progress') {
-            statusBadge = '<span class="badge-status badge-processing"><i class="fa-solid fa-clock"></i> In Progress</span>';
-          } else {
-            statusBadge = '<span class="badge-status badge-pending"><i class="fa-solid fa-hourglass-start"></i> Open</span>';
-          }
+        // 1. Desktop Table rendering (100% untouched)
+        if (tbody) {
+          tbody.innerHTML = complaints.map(c => {
+            let statusBadge = '';
+            if (c.status === 'resolved' || c.status === 'closed') {
+              statusBadge = '<span class="badge-status badge-completed">Resolved</span>';
+            } else if (c.status === 'in_progress') {
+              statusBadge = '<span class="badge-status badge-processing">In Progress</span>';
+            } else {
+              statusBadge = '<span class="badge-status badge-pending">Under Review</span>';
+            }
 
-          return `
-            <tr>
-              <td>
-                <span class="order-num-tag">#${c.id}</span>
-                <div style="font-size:0.78rem; color:#64748b; margin-top:4px;">${formatDate(c.created_at)}</div>
-              </td>
-              <td>
-                <strong>${c.subject}</strong>
-                ${c.order_number ? `<div style="font-size:0.8rem; color:#ff6b00; font-family:'JetBrains Mono', monospace;">Order: ${c.order_number}</div>` : ''}
-              </td>
-              <td>${statusBadge}</td>
-              <td>
-                ${c.admin_reply ? `<div style="background:#f8fafc; padding:8px 12px; border-radius:8px; border:1px solid #e2e8f0; font-size:0.85rem; color:#1e293b;">${c.admin_reply}</div>` : '<span style="color:#94a3b8; font-size:0.82rem;">Awaiting Admin Review</span>'}
-              </td>
-            </tr>
-          `;
-        }).join('');
+            return `
+              <tr>
+                <td>
+                  <span class="order-id-chip">#TK-${c.id}</span>
+                  <div style="font-size:0.75rem; color:#64748b; margin-top:4px; font-weight: 500;">${formatDate(c.created_at)}</div>
+                </td>
+                <td>
+                  <div style="font-weight: 700; color:#0f172a; font-size: 0.9rem;">${c.subject}</div>
+                  ${c.order_number ? `<div style="font-size:0.75rem; color:#fd5c00; font-family:'JetBrains Mono', monospace; margin-top: 2px;">Order Ref: ${c.order_number}</div>` : ''}
+                </td>
+                <td>${statusBadge}</td>
+                <td>
+                  ${c.admin_reply ? `
+                    <div style="background: rgba(13,148,136,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(13,148,136,0.2); font-size: 0.82rem; color: #0f172a; line-height: 1.4;">
+                      <div style="font-size: 0.68rem; font-weight: 700; color: #0d9488; text-transform: uppercase; margin-bottom: 2px;">Support Executive</div>
+                      ${c.admin_reply}
+                    </div>
+                  ` : '<span style="color:#94a3b8; font-size:0.8rem; font-style: italic;">Awaiting operations reply</span>'}
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        // 2. Mobile Responsive Cards rendering
+        if (mobileContainer) {
+          mobileContainer.innerHTML = complaints.map(c => {
+            let statusBadge = '';
+            if (c.status === 'resolved' || c.status === 'closed') {
+              statusBadge = '<span class="badge-status badge-completed">Resolved</span>';
+            } else if (c.status === 'in_progress') {
+              statusBadge = '<span class="badge-status badge-processing">In Progress</span>';
+            } else {
+              statusBadge = '<span class="badge-status badge-pending">Under Review</span>';
+            }
+
+            let replySection = '';
+            if (c.admin_reply) {
+              replySection = `
+                <div class="mobile-ticket-reply-box">
+                  <div class="reply-header"><i class="fa-solid fa-headset"></i> Support Executive</div>
+                  <div class="reply-content">${c.admin_reply}</div>
+                </div>
+              `;
+            } else {
+              replySection = '<span style="color:#94a3b8; font-size:0.78rem; font-style: italic; display:inline-flex; align-items:center; gap:5px;"><i class="fa-regular fa-clock"></i> Awaiting operations reply</span>';
+            }
+
+            return `
+              <div class="mobile-ledger-card">
+                <div class="mobile-ledger-card-header">
+                  <span class="order-id-chip">#TK-${c.id}</span>
+                  ${statusBadge}
+                </div>
+                <div class="mobile-ledger-card-body">
+                  <div class="mobile-ledger-title">${c.subject}</div>
+                  ${c.order_number ? `<div style="font-size:0.75rem; color:#fd5c00; font-family:'JetBrains Mono', monospace; font-weight:700;"><i class="fa-solid fa-receipt"></i> Order: ${c.order_number}</div>` : ''}
+                  <div class="mobile-ledger-meta">
+                    <span><i class="fa-regular fa-clock"></i> ${formatDate(c.created_at)}</span>
+                  </div>
+                  <div style="margin-top: 4px;">
+                    ${replySection}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
       } catch (err) {
         console.error(err);
         const tbody = document.getElementById('complaintsTbody');

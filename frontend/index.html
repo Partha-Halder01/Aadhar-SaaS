@@ -3,63 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Utkal Print Portal - India's #1 Digital Print & PAN Recovery Engine</title>
-  <meta name="description" content="Instant Aadhaar PVC card printing, Lost PAN find by Aadhaar, Voter ID HD prints, and instant digital micro-services with fast UPI wallet top-ups.">
+  <title>Instant Online Seva - India's #1 Digital Print & PAN Recovery Engine</title>
+  <meta name="description" content="High-definition Aadhaar PVC card formatting, instant lost PAN recovery by Aadhaar, Voter ID HD prints, and instant digital micro-services with fast UPI wallet top-ups.">
   
   <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
-  <!-- Master Stylesheet -->
+  <!-- Favicon & Master Stylesheet -->
+  <link rel="icon" type="image/png" href="logo-icon.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- Top Realtime Notification Strip -->
+  <!-- Top Realtime Notification Strip (Razorpay Style) -->
   <div class="top-announcement-bar">
     <div class="top-announcement-content">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <span class="announcement-badge"><i class="fa-solid fa-bolt"></i> FAST PORTAL</span>
-        <span>⚡ Server 2.0 Live: Instant Aadhaar HD Formatting & Manual UPI Fast Approval under 2 mins!</span>
+      <div class="announcement-left">
+        <span class="announcement-badge">
+          <span class="announcement-live-dot"></span>
+          <span>LIVE 2.0</span>
+        </span>
+        <span class="announcement-text">Instant Aadhaar HD PVC Formatting & UPI Fast Approvals under 2 mins!</span>
       </div>
-      <div style="display: flex; gap: 16px; align-items: center;">
-        <span><i class="fa-solid fa-headset" style="color:#ff9e42;"></i> Helpline: +91 98765 43210</span>
-        <span style="opacity: 0.5;">|</span>
-        <span><i class="fa-solid fa-shield-halved" style="color:#10b981;"></i> 100% UIDAI/Govt Safe</span>
+      <div class="announcement-right">
+        <a href="tel:+919876543210" class="announcement-link">
+          <i class="fa-solid fa-headset"></i> Helpline: +91 98765 43210
+        </a>
+        <span class="announcement-sep">•</span>
+        <span class="announcement-safe">
+          <i class="fa-solid fa-shield-halved"></i> 100% UIDAI/Govt Safe
+        </span>
       </div>
     </div>
   </div>
 
-  <!-- Sticky Glassmorphism Navigation Bar -->
-  <nav class="navbar-custom">
+  <!-- Sticky Glassmorphism Navigation Bar (Razorpay Style) -->
+  <nav class="navbar-custom" id="mainNavbar">
     <div class="navbar-inner">
       <a href="index.html" class="brand-logo">
-        <div class="brand-logo-icon">
-          <i class="fa-solid fa-print"></i>
-        </div>
-        <div class="brand-logo-text">
-          <span>UTKAL</span><span style="color: #ff6b00;">PRINT</span>
-          <span class="brand-badge">PRO</span>
-        </div>
+        <img src="logo .png" alt="Instant Online Seva" class="brand-logo-img">
       </a>
 
       <ul class="nav-links">
-        <li><a href="#services" class="nav-link-item"><i class="fa-solid fa-layer-group"></i> Services</a></li>
-        <li><a href="#pricing" class="nav-link-item"><i class="fa-solid fa-tags"></i> Rates & Turnaround</a></li>
-        <li><a href="#how-it-works" class="nav-link-item"><i class="fa-solid fa-route"></i> How It Works</a></li>
-        <li><a href="#faq" class="nav-link-item"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+        <li>
+          <a href="#services" class="nav-link-item">
+            <span class="nav-icon-wrapper nav-icon-orange"><i class="fa-solid fa-layer-group"></i></span>
+            <span>Services</span>
+          </a>
+        </li>
+        <li>
+          <a href="#pricing" class="nav-link-item">
+            <span class="nav-icon-wrapper nav-icon-green"><i class="fa-solid fa-tags"></i></span>
+            <span>Rates & Turnaround</span>
+          </a>
+        </li>
+        <li>
+          <a href="#how-it-works" class="nav-link-item">
+            <span class="nav-icon-wrapper nav-icon-blue"><i class="fa-solid fa-route"></i></span>
+            <span>How It Works</span>
+          </a>
+        </li>
+        <li>
+          <a href="#faq" class="nav-link-item">
+            <span class="nav-icon-wrapper nav-icon-purple"><i class="fa-solid fa-circle-question"></i></span>
+            <span>FAQ</span>
+          </a>
+        </li>
       </ul>
 
       <div class="nav-actions">
-        <a href="login.html" class="btn-outline-custom nav-login-btn">
-          <i class="fa-solid fa-arrow-right-to-bracket"></i> <span>Login</span>
+        <a href="login.html" class="nav-btn-login" title="User Login">
+          <i class="fa-solid fa-user"></i>
+          <span>User Login</span>
         </a>
-        <a href="register.html" class="btn-tiranga nav-register-btn">
-          <i class="fa-solid fa-user-plus"></i> <span>Get Started Free</span>
+        <a href="register.html" class="nav-btn-cta">
+          <span>Register Free</span>
+          <i class="fa-solid fa-arrow-right"></i>
         </a>
-        <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle Menu">
+        <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle Navigation Menu">
           <i class="fa-solid fa-bars" id="mobileNavIcon"></i>
         </button>
       </div>
@@ -68,450 +92,435 @@
     <!-- Mobile Dropdown Nav Menu -->
     <div id="mobile-nav" class="mobile-nav-dropdown">
       <ul class="mobile-nav-list">
-        <li><a href="#services" class="mobile-nav-link" onclick="toggleMobileNav()"><i class="fa-solid fa-layer-group"></i> Services & Cards</a></li>
-        <li><a href="#pricing" class="mobile-nav-link" onclick="toggleMobileNav()"><i class="fa-solid fa-tags"></i> Pricing & Rates</a></li>
-        <li><a href="#how-it-works" class="mobile-nav-link" onclick="toggleMobileNav()"><i class="fa-solid fa-route"></i> 4-Step Process</a></li>
-        <li><a href="#faq" class="mobile-nav-link" onclick="toggleMobileNav()"><i class="fa-solid fa-circle-question"></i> Help & FAQ</a></li>
+        <li><a href="#services" class="mobile-nav-link" onclick="toggleMobileNav()"><span class="nav-icon-wrapper nav-icon-orange"><i class="fa-solid fa-layer-group"></i></span> Services & Cards</a></li>
+        <li><a href="#pricing" class="mobile-nav-link" onclick="toggleMobileNav()"><span class="nav-icon-wrapper nav-icon-green"><i class="fa-solid fa-tags"></i></span> Pricing & Rates</a></li>
+        <li><a href="#how-it-works" class="mobile-nav-link" onclick="toggleMobileNav()"><span class="nav-icon-wrapper nav-icon-blue"><i class="fa-solid fa-route"></i></span> 4-Step Process</a></li>
+        <li><a href="#faq" class="mobile-nav-link" onclick="toggleMobileNav()"><span class="nav-icon-wrapper nav-icon-purple"><i class="fa-solid fa-circle-question"></i></span> Help & FAQ</a></li>
       </ul>
-      <div class="mobile-nav-actions">
-        <a href="login.html" class="btn-outline-custom" style="flex: 1; justify-content: center; padding: 11px;">
-          <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
+      <div class="mobile-nav-actions" style="flex-direction: column; gap: 8px;">
+        <a href="login.html" class="btn-outline-custom" style="width: 100%; justify-content: center; padding: 11px; border-radius: 9999px; font-size: 0.92rem;">
+          <i class="fa-solid fa-user"></i> User Login
         </a>
-        <a href="register.html" class="btn-tiranga" style="flex: 1; justify-content: center; padding: 11px;">
+        <a href="register.html" class="btn-tiranga" style="width: 100%; justify-content: center; padding: 12px; border-radius: 9999px;">
           <i class="fa-solid fa-rocket"></i> Register Free
         </a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-glow-bg"></div>
-    <div class="hero-grid-pattern"></div>
+  <!-- Razorpay-Style Split Hero Section -->
+  <section class="rz-hero-section" id="heroSection">
+    <div class="rz-hero-container">
+      
+      <!-- Left Column: Copy & Value Proposition -->
+      <div class="rz-hero-copy-col">
+        <div class="rz-hero-badge" id="heroBadge">
+          <span class="rz-badge-tag">SEVA 2.0</span>
+          <span>India's #1 Citizen Printing & PAN Recovery Engine</span>
+        </div>
 
-    <div class="hero-container" style="text-align: center;">
-      <div class="hero-pill-badge">
-        <span class="live-pulse-dot"></span>
-        <span>INDIA'S SMARTEST CITIZEN PRINT & PAN EXTRACTION PLATFORM</span>
+        <h1 class="rz-hero-title" id="heroTitle">
+          Next-Gen <span class="rz-hero-gradient-text">Digital Document & PAN</span> Suite
+        </h1>
+
+        <p class="rz-hero-subtitle" id="heroSubtitle">
+          High-definition Aadhaar PVC card formatting, instant lost PAN recovery by Aadhaar, Voter ID prints, and seamless zero-delay UPI wallet recharges built specifically for Cyber Cafes and CSC Retailers.
+        </p>
+
+        <div class="rz-hero-cta-group">
+          <a href="register.html" class="rz-btn-primary" id="heroCtaPrimary">
+            <span>Launch Portal Free</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+          <a href="login.html" class="rz-btn-secondary" id="heroCtaSecondary">
+            <i class="fa-solid fa-user"></i>
+            <span>User Login</span>
+          </a>
+        </div>
+
+        <!-- Trust Row -->
+        <div class="rz-hero-trust-row" id="heroTrustRow">
+          <div class="rz-trust-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>50,000+ PVC Cards Printed</span>
+          </div>
+          <div class="rz-trust-item">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Instant UPI Approvals</span>
+          </div>
+          <div class="rz-trust-item">
+            <i class="fa-solid fa-lock"></i>
+            <span>256-Bit Bank Grade Safe</span>
+          </div>
+        </div>
       </div>
 
-      <h1 class="hero-title">
-        Next-Gen <span class="hero-title-gradient">Digital Print & PAN</span> Portal
-      </h1>
-
-      <p class="hero-subtitle">
-        High-definition Aadhaar PVC Card formatting, instant lost PAN recovery by Aadhaar, Voter ID prints, and seamless zero-delay UPI wallet checkout built for retailers and cyber cafes.
-      </p>
-
-      <div class="hero-actions">
-        <a href="register.html" class="btn-tiranga" style="padding: 14px 34px; font-size: 1.05rem;">
-          <i class="fa-solid fa-rocket"></i> Launch Portal Free
-        </a>
-        <a href="login.html" class="btn-outline-custom" style="padding: 13px 28px; font-size: 1.05rem;">
-          <i class="fa-solid fa-lock"></i> Retailer Login
-        </a>
-      </div>
-
-      <!-- Trust Bar -->
-      <div class="hero-trust-bar">
-        <div class="hero-trust-item">
-          <i class="fa-solid fa-circle-check"></i> <span>50,000+ PVC Cards Printed</span>
-        </div>
-        <div class="hero-trust-item">
-          <i class="fa-solid fa-bolt"></i> <span>Instant UPI QR Approvals</span>
-        </div>
-        <div class="hero-trust-item">
-          <i class="fa-solid fa-lock"></i> <span>256-Bit Bank-Grade Security</span>
-        </div>
-        <div class="hero-trust-item">
-          <i class="fa-solid fa-headset"></i> <span>24x7 Support Desk</span>
-        </div>
-      </div>
-
-      <!-- Hero Visual Interactive Cards Showcase -->
-      <div class="hero-visual-container">
-        <!-- Floating Chip 1 -->
-        <div class="floating-chip top-left">
-          <div style="width: 28px; height: 28px; border-radius: 50%; background: #dcfce7; color: #16a34a; display: flex; align-items: center; justify-content: center;">
+      <!-- Right Column: Razorpay-Style Interactive Bento Product Showcase -->
+      <div class="rz-showcase-wrapper">
+        
+        <!-- Floating Chip Top-Right -->
+        <div class="rz-float-chip top-right">
+          <div class="rz-chip-icon green">
             <i class="fa-solid fa-check"></i>
           </div>
-          <div>
-            <div style="color: #0f172a; font-size: 0.8rem; font-weight:700;">PAN Extracted</div>
-            <div style="color: #16a34a; font-size: 0.72rem;">Matched in 0.9s</div>
+          <div class="rz-chip-text">
+            <div class="rz-chip-title">PAN Extracted</div>
+            <div class="rz-chip-sub">Matched in 0.8s</div>
           </div>
         </div>
 
-        <!-- Floating Chip 2 -->
-        <div class="floating-chip bottom-right">
-          <div style="width: 28px; height: 28px; border-radius: 50%; background: #fff7ed; color: #ff6b00; display: flex; align-items: center; justify-content: center;">
-            <i class="fa-solid fa-wallet"></i>
+        <!-- Floating Chip Bottom-Left -->
+        <div class="rz-float-chip bottom-left">
+          <div class="rz-chip-icon orange">
+            <i class="fa-solid fa-bolt-lightning"></i>
           </div>
-          <div>
-            <div style="color: #0f172a; font-size: 0.8rem; font-weight:700;">Wallet Auto-Credited</div>
-            <div style="color: #ff6b00; font-size: 0.72rem;">₹500.00 via UPI</div>
+          <div class="rz-chip-text">
+            <div class="rz-chip-title">Wallet Auto-Credited</div>
+            <div class="rz-chip-sub">+₹500.00 via UPI QR</div>
           </div>
         </div>
 
         <!-- Glass Showcase Container -->
-        <div class="hero-showcase-glass-card">
+        <div class="rz-showcase-glass-card">
           
-          <!-- Mockup Card 1: Aadhaar PVC Preview -->
-          <div class="mockup-pvc-card">
-            <div class="pvc-flag-strip"></div>
-            <div class="pvc-header">
-              <div style="font-weight: 800; font-size: 0.85rem; color: #c2410c; display: flex; align-items: center; gap: 6px;">
-                <i class="fa-solid fa-id-card"></i> UNIQUE IDENTIFICATION AUTHORITY
+          <!-- Card Switcher Tab Header -->
+          <div class="rz-card-switch-header">
+            <div class="rz-card-switch-title">
+              <i class="fa-solid fa-id-card" style="color:#0066cc;"></i>
+              <span>Smart PVC ID Engine</span>
+            </div>
+            <div class="rz-card-tab-buttons">
+              <button type="button" class="rz-tab-btn active" id="tabFrontBtn" onclick="switchCardSide('front')">Front View</button>
+              <button type="button" class="rz-tab-btn" id="tabBackBtn" onclick="switchCardSide('back')">Back View</button>
+            </div>
+          </div>
+
+          <!-- Realistic PVC Card Preview -->
+          <div class="rz-pvc-card-preview" id="pvcCardInteractive">
+            <div class="rz-pvc-flag-strip">
+              <div class="rz-gov-emblem-text">
+                <i class="fa-solid fa-shield-halved" style="color:#0066cc;"></i>
+                <span>UNIQUE IDENTIFICATION AUTHORITY OF INDIA</span>
               </div>
-              <span style="font-size: 0.7rem; background: #ffedd5; color: #c2410c; padding: 2px 7px; border-radius: 4px; font-weight: 700;">HD 300 DPI</span>
+              <span class="rz-pvc-badge-dpi">HD 300 DPI</span>
             </div>
 
-            <div class="pvc-card-body">
-              <div class="pvc-photo-box">
+            <!-- Front Side View -->
+            <div class="rz-card-front-content" id="cardFrontView">
+              <div class="rz-card-photo-box">
                 <i class="fa-solid fa-user"></i>
+                <div style="position:absolute; bottom:2px; font-size:0.55rem; font-weight:800; color:#475569;">PHOTO</div>
               </div>
-              <div class="pvc-details" style="text-align: left;">
-                <div class="pvc-name">RAJESH KUMAR PATRA</div>
-                <div class="pvc-meta">DOB: 15/08/1994 | Male</div>
-                <div class="pvc-meta" style="font-size: 0.75rem;">Address: Cuttack, Odisha - 753001</div>
-                <div class="pvc-aadhaar-num">
+              <div class="rz-card-details-box">
+                <div class="rz-applicant-name">RAJESH KUMAR PATRA</div>
+                <div class="rz-applicant-meta">DOB: 15/08/1994 | Male</div>
+                <div class="rz-applicant-meta" style="font-size:0.75rem;">State: Odisha, India</div>
+                <div class="rz-aadhaar-number-display">
                   XXXX XXXX 8924
                 </div>
               </div>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px dashed #fed7aa; font-size: 0.75rem; color: #64748b;">
-              <span><i class="fa-solid fa-qrcode"></i> Secure QR Encoded</span>
-              <span style="color: #10b981; font-weight: 700;"><i class="fa-solid fa-circle-check"></i> Print Ready PDF</span>
-            </div>
-          </div>
-
-          <!-- Mockup Card 2: Instant PAN Recovery Result -->
-          <div class="mockup-pan-card">
-            <div class="pan-header">
-              <div style="font-weight: 800; font-size: 0.85rem; color: #065f46; display: flex; align-items: center; gap: 6px;">
-                <i class="fa-solid fa-address-card"></i> INCOME TAX DEPARTMENT GOI
+            <!-- Back Side View -->
+            <div class="rz-card-back-content" id="cardBackView">
+              <div class="rz-address-label">Address / ଠିକଣା:</div>
+              <div class="rz-address-text">
+                S/O: Ramesh Patra, Plot No. 412, Arunodaya Nagar, Badambadi, Cuttack, Odisha, PIN - 753012
               </div>
-              <span class="pan-badge-live"><i class="fa-solid fa-bolt"></i> INSTANT MATCH</span>
-            </div>
-
-            <div style="text-align: left;">
-              <div style="font-size: 0.8rem; color: #64748b;">Input Aadhaar: <strong>XXXX-XXXX-4512</strong></div>
-              <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">Applicant Name: <strong>PRIYA MOHANTY</strong></div>
-
-              <div class="pan-result-box">
-                <div style="font-size: 0.75rem; color: #065f46; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Verified Permanent Account Number:</div>
-                <div class="pan-extracted-number">
-                  BKPPM9842K
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #047857; font-weight: 600;">
-                  <span><i class="fa-solid fa-building-columns"></i> NSDL / UTI Active</span>
-                  <span><i class="fa-solid fa-shield-check"></i> Status: Operative</span>
-                </div>
+              <div class="rz-barcode-mock"></div>
+              <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:0.72rem; color:#64748b;">
+                <span>Helpline: 1947</span>
+                <span>www.uidai.gov.in</span>
               </div>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px dashed #bbf7d0; font-size: 0.75rem;">
-              <span style="color: #64748b;"><i class="fa-solid fa-clock"></i> Response: 0.84s</span>
-              <span style="color: #059669; font-weight: 700;"><i class="fa-solid fa-file-arrow-down"></i> e-PAN Ready</span>
+            <!-- PVC Card Footer -->
+            <div class="rz-pvc-card-footer">
+              <span><i class="fa-solid fa-qrcode"></i> Secure Scannable QR</span>
+              <span style="color:#03a93a; font-weight:700;"><i class="fa-solid fa-circle-check"></i> CR80 Print Ready</span>
             </div>
           </div>
 
+          <!-- Mini Quick Action Row inside Showcase -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; font-size:0.82rem;">
+            <span style="color:#64748b;"><i class="fa-solid fa-microchip" style="color:#0066cc;"></i> Auto CR80 Dimension Ratio</span>
+            <a href="register.html" style="color:#0066cc; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+              Try It Live <i class="fa-solid fa-arrow-right" style="font-size:0.75rem;"></i>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Razorpay-Style Bento Grid Core Services Section -->
+  <section id="services" class="rz-bento-section">
+    <div class="rz-section-header">
+      <span class="rz-section-tag" id="servicesTag"><i class="fa-solid fa-cubes"></i> Enterprise Suite</span>
+      <h2 class="rz-section-title" id="servicesTitle">Everything Your Cyber Cafe Needs in One Place</h2>
+      <p class="rz-section-desc" id="servicesDesc">
+        Engineered for Digital Retailers, CSC Centers, and Cyber Cafes to fulfill citizen requests with lightning turnaround, highest resolution, and maximum profit margins.
+      </p>
+    </div>
+
+    <!-- Category Filter Tabs (Razorpay Style) -->
+    <div class="rz-filter-tabs-wrapper">
+      <div class="rz-filter-tabs">
+        <button type="button" class="rz-filter-btn active" onclick="filterBentoServices('all', this)">All Solutions</button>
+        <button type="button" class="rz-filter-btn" onclick="filterBentoServices('print', this)">PVC ID Printing</button>
+        <button type="button" class="rz-filter-btn" onclick="filterBentoServices('pan', this)">PAN Recovery</button>
+        <button type="button" class="rz-filter-btn" onclick="filterBentoServices('wallet', this)">UPI Wallet</button>
+      </div>
+    </div>
+
+    <!-- Asymmetric Bento Grid -->
+    <div class="rz-bento-grid" id="servicesGrid">
+      
+      <!-- Bento Card 1: Large Featured Card (Aadhaar PVC) -->
+      <div class="rz-bento-card rz-col-span-8 border-orange" data-category="print">
+        <div class="rz-bento-badge-row">
+          <div class="rz-bento-icon orange">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <span class="rz-bento-price-tag orange" id="svcBadge_0">Starting ₹20 / card</span>
+        </div>
+        <h3 class="rz-bento-title" id="svcTitle_0">Aadhaar HD Smart PVC Print</h3>
+        <p class="rz-bento-desc" id="svcDesc_0">
+          Upload password-protected e-Aadhaar PDFs or scans. Our engine automatically crops, straightens, removes masks, sharpens photographs, and aligns dual-sided CR-80 standard PVC printable formats in crisp 300 DPI vector clarity.
+        </p>
+        <ul class="rz-bento-features-list">
+          <li><i class="fa-solid fa-circle-check"></i> Standard CR-80 PVC Dimensions (85.60 × 53.98 mm)</li>
+          <li><i class="fa-solid fa-circle-check"></i> Auto photo contrast correction & QR code enhancement</li>
+          <li><i class="fa-solid fa-circle-check"></i> High-resolution 300 DPI PDF output ready for direct tray printing</li>
+        </ul>
+        <a href="register.html" class="rz-bento-action-link orange">
+          <span>Start Aadhaar Print</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Bento Card 2: Medium Card (PAN Find) -->
+      <div class="rz-bento-card rz-col-span-4 border-green" data-category="pan">
+        <div class="rz-bento-badge-row">
+          <div class="rz-bento-icon green">
+            <i class="fa-solid fa-magnifying-glass-location"></i>
+          </div>
+          <span class="rz-bento-price-tag green" id="svcBadge_1">Starting ₹30 / search</span>
+        </div>
+        <h3 class="rz-bento-title" id="svcTitle_1">Lost PAN Recovery by Aadhaar</h3>
+        <p class="rz-bento-desc" id="svcDesc_1">
+          Client lost their PAN card? Enter Aadhaar number and applicant details to cross-match official NSDL/UTIITSL databases and recover verified PAN numbers in seconds.
+        </p>
+        <ul class="rz-bento-features-list">
+          <li><i class="fa-solid fa-circle-check"></i> 100% Accurate NSDL/UTI database match</li>
+          <li><i class="fa-solid fa-circle-check"></i> Operative & Active status confirmation</li>
+        </ul>
+        <a href="register.html" class="rz-bento-action-link green">
+          <span>Find Lost PAN</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Bento Card 3: Medium Card (Voter ID) -->
+      <div class="rz-bento-card rz-col-span-4 border-blue" data-category="print">
+        <div class="rz-bento-badge-row">
+          <div class="rz-bento-icon blue">
+            <i class="fa-solid fa-person-booth"></i>
+          </div>
+          <span class="rz-bento-price-tag blue" id="svcBadge_2">Starting ₹20 / card</span>
+        </div>
+        <h3 class="rz-bento-title" id="svcTitle_2">Voter ID (e-EPIC) HD Print</h3>
+        <p class="rz-bento-desc" id="svcDesc_2">
+          Convert modern digital e-EPIC documents into clear laminated PVC printable sheets with official Election Commission formatting.
+        </p>
+        <ul class="rz-bento-features-list">
+          <li><i class="fa-solid fa-circle-check"></i> Dual-sided auto separation</li>
+          <li><i class="fa-solid fa-circle-check"></i> Clean vector export</li>
+        </ul>
+        <a href="register.html" class="rz-bento-action-link blue">
+          <span>Order Voter ID</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Bento Card 4: Medium Card (Ayushman Card) -->
+      <div class="rz-bento-card rz-col-span-4 border-purple" data-category="print">
+        <div class="rz-bento-badge-row">
+          <div class="rz-bento-icon purple">
+            <i class="fa-solid fa-heart-pulse"></i>
+          </div>
+          <span class="rz-bento-price-tag" id="svcBadge_3" style="background:#f5f3ff; color:#7c3aed; border:1px solid #ddd6fe;">Starting ₹25 / card</span>
+        </div>
+        <h3 class="rz-bento-title" id="svcTitle_3">Ayushman PM-JAY Golden Card</h3>
+        <p class="rz-bento-desc" id="svcDesc_3">
+          Standardize government health cards and state schemes with family ID and ABHA number into durable pocket PVC cards.
+        </p>
+        <ul class="rz-bento-features-list">
+          <li><i class="fa-solid fa-circle-check"></i> Official PM-JAY layout compliance</li>
+          <li><i class="fa-solid fa-circle-check"></i> Crisp QR scan guarantee</li>
+        </ul>
+        <a href="register.html" class="rz-bento-action-link" style="color:#7c3aed;">
+          <span>Format Health Card</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Bento Card 5: Medium Card (Instant Wallet) -->
+      <div class="rz-bento-card rz-col-span-4 border-green" data-category="wallet">
+        <div class="rz-bento-badge-row">
+          <div class="rz-bento-icon green">
+            <i class="fa-solid fa-wallet"></i>
+          </div>
+          <span class="rz-bento-price-tag green" id="svcBadge_4">0% Fees (FREE)</span>
+        </div>
+        <h3 class="rz-bento-title" id="svcTitle_4">Instant Wallet & UPI QR Topup</h3>
+        <p class="rz-bento-desc" id="svcDesc_4">
+          Recharge your balance 24x7 using PhonePe, Google Pay, or Paytm. Submit the payment reference for approval within ~2 mins.
+        </p>
+        <ul class="rz-bento-features-list">
+          <li><i class="fa-solid fa-circle-check"></i> Zero gateway fees or convenience charge</li>
+          <li><i class="fa-solid fa-circle-check"></i> Realtime transaction ledger</li>
+        </ul>
+        <a href="register.html" class="rz-bento-action-link green">
+          <span>Top Up Wallet</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Razorpay-Style Connected 4-Step Process Section -->
+  <section id="how-it-works" class="rz-process-section">
+    <div class="rz-process-container">
+      <div class="rz-section-header">
+        <span class="rz-section-tag" id="workflowTag"><i class="fa-solid fa-diagram-project"></i> Rapid Workflow</span>
+        <h2 class="rz-section-title" id="workflowTitle">How The Platform Works</h2>
+        <p class="rz-section-desc">From onboarding to downloading print-ready documents in less than 2 minutes.</p>
+      </div>
+
+      <div class="rz-process-grid">
+        <div class="rz-process-card">
+          <div class="rz-process-step-num" id="stepNum_0">01</div>
+          <h4 class="rz-process-title" id="stepTitle_0">Create Free Account</h4>
+          <p class="rz-process-desc" id="stepDesc_0">Register your retailer account with Name, Mobile, and Email in under 30 seconds with 0 onboarding fees.</p>
+        </div>
+
+        <div class="rz-process-card">
+          <div class="rz-process-step-num" id="stepNum_1">02</div>
+          <h4 class="rz-process-title" id="stepTitle_1">Top Up Wallet</h4>
+          <p class="rz-process-desc" id="stepDesc_1">Scan the Admin UPI QR code, submit the 12-digit UTR reference, and balance is credited rapidly.</p>
+        </div>
+
+        <div class="rz-process-card">
+          <div class="rz-process-step-num" id="stepNum_2">03</div>
+          <h4 class="rz-process-title" id="stepTitle_2">Submit Order</h4>
+          <p class="rz-process-desc" id="stepDesc_2">Upload your Aadhaar PDF, enter PAN query details, or submit Voter ID for automated formatting.</p>
+        </div>
+
+        <div class="rz-process-card">
+          <div class="rz-process-step-num" id="stepNum_3">04</div>
+          <h4 class="rz-process-title" id="stepTitle_3">Instant HD Download</h4>
+          <p class="rz-process-desc" id="stepDesc_3">Download pixel-perfect 300 DPI CR-80 PDFs directly to your system ready for immediate printing.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Impact Statistics Strip -->
-  <section class="stats-strip">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-number">50,000<span>+</span></div>
-        <div class="stat-label">Document Orders Processed</div>
+  <!-- Razorpay-Style Transparent Pricing & Turnaround Matrix -->
+  <section id="pricing" class="rz-pricing-section">
+    <div class="rz-section-header">
+      <span class="rz-section-tag" id="pricingTag"><i class="fa-solid fa-indian-rupee-sign"></i> Transparent Pricing</span>
+      <h2 class="rz-section-title" id="pricingTitle">Predictable Rates & Turnaround Times</h2>
+      <p class="rz-section-desc" id="pricingDesc">No monthly subscriptions, no lock-ins, and no hidden fees. Pay strictly for the orders you submit.</p>
+    </div>
+
+    <div class="rz-pricing-card-wrap">
+      <div class="rz-pricing-table-header">
+        <div>Service Offering</div>
+        <div>Turnaround Time</div>
+        <div>Deliverable Format</div>
+        <div>Standard Fee</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-number">99.8<span>%</span></div>
-        <div class="stat-label">Verification Success Rate</div>
+
+      <div class="rz-pricing-row">
+        <div>
+          <strong class="rz-pricing-title-main" id="pricingCardTitle_0">Aadhaar HD Smart PVC Print</strong>
+          <span class="rz-pricing-sub" id="pricingCardDesc_0">Front & Back CR-80 auto-aligned layout</span>
+        </div>
+        <div><span class="badge-status badge-completed" id="pricingCardSpeed_0"><i class="fa-solid fa-bolt"></i> 1 - 2 mins</span></div>
+        <div><span style="color:#475569; font-weight:600; font-size:0.88rem;" id="pricingCardFormat_0">HD Vector PDF (300 DPI)</span></div>
+        <div><strong class="rz-pricing-rate" style="color:#e04d00;" id="pricingCardPrice_0">₹ 20.00</strong></div>
       </div>
-      <div class="stat-item">
-        <div class="stat-number">&lt; 2<span>min</span></div>
-        <div class="stat-label">Average Order Turnaround</div>
+
+      <div class="rz-pricing-row">
+        <div>
+          <strong class="rz-pricing-title-main" id="pricingCardTitle_1">Lost PAN Find by Aadhaar</strong>
+          <span class="rz-pricing-sub" id="pricingCardDesc_1">Official NSDL / UTIITSL cross-match</span>
+        </div>
+        <div><span class="badge-status badge-completed" id="pricingCardSpeed_1"><i class="fa-solid fa-bolt"></i> &lt; 30 secs</span></div>
+        <div><span style="color:#475569; font-weight:600; font-size:0.88rem;" id="pricingCardFormat_1">Verified Number & Status</span></div>
+        <div><strong class="rz-pricing-rate" style="color:#03a93a;" id="pricingCardPrice_1">₹ 30.00</strong></div>
       </div>
-      <div class="stat-item">
-        <div class="stat-number">12,500<span>+</span></div>
-        <div class="stat-label">Active Cyber Cafe Partners</div>
+
+      <div class="rz-pricing-row">
+        <div>
+          <strong class="rz-pricing-title-main" id="pricingCardTitle_2">Voter ID (e-EPIC) HD Print</strong>
+          <span class="rz-pricing-sub" id="pricingCardDesc_2">Election Commission format standard</span>
+        </div>
+        <div><span class="badge-status badge-completed" id="pricingCardSpeed_2"><i class="fa-solid fa-bolt"></i> 1 - 2 mins</span></div>
+        <div><span style="color:#475569; font-weight:600; font-size:0.88rem;" id="pricingCardFormat_2">CR-80 PVC Layout</span></div>
+        <div><strong class="rz-pricing-rate" style="color:#e04d00;" id="pricingCardPrice_2">₹ 20.00</strong></div>
+      </div>
+
+      <div class="rz-pricing-row">
+        <div>
+          <strong class="rz-pricing-title-main" id="pricingCardTitle_3">Ayushman Golden Card Print</strong>
+          <span class="rz-pricing-sub" id="pricingCardDesc_3">PM-JAY beneficiary card formatting</span>
+        </div>
+        <div><span class="badge-status badge-completed" id="pricingCardSpeed_3"><i class="fa-solid fa-bolt"></i> 1 - 2 mins</span></div>
+        <div><span style="color:#475569; font-weight:600; font-size:0.88rem;" id="pricingCardFormat_3">PVC Print Sheet</span></div>
+        <div><strong class="rz-pricing-rate" style="color:#e04d00;" id="pricingCardPrice_3">₹ 25.00</strong></div>
+      </div>
+
+      <div class="rz-pricing-row" style="background:#fdfcf9;">
+        <div>
+          <strong class="rz-pricing-title-main" id="pricingCardTitle_4">Manual UPI Wallet Recharge</strong>
+          <span class="rz-pricing-sub" id="pricingCardDesc_4">Google Pay, PhonePe, Paytm, BHIM UPI</span>
+        </div>
+        <div><span class="badge-status badge-completed" id="pricingCardSpeed_4"><i class="fa-solid fa-bolt"></i> 1 - 2 mins</span></div>
+        <div><span style="color:#475569; font-weight:600; font-size:0.88rem;" id="pricingCardFormat_4">Direct Wallet Credit</span></div>
+        <div><strong class="rz-pricing-rate" style="color:#03a93a;" id="pricingCardPrice_4">0% (FREE)</strong></div>
       </div>
     </div>
   </section>
 
-  <!-- Core Services Section -->
-  <section id="services" style="padding: 20px 0 70px 0;">
-    <div class="section-header-modern">
-      <span class="section-tag"><i class="fa-solid fa-cubes"></i> Powerful Features</span>
-      <h2 class="section-title">Everything You Need For Digital Citizen Services</h2>
-      <p class="section-subtitle">Specially tailored for Cyber Cafes, CSC Centers, and Digital Retailers across India for fastest execution and maximum customer satisfaction.</p>
+  <!-- Retailer Testimonials -->
+  <section id="testimonialsSection" style="padding: 70px 20px; background: #fafafa; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+    <div class="rz-section-header">
+      <span class="rz-section-tag" id="testimonialsTag"><i class="fa-solid fa-star"></i> Verified Feedback</span>
+      <h2 class="rz-section-title" id="testimonialsTitle">Trusted By 12,000+ Cyber Cafe Owners</h2>
+      <p class="rz-section-desc" id="testimonialsDesc">Hear why CSC operators and digital centers across India rely on Instant Online Seva.</p>
     </div>
 
-    <div class="services-grid-modern">
-      <!-- Feature 1 -->
-      <div class="service-card-modern">
-        <div class="service-icon-box" style="background:#fff7ed; color:#ea580c;">
-          <i class="fa-solid fa-id-card"></i>
-        </div>
-        <h3 class="service-card-title">Aadhaar HD PVC Print</h3>
-        <p class="service-card-desc">
-          Upload Aadhaar PDF password-protected or decrypted. Get a pixel-perfect, dual-sided standard CR-80 PVC printable format with enhanced clarity.
-        </p>
-        <ul class="service-feature-checklist">
-          <li><i class="fa-solid fa-circle-check"></i> Standard CR80 ID Card dimensions</li>
-          <li><i class="fa-solid fa-circle-check"></i> Auto color correction & photo sharpening</li>
-          <li><i class="fa-solid fa-circle-check"></i> High-resolution 300 DPI vector rendering</li>
-        </ul>
-        <div class="service-card-footer">
-          <span class="service-rate-pill">Starting ₹20 / card</span>
-          <a href="register.html" class="btn-primary-orange" style="padding: 8px 18px; font-size: 0.88rem;">Order Print <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
-
-      <!-- Feature 2 -->
-      <div class="service-card-modern">
-        <div class="service-icon-box" style="background:#ecfdf5; color:#059669;">
-          <i class="fa-solid fa-magnifying-glass-location"></i>
-        </div>
-        <h3 class="service-card-title">PAN Find by Aadhaar</h3>
-        <p class="service-card-desc">
-          Lost your client's PAN card or forgot the number? Enter Aadhaar number and applicant details to retrieve the exact PAN number from official database.
-        </p>
-        <ul class="service-feature-checklist">
-          <li><i class="fa-solid fa-circle-check"></i> 100% Accurate NSDL/UTI cross-match</li>
-          <li><i class="fa-solid fa-circle-check"></i> Active/Operative status report</li>
-          <li><i class="fa-solid fa-circle-check"></i> Instant result delivered in portal</li>
-        </ul>
-        <div class="service-card-footer">
-          <span class="service-rate-pill" style="color:#059669; background:#ecfdf5; border-color:#a7f3d0;">Starting ₹30 / search</span>
-          <a href="register.html" class="btn-primary-green" style="padding: 8px 18px; font-size: 0.88rem;">Search Now <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
-
-      <!-- Feature 3 -->
-      <div class="service-card-modern">
-        <div class="service-icon-box" style="background:#f0f9ff; color:#0284c7;">
-          <i class="fa-solid fa-person-booth"></i>
-        </div>
-        <h3 class="service-card-title">Voter ID (EPIC) HD Print</h3>
-        <p class="service-card-desc">
-          Convert official Election Commission e-EPIC documents into clear, crisp, laminated PVC-ready print files with scannable QR code formatting.
-        </p>
-        <ul class="service-feature-checklist">
-          <li><i class="fa-solid fa-circle-check"></i> Modern e-EPIC layout alignment</li>
-          <li><i class="fa-solid fa-circle-check"></i> Front and back auto-separated</li>
-          <li><i class="fa-solid fa-circle-check"></i> Clean print-ready PDF export</li>
-        </ul>
-        <div class="service-card-footer">
-          <span class="service-rate-pill" style="color:#0284c7; background:#f0f9ff; border-color:#bae6fd;">Starting ₹20 / card</span>
-          <a href="register.html" class="btn-primary-orange" style="padding: 8px 18px; font-size: 0.88rem;">Order Print <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
-
-      <!-- Feature 4 -->
-      <div class="service-card-modern">
-        <div class="service-icon-box" style="background:#fdf2f8; color:#db2777;">
-          <i class="fa-solid fa-heart-pulse"></i>
-        </div>
-        <h3 class="service-card-title">Ayushman & Health Cards</h3>
-        <p class="service-card-desc">
-          Format PM-JAY Ayushman Golden Cards and State Health Schemes into standard printable PVC sheets for easy patient wallet storage.
-        </p>
-        <ul class="service-feature-checklist">
-          <li><i class="fa-solid fa-circle-check"></i> Official PM-JAY format compliant</li>
-          <li><i class="fa-solid fa-circle-check"></i> Family ID and ABHA number highlighted</li>
-          <li><i class="fa-solid fa-circle-check"></i> Ultra-high clarity text & QR scan</li>
-        </ul>
-        <div class="service-card-footer">
-          <span class="service-rate-pill" style="color:#db2777; background:#fdf2f8; border-color:#fbcfe8;">Starting ₹25 / card</span>
-          <a href="register.html" class="btn-primary-orange" style="padding: 8px 18px; font-size: 0.88rem;">Order Print <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
-
-      <!-- Feature 5 -->
-      <div class="service-card-modern">
-        <div class="service-icon-box" style="background:#f5f3ff; color:#7c3aed;">
-          <i class="fa-solid fa-wallet"></i>
-        </div>
-        <h3 class="service-card-title">Instant Wallet & UPI QR</h3>
-        <p class="service-card-desc">
-          Top-up your wallet anytime using PhonePe, Google Pay, or Paytm. Submit the UTR number with screenshot for fast approval and 1-click orders.
-        </p>
-        <ul class="service-feature-checklist">
-          <li><i class="fa-solid fa-circle-check"></i> Zero convenience or gateway charges</li>
-          <li><i class="fa-solid fa-circle-check"></i> Direct Admin UPI QR integration</li>
-          <li><i class="fa-solid fa-circle-check"></i> Transparent ledger & history tracker</li>
-        </ul>
-        <div class="service-card-footer">
-          <span class="service-rate-pill" style="color:#7c3aed; background:#f5f3ff; border-color:#ddd6fe;">0% Fees</span>
-          <a href="register.html" class="btn-primary-orange" style="padding: 8px 18px; font-size: 0.88rem;">Top Up Now <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
-
-      <!-- Feature 6 -->
-      <div class="service-card-modern">
-        <div class="service-icon-box" style="background:#fff1f2; color:#e11d48;">
-          <i class="fa-solid fa-headset"></i>
-        </div>
-        <h3 class="service-card-title">Priority Support & Helpdesk</h3>
-        <p class="service-card-desc">
-          Facing any delay or error with an order? Raise a ticket directly from your dashboard or ping our live WhatsApp desk for instant resolution.
-        </p>
-        <ul class="service-feature-checklist">
-          <li><i class="fa-solid fa-circle-check"></i> Dedicated complaint management</li>
-          <li><i class="fa-solid fa-circle-check"></i> 100% Refund policy on failed orders</li>
-          <li><i class="fa-solid fa-circle-check"></i> Active WhatsApp assistance</li>
-        </ul>
-        <div class="service-card-footer">
-          <span class="service-rate-pill" style="color:#e11d48; background:#fff1f2; border-color:#fecdd3;">24x7 Active</span>
-          <a href="register.html" class="btn-primary-orange" style="padding: 8px 18px; font-size: 0.88rem;">Get Help <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Process / How It Works Section -->
-  <section id="how-it-works" class="process-section">
-    <div style="max-width: 1240px; margin: 0 auto; text-align: center;">
-      <span class="section-tag"><i class="fa-solid fa-diagram-project"></i> 4 Simple Steps</span>
-      <h2 class="section-title">How The Portal Works</h2>
-      <p class="section-subtitle">Get your print jobs and PAN numbers in under 2 minutes with zero technical hassle.</p>
-
-      <div class="process-grid" style="margin-top: 45px;">
-        <div class="process-step-card">
-          <div class="process-step-badge">1</div>
-          <h4 class="process-step-title">Create Free Account</h4>
-          <p class="process-step-desc">Sign up with your Name, Phone Number, and Email in under 30 seconds with zero onboarding fees.</p>
-        </div>
-
-        <div class="process-step-card">
-          <div class="process-step-badge">2</div>
-          <h4 class="process-step-title">Top Up Wallet</h4>
-          <p class="process-step-desc">Scan the Admin UPI QR, enter payment UTR number, and your balance is credited rapidly.</p>
-        </div>
-
-        <div class="process-step-card">
-          <div class="process-step-badge">3</div>
-          <h4 class="process-step-title">Submit Order</h4>
-          <p class="process-step-desc">Select Aadhaar PVC Print, PAN Find, or Voter ID and upload your file or search details.</p>
-        </div>
-
-        <div class="process-step-card">
-          <div class="process-step-badge">4</div>
-          <h4 class="process-step-title">Instant Download</h4>
-          <p class="process-step-desc">Admin processes the job and uploads the print-ready HD file directly to your Documents tab.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Transparent Rates & Pricing Section -->
-  <section id="pricing" style="padding: 30px 0 80px 0;">
-    <div class="section-header-modern">
-      <span class="section-tag"><i class="fa-solid fa-indian-rupee-sign"></i> Transparent Pricing</span>
-      <h2 class="section-title">Service Rates & Turnaround Times</h2>
-      <p class="section-subtitle">No monthly subscriptions or hidden charges. Pay only for the exact services you use.</p>
-    </div>
-
-    <div class="pricing-container">
-      <div class="pricing-table-card">
-        <div class="pricing-table-head">
-          <div>
-            <h3 style="font-size: 1.25rem; font-weight: 800;">Official Retail Rates</h3>
-            <p style="color: #94a3b8; font-size: 0.85rem;">All rates are inclusive of portal processing & high-res PDF rendering</p>
-          </div>
-          <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 4px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 700;">
-            <i class="fa-solid fa-check"></i> No Minimum Deposit
-          </span>
-        </div>
-
-        <div class="pricing-item-row" style="background: #f8fafc; font-weight: 800; color: #475569; font-size: 0.8rem; text-transform: uppercase;">
-          <div>Service Name</div>
-          <div>Turnaround</div>
-          <div>Format / Specs</div>
-          <div>Retail Price</div>
-        </div>
-
-        <div class="pricing-item-row">
-          <div>
-            <strong style="color: #0f172a; display: block;">Aadhaar PVC Card Formatting</strong>
-            <span style="color: #64748b; font-size: 0.82rem;">Front + Back CR80 layout with photo sharpening</span>
-          </div>
-          <div><span class="badge-status badge-completed"><i class="fa-solid fa-bolt"></i> 1 - 3 mins</span></div>
-          <div><span style="color: #475569; font-size: 0.85rem;">300 DPI PDF</span></div>
-          <div><strong style="color: #ea580c; font-size: 1.1rem;">₹ 20.00</strong></div>
-        </div>
-
-        <div class="pricing-item-row">
-          <div>
-            <strong style="color: #0f172a; display: block;">Instant PAN Find by Aadhaar</strong>
-            <span style="color: #64748b; font-size: 0.82rem;">Extract 10-digit PAN number directly from database</span>
-          </div>
-          <div><span class="badge-status badge-completed"><i class="fa-solid fa-bolt"></i> Instant</span></div>
-          <div><span style="color: #475569; font-size: 0.85rem;">Text & Report</span></div>
-          <div><strong style="color: #059669; font-size: 1.1rem;">₹ 30.00</strong></div>
-        </div>
-
-        <div class="pricing-item-row">
-          <div>
-            <strong style="color: #0f172a; display: block;">Voter ID (EPIC) HD Print</strong>
-            <span style="color: #64748b; font-size: 0.82rem;">e-EPIC document conversion to double-sided PVC</span>
-          </div>
-          <div><span class="badge-status badge-completed"><i class="fa-solid fa-bolt"></i> 2 - 5 mins</span></div>
-          <div><span style="color: #475569; font-size: 0.85rem;">Print PDF</span></div>
-          <div><strong style="color: #ea580c; font-size: 1.1rem;">₹ 20.00</strong></div>
-        </div>
-
-        <div class="pricing-item-row">
-          <div>
-            <strong style="color: #0f172a; display: block;">Ayushman & State Health Card</strong>
-            <span style="color: #64748b; font-size: 0.82rem;">PM-JAY Gold Card layout preparation</span>
-          </div>
-          <div><span class="badge-status badge-completed"><i class="fa-solid fa-bolt"></i> 2 - 5 mins</span></div>
-          <div><span style="color: #475569; font-size: 0.85rem;">Print PDF</span></div>
-          <div><strong style="color: #ea580c; font-size: 1.1rem;">₹ 25.00</strong></div>
-        </div>
-
-        <div class="pricing-item-row" style="background: #fffdfa;">
-          <div>
-            <strong style="color: #0f172a; display: block;">Wallet Top-Up via UPI</strong>
-            <span style="color: #64748b; font-size: 0.82rem;">PhonePe, GPay, Paytm, BHIM UPI</span>
-          </div>
-          <div><span class="badge-status badge-completed"><i class="fa-solid fa-bolt"></i> 1 - 2 mins</span></div>
-          <div><span style="color: #475569; font-size: 0.85rem;">Direct Balance</span></div>
-          <div><strong style="color: #16a34a; font-size: 1.1rem;">0% (FREE)</strong></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonials Section -->
-  <section style="padding: 20px 0 70px 0; background: #fafafa; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
-    <div class="section-header-modern">
-      <span class="section-tag"><i class="fa-solid fa-star"></i> Retailer Feedback</span>
-      <h2 class="section-title">Trusted By 12,000+ Cyber Cafe Owners</h2>
-      <p class="section-subtitle">Hear why CSC operators and digital centers across Odisha and India rely on Utkal Print Portal.</p>
-    </div>
-
-    <div class="testimonials-grid">
+    <div class="testimonials-grid" style="max-width: 1280px; margin: 0 auto;">
       <div class="testimonial-card-modern">
         <div>
           <div class="testimonial-stars">
             <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
           </div>
-          <p class="testimonial-quote">
-            "Utkal Print Portal has changed how our Cyber Cafe operates. The PVC card dimensions are always 100% accurate and our customers are delighted with the HD 300 DPI print quality."
+          <p class="testimonial-quote" id="reviewQuote_0">
+            "Instant Online Seva has changed how our Cyber Cafe operates. The PVC card dimensions are always 100% accurate and our customers are delighted with the HD 300 DPI print quality."
           </p>
         </div>
         <div class="testimonial-author">
           <div class="author-avatar">SP</div>
           <div class="author-info">
-            <h5>Soumya Ranjan Panda</h5>
-            <p>Maa Tarini Cyber Cafe, Bhubaneswar</p>
+            <h5 id="reviewAuthor_0">Soumya Ranjan Panda</h5>
+            <p id="reviewRole_0">Maa Tarini Cyber Cafe, Bhubaneswar</p>
           </div>
         </div>
       </div>
@@ -521,15 +530,15 @@
           <div class="testimonial-stars">
             <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
           </div>
-          <p class="testimonial-quote">
+          <p class="testimonial-quote" id="reviewQuote_1">
             "Finding lost PAN numbers by Aadhaar used to take days. Here we get the result in seconds. The manual UPI wallet recharge is verified within 2 minutes flat. Fantastic portal!"
           </p>
         </div>
         <div class="testimonial-author">
           <div class="author-avatar" style="background: linear-gradient(135deg, #dcfce7, #86efac); color: #166534;">BM</div>
           <div class="author-info">
-            <h5>Biswajit Mohapatra</h5>
-            <p>CSC Seva Kendra, Cuttack</p>
+            <h5 id="reviewAuthor_1">Biswajit Mohapatra</h5>
+            <p id="reviewRole_1">CSC Seva Kendra, Cuttack</p>
           </div>
         </div>
       </div>
@@ -539,122 +548,129 @@
           <div class="testimonial-stars">
             <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
           </div>
-          <p class="testimonial-quote">
-            "Customer support is always active. Whenever there's any query regarding document formatting or wallet, the team resolves it immediately on WhatsApp. Highly recommended!"
+          <p class="testimonial-quote" id="reviewQuote_2">
+            "Customer support is always active. Whenever there is any query regarding document formatting or wallet, the team resolves it immediately on WhatsApp. Highly recommended!"
           </p>
         </div>
         <div class="testimonial-author">
           <div class="author-avatar" style="background: linear-gradient(135deg, #e0f2fe, #7dd3fc); color: #0369a1;">AK</div>
           <div class="author-info">
-            <h5>Anil Kumar Sethi</h5>
-            <p>Digital Print Hub, Sambalpur</p>
+            <h5 id="reviewAuthor_2">Anil Kumar Sethi</h5>
+            <p id="reviewRole_2">Digital Print Hub, Sambalpur</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Frequently Asked Questions (FAQ) Section -->
-  <section id="faq" style="padding: 70px 0;">
-    <div class="section-header-modern">
-      <span class="section-tag"><i class="fa-solid fa-circle-question"></i> Got Questions?</span>
-      <h2 class="section-title">Frequently Asked Questions</h2>
-      <p class="section-subtitle">Everything you need to know about wallet recharges, document formats, and service turnaround.</p>
+  <!-- Razorpay-Style Interactive FAQ Accordion -->
+  <section id="faq" class="rz-faq-section">
+    <div class="rz-section-header">
+      <span class="rz-section-tag" id="faqTag"><i class="fa-solid fa-circle-question"></i> Got Questions?</span>
+      <h2 class="rz-section-title" id="faqTitle">Frequently Asked Questions</h2>
+      <p class="rz-section-desc" id="faqDesc">Everything you need to know about wallet recharges, document formats, and turnaround.</p>
     </div>
 
-    <div class="faq-wrapper">
-      <div class="faq-item-modern active">
-        <button class="faq-question-btn" onclick="toggleFaq(this)">
+    <div class="rz-faq-wrapper" id="faqAccordionContainer">
+      
+      <div class="rz-faq-item active">
+        <button type="button" class="rz-faq-trigger" onclick="toggleRzFaq(this)">
           <span>How fast does the PAN Find by Aadhaar service work?</span>
-          <i class="fa-solid fa-chevron-down faq-icon-chevron"></i>
+          <div class="rz-faq-icon"><i class="fa-solid fa-chevron-down"></i></div>
         </button>
-        <div class="faq-answer-content">
-          PAN recovery by Aadhaar or details is processed within seconds once submitted. You will immediately see the retrieved PAN number with official status report inside your completed orders dashboard.
+        <div class="rz-faq-body">
+          PAN recovery by Aadhaar is processed within seconds once submitted. You will immediately see the retrieved PAN number with official status report inside your completed orders dashboard.
         </div>
       </div>
 
-      <div class="faq-item-modern">
-        <button class="faq-question-btn" onclick="toggleFaq(this)">
+      <div class="rz-faq-item">
+        <button type="button" class="rz-faq-trigger" onclick="toggleRzFaq(this)">
           <span>How do I recharge my wallet balance?</span>
-          <i class="fa-solid fa-chevron-down faq-icon-chevron"></i>
+          <div class="rz-faq-icon"><i class="fa-solid fa-chevron-down"></i></div>
         </button>
-        <div class="faq-answer-content">
+        <div class="rz-faq-body">
           Navigate to the <strong>Wallet</strong> tab in your dashboard, scan the Admin UPI QR Code using Google Pay, PhonePe, or Paytm, enter the 12-digit UTR/Transaction Reference Number, and upload the payment screenshot. Admin verifies and credits your wallet within 1-2 minutes.
         </div>
       </div>
 
-      <div class="faq-item-modern">
-        <button class="faq-question-btn" onclick="toggleFaq(this)">
-          <span>Are the downloaded files ready for PVC ID Card printing?</span>
-          <i class="fa-solid fa-chevron-down faq-icon-chevron"></i>
+      <div class="rz-faq-item">
+        <button type="button" class="rz-faq-trigger" onclick="toggleRzFaq(this)">
+          <span>Are the downloaded files ready for direct PVC ID Card printing?</span>
+          <div class="rz-faq-icon"><i class="fa-solid fa-chevron-down"></i></div>
         </button>
-        <div class="faq-answer-content">
+        <div class="rz-faq-body">
           Yes! All generated PDF files are exported strictly in standard ISO/IEC 7810 CR80 dimensions (85.60 × 53.98 mm) at 300 DPI high resolution, perfectly sized for direct printing on Epson, Canon, Magicard, Fargo, or Evolis card printers.
         </div>
       </div>
 
-      <div class="faq-item-modern">
-        <button class="faq-question-btn" onclick="toggleFaq(this)">
+      <div class="rz-faq-item">
+        <button type="button" class="rz-faq-trigger" onclick="toggleRzFaq(this)">
           <span>What happens if an order is rejected or data is not found?</span>
-          <i class="fa-solid fa-chevron-down faq-icon-chevron"></i>
+          <div class="rz-faq-icon"><i class="fa-solid fa-chevron-down"></i></div>
         </button>
-        <div class="faq-answer-content">
+        <div class="rz-faq-body">
           If any order cannot be processed or if data is not found, your wallet points/funds are instantly refunded 100% with a clear rejection reason displayed in your dashboard.
         </div>
       </div>
 
-      <div class="faq-item-modern">
-        <button class="faq-question-btn" onclick="toggleFaq(this)">
-          <span>Is my customer data secure and confidential?</span>
-          <i class="fa-solid fa-chevron-down faq-icon-chevron"></i>
+      <div class="rz-faq-item">
+        <button type="button" class="rz-faq-trigger" onclick="toggleRzFaq(this)">
+          <span>Is customer data safe, secure, and confidential?</span>
+          <div class="rz-faq-icon"><i class="fa-solid fa-chevron-down"></i></div>
         </button>
-        <div class="faq-answer-content">
+        <div class="rz-faq-body">
           Absolutely. We adhere to stringent 256-bit encryption standards. Uploaded documents and processed records are stored securely in protected storage and accessible only by your verified retailer account.
         </div>
       </div>
+
     </div>
   </section>
 
-  <!-- High-Impact Call to Action Banner -->
-  <section class="cta-banner-wrapper">
-    <div class="cta-banner-card">
-      <h2 class="cta-banner-title">Ready to Boost Your Digital Print Business?</h2>
-      <p class="cta-banner-subtitle">Join thousands of CSC operators and Cyber Cafes saving time and delighting customers with instant HD PVC prints & PAN recovery.</p>
-      <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-        <a href="register.html" class="btn-tiranga" style="padding: 14px 38px; font-size: 1.05rem;">
-          <i class="fa-solid fa-user-plus"></i> Register Free Account
+  <!-- Razorpay-Style High-Impact CTA Banner -->
+  <section class="rz-cta-banner-wrapper" id="ctaSection">
+    <div class="rz-cta-banner-card">
+      <span class="rz-cta-badge" id="ctaBadge">
+        <i class="fa-solid fa-bolt"></i> 30 Seconds Onboarding
+      </span>
+      <h2 class="rz-cta-title" id="ctaTitle">Ready to Supercharge Your Citizen Services?</h2>
+      <p class="rz-cta-subtitle" id="ctaSubtitle">
+        Join thousands of cyber cafe operators and CSC centers saving hours daily with instant HD PVC prints, lost PAN recovery, and 0-delay UPI recharges.
+      </p>
+      <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+        <a href="register.html" class="rz-btn-primary" id="ctaPrimaryBtn" style="padding:15px 40px; font-size:1.05rem;">
+          <i class="fa-solid fa-user-plus"></i>
+          <span>Create Free Account</span>
         </a>
-        <a href="login.html" class="btn-outline-custom" style="padding: 13px 30px; font-size: 1.05rem; background: rgba(255,255,255,0.15); color:#fff !important; border-color: rgba(255,255,255,0.3);">
-          <i class="fa-solid fa-lock"></i> Member Login
+        <a href="login.html" class="rz-btn-secondary" id="ctaSecondaryBtn" style="background:rgba(255,255,255,0.1); color:#ffffff !important; border-color:rgba(255,255,255,0.25);">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i>
+          <span>User Login</span>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- Modern Multi-Column Footer -->
+  <!-- Razorpay-Style Enterprise Multi-Column Footer -->
   <footer class="footer-modern">
     <div class="footer-container">
       <div class="footer-top-grid">
+        
         <div class="footer-brand">
-          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-            <div class="brand-logo-icon" style="width:36px; height:36px; font-size:1.05rem;">
-              <i class="fa-solid fa-print"></i>
-            </div>
-            <h4 style="margin-bottom:0;">UTKAL PRINT PORTAL</h4>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+            <img src="logo .png" alt="Instant Online Seva" class="footer-logo-img">
           </div>
-          <p>
+          <p id="footerSlogan">
             India's foremost digital print formatting and PAN retrieval suite designed for retailers, cyber cafes, and customer service centers.
           </p>
-          <div style="display: flex; gap: 12px; color: #cbd5e1; font-size: 1.1rem;">
-            <a href="#" style="color:#94a3b8;" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#" style="color:#94a3b8;" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="#" style="color:#25d366;" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-            <a href="#" style="color:#0ea5e9;" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+          <div style="display:flex; gap:12px; color:#cbd5e1; font-size:1.15rem; margin-top:16px;">
+            <a href="#" id="footerSocialFacebook" style="color:#94a3b8;" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" id="footerSocialTwitter" style="color:#94a3b8;" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" id="footerSocialWhatsapp" style="color:#25d366;" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="#" id="footerSocialTelegram" style="color:#0ea5e9;" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
           </div>
         </div>
 
         <div>
-          <h5 class="footer-col-title">Core Services</h5>
+          <h5 class="footer-col-title">Core Solutions</h5>
           <ul class="footer-links-list">
             <li><a href="login.html">Aadhaar PVC Print</a></li>
             <li><a href="login.html">PAN Find by Aadhaar</a></li>
@@ -665,42 +681,43 @@
         </div>
 
         <div>
-          <h5 class="footer-col-title">Quick Links</h5>
+          <h5 class="footer-col-title">Quick Navigation</h5>
           <ul class="footer-links-list">
-            <li><a href="#services">Our Features</a></li>
+            <li><a href="#services">Our Solutions</a></li>
             <li><a href="#pricing">Rates & Speeds</a></li>
-            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#how-it-works">Workflow</a></li>
             <li><a href="#faq">Portal FAQ</a></li>
-            <li><a href="login.html">Retailer Login</a></li>
+            <li><a href="login.html">User Login</a></li>
           </ul>
         </div>
 
         <div>
-          <h5 class="footer-col-title">Help & Support</h5>
+          <h5 class="footer-col-title">Contact & Desk</h5>
           <div class="footer-contact-item">
-            <i class="fa-solid fa-phone" style="color:#ff8a00;"></i>
-            <span>+91 98765 43210</span>
+            <i class="fa-solid fa-phone" style="color:#fd5c00;"></i>
+            <a href="tel:+919876543210" id="footerPhoneLink" style="color:inherit; text-decoration:none;"><span id="footerPhoneText">+91 98765 43210</span></a>
           </div>
           <div class="footer-contact-item">
             <i class="fa-brands fa-whatsapp" style="color:#22c55e;"></i>
-            <span>+91 98765 43210 (Live Chat)</span>
+            <a href="https://wa.me/919876543210" id="footerWhatsappLink" target="_blank" style="color:inherit; text-decoration:none;"><span id="footerWhatsappText">+91 98765 43210 (Live Chat)</span></a>
           </div>
           <div class="footer-contact-item">
             <i class="fa-solid fa-envelope" style="color:#38bdf8;"></i>
-            <span>support@utkalprint.com</span>
+            <a href="mailto:support@utkalprint.com" id="footerEmailLink" style="color:inherit; text-decoration:none;"><span id="footerEmailText">support@utkalprint.com</span></a>
           </div>
           <div class="footer-contact-item">
             <i class="fa-solid fa-clock" style="color:#f59e0b;"></i>
-            <span>Mon - Sat: 8:00 AM - 10:00 PM</span>
+            <span id="footerHoursText">Mon - Sat: 8:00 AM - 10:00 PM</span>
           </div>
         </div>
+
       </div>
 
       <div class="footer-bottom-bar">
-        <div>
-          © 2026 Utkal Print Portal. All rights reserved. Built for Indian Digital Retailers.
+        <div id="footerCopyright">
+          © 2026 Instant Online Seva. All rights reserved. Built for Indian Digital Retailers.
         </div>
-        <div style="display: flex; gap: 20px;">
+        <div style="display:flex; gap:20px;">
           <a href="#" style="color:#64748b; text-decoration:none;">Privacy Policy</a>
           <a href="#" style="color:#64748b; text-decoration:none;">Terms of Service</a>
           <a href="#" style="color:#64748b; text-decoration:none;">Refund Policy</a>
@@ -709,21 +726,58 @@
     </div>
   </footer>
 
-  <!-- Interactive Scripts -->
+  <!-- Interactive Scripts (Toggles, Filters, Navbar elevation) -->
   <script>
-    function toggleFaq(button) {
-      const parent = button.parentElement;
+    // Interactive PVC Card Flip (Front / Back)
+    function switchCardSide(side) {
+      const front = document.getElementById('cardFrontView');
+      const back = document.getElementById('cardBackView');
+      const frontBtn = document.getElementById('tabFrontBtn');
+      const backBtn = document.getElementById('tabBackBtn');
+
+      if (side === 'front') {
+        front.style.display = 'flex';
+        back.style.display = 'none';
+        frontBtn.classList.add('active');
+        backBtn.classList.remove('active');
+      } else {
+        front.style.display = 'none';
+        back.style.display = 'block';
+        frontBtn.classList.remove('active');
+        backBtn.classList.add('active');
+      }
+    }
+
+    // Category Filter for Bento Services
+    function filterBentoServices(category, btn) {
+      document.querySelectorAll('.rz-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.rz-bento-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Accordion FAQ Toggle
+    function toggleRzFaq(trigger) {
+      const parent = trigger.parentElement;
       const isActive = parent.classList.contains('active');
-      
-      document.querySelectorAll('.faq-item-modern').forEach(item => {
+
+      document.querySelectorAll('.rz-faq-item').forEach(item => {
         item.classList.remove('active');
       });
-      
+
       if (!isActive) {
         parent.classList.add('active');
       }
     }
 
+    // Mobile Navbar Toggle
     function toggleMobileNav() {
       const menu = document.getElementById('mobile-nav');
       const icon = document.getElementById('mobileNavIcon');
@@ -738,9 +792,22 @@
         }
       }
     }
+
+    // Dynamic glass navbar elevation on scroll
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('mainNavbar');
+      if (navbar) {
+        if (window.scrollY > 20) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      }
+    }, { passive: true });
   </script>
 
   <script src="js/api.js"></script>
+  <script src="js/landing.js"></script>
   <script src="js/auth.js"></script>
 </body>
 </html>

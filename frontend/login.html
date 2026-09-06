@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Retailer Login - Utkal Print Portal</title>
+  <title>User Login - Utkal Print Portal</title>
   
   <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
+  <link rel="icon" type="image/png" href="logo-icon.png">
   <link rel="stylesheet" href="css/style.css">
   
   <style>
@@ -19,120 +20,318 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
+      padding: 40px 16px;
       position: relative;
-      background: radial-gradient(circle at 50% 15%, rgba(255, 107, 0, 0.14) 0%, transparent 55%),
-                  radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.1) 0%, transparent 55%),
-                  #fbfbf9;
+      background: radial-gradient(circle at 50% 8%, rgba(0, 102, 204, 0.08) 0%, transparent 45%),
+                  radial-gradient(circle at 85% 85%, rgba(253, 92, 0, 0.06) 0%, transparent 45%),
+                  #f8fafc;
+      overflow-x: hidden;
     }
+    
     .auth-card {
       background: #ffffff;
       border: 1.5px solid #e2e8f0;
       border-radius: 24px;
-      box-shadow: 0 25px 55px -12px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(226, 232, 240, 0.6);
-      max-width: 460px;
+      box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+      max-width: 480px;
       width: 100%;
       overflow: hidden;
       position: relative;
       z-index: 2;
-      backdrop-filter: blur(16px);
+      transition: all 0.3s ease;
     }
-    .auth-header {
-      background: linear-gradient(135deg, #0b1120 0%, #1e293b 100%);
-      padding: 34px 24px;
-      text-align: center;
-      color: #ffffff;
-      position: relative;
-    }
-    .auth-header::after {
+
+    .auth-card::before {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; right: 0;
+      top: 0; left: 0; right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #ff6b00, #10b981);
+      background: linear-gradient(90deg, #0066cc 0%, #fd5c00 50%, #03a93a 100%);
+      z-index: 3;
     }
-    .auth-body {
-      padding: 32px 28px;
+
+    .auth-header {
+      background: #ffffff;
+      padding: 34px 28px 20px;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid #f1f5f9;
     }
-    .form-group {
-      margin-bottom: 20px;
+
+    .auth-logo-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      margin-bottom: 14px;
+      transition: transform 0.2s ease;
     }
-    .form-label {
-      display: block;
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: #334155;
+
+    .auth-logo-link:hover {
+      transform: scale(1.02);
+    }
+
+    .auth-logo-img {
+      height: 44px;
+      width: auto;
+      max-width: 220px;
+      object-fit: contain;
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+
+    .auth-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0b1120;
+      letter-spacing: -0.025em;
       margin-bottom: 6px;
     }
+
+    .auth-subtitle {
+      font-size: 0.9rem;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    .auth-body {
+      padding: 26px 28px 32px;
+    }
+
+    /* Razorpay Segmented Tab Switcher */
+    .rz-auth-tabs {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 9999px;
+      padding: 4px;
+      display: flex;
+      gap: 4px;
+      margin-bottom: 22px;
+    }
+
+    .rz-auth-tab {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 9px 14px;
+      border-radius: 9999px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .rz-auth-tab.active {
+      background: #ffffff;
+      color: #0066cc;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .role-context-banner {
+      padding: 11px 14px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.84rem;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #0066cc;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+
     .input-wrapper {
       position: relative;
       display: flex;
       align-items: center;
+      width: 100%;
     }
+
     .input-wrapper i.icon-lead {
       position: absolute;
       left: 14px;
       color: #94a3b8;
-      font-size: 1rem;
+      font-size: 0.98rem;
+      transition: color 0.2s ease;
+      pointer-events: none;
     }
+
     .form-control {
       width: 100%;
       padding: 12px 14px 12px 42px;
       border: 1.5px solid #cbd5e1;
       border-radius: 12px;
-      font-size: 0.95rem;
-      color: #1e293b;
-      transition: all 0.25s ease;
+      font-size: 0.94rem;
+      color: #0f172a;
+      background: #ffffff;
+      transition: all 0.22s ease;
       outline: none;
+      box-sizing: border-box;
     }
+
     .form-control:focus {
-      border-color: #ff6b00;
-      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
+      border-color: #0066cc;
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
     }
+
+    .input-wrapper:focus-within i.icon-lead {
+      color: #0066cc;
+    }
+
     .toggle-password {
       position: absolute;
       right: 14px;
       color: #94a3b8;
       cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s ease;
     }
-    .demo-box {
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 22px;
-      font-size: 0.82rem;
-      color: #475569;
+
+    .toggle-password:hover {
+      color: #0f172a;
     }
-    .demo-btn {
-      background: #e2e8f0;
+
+    .btn-rz-primary {
+      background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+      color: #ffffff;
       border: none;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #1e293b;
+      border-radius: 12px;
+      padding: 13px 20px;
+      font-weight: 800;
+      font-size: 0.96rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
       cursor: pointer;
-      margin-top: 4px;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0, 102, 204, 0.28);
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-rz-primary:hover {
+      background: linear-gradient(135deg, #0052a3 0%, #014183 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 102, 204, 0.38);
+    }
+
+    .btn-send-otp {
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      color: #0066cc;
+      font-weight: 700;
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
       transition: all 0.2s ease;
     }
-    .demo-btn:hover {
-      background: #fed7aa;
-      color: #c2410c;
-      transform: translateY(-1px);
+
+    .btn-send-otp:hover {
+      background: #dbeafe;
+      border-color: #93c5fd;
     }
+
+    .otp-boxes-container {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin: 16px 0 14px;
+    }
+
+    .otp-box {
+      width: 46px;
+      height: 52px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      text-align: center;
+      color: #0f172a;
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .otp-box:focus {
+      border-color: #0066cc;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.16);
+      transform: translateY(-2px);
+    }
+
+    .dev-otp-helper {
+      background: #f0fdf4;
+      border: 1px dashed #86efac;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      color: #03a93a;
+      margin: 10px 0 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+      transition: background-color 0.2s ease;
+    }
+
+    .dev-otp-helper:hover {
+      background: #dcfce7;
+    }
+
+
     @media (max-width: 500px) {
       .auth-container {
-        padding: 20px 14px;
+        padding: 20px 12px;
+      }
+      .auth-card {
+        border-radius: 20px;
       }
       .auth-header {
-        padding: 24px 18px;
+        padding: 26px 18px 16px;
       }
       .auth-body {
-        padding: 22px 18px;
+        padding: 20px 16px 26px;
       }
-      .demo-box {
-        padding: 10px 12px;
+      .auth-title {
+        font-size: 1.35rem;
+      }
+      .otp-box {
+        width: 40px;
+        height: 48px;
+        font-size: 1.3rem;
+      }
+      .otp-boxes-container {
+        gap: 6px;
       }
     }
   </style>
@@ -142,31 +341,45 @@
   <div class="auth-container">
     <div class="auth-card">
       <div class="auth-header">
-        <a href="index.html" class="brand-logo" style="justify-content: center; color: #fff; margin-bottom: 8px;">
-          <div class="brand-logo-icon" style="width:38px; height:38px; font-size:1.1rem;">
-            <i class="fa-solid fa-print"></i>
-          </div>
-          <span style="color:#ffffff;">UTKAL<span style="color:#ff8a00;">PRINT</span></span>
-          <span class="brand-badge">PRO</span>
+        <a href="index.html" class="auth-logo-link">
+          <img src="logo .png" alt="Instant Online Seva" class="auth-logo-img">
         </a>
-        <p style="font-size: 0.88rem; color: #cbd5e1; margin: 0;">Sign in to your Retailer & Printing Dashboard</p>
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">User Login</p>
       </div>
 
       <div class="auth-body">
-        <form id="loginForm">
+        <!-- Razorpay-Style Tab Switcher -->
+        <div class="rz-auth-tabs">
+          <button type="button" class="rz-auth-tab active" id="tabPasswordMode">
+            <i class="fa-solid fa-key"></i> Password Login
+          </button>
+          <button type="button" class="rz-auth-tab" id="tabOtpMode">
+            <i class="fa-solid fa-mobile-screen"></i> Login with OTP
+          </button>
+        </div>
+
+        <!-- Role Context Banner -->
+        <div class="role-context-banner">
+          <i class="fa-solid fa-shield-halved" style="font-size: 1.15rem; flex-shrink: 0;"></i>
+          <span id="bannerText">Login to access Aadhaar PVC card printing, PAN recovery & instant wallet.</span>
+        </div>
+
+        <!-- 1. Password Login Form -->
+        <form id="passwordLoginForm">
           <!-- Identifier (Email/Phone) -->
           <div class="form-group">
-            <label class="form-label" for="loginIdentifier">Email or Phone Number</label>
+            <label class="form-label" for="loginIdentifier">Email ID or Registered Mobile</label>
             <div class="input-wrapper">
               <i class="fa-solid fa-user icon-lead"></i>
-              <input type="text" id="loginIdentifier" class="form-control" placeholder="Enter registered email or mobile" required autofocus>
+              <input type="text" id="loginIdentifier" class="form-control" placeholder="Enter email or 10-digit mobile" required autofocus>
             </div>
           </div>
 
           <!-- Password -->
           <div class="form-group">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <label class="form-label" for="loginPassword" style="margin:0;">Password</label>
+              <label class="form-label" for="loginPassword" style="margin:0;">Secure Password</label>
             </div>
             <div class="input-wrapper">
               <i class="fa-solid fa-lock icon-lead"></i>
@@ -175,24 +388,87 @@
             </div>
           </div>
 
+          <!-- Switch to OTP Login Link -->
+          <div style="display: flex; justify-content: flex-end; margin-bottom: 14px;">
+            <a href="#" id="btnSwitchToOtp" style="color: #0066cc; font-size: 0.84rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+              <i class="fa-solid fa-mobile-screen"></i> Login with SMS OTP instead
+            </a>
+          </div>
+
           <!-- Submit Button -->
-          <button type="submit" id="btnSubmit" class="btn-tiranga" style="width: 100%; justify-content: center; padding: 13px; font-size: 1rem; border-radius: 12px; margin-top: 10px;">
-            <i class="fa-solid fa-arrow-right-to-bracket"></i> Login to Portal
+          <button type="submit" id="btnSubmitPassword" class="btn-rz-primary">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Login to Dashboard
           </button>
         </form>
 
-        <!-- Quick Demo Switcher -->
-        <div class="demo-box">
-          <div style="font-weight: 700; margin-bottom: 6px; color:#0f172a;"><i class="fa-solid fa-bolt" style="color:#ff6b00;"></i> Quick 1-Click Demo Access:</div>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button type="button" class="demo-btn" id="btnFillUser"><i class="fa-solid fa-user"></i> Retailer (demo@utkalprint.com)</button>
-            <button type="button" class="demo-btn" id="btnFillAdmin"><i class="fa-solid fa-shield"></i> Admin (admin@utkalprint.com)</button>
+        <!-- 2. OTP Login Form (Initially Hidden) -->
+        <form id="otpLoginForm" style="display: none;">
+          <!-- Phone Number -->
+          <div class="form-group">
+            <label class="form-label" for="otpPhone">Registered 10-Digit Mobile Number</label>
+            <div style="display: flex; gap: 8px;">
+              <div class="input-wrapper" style="flex: 1;">
+                <i class="fa-solid fa-phone icon-lead"></i>
+                <input type="tel" id="otpPhone" class="form-control" placeholder="10-digit mobile number" pattern="[6-9][0-9]{9}" maxlength="10" required>
+              </div>
+              <button type="button" id="btnSendLoginOtp" class="btn-send-otp">
+                <i class="fa-solid fa-paper-plane"></i> Send OTP
+              </button>
+            </div>
           </div>
+
+          <!-- OTP Input Section (Shows after OTP is dispatched) -->
+          <div id="otpInputSection" style="display: none;">
+            <!-- Dev OTP Helper -->
+            <div id="devOtpLoginBanner" class="dev-otp-helper" style="display: none;" onclick="autoFillDevLoginOtp()">
+              <i class="fa-solid fa-bolt" style="color: #03a93a;"></i>
+              <span>Simulator Code: <strong id="devOtpLoginCode">------</strong> (Click to fill)</span>
+            </div>
+
+            <label class="form-label" style="text-align: center; margin-bottom: 2px;">Enter 6-Digit SMS Verification Code</label>
+            <div class="otp-boxes-container">
+              <input type="text" maxlength="1" class="otp-box login-otp-box" data-index="0" inputmode="numeric">
+              <input type="text" maxlength="1" class="otp-box login-otp-box" data-index="1" inputmode="numeric">
+              <input type="text" maxlength="1" class="otp-box login-otp-box" data-index="2" inputmode="numeric">
+              <input type="text" maxlength="1" class="otp-box login-otp-box" data-index="3" inputmode="numeric">
+              <input type="text" maxlength="1" class="otp-box login-otp-box" data-index="4" inputmode="numeric">
+              <input type="text" maxlength="1" class="otp-box login-otp-box" data-index="5" inputmode="numeric">
+            </div>
+
+            <div style="text-align: center; margin-bottom: 16px; font-size: 0.84rem; color: #64748b;">
+              <span id="loginTimerContainer">Resend code in <strong id="loginTimerCount" style="color: #0066cc;">60</strong>s</span>
+              <button type="button" id="btnLoginResendOtp" style="display: none; background: none; border: none; color: #0066cc; font-weight: 700; cursor: pointer;">
+                <i class="fa-solid fa-rotate-right"></i> Resend OTP SMS
+              </button>
+            </div>
+
+            <button type="submit" id="btnSubmitOtpLogin" class="btn-rz-primary">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> Verify & Login
+            </button>
+          </div>
+
+          <!-- Switch back to Password Link -->
+          <div style="display: flex; justify-content: flex-end; margin-top: 14px;">
+            <a href="#" id="btnSwitchToPassword" style="color: #0066cc; font-size: 0.84rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+              <i class="fa-solid fa-lock"></i> Login with Password instead
+            </a>
+          </div>
+        </form>
+
+
+        <!-- Registration Link -->
+        <div style="text-align: center; margin-top: 22px; font-size: 0.88rem; color: #64748b;">
+          New Retailer or Cyber Cafe? 
+          <a href="register.html" style="color: #0066cc; font-weight: 800; text-decoration: none;">Create Free Account</a>
         </div>
 
-        <div style="text-align: center; margin-top: 24px; font-size: 0.9rem; color: #64748b;">
-          Don't have an account? 
-          <a href="register.html" style="color: #ff6b00; font-weight: 700; text-decoration: none;">Register free here</a>
+        <!-- Trust Badges -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 24px; padding-top: 18px; border-top: 1px solid #f1f5f9; font-size: 0.75rem; color: #94a3b8; flex-wrap: wrap;">
+          <span><i class="fa-solid fa-shield-check" style="color: #03a93a;"></i> 256-Bit SSL Encrypted</span>
+          <span>&bull;</span>
+          <span><i class="fa-solid fa-bolt" style="color: #fd5c00;"></i> Instant OTP Login</span>
+          <span>&bull;</span>
+          <span><i class="fa-solid fa-headset" style="color: #0066cc;"></i> Retailer Support</span>
         </div>
       </div>
     </div>
@@ -201,52 +477,233 @@
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script>
-    const form = document.getElementById('loginForm');
-    const btnSubmit = document.getElementById('btnSubmit');
-    const pwdInput = document.getElementById('loginPassword');
+    // Elements
+    const passwordLoginForm = document.getElementById('passwordLoginForm');
+    const otpLoginForm = document.getElementById('otpLoginForm');
+    const btnSwitchToOtp = document.getElementById('btnSwitchToOtp');
+    const btnSwitchToPassword = document.getElementById('btnSwitchToPassword');
+    const tabPasswordMode = document.getElementById('tabPasswordMode');
+    const tabOtpMode = document.getElementById('tabOtpMode');
+    const bannerText = document.getElementById('bannerText');
+
+    // Password login elements
+    const loginIdentifier = document.getElementById('loginIdentifier');
+    const loginPassword = document.getElementById('loginPassword');
+    const btnSubmitPassword = document.getElementById('btnSubmitPassword');
     const togglePwd = document.getElementById('togglePasswordBtn');
 
+    // OTP login elements
+    const otpPhone = document.getElementById('otpPhone');
+    const btnSendLoginOtp = document.getElementById('btnSendLoginOtp');
+    const otpInputSection = document.getElementById('otpInputSection');
+    const devOtpLoginBanner = document.getElementById('devOtpLoginBanner');
+    const devOtpLoginCode = document.getElementById('devOtpLoginCode');
+    const loginTimerContainer = document.getElementById('loginTimerContainer');
+    const loginTimerCount = document.getElementById('loginTimerCount');
+    const btnLoginResendOtp = document.getElementById('btnLoginResendOtp');
+    const btnSubmitOtpLogin = document.getElementById('btnSubmitOtpLogin');
+    const loginOtpBoxes = document.querySelectorAll('.login-otp-box');
+
+    let loginCountdown = null;
+    let currentLoginDevOtp = null;
+
+    // Toggle Password Visibility
     togglePwd.addEventListener('click', () => {
-      const type = pwdInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      pwdInput.setAttribute('type', type);
+      const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      loginPassword.setAttribute('type', type);
       togglePwd.classList.toggle('fa-eye');
       togglePwd.classList.toggle('fa-eye-slash');
     });
 
-    document.getElementById('btnFillUser').addEventListener('click', () => {
-      document.getElementById('loginIdentifier').value = 'demo@utkalprint.com';
-      document.getElementById('loginPassword').value = 'User@123';
-    });
+    function setLoginMode(mode) {
+      if (mode === 'otp') {
+        if (tabPasswordMode) tabPasswordMode.classList.remove('active');
+        if (tabOtpMode) tabOtpMode.classList.add('active');
+        passwordLoginForm.style.display = 'none';
+        otpLoginForm.style.display = 'block';
+        bannerText.textContent = 'Instant OTP Login: Enter registered mobile to receive a 6-digit code.';
+        otpPhone.focus();
+      } else {
+        if (tabOtpMode) tabOtpMode.classList.remove('active');
+        if (tabPasswordMode) tabPasswordMode.classList.add('active');
+        otpLoginForm.style.display = 'none';
+        passwordLoginForm.style.display = 'block';
+        bannerText.textContent = 'Login to access Aadhaar PVC card printing, PAN recovery & instant wallet.';
+        loginIdentifier.focus();
+      }
+    }
 
-    document.getElementById('btnFillAdmin').addEventListener('click', () => {
-      document.getElementById('loginIdentifier').value = 'admin@utkalprint.com';
-      document.getElementById('loginPassword').value = 'Admin@123';
-    });
+    if (tabPasswordMode && tabOtpMode) {
+      tabPasswordMode.addEventListener('click', () => setLoginMode('password'));
+      tabOtpMode.addEventListener('click', () => setLoginMode('otp'));
+    }
 
-    form.addEventListener('submit', async (e) => {
+    // Switch between Password & OTP Login modes
+    btnSwitchToOtp.addEventListener('click', (e) => {
       e.preventDefault();
-      const identifier = document.getElementById('loginIdentifier').value.trim();
-      const password = document.getElementById('loginPassword').value;
+      setLoginMode('otp');
+    });
+
+    btnSwitchToPassword.addEventListener('click', (e) => {
+      e.preventDefault();
+      setLoginMode('password');
+    });
+
+
+
+    // Handle Password Login Submit
+    passwordLoginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const identifier = loginIdentifier.value.trim();
+      const password = loginPassword.value;
 
       if (!identifier || !password) {
-        showToast('Please enter your email/phone and password', 'error');
+        showToast('Please enter your credentials', 'error');
         return;
       }
 
-      btnSubmit.disabled = true;
-      btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+      btnSubmitPassword.disabled = true;
+      btnSubmitPassword.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
 
       try {
         const res = await API.login({ identifier, password });
+
         if (res.user.role === 'admin') {
+          showToast('Administrator account detected. Redirecting...', 'success');
           window.location.href = getAppPath('admin/dashboard.html');
         } else {
+          showToast('Login successful!', 'success');
           window.location.href = getAppPath('user/dashboard.html');
         }
       } catch (err) {
         showToast(err.message || 'Login failed. Please check credentials.', 'error');
-        btnSubmit.disabled = false;
-        btnSubmit.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Login to Portal';
+        btnSubmitPassword.disabled = false;
+        btnSubmitPassword.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Login to Dashboard';
+      }
+    });
+
+    // Handle 6-digit boxes in OTP Login
+    loginOtpBoxes.forEach((box, idx) => {
+      box.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = val ? val[val.length - 1] : '';
+        if (val && idx < loginOtpBoxes.length - 1) {
+          loginOtpBoxes[idx + 1].focus();
+        }
+      });
+
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && idx > 0) {
+          loginOtpBoxes[idx - 1].focus();
+        }
+      });
+
+      box.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text').trim();
+        const digits = text.replace(/[^0-9]/g, '').slice(0, 6);
+        if (digits) {
+          digits.split('').forEach((d, i) => {
+            if (loginOtpBoxes[i]) loginOtpBoxes[i].value = d;
+          });
+          loginOtpBoxes[Math.min(digits.length, 5)].focus();
+        }
+      });
+    });
+
+    function startLoginTimer(sec = 60) {
+      clearInterval(loginCountdown);
+      loginTimerContainer.style.display = 'inline';
+      btnLoginResendOtp.style.display = 'none';
+      let remaining = sec;
+      loginTimerCount.textContent = remaining;
+
+      loginCountdown = setInterval(() => {
+        remaining--;
+        loginTimerCount.textContent = remaining;
+        if (remaining <= 0) {
+          clearInterval(loginCountdown);
+          loginTimerContainer.style.display = 'none';
+          btnLoginResendOtp.style.display = 'inline-flex';
+        }
+      }, 1000);
+    }
+
+    function autoFillDevLoginOtp() {
+      if (currentLoginDevOtp && currentLoginDevOtp.length === 6) {
+        currentLoginDevOtp.split('').forEach((d, i) => {
+          if (loginOtpBoxes[i]) loginOtpBoxes[i].value = d;
+        });
+        showToast('Simulator code filled!', 'success');
+        btnSubmitOtpLogin.focus();
+      }
+    }
+
+    // Send Login OTP
+    async function triggerSendLoginOtp() {
+      const phone = otpPhone.value.trim();
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        showToast('Please enter a valid 10-digit mobile number', 'error');
+        return;
+      }
+
+      btnSendLoginOtp.disabled = true;
+      btnSendLoginOtp.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
+      try {
+        const res = await API.sendOtp({ phone, purpose: 'login' });
+        showToast(res.message || 'OTP dispatched to your mobile!', 'success');
+        otpInputSection.style.display = 'block';
+
+        currentLoginDevOtp = res.dev_otp;
+        if (res.dev_otp) {
+          devOtpLoginCode.textContent = res.dev_otp;
+          devOtpLoginBanner.style.display = 'inline-flex';
+        } else {
+          devOtpLoginBanner.style.display = 'none';
+        }
+
+        startLoginTimer(60);
+        loginOtpBoxes.forEach(b => b.value = '');
+        setTimeout(() => loginOtpBoxes[0].focus(), 150);
+      } catch (err) {
+        showToast(err.message || 'Failed to send login OTP.', 'error');
+      } finally {
+        btnSendLoginOtp.disabled = false;
+        btnSendLoginOtp.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send OTP';
+      }
+    }
+
+    btnSendLoginOtp.addEventListener('click', triggerSendLoginOtp);
+    btnLoginResendOtp.addEventListener('click', triggerSendLoginOtp);
+
+    // Submit OTP Login
+    otpLoginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const phone = otpPhone.value.trim();
+      let otp = '';
+      loginOtpBoxes.forEach(b => otp += b.value.trim());
+
+      if (otp.length !== 6) {
+        showToast('Please enter all 6 digits of the OTP', 'error');
+        return;
+      }
+
+      btnSubmitOtpLogin.disabled = true;
+      btnSubmitOtpLogin.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Logging in...';
+
+      try {
+        const res = await API.loginWithOtp({ phone, otp });
+        showToast('Login successful via OTP!', 'success');
+        setTimeout(() => {
+          window.location.href = getAppPath(res.user.role === 'admin' ? 'admin/dashboard.html' : 'user/dashboard.html');
+        }, 500);
+      } catch (err) {
+        showToast(err.message || 'Invalid or expired OTP code.', 'error');
+        btnSubmitOtpLogin.disabled = false;
+        btnSubmitOtpLogin.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Verify & Login';
+        loginOtpBoxes.forEach(b => b.value = '');
+        loginOtpBoxes[0].focus();
       }
     });
   </script>

@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/png" href="../logo-icon.png">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -18,18 +19,14 @@
     <!-- Sidebar Navigation -->
     <aside class="portal-sidebar">
       <div class="sidebar-header">
-        <a href="dashboard.html" class="brand-logo" style="font-size: 1.15rem;">
-          <div class="brand-logo-icon" style="width:34px; height:34px; font-size:1rem;">
-            <i class="fa-solid fa-print"></i>
-          </div>
-          <div>
-            <span>UTKAL</span><span style="color: #ff6b00;">PRINT</span>
-            <span class="brand-badge">PRO</span>
-          </div>
+        <a href="dashboard.html" class="brand-logo">
+          <img src="../logo .png" alt="Instant Online Seva" class="brand-logo-img">
+          <img src="../logo-icon.png" alt="Instant Online Seva" class="brand-logo-icon-img">
         </a>
       </div>
 
       <ul class="sidebar-menu">
+        <li class="sidebar-category-header">Main Overview</li>
         <li class="sidebar-item">
           <a href="dashboard.html" class="sidebar-link">
             <i class="fa-solid fa-house" style="color:#64748b;"></i>
@@ -37,21 +34,30 @@
           </a>
         </li>
 
+        <li class="sidebar-category-header">Citizen Services</li>
         <li class="sidebar-item">
           <a href="print-list.html" class="sidebar-link">
-            <i class="fa-solid fa-id-card" style="color:#ea580c;"></i>
+            <i class="fa-solid fa-id-card" style="color:#e04d00;"></i>
             <span>Print List</span>
-            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.75rem; opacity:0.5;"></i>
+            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.72rem; opacity:0.4;"></i>
           </a>
         </li>
 
         <li class="sidebar-item">
           <a href="pan-find.html" class="sidebar-link">
-            <i class="fa-solid fa-magnifying-glass-location" style="color:#059669;"></i>
-            <span>Pan Find List</span>
+            <i class="fa-solid fa-magnifying-glass-location" style="color:#03a93a;"></i>
+            <span>PAN Find List</span>
           </a>
         </li>
 
+        <li class="sidebar-item">
+          <a href="orders.html" class="sidebar-link">
+            <i class="fa-solid fa-clock-rotate-left" style="color:#2563eb;"></i>
+            <span>My Orders & Process</span>
+          </a>
+        </li>
+
+        <li class="sidebar-category-header">Finance & Wallet</li>
         <li class="sidebar-item">
           <a href="wallet.html" class="sidebar-link">
             <i class="fa-solid fa-wallet" style="color:#7c3aed;"></i>
@@ -60,32 +66,40 @@
           </a>
         </li>
 
-        <li class="sidebar-item">
-          <a href="profile.html" class="sidebar-link">
-            <i class="fa-solid fa-user" style="color:#0284c7;"></i>
-            <span>My Account</span>
-          </a>
-        </li>
-
+        <li class="sidebar-category-header">Account & Desk</li>
         <li class="sidebar-item active">
           <a href="documents.html" class="sidebar-link active">
-            <i class="fa-solid fa-file-pdf" style="color:#ff6b00;"></i>
-            <span>Documents</span>
+            <i class="fa-solid fa-file-pdf" style="color:#fd5c00;"></i>
+            <span>My Documents</span>
           </a>
         </li>
 
         <li class="sidebar-item">
           <a href="complaint.html" class="sidebar-link">
             <i class="fa-solid fa-headset" style="color:#f59e0b;"></i>
-            <span>Complaint</span>
+            <span>Support Helpdesk</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="profile.html" class="sidebar-link">
+            <i class="fa-solid fa-user-gear" style="color:#0284c7;"></i>
+            <span>My Account</span>
           </a>
         </li>
       </ul>
 
-      <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(226, 232, 240, 0.8);">
-        <a href="#" class="sidebar-link btn-logout-action" style="color: #dc2626;">
+      <!-- User Info & Logout in sidebar bottom -->
+      <div class="sidebar-user-footer">
+        <div class="sidebar-user-info">
+          <div class="topbar-avatar user-initials-display">UP</div>
+          <div class="sidebar-user-details">
+            <div class="user-name-display">Member</div>
+            <div class="user-role-display">Active User</div>
+          </div>
+        </div>
+        <a href="#" class="btn-icon-action danger btn-logout-action" title="Logout">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          <span>Logout</span>
         </a>
       </div>
     </aside>
@@ -98,42 +112,69 @@
             <i class="fa-solid fa-bars"></i>
           </button>
           <div>
-            <h1 style="font-size: 1.28rem; font-weight: 800; color: #0f172a; margin: 0;">My Documents Library</h1>
-            <small style="color: #64748b; font-weight: 500;">Download your verified print cards & processed PDF files</small>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Digital Locker &bull; Archive</div>
+            <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;"><span>My Documents</span><span class="page-title-sub"> Vault</span></h1>
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <a href="wallet.html" style="text-decoration: none; display: flex; align-items: center; gap: 8px; background: #ecfdf5; border: 1.5px solid #a7f3d0; padding: 7px 16px; border-radius: 9999px; color: #059669; font-weight: 800; font-size: 0.92rem;">
-            <i class="fa-solid fa-wallet"></i>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <!-- Wallet Pill -->
+          <a href="wallet.html" class="topbar-wallet-pill" title="View Wallet Balance">
+            <i class="fa-solid fa-wallet" style="color: #03a93a;"></i>
             <span class="user-wallet-display">₹0</span>
+            <span class="badge-topup"><i class="fa-solid fa-plus"></i> Topup</span>
           </a>
+
+          <!-- User Chip -->
+          <div class="topbar-user-chip">
+            <div class="topbar-avatar user-initials-display">UP</div>
+            <div>
+              <div class="user-name-display" style="line-height: 1.1;">User</div>
+              <div class="user-role-display" style="font-size: 0.68rem; color: #64748b; font-weight: 600;">Active User</div>
+            </div>
+          </div>
         </div>
       </header>
 
       <div class="portal-content">
+        <!-- Banner info -->
+        <div style="background: linear-gradient(135deg, rgba(253, 92, 0,0.05), rgba(13,148,136,0.05)); border: 1.5px solid rgba(253, 92, 0,0.15); border-radius: var(--radius-lg); padding: 18px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(253, 92, 0,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <h4 style="margin: 0 0 3px; font-weight: 800; color: var(--text-dark); font-size: 0.98rem;">256-Bit Encrypted Document Locker</h4>
+              <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted);">All verified government ID prints and certificates are archived here indefinitely with high-resolution 300 DPI vector fidelity.</p>
+            </div>
+          </div>
+          <a href="print-list.html" class="btn-tiranga" style="padding: 9px 18px; font-size: 0.84rem; text-decoration: none;">
+            <i class="fa-solid fa-plus"></i> New Order
+          </a>
+        </div>
+
         <div class="glass-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 14px;">
             <div>
               <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 2px;">Completed & Print-Ready Files</h2>
-              <p style="color: #64748b; font-size: 0.88rem; margin: 0;">All files are retained securely and accessible anytime</p>
+              <p style="color: #64748b; font-size: 0.88rem; margin: 0;">Instant 1-click download for high-definition ready PDFs</p>
             </div>
 
             <div class="search-box-wrapper">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
-              <input type="text" id="searchDocInput" placeholder="Search by Order # or Service..." oninput="filterDocuments()">
+              <input type="text" id="searchDocInput" placeholder="Filter by Order # or Service..." oninput="filterDocuments()">
             </div>
           </div>
 
-          <div class="custom-table-container">
+          <div class="custom-table-container documents-desktop-table">
             <table class="custom-table">
               <thead>
                 <tr>
-                  <th>Order #</th>
-                  <th>Service Type</th>
+                  <th>Order Identifier</th>
+                  <th>Service Spec</th>
                   <th>Completed Date</th>
-                  <th>File Format</th>
-                  <th>Download / Action</th>
+                  <th>Format / Quality</th>
+                  <th style="text-align: right;">Download Action</th>
                 </tr>
               </thead>
               <tbody id="documentsTbody">
@@ -141,12 +182,22 @@
                   <td colspan="5" class="loading-state-cell">
                     <div class="loading-spinner-wrapper">
                       <i class="fa-solid fa-spinner fa-spin"></i>
-                      <span>Loading ready documents...</span>
+                      <span>Loading secured documents...</span>
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <!-- Mobile View: Completed & Print-Ready Files Cards Container -->
+          <div class="documents-mobile-container" id="documentsMobileContainer">
+            <div class="loading-state-cell" style="padding: 30px; text-align: center; color: #64748b;">
+              <div class="loading-spinner-wrapper">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.4rem; color: var(--primary);"></i>
+                <div style="font-weight: 600; margin-top: 8px;">Loading secured documents...</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -167,9 +218,14 @@
       }
     } catch (e) {}
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // Race-condition free DOM hydration
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        loadDocuments();
+      });
+    } else {
       loadDocuments();
-    });
+    }
 
     async function loadDocuments() {
       try {
@@ -184,41 +240,119 @@
 
     function renderDocuments(docs) {
       const tbody = document.getElementById('documentsTbody');
+      const mobileContainer = document.getElementById('documentsMobileContainer');
+
       if (!docs || docs.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="5" style="text-align:center; padding: 36px; color: #94a3b8;">
-              <i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom: 8px; display: block; color:#cbd5e1;"></i>
-              No completed documents ready for download yet.
-            </td>
-          </tr>
-        `;
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5">
+                <div class="empty-state-box">
+                  <div class="empty-state-icon"><i class="fa-solid fa-folder-open"></i></div>
+                  <div class="empty-state-title">No Ready Documents Found</div>
+                  <div class="empty-state-text">Once your print applications are processed by our automated pipeline, high-definition download links will appear here immediately.</div>
+                  <a href="print-list.html" class="btn-tiranga" style="text-decoration:none; margin-top: 14px; display: inline-flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-plus"></i> Submit Print Order
+                  </a>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+        if (mobileContainer) {
+          mobileContainer.innerHTML = `
+            <div class="mobile-ledger-empty-state">
+              <div class="empty-state-icon" style="background: #fff7ed; color: #e04d00;">
+                <i class="fa-solid fa-folder-open"></i>
+              </div>
+              <div class="empty-state-title">No Ready Documents Found</div>
+              <div class="empty-state-desc">Once your print applications are processed by our automated pipeline, high-definition download links will appear here immediately.</div>
+              <a href="print-list.html" class="btn-tiranga" style="text-decoration:none; margin-top: 14px; display: inline-flex; align-items:center; gap:8px; font-size: 0.84rem; padding: 8px 18px;">
+                <i class="fa-solid fa-plus"></i> Submit Print Order
+              </a>
+            </div>
+          `;
+        }
         return;
       }
 
-      tbody.innerHTML = docs.map(d => {
-        const isPdf = d.delivery_file && d.delivery_file.toLowerCase().endsWith('.pdf');
-        const fileUrl = `${STORAGE_BASE_URL}/${d.delivery_file}`;
-        
-        return `
-          <tr>
-            <td><span class="order-num-tag">${d.order_number}</span></td>
-            <td><strong>${d.service ? d.service.name : 'Completed Service'}</strong></td>
-            <td>${formatDate(d.updated_at || d.created_at)}</td>
-            <td>
-              <span class="badge-status ${isPdf ? 'badge-processing' : 'badge-completed'}">
-                <i class="fa-solid ${isPdf ? 'fa-file-pdf' : 'fa-id-card'}"></i>
-                ${isPdf ? 'HD 300 DPI PDF' : 'Extracted Text / Image'}
-              </span>
-            </td>
-            <td>
-              <a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 6px 16px; font-size: 0.82rem;" download>
-                <i class="fa-solid fa-download"></i> Download File
-              </a>
-            </td>
-          </tr>
-        `;
-      }).join('');
+      // 1. Render Desktop Rows
+      if (tbody) {
+        tbody.innerHTML = docs.map(d => {
+          const isPdf = d.delivery_file && d.delivery_file.toLowerCase().endsWith('.pdf');
+          const fileUrl = `${STORAGE_BASE_URL}/${d.delivery_file}`;
+          
+          return `
+            <tr>
+              <td>
+                <span class="order-id-chip">${d.order_number}</span>
+              </td>
+              <td>
+                <div style="font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(253, 92, 0,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
+                    <i class="fa-solid ${isPdf ? 'fa-file-pdf' : 'fa-id-card'}"></i>
+                  </div>
+                  <span>${d.service ? d.service.name : 'Completed Service'}</span>
+                </div>
+              </td>
+              <td>
+                <div style="font-size: 0.88rem; font-weight: 600; color: #334155;">${formatDate(d.updated_at || d.created_at)}</div>
+                <div style="font-size: 0.72rem; color: #94a3b8;">Verified Delivery</div>
+              </td>
+              <td>
+                <span class="badge-status ${isPdf ? 'badge-processing' : 'badge-completed'}">
+                  ${isPdf ? 'HD 300 DPI PDF' : 'Extracted Text / File'}
+                </span>
+              </td>
+              <td style="text-align: right;">
+                <a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 7px 18px; font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 7px;" download>
+                  <i class="fa-solid fa-cloud-arrow-down"></i> ${isPdf ? 'Download PDF' : 'Download File'}
+                </a>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 2. Render Mobile Cards
+      if (mobileContainer) {
+        mobileContainer.innerHTML = docs.map(d => {
+          const isPdf = d.delivery_file && d.delivery_file.toLowerCase().endsWith('.pdf');
+          const fileUrl = `${STORAGE_BASE_URL}/${d.delivery_file}`;
+          
+          return `
+            <div class="mobile-ledger-card">
+              <div class="mobile-ledger-card-header">
+                <span class="order-id-chip">${d.order_number}</span>
+                <span class="badge-status ${isPdf ? 'badge-processing' : 'badge-completed'}">
+                  ${isPdf ? 'HD 300 DPI PDF' : 'Extracted Text / File'}
+                </span>
+              </div>
+              <div class="mobile-ledger-card-body">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="width: 36px; height: 36px; border-radius: 9px; background: rgba(253, 92, 0,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">
+                    <i class="fa-solid ${isPdf ? 'fa-file-pdf' : 'fa-id-card'}"></i>
+                  </div>
+                  <div>
+                    <div class="mobile-ledger-title">${d.service ? d.service.name : 'Completed Service'}</div>
+                    <div class="mobile-ledger-meta" style="margin-top: 3px;">
+                      <span><i class="fa-regular fa-calendar-check" style="color: #03a93a;"></i> ${formatDate(d.updated_at || d.created_at)}</span>
+                      <span style="display: inline-flex; align-items: center; gap: 4px; color: #03a93a; font-weight: 600; font-size: 0.74rem;">
+                        <i class="fa-solid fa-circle-check"></i> Verified Delivery
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mobile-ledger-card-footer" style="padding-top: 10px;">
+                <a href="${fileUrl}" target="_blank" class="btn-tiranga" style="width: 100%; justify-content: center; padding: 9px 16px; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-sizing: border-box;" download>
+                  <i class="fa-solid fa-cloud-arrow-down"></i> ${isPdf ? 'Download PDF' : 'Download File'}
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
     function filterDocuments() {

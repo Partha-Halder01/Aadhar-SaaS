@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/png" href="../logo-icon.png">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -18,44 +19,45 @@
     <!-- Sidebar Navigation -->
     <aside class="portal-sidebar">
       <div class="sidebar-header">
-        <a href="dashboard.html" class="brand-logo" style="font-size: 1.15rem;">
-          <div class="brand-logo-icon" style="width:34px; height:34px; font-size:1rem;">
-            <i class="fa-solid fa-print"></i>
-          </div>
-          <div>
-            <span>UTKAL</span><span style="color: #ff6b00;">PRINT</span>
-            <span class="brand-badge">PRO</span>
-          </div>
+        <a href="dashboard.html" class="brand-logo">
+          <img src="../logo .png" alt="Instant Online Seva" class="brand-logo-img">
+          <img src="../logo-icon.png" alt="Instant Online Seva" class="brand-logo-icon-img">
         </a>
       </div>
 
       <ul class="sidebar-menu">
-        <!-- 1. Dashboard -->
+        <li class="sidebar-category-header">Main Overview</li>
         <li class="sidebar-item active">
           <a href="dashboard.html" class="sidebar-link active">
-            <i class="fa-solid fa-house" style="color:#ff6b00;"></i>
+            <i class="fa-solid fa-house" style="color:#fd5c00;"></i>
             <span>Dashboard</span>
           </a>
         </li>
 
-        <!-- 2. Print List -->
+        <li class="sidebar-category-header">Citizen Services</li>
         <li class="sidebar-item">
           <a href="print-list.html" class="sidebar-link">
-            <i class="fa-solid fa-id-card" style="color:#ea580c;"></i>
+            <i class="fa-solid fa-id-card" style="color:#e04d00;"></i>
             <span>Print List</span>
-            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.75rem; opacity:0.5;"></i>
+            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.72rem; opacity:0.4;"></i>
           </a>
         </li>
 
-        <!-- 3. Pan Find List -->
         <li class="sidebar-item">
           <a href="pan-find.html" class="sidebar-link">
-            <i class="fa-solid fa-magnifying-glass-location" style="color:#059669;"></i>
-            <span>Pan Find List</span>
+            <i class="fa-solid fa-magnifying-glass-location" style="color:#03a93a;"></i>
+            <span>PAN Find List</span>
           </a>
         </li>
 
-        <!-- 4. Wallet Manage -->
+        <li class="sidebar-item">
+          <a href="orders.html" class="sidebar-link">
+            <i class="fa-solid fa-clock-rotate-left" style="color:#2563eb;"></i>
+            <span>My Orders & Process</span>
+          </a>
+        </li>
+
+        <li class="sidebar-category-header">Finance & Wallet</li>
         <li class="sidebar-item">
           <a href="wallet.html" class="sidebar-link">
             <i class="fa-solid fa-wallet" style="color:#7c3aed;"></i>
@@ -64,36 +66,40 @@
           </a>
         </li>
 
-        <!-- 5. My Account -->
-        <li class="sidebar-item">
-          <a href="profile.html" class="sidebar-link">
-            <i class="fa-solid fa-user" style="color:#0284c7;"></i>
-            <span>My Account</span>
-          </a>
-        </li>
-
-        <!-- 6. Documents -->
+        <li class="sidebar-category-header">Account & Desk</li>
         <li class="sidebar-item">
           <a href="documents.html" class="sidebar-link">
             <i class="fa-solid fa-file-pdf" style="color:#dc2626;"></i>
-            <span>Documents</span>
+            <span>My Documents</span>
           </a>
         </li>
 
-        <!-- 7. Complaint -->
         <li class="sidebar-item">
           <a href="complaint.html" class="sidebar-link">
             <i class="fa-solid fa-headset" style="color:#f59e0b;"></i>
-            <span>Complaint</span>
+            <span>Support Helpdesk</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="profile.html" class="sidebar-link">
+            <i class="fa-solid fa-user-gear" style="color:#0284c7;"></i>
+            <span>My Account</span>
           </a>
         </li>
       </ul>
 
-      <!-- Logout in sidebar bottom -->
-      <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(226, 232, 240, 0.8);">
-        <a href="#" class="sidebar-link btn-logout-action" style="color: #dc2626;">
+      <!-- User Info & Logout in sidebar bottom -->
+      <div class="sidebar-user-footer">
+        <div class="sidebar-user-info">
+          <div class="topbar-avatar user-initials-display">UP</div>
+          <div class="sidebar-user-details">
+            <div class="user-name-display">Member</div>
+            <div class="user-role-display">Active User</div>
+          </div>
+        </div>
+        <a href="#" class="btn-icon-action danger btn-logout-action" title="Logout">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          <span>Logout</span>
         </a>
       </div>
     </aside>
@@ -107,29 +113,43 @@
             <i class="fa-solid fa-bars"></i>
           </button>
           <div>
-            <h1 style="font-size: 1.28rem; font-weight: 800; color: #0f172a; margin: 0;">Dashboard Overview</h1>
-            <small style="color: #64748b; font-weight: 500;">Welcome back, <span class="user-name-display" style="font-weight:700; color:#ff6b00;">Member</span></small>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Portal &bull; User Hub</div>
+            <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;"><span>Dashboard</span><span class="page-title-sub"> Overview</span></h1>
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <a href="wallet.html" style="text-decoration: none; display: flex; align-items: center; gap: 8px; background: #ecfdf5; border: 1.5px solid #a7f3d0; padding: 7px 16px; border-radius: 9999px; color: #059669; font-weight: 800; font-size: 0.92rem; box-shadow: var(--shadow-xs);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="wallet.html" class="topbar-wallet-pill" title="Click to recharge wallet">
             <i class="fa-solid fa-wallet"></i>
             <span class="user-wallet-display">₹0</span>
+            <span class="pill-add-btn"><i class="fa-solid fa-plus"></i></span>
           </a>
-          <button class="btn-primary-orange btn-logout-action" style="padding: 7px 16px; font-size: 0.85rem;">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-          </button>
+
+          <a href="profile.html" class="topbar-user-badge">
+            <div class="topbar-avatar user-initials-display">UP</div>
+            <div style="display: flex; flex-direction: column;">
+              <span class="user-name-display" style="font-weight: 700; font-size: 0.84rem; line-height: 1.2;">Member</span>
+              <span class="user-role-display" style="font-size: 0.68rem; color: #64748b; line-height: 1;">User</span>
+            </div>
+          </a>
         </div>
       </header>
 
       <!-- Dashboard Content -->
       <div class="portal-content">
         <!-- Notice banner -->
-        <div id="noticeBanner" class="glass-card" style="display: none; background: #fffbeb; border-color: #fde68a; padding: 14px 20px; margin-bottom: 20px;">
-          <div style="display: flex; align-items: center; gap: 12px; color: #b45309;">
-            <i class="fa-solid fa-bullhorn" style="font-size: 1.2rem;"></i>
-            <div id="noticeContent" style="font-size: 0.92rem; font-weight: 600;">Notice board alert</div>
+        <div id="noticeBanner" class="glass-card" style="display: none; background: #fffbeb; border-color: #fde68a; padding: 14px 20px; margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px; color: #b45309;">
+              <i class="fa-solid fa-bullhorn" style="font-size: 1.25rem; color: #d97706;"></i>
+              <div>
+                <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #92400e;">Important Notice</div>
+                <div id="noticeContent" style="font-size: 0.92rem; font-weight: 600; color: #78350f;">Notice board alert</div>
+              </div>
+            </div>
+            <button onclick="document.getElementById('noticeBanner').style.display='none'" style="background:none; border:none; color:#b45309; cursor:pointer; font-size:0.9rem;" title="Dismiss">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
           </div>
         </div>
 
@@ -138,69 +158,83 @@
           <div class="stat-card">
             <div class="stat-icon orange"><i class="fa-solid fa-list-check"></i></div>
             <div>
-              <div class="stat-value" id="statTotalOrders">0</div>
               <div class="stat-label">Total Orders</div>
+              <div class="stat-value" id="statTotalOrders">0</div>
             </div>
           </div>
 
           <div class="stat-card">
             <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
             <div>
+              <div class="stat-label">Completed</div>
               <div class="stat-value" id="statCompletedOrders">0</div>
-              <div class="stat-label">Completed Orders</div>
             </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-icon blue"><i class="fa-solid fa-clock"></i></div>
+            <div class="stat-icon blue"><i class="fa-solid fa-clock-rotate-left"></i></div>
             <div>
-              <div class="stat-value" id="statPendingOrders">0</div>
               <div class="stat-label">Pending / In Progress</div>
+              <div class="stat-value" id="statPendingOrders">0</div>
             </div>
           </div>
 
           <div class="stat-card">
             <div class="stat-icon purple"><i class="fa-solid fa-wallet"></i></div>
             <div>
-              <div class="stat-value user-wallet-display">₹0</div>
               <div class="stat-label">Wallet Balance</div>
+              <div class="stat-value user-wallet-display">₹0</div>
             </div>
           </div>
         </div>
 
         <!-- Quick Action Shortcuts -->
-        <div class="glass-card">
-          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 16px; color: #0f172a;">Quick Service Shortcuts</h2>
+        <div class="glass-card" style="margin-bottom: 28px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+            <div>
+              <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Quick Services</h2>
+              <small style="color: #64748b;">Instant 1-click access to most frequent citizen orders</small>
+            </div>
+          </div>
+
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
-            <a href="print-list.html" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #fff7ed; border: 1.5px solid #fed7aa; display: flex; align-items: center; gap: 14px; color: #ea580c; font-weight: 700; transition: transform 0.2s ease;">
-              <i class="fa-solid fa-id-card" style="font-size: 1.8rem;"></i>
+            <a href="print-list.html" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #fff7ed; border: 1.5px solid #fed7aa; display: flex; align-items: center; gap: 14px; color: #e04d00; font-weight: 700; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(253, 92, 0,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: #ffedd5; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                <i class="fa-solid fa-id-card"></i>
+              </div>
               <div>
-                <div style="font-size: 1rem;">Print List</div>
-                <small style="color: #9a3412; font-weight: 500;">Aadhaar & PVC Cards</small>
+                <div style="font-size: 1rem; color: #9a3412;">Print List</div>
+                <small style="color: #c2410c; font-weight: 500;">Aadhaar, Voter & PVC Cards</small>
               </div>
             </a>
 
-            <a href="pan-find.html" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #ecfdf5; border: 1.5px solid #a7f3d0; display: flex; align-items: center; gap: 14px; color: #059669; font-weight: 700; transition: transform 0.2s ease;">
-              <i class="fa-solid fa-magnifying-glass-location" style="font-size: 1.8rem;"></i>
+            <a href="pan-find.html" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #f0fdf4; border: 1.5px solid #bbf7d0; display: flex; align-items: center; gap: 14px; color: #03a93a; font-weight: 700; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(3, 169, 58,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: #d1fae5; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                <i class="fa-solid fa-magnifying-glass-location"></i>
+              </div>
               <div>
-                <div style="font-size: 1rem;">PAN Find List</div>
-                <small style="color: #065f46; font-weight: 500;">Search by Aadhaar/Info</small>
+                <div style="font-size: 1rem; color: #028a2f;">PAN Find List</div>
+                <small style="color: #028a2f; font-weight: 500;">Recover Lost PAN by Aadhaar</small>
               </div>
             </a>
 
-            <a href="wallet.html?recharge=true" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #f5f3ff; border: 1.5px solid #ddd6fe; display: flex; align-items: center; gap: 14px; color: #7c3aed; font-weight: 700; transition: transform 0.2s ease;">
-              <i class="fa-solid fa-qrcode" style="font-size: 1.8rem;"></i>
+            <a href="wallet.html?recharge=true" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #f5f3ff; border: 1.5px solid #ddd6fe; display: flex; align-items: center; gap: 14px; color: #7c3aed; font-weight: 700; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(124,58,237,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: #ede9fe; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                <i class="fa-solid fa-qrcode"></i>
+              </div>
               <div>
-                <div style="font-size: 1rem;">Recharge Wallet</div>
-                <small style="color: #5b21b6; font-weight: 500;">Instant QR Top-Up</small>
+                <div style="font-size: 1rem; color: #5b21b6;">Recharge Wallet</div>
+                <small style="color: #6d28d9; font-weight: 500;">Instant QR UPI Top-Up</small>
               </div>
             </a>
 
-            <a href="documents.html" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #f0f9ff; border: 1.5px solid #bae6fd; display: flex; align-items: center; gap: 14px; color: #0284c7; font-weight: 700; transition: transform 0.2s ease;">
-              <i class="fa-solid fa-file-arrow-down" style="font-size: 1.8rem;"></i>
+            <a href="documents.html" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #f0f9ff; border: 1.5px solid #bae6fd; display: flex; align-items: center; gap: 14px; color: #0284c7; font-weight: 700; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0, 102, 204,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: #e0f2fe; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                <i class="fa-solid fa-file-arrow-down"></i>
+              </div>
               <div>
-                <div style="font-size: 1rem;">My Documents</div>
-                <small style="color: #0369a1; font-weight: 500;">Download Ready Cards</small>
+                <div style="font-size: 1rem; color: #0369a1;">My Documents</div>
+                <small style="color: #0284c7; font-weight: 500;">Download Ready PDF/PNG Cards</small>
               </div>
             </a>
           </div>
@@ -208,12 +242,19 @@
 
         <!-- Recent Orders Table -->
         <div class="glass-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-            <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Recent Service Orders</h2>
-            <a href="print-list.html" style="color: #ff6b00; font-size: 0.9rem; font-weight: 700; text-decoration: none;">View All Services &rarr;</a>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Recent Service Orders</h2>
+              <small style="color: #64748b;">Track status, verify amounts and download generated files</small>
+            </div>
+            <a href="orders.html" class="btn-outline-custom" style="padding: 7px 16px; font-size: 0.84rem;">
+              <span>View All Orders & Process</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
           </div>
 
-          <div class="custom-table-container">
+          <!-- Desktop Table (Visible only on Desktop) -->
+          <div class="custom-table-container recent-orders-desktop-table">
             <table class="custom-table">
               <thead>
                 <tr>
@@ -223,7 +264,7 @@
                   <th>Amount</th>
                   <th>Payment</th>
                   <th>Status</th>
-                  <th>Action / File</th>
+                  <th>Action / Result</th>
                 </tr>
               </thead>
               <tbody id="recentOrdersTbody">
@@ -237,6 +278,14 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <!-- Mobile Cards & Centered Empty State (Visible only on Mobile) -->
+          <div id="recentOrdersMobileContainer" class="recent-orders-mobile-container">
+            <div class="mobile-order-loading">
+              <i class="fa-solid fa-spinner fa-spin"></i>
+              <span>Loading recent orders...</span>
+            </div>
           </div>
         </div>
 
@@ -302,56 +351,141 @@
 
     function renderRecentOrders(orders) {
       const tbody = document.getElementById('recentOrdersTbody');
+      const mobileContainer = document.getElementById('recentOrdersMobileContainer');
+
       if (!orders || orders.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="7" style="text-align:center; padding: 34px; color: #94a3b8;">
-              <i class="fa-solid fa-box-open" style="font-size: 2rem; margin-bottom: 8px; display: block; color:#cbd5e1;"></i>
-              No orders placed yet. Choose a service above to get started!
-            </td>
-          </tr>
-        `;
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7">
+                <div class="empty-state-box">
+                  <div class="empty-state-icon"><i class="fa-solid fa-box-open"></i></div>
+                  <div class="empty-state-title">No Orders Placed Yet</div>
+                  <div class="empty-state-desc">You haven't ordered any PVC prints or PAN searches. Choose a service above to get started!</div>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+        if (mobileContainer) {
+          mobileContainer.innerHTML = `
+            <div class="mobile-orders-empty-state">
+              <div class="empty-state-icon"><i class="fa-solid fa-box-open"></i></div>
+              <div class="empty-state-title">No Orders Placed Yet</div>
+              <div class="empty-state-desc">You haven't ordered any PVC prints or PAN searches. Choose a service above to get started!</div>
+              <a href="print-list.html" class="btn-tiranga" style="margin-top: 14px; display: inline-flex; padding: 9px 22px; font-size: 0.86rem; border-radius: 10px;">
+                <i class="fa-solid fa-plus"></i> Order New Print
+              </a>
+            </div>
+          `;
+        }
         return;
       }
 
-      tbody.innerHTML = orders.map(o => {
-        let statusBadge = '';
-        if (o.order_status === 'completed') {
-          statusBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-check"></i> Completed</span>';
-        } else if (o.order_status === 'processing') {
-          statusBadge = '<span class="badge-status badge-processing"><i class="fa-solid fa-gear fa-spin"></i> Processing</span>';
-        } else if (o.order_status === 'rejected') {
-          statusBadge = `<span class="badge-status badge-rejected" title="${o.rejection_reason || ''}"><i class="fa-solid fa-xmark"></i> Rejected</span>`;
-        } else {
-          statusBadge = '<span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending</span>';
-        }
+      // 1. Desktop Table Render
+      if (tbody) {
+        tbody.innerHTML = orders.map(o => {
+          const isPrintService = o.service && o.service.category === 'print';
 
-        let downloadAction = '-';
-        if (o.delivery_file) {
-          const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
-          downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.8rem;" download><i class="fa-solid fa-download"></i> Download</a>`;
-        } else if (o.order_status === 'rejected') {
-          downloadAction = `<span style="font-size:0.8rem; color:#dc2626; font-weight:600;">${o.rejection_reason || 'Rejected'}</span>`;
-        } else {
-          downloadAction = '<span style="color:#94a3b8; font-size:0.84rem; font-weight:500;">In Progress</span>';
-        }
+          let statusBadge = '';
+          if (o.order_status === 'completed') {
+            statusBadge = isPrintService
+              ? '<span class="badge-status badge-completed" style="background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>'
+              : '<span class="badge-status badge-completed">Completed</span>';
+          } else if (o.order_status === 'processing') {
+            statusBadge = '<span class="badge-status badge-processing">Processing</span>';
+          } else if (o.order_status === 'rejected') {
+            statusBadge = `<span class="badge-status badge-rejected" title="${o.rejection_reason || ''}">Rejected</span>`;
+          } else {
+            statusBadge = '<span class="badge-status badge-pending">Pending Review</span>';
+          }
 
-        return `
-          <tr>
-            <td><span class="order-num-tag">${o.order_number}</span></td>
-            <td><strong>${o.service ? o.service.name : 'Custom Service'}</strong></td>
-            <td>${formatDate(o.created_at)}</td>
-            <td style="font-weight: 700; color:#0f172a;">${formatINR(o.amount)}</td>
-            <td>
-              <span style="font-size: 0.82rem; text-transform: uppercase; font-weight: 700;">
-                ${o.payment_method === 'wallet' ? '<i class="fa-solid fa-wallet" style="color:#10b981;"></i> Wallet' : '<i class="fa-solid fa-qrcode" style="color:#f59e0b;"></i> Direct UPI'}
+          let downloadAction = '-';
+          if (isPrintService && o.order_status === 'completed') {
+            downloadAction = `
+              <span style="display:inline-flex; align-items:center; gap:5px; color:#03a93a; font-weight:700; font-size:0.78rem; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 10px; border-radius:6px;">
+                <i class="fa-solid fa-store"></i> Collect from center
               </span>
-            </td>
-            <td>${statusBadge}</td>
-            <td>${downloadAction}</td>
-          </tr>
-        `;
-      }).join('');
+            `;
+          } else if (o.delivery_file) {
+            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+          } else if (o.order_status === 'rejected') {
+            downloadAction = `<span style="font-size:0.8rem; color:#dc2626; font-weight:600;">${o.rejection_reason || 'Rejected'}</span>`;
+          } else {
+            downloadAction = '<span style="color:#94a3b8; font-size:0.82rem; font-weight:600;"><i class="fa-solid fa-clock" style="font-size:0.75rem;"></i> In Progress</span>';
+          }
+
+          return `
+            <tr>
+              <td><span class="order-id-chip">${o.order_number}</span></td>
+              <td><strong style="color:#0f172a;">${o.service ? o.service.name : 'Citizen Service'}</strong></td>
+              <td style="color:#64748b; font-size:0.85rem;">${formatDate(o.created_at)}</td>
+              <td style="font-weight: 800; font-family:'Outfit',sans-serif; font-size:0.95rem; color:#0f172a;">${formatINR(o.amount)}</td>
+              <td>
+                <span style="font-size: 0.8rem; font-weight: 700; color:#475569;">
+                  ${o.payment_method === 'wallet' ? '<i class="fa-solid fa-wallet" style="color:#03a93a;"></i> Wallet' : '<i class="fa-solid fa-qrcode" style="color:#f59e0b;"></i> UPI QR'}
+                </span>
+              </td>
+              <td>${statusBadge}</td>
+              <td>${downloadAction}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 2. Mobile Responsive Cards Render
+      if (mobileContainer) {
+        mobileContainer.innerHTML = orders.map(o => {
+          const isPrintService = o.service && o.service.category === 'print';
+
+          let statusBadge = '';
+          if (o.order_status === 'completed') {
+            statusBadge = isPrintService
+              ? '<span class="badge-status badge-completed" style="font-size:0.72rem; padding: 2px 8px; background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>'
+              : '<span class="badge-status badge-completed" style="font-size:0.72rem; padding: 2px 8px;">Completed</span>';
+          } else if (o.order_status === 'processing') {
+            statusBadge = '<span class="badge-status badge-processing" style="font-size:0.72rem; padding: 2px 8px;">Processing</span>';
+          } else if (o.order_status === 'rejected') {
+            statusBadge = `<span class="badge-status badge-rejected" style="font-size:0.72rem; padding: 2px 8px;">Rejected</span>`;
+          } else {
+            statusBadge = '<span class="badge-status badge-pending" style="font-size:0.72rem; padding: 2px 8px;">Pending</span>';
+          }
+
+          let downloadAction = '';
+          if (isPrintService && o.order_status === 'completed') {
+            downloadAction = '<span style="font-size:0.75rem; color:#03a93a; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-store"></i> Collect from center</span>';
+          } else if (o.delivery_file) {
+            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Download</a>`;
+          } else if (o.order_status === 'rejected') {
+            downloadAction = `<span style="font-size:0.75rem; color:#dc2626; font-weight:600;">${o.rejection_reason || 'Rejected'}</span>`;
+          } else {
+            downloadAction = '<span style="color:#94a3b8; font-size:0.78rem; font-weight:600;"><i class="fa-solid fa-clock"></i> In Progress</span>';
+          }
+
+          return `
+            <div class="mobile-order-card">
+              <div class="mobile-order-card-header">
+                <span class="order-id-chip">${o.order_number}</span>
+                ${statusBadge}
+              </div>
+              <div class="mobile-order-card-body">
+                <div class="mobile-order-service-name">${o.service ? o.service.name : 'Citizen Service'}</div>
+                <div class="mobile-order-meta">
+                  <span><i class="fa-regular fa-clock" style="font-size:0.72rem;"></i> ${formatDate(o.created_at)}</span>
+                  <span>&bull;</span>
+                  <span>${o.payment_method === 'wallet' ? '<i class="fa-solid fa-wallet" style="color:#03a93a;"></i> Wallet' : '<i class="fa-solid fa-qrcode" style="color:#f59e0b;"></i> UPI'}</span>
+                </div>
+              </div>
+              <div class="mobile-order-card-footer">
+                <div class="mobile-order-amount">${formatINR(o.amount)}</div>
+                <div class="mobile-order-action">${downloadAction}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
   </script>
 </body>

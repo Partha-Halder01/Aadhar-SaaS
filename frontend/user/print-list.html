@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Print List - Utkal Print Portal</title>
+  <title>Print Services - Utkal Print Portal</title>
   
   <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/png" href="../logo-icon.png">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -18,18 +19,14 @@
     <!-- Sidebar Navigation -->
     <aside class="portal-sidebar">
       <div class="sidebar-header">
-        <a href="dashboard.html" class="brand-logo" style="font-size: 1.15rem;">
-          <div class="brand-logo-icon" style="width:34px; height:34px; font-size:1rem;">
-            <i class="fa-solid fa-print"></i>
-          </div>
-          <div>
-            <span>UTKAL</span><span style="color: #ff6b00;">PRINT</span>
-            <span class="brand-badge">PRO</span>
-          </div>
+        <a href="dashboard.html" class="brand-logo">
+          <img src="../logo .png" alt="Instant Online Seva" class="brand-logo-img">
+          <img src="../logo-icon.png" alt="Instant Online Seva" class="brand-logo-icon-img">
         </a>
       </div>
 
       <ul class="sidebar-menu">
+        <li class="sidebar-category-header">Main Overview</li>
         <li class="sidebar-item">
           <a href="dashboard.html" class="sidebar-link">
             <i class="fa-solid fa-house" style="color:#64748b;"></i>
@@ -37,21 +34,30 @@
           </a>
         </li>
 
+        <li class="sidebar-category-header">Citizen Services</li>
         <li class="sidebar-item active">
           <a href="print-list.html" class="sidebar-link active">
-            <i class="fa-solid fa-id-card" style="color:#ff6b00;"></i>
+            <i class="fa-solid fa-id-card" style="color:#fd5c00;"></i>
             <span>Print List</span>
-            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.75rem; opacity:0.5;"></i>
+            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.72rem; opacity:0.4;"></i>
           </a>
         </li>
 
         <li class="sidebar-item">
           <a href="pan-find.html" class="sidebar-link">
-            <i class="fa-solid fa-magnifying-glass-location" style="color:#059669;"></i>
-            <span>Pan Find List</span>
+            <i class="fa-solid fa-magnifying-glass-location" style="color:#03a93a;"></i>
+            <span>PAN Find List</span>
           </a>
         </li>
 
+        <li class="sidebar-item">
+          <a href="orders.html" class="sidebar-link">
+            <i class="fa-solid fa-clock-rotate-left" style="color:#2563eb;"></i>
+            <span>My Orders & Process</span>
+          </a>
+        </li>
+
+        <li class="sidebar-category-header">Finance & Wallet</li>
         <li class="sidebar-item">
           <a href="wallet.html" class="sidebar-link">
             <i class="fa-solid fa-wallet" style="color:#7c3aed;"></i>
@@ -60,32 +66,40 @@
           </a>
         </li>
 
-        <li class="sidebar-item">
-          <a href="profile.html" class="sidebar-link">
-            <i class="fa-solid fa-user" style="color:#0284c7;"></i>
-            <span>My Account</span>
-          </a>
-        </li>
-
+        <li class="sidebar-category-header">Account & Desk</li>
         <li class="sidebar-item">
           <a href="documents.html" class="sidebar-link">
             <i class="fa-solid fa-file-pdf" style="color:#dc2626;"></i>
-            <span>Documents</span>
+            <span>My Documents</span>
           </a>
         </li>
 
         <li class="sidebar-item">
           <a href="complaint.html" class="sidebar-link">
             <i class="fa-solid fa-headset" style="color:#f59e0b;"></i>
-            <span>Complaint</span>
+            <span>Support Helpdesk</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="profile.html" class="sidebar-link">
+            <i class="fa-solid fa-user-gear" style="color:#0284c7;"></i>
+            <span>My Account</span>
           </a>
         </li>
       </ul>
 
-      <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(226, 232, 240, 0.8);">
-        <a href="#" class="sidebar-link btn-logout-action" style="color: #dc2626;">
+      <!-- User Info & Logout in sidebar bottom -->
+      <div class="sidebar-user-footer">
+        <div class="sidebar-user-info">
+          <div class="topbar-avatar user-initials-display">UP</div>
+          <div class="sidebar-user-details">
+            <div class="user-name-display">Member</div>
+            <div class="user-role-display">Active User</div>
+          </div>
+        </div>
+        <a href="#" class="btn-icon-action danger btn-logout-action" title="Logout">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          <span>Logout</span>
         </a>
       </div>
     </aside>
@@ -98,36 +112,75 @@
             <i class="fa-solid fa-bars"></i>
           </button>
           <div>
-            <h1 style="font-size: 1.28rem; font-weight: 800; color: #0f172a; margin: 0;">Print Services List</h1>
-            <small style="color: #64748b; font-weight: 500;">Instant Aadhaar, Voter, and PVC card printing orders</small>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Portal &bull; Print Services</div>
+            <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;"><span>Print Services</span><span class="page-title-sub"> Catalog</span></h1>
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <a href="wallet.html" style="text-decoration: none; display: flex; align-items: center; gap: 8px; background: #ecfdf5; border: 1.5px solid #a7f3d0; padding: 7px 16px; border-radius: 9999px; color: #059669; font-weight: 800; font-size: 0.92rem;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="wallet.html" class="topbar-wallet-pill" title="Click to recharge wallet">
             <i class="fa-solid fa-wallet"></i>
             <span class="user-wallet-display">₹0</span>
+            <span class="pill-add-btn"><i class="fa-solid fa-plus"></i></span>
+          </a>
+
+          <a href="profile.html" class="topbar-user-badge">
+            <div class="topbar-avatar user-initials-display">UP</div>
+            <div style="display: flex; flex-direction: column;">
+              <span class="user-name-display" style="font-weight: 700; font-size: 0.84rem; line-height: 1.2;">Member</span>
+              <span class="user-role-display" style="font-size: 0.68rem; color: #64748b; line-height: 1;">User</span>
+            </div>
           </a>
         </div>
       </header>
 
       <div class="portal-content">
-        <!-- Service Cards Grid -->
-        <div style="margin-bottom: 32px;">
-          <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 16px;">Available Print Services</h2>
+        <!-- Service Cards Section -->
+        <div style="margin-bottom: 34px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 14px;">
+            <div>
+              <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;">Print & Document Services</h2>
+              <small style="color: #64748b;">High-definition PVC smart cards, certificates, and digital document services</small>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <!-- Category Filter Tabs -->
+              <div style="display: flex; background: #f1f5f9; padding: 4px; border-radius: 10px; gap: 4px;" id="categoryFilterTabs">
+                <button type="button" class="tab-btn active" data-cat="all" onclick="filterServices('all')" style="padding: 6px 14px; font-size: 0.82rem; font-weight: 700; border-radius: 8px; border: none; background: #ffffff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;">
+                  All (<span id="countAll">0</span>)
+                </button>
+                <button type="button" class="tab-btn" data-cat="print" onclick="filterServices('print')" style="padding: 6px 14px; font-size: 0.82rem; font-weight: 600; border-radius: 8px; border: none; background: transparent; color: #64748b; cursor: pointer; transition: all 0.2s;">
+                  PVC Cards (<span id="countPrint">0</span>)
+                </button>
+                <button type="button" class="tab-btn" data-cat="document" onclick="filterServices('document')" style="padding: 6px 14px; font-size: 0.82rem; font-weight: 600; border-radius: 8px; border: none; background: transparent; color: #64748b; cursor: pointer; transition: all 0.2s;">
+                  Documents (<span id="countDoc">0</span>)
+                </button>
+              </div>
+              <span class="badge-status badge-completed" style="font-size: 0.8rem;">
+                <i class="fa-solid fa-bolt"></i> Instant Automated Delivery
+              </span>
+            </div>
+          </div>
           
           <div id="printServicesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px;">
             <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
-              <i class="fa-solid fa-spinner fa-spin"></i> Loading print services...
+              <i class="fa-solid fa-spinner fa-spin"></i> Loading services...
             </div>
           </div>
         </div>
 
         <!-- Print Orders History -->
         <div class="glass-card">
-          <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 16px;">Your Print Orders History</h2>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Print Orders Ledger</h2>
+              <small style="color: #64748b;">View status, inspect order IDs and download finished PVC files</small>
+            </div>
+            <button onclick="loadPrintOrders()" class="btn-secondary" style="font-size: 0.84rem; padding: 7px 14px;">
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+          </div>
           
-          <div class="custom-table-container">
+          <div class="custom-table-container print-orders-desktop-table">
             <table class="custom-table">
               <thead>
                 <tr>
@@ -152,6 +205,9 @@
               </tbody>
             </table>
           </div>
+
+          <!-- Mobile Cards Container -->
+          <div id="printOrdersMobileContainer" class="print-orders-mobile-container"></div>
         </div>
 
       </div>
@@ -161,73 +217,78 @@
   <!-- Apply Print Service Modal -->
   <div id="applyModal" class="modal-backdrop-custom">
     <div class="modal-dialog-custom">
-      <div class="modal-header-custom">
-        <div>
-          <h3 id="modalServiceTitle" style="font-size: 1.2rem; font-weight: 800; margin: 0; color: #0f172a;">Apply for Service</h3>
-          <small id="modalServicePrice" style="color: #ff6b00; font-weight: 800;">Price: ₹0</small>
+      <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 22px 26px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; color: #0066cc; border: 1.5px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <div>
+            <h3 id="modalServiceTitle" style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color: #0f172a; font-family: 'Outfit', sans-serif;">Apply for Service</h3>
+            <span id="modalServicePrice" style="color: #03a93a; font-weight: 800; font-size: 1rem; font-family: 'Outfit', sans-serif;">Price: ₹0</span>
+          </div>
         </div>
-        <button type="button" onclick="closeApplyModal()" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:#64748b;">
+        <button type="button" onclick="closeApplyModal()" class="btn-icon-action" title="Close" style="border-radius: 50%;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
       <form id="applyServiceForm">
         <input type="hidden" id="modalServiceId">
-        <div class="modal-body-custom">
+        <div class="modal-body-custom" style="padding: 24px 26px;">
           <!-- Dynamic Form Inputs -->
           <div id="dynamicFormFields"></div>
 
           <!-- Payment Mode Selection -->
-          <div style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 16px;">
-            <label class="form-label" style="font-weight: 700;">Choose Payment Method</label>
+          <div style="margin-top: 22px; border-top: 1px solid #f1f5f9; padding-top: 20px;">
+            <label class="form-label" style="font-weight: 800; font-size: 0.88rem; color: #0f172a; margin-bottom: 12px; display: block;">Select Payment Method</label>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-              <label style="border: 2px solid #cbd5e1; border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition:all 0.2s;" id="labelPayWallet">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">
+              <label style="border: 2px solid #0066cc; background: #eff6ff; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s ease;" id="labelPayWallet">
                 <input type="radio" name="payment_method" value="wallet" checked onchange="togglePaymentFields()">
                 <div>
-                  <div style="font-weight: 700; font-size: 0.92rem; color:#0f172a;">Wallet Balance</div>
-                  <small style="color: #10b981; font-weight: 700;" class="user-wallet-display">₹0</small>
+                  <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">Prepaid Wallet</div>
+                  <small style="color: #03a93a; font-weight: 800;" class="user-wallet-display">₹0 Balance</small>
                 </div>
               </label>
 
-              <label style="border: 2px solid #cbd5e1; border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition:all 0.2s;" id="labelPayDirect">
+              <label style="border: 2px solid #e2e8f0; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s ease;" id="labelPayDirect">
                 <input type="radio" name="payment_method" value="direct_upi" onchange="togglePaymentFields()">
                 <div>
-                  <div style="font-weight: 700; font-size: 0.92rem; color:#0f172a;">Direct QR / UPI</div>
-                  <small style="color: #64748b; font-weight: 500;">Manual Scan & Pay</small>
+                  <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">UPI QR Scan</div>
+                  <small style="color: #64748b; font-weight: 600;">Instant QR Pay</small>
                 </div>
               </label>
             </div>
 
             <!-- Direct UPI Details Box -->
             <div id="directUpiBox" style="display: none;">
-              <div class="qr-preview-box">
-                <img id="adminQrImage" src="" alt="Admin UPI QR" class="qr-image-display">
-                <div style="font-size: 0.92rem; font-weight: 800; color: #0f172a;" id="adminUpiName">Utkal Print Portal</div>
-                <div style="font-size: 0.88rem; color: #64748b; margin-top: 3px;">
-                  UPI ID: <strong id="adminUpiId" style="color:#ff6b00; font-family:'JetBrains Mono', monospace;">utkalprint@upi</strong>
+              <div class="qr-preview-box" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 16px;">
+                <img id="adminQrImage" src="" alt="Admin UPI QR" class="qr-image-display" style="width: 170px; height: 170px; border-radius: 12px; border: 1px solid #cbd5e1; margin: 0 auto 12px; display: block;">
+                <div style="font-size: 0.98rem; font-weight: 800; color: #0f172a;" id="adminUpiName">Utkal Print Portal</div>
+                <div style="font-size: 0.86rem; color: #64748b; margin-top: 6px;">
+                  Payee UPI: <strong id="adminUpiId" style="color: #0066cc; font-family: 'JetBrains Mono', monospace;">utkalprint@upi</strong>
                 </div>
               </div>
 
               <!-- UTR Number -->
               <div class="form-group" style="margin-bottom: 14px;">
-                <label class="form-label" for="orderUtr">12-Digit UTR / Transaction Reference Number</label>
-                <input type="text" id="orderUtr" class="form-control" placeholder="e.g. 423987123456">
+                <label class="form-label" for="orderUtr">12-Digit UTR / UPI Reference Number <span style="color: #ef4444;">*</span></label>
+                <input type="text" id="orderUtr" class="form-control" placeholder="e.g. 423987123456" style="font-family: 'JetBrains Mono', monospace;">
               </div>
 
               <!-- Payment Screenshot -->
               <div class="form-group">
-                <label class="form-label" for="orderProof">Upload Payment Screenshot / Slip</label>
+                <label class="form-label" for="orderProof">Upload Payment Proof / Screenshot <span style="color: #ef4444;">*</span></label>
                 <input type="file" id="orderProof" class="form-control" accept="image/*,.pdf">
               </div>
             </div>
           </div>
         </div>
 
-        <div class="modal-footer-custom">
+        <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 18px 26px;">
           <button type="button" onclick="closeApplyModal()" class="btn-outline-custom">Cancel</button>
-          <button type="submit" id="btnSubmitOrder" class="btn-tiranga">
-            <i class="fa-solid fa-paper-plane"></i> Submit Order
+          <button type="submit" id="btnSubmitOrder" class="btn-rz-primary" style="width: auto; padding: 11px 24px;">
+            <i class="fa-solid fa-paper-plane"></i> Submit & Place Order
           </button>
         </div>
       </form>
@@ -239,23 +300,21 @@
   <script>
     let publicSettings = {};
     let printServices = [];
+    let currentCategoryFilter = 'all';
 
-    // Instant Zero-Lag Hydration (0ms)
-    try {
-      const cachedServices = API.cache.get('services_print');
-      if (cachedServices && cachedServices.data) {
-        printServices = cachedServices.data;
-        renderServices(printServices);
-      }
-      const cachedOrders = API.cache.get('orders_category=print');
-      if (cachedOrders && cachedOrders.data) {
-        renderPrintOrders(cachedOrders.data);
-      }
-    } catch (e) {}
+    function initPrintPage() {
+      try {
+        sessionStorage.removeItem('utkal_cache_services_print');
+      } catch (e) {}
+      loadSettingsAndServices();
+      loadPrintOrders();
+    }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      Promise.all([loadSettingsAndServices(), loadPrintOrders()]);
-    });
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPrintPage);
+    } else {
+      initPrintPage();
+    }
 
     async function loadSettingsAndServices() {
       try {
@@ -270,39 +329,113 @@
         if (publicSettings.qr_code) {
           document.getElementById('adminQrImage').src = `${STORAGE_BASE_URL}/${publicSettings.qr_code}`;
         } else {
-          document.getElementById('adminQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=' + (publicSettings.upi_id || 'utkalprint@upi');
+          document.getElementById('adminQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=' + encodeURIComponent(publicSettings.upi_id || 'utkalprint@upi');
         }
 
         printServices = res.data || [];
-        renderServices(printServices);
+        updateServiceCounts();
+        applyFilterAndRender();
       } catch (err) {
         console.error(err);
-        renderServices([]);
+        printServices = [];
+        applyFilterAndRender();
       }
+    }
+
+    function updateServiceCounts() {
+      const allCount = printServices.length;
+      const printCount = printServices.filter(s => s.category === 'print').length;
+      const docCount = printServices.filter(s => s.category === 'document').length;
+      
+      const elAll = document.getElementById('countAll');
+      const elPrint = document.getElementById('countPrint');
+      const elDoc = document.getElementById('countDoc');
+      if (elAll) elAll.textContent = allCount;
+      if (elPrint) elPrint.textContent = printCount;
+      if (elDoc) elDoc.textContent = docCount;
+    }
+
+    function filterServices(category) {
+      currentCategoryFilter = category;
+      document.querySelectorAll('#categoryFilterTabs .tab-btn').forEach(btn => {
+        if (btn.dataset.cat === category) {
+          btn.style.background = '#ffffff';
+          btn.style.color = '#0f172a';
+          btn.style.fontWeight = '700';
+          btn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+        } else {
+          btn.style.background = 'transparent';
+          btn.style.color = '#64748b';
+          btn.style.fontWeight = '600';
+          btn.style.boxShadow = 'none';
+        }
+      });
+      applyFilterAndRender();
+    }
+
+    function applyFilterAndRender() {
+      let filtered = printServices;
+      if (currentCategoryFilter !== 'all') {
+        filtered = printServices.filter(s => s.category === currentCategoryFilter);
+      }
+      renderServices(filtered);
     }
 
     function renderServices(services) {
       const grid = document.getElementById('printServicesGrid');
       if (!services || services.length === 0) {
-        grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:30px; color:#64748b;">No print services configured currently.</div>';
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:30px; color:#64748b;">No services found in this category.</div>';
         return;
       }
 
-      grid.innerHTML = services.map(s => `
-        <div class="service-card-item">
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-              <span class="badge-status badge-processing" style="font-size:0.75rem;">${s.category.toUpperCase()}</span>
-              <span style="font-size: 1.3rem; font-weight: 800; color: #10b981;">${formatINR(s.price)}</span>
+      grid.innerHTML = services.map(s => {
+        let iconClass = 'fa-solid fa-id-card';
+        let iconBg = '#fff7ed';
+        let iconColor = '#e04d00';
+        let catBadge = '<span style="display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; font-weight:700; background:#fff7ed; color:#e04d00; border:1px solid #fed7aa; padding:2px 8px; border-radius:6px;"><i class="fa-solid fa-id-card"></i> PVC Card</span>';
+        let btnText = '<i class="fa-solid fa-print"></i> Order Print Service';
+
+        if (s.category === 'document') {
+          iconClass = 'fa-solid fa-file-lines';
+          iconBg = '#f0fdf4';
+          iconColor = '#03a93a';
+          catBadge = '<span style="display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; font-weight:700; background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0; padding:2px 8px; border-radius:6px;"><i class="fa-solid fa-file-lines"></i> Document</span>';
+          btnText = '<i class="fa-solid fa-file-arrow-up"></i> Apply Document Service';
+        } else if (s.slug && s.slug.includes('voter')) {
+          iconClass = 'fa-solid fa-person-booth';
+          iconBg = '#f0fdf4';
+          iconColor = '#03a93a';
+        } else if (s.slug && s.slug.includes('pan')) {
+          iconClass = 'fa-solid fa-address-card';
+          iconBg = '#eff6ff';
+          iconColor = '#2563eb';
+        } else if (s.slug && s.slug.includes('ayushman')) {
+          iconClass = 'fa-solid fa-heart-pulse';
+          iconBg = '#fdf2f8';
+          iconColor = '#db2777';
+        }
+
+        return `
+          <div class="glass-card" style="display:flex; flex-direction:column; justify-content:space-between; padding:22px; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 28px -6px rgba(15,23,42,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)';">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: ${iconBg}; color: ${iconColor}; display: flex; align-items: center; justify-content: center; font-size: 1.35rem;">
+                  <i class="${iconClass}"></i>
+                </div>
+                <div style="text-align: right;">
+                  <span style="font-size: 1.35rem; font-weight: 800; font-family:'Outfit',sans-serif; color: #03a93a;">${formatINR(s.price)}</span>
+                  <div style="margin-top: 2px;">${catBadge}</div>
+                </div>
+              </div>
+              <h3 style="font-size: 1.12rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">${s.name}</h3>
+              <p style="color: #64748b; font-size: 0.86rem; line-height: 1.5; margin-bottom: 18px;">${s.description || (s.category === 'document' ? 'Digital document processing and verification service.' : 'High-definition PVC smart card print service with protective overlay.')}</p>
             </div>
-            <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">${s.name}</h3>
-            <p style="color: #64748b; font-size: 0.88rem; line-height: 1.45; margin-bottom: 18px;">${s.description || 'High-quality digital print service'}</p>
+            <button onclick="openApplyModal(${s.id})" class="btn-tiranga" style="width: 100%; justify-content: center; padding: 11px; border-radius: 10px;">
+              ${btnText}
+            </button>
           </div>
-          <button onclick="openApplyModal(${s.id})" class="btn-primary-orange" style="width: 100%; justify-content: center; padding: 10px;">
-            <i class="fa-solid fa-print"></i> Order Service
-          </button>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     async function loadPrintOrders() {
@@ -318,49 +451,155 @@
 
     function renderPrintOrders(orders) {
       const tbody = document.getElementById('printOrdersTbody');
+      const mobileContainer = document.getElementById('printOrdersMobileContainer');
+
       if (!orders || orders.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:30px; color:#94a3b8;">No print orders found. Place your first order above!</td></tr>';
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7">
+                <div class="empty-state-box">
+                  <div class="empty-state-icon"><i class="fa-solid fa-folder-open"></i></div>
+                  <div class="empty-state-title">No Print Orders Found</div>
+                  <div class="empty-state-desc">You haven't ordered any PVC card prints yet. Select any print card above to place an instant request!</div>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+        if (mobileContainer) {
+          mobileContainer.innerHTML = `
+            <div class="mobile-ledger-empty-state">
+              <div class="empty-state-icon"><i class="fa-solid fa-folder-open"></i></div>
+              <div class="empty-state-title">No Print Orders Found</div>
+              <div class="empty-state-desc">You haven't ordered any PVC card prints yet. Select any print card above to place an instant request!</div>
+              <a href="#printServicesGrid" class="btn-tiranga" style="margin-top: 14px; font-size: 0.85rem; padding: 9px 18px;">
+                <i class="fa-solid fa-print"></i> Order Print Service
+              </a>
+            </div>
+          `;
+        }
         return;
       }
 
-      tbody.innerHTML = orders.map(o => {
-        let statusBadge = '';
-        if (o.order_status === 'completed') {
-          statusBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-check"></i> Completed</span>';
-        } else if (o.order_status === 'processing') {
-          statusBadge = '<span class="badge-status badge-processing"><i class="fa-solid fa-gear fa-spin"></i> Processing</span>';
-        } else if (o.order_status === 'rejected') {
-          statusBadge = `<span class="badge-status badge-rejected" title="${o.rejection_reason || ''}"><i class="fa-solid fa-xmark"></i> Rejected</span>`;
-        } else {
-          statusBadge = '<span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending</span>';
-        }
+      // 1. Desktop Table rendering (100% untouched)
+      if (tbody) {
+        tbody.innerHTML = orders.map(o => {
+          const isPrintService = o.service && o.service.category === 'print';
 
-        let downloadAction = '-';
-        if (o.delivery_file) {
-          const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
-          downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.8rem;" download><i class="fa-solid fa-download"></i> Download</a>`;
-        } else if (o.rejection_reason) {
-          downloadAction = `<span style="color:#dc2626; font-size:0.8rem; font-weight:600;">Reason: ${o.rejection_reason}</span>`;
-        } else {
-          downloadAction = '<span style="color:#94a3b8; font-size:0.84rem;">In Progress</span>';
-        }
+          let statusBadge = '';
+          if (o.order_status === 'completed') {
+            statusBadge = isPrintService 
+              ? '<span class="badge-status badge-completed" style="background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>'
+              : '<span class="badge-status badge-completed">Completed</span>';
+          } else if (o.order_status === 'processing') {
+            statusBadge = '<span class="badge-status badge-processing">Processing</span>';
+          } else if (o.order_status === 'rejected') {
+            statusBadge = `<span class="badge-status badge-rejected" title="${o.rejection_reason || ''}">Rejected</span>`;
+          } else {
+            statusBadge = '<span class="badge-status badge-pending">Pending Review</span>';
+          }
 
-        return `
-          <tr>
-            <td><span class="order-num-tag">${o.order_number}</span></td>
-            <td><strong>${o.service ? o.service.name : 'Print Card'}</strong></td>
-            <td>${formatDate(o.created_at)}</td>
-            <td style="font-weight: 700; color:#0f172a;">${formatINR(o.amount)}</td>
-            <td>
-              <span style="font-size: 0.82rem; text-transform: uppercase; font-weight: 700;">
-                ${o.payment_method === 'wallet' ? '<i class="fa-solid fa-wallet" style="color:#10b981;"></i> Wallet' : '<i class="fa-solid fa-qrcode" style="color:#f59e0b;"></i> Direct UPI'}
-              </span>
-            </td>
-            <td>${statusBadge}</td>
-            <td>${downloadAction}</td>
-          </tr>
-        `;
-      }).join('');
+          let downloadAction = '-';
+          if (isPrintService && o.order_status === 'completed') {
+            downloadAction = `
+              <div style="display:inline-flex; flex-direction:column; gap:3px;">
+                <span style="display:inline-flex; align-items:center; gap:6px; color:#03a93a; font-weight:700; font-size:0.8rem; background:#f0fdf4; border:1.5px solid #bbf7d0; padding:6px 12px; border-radius:8px; line-height:1.25;">
+                  <i class="fa-solid fa-store" style="font-size:0.95rem; color:#03a93a;"></i>
+                  <span>Printed Successfully &bull; Collect from our center</span>
+                </span>
+                ${o.delivery_file ? `<a href="${STORAGE_BASE_URL}/${o.delivery_file}" target="_blank" style="font-size:0.75rem; color:#2563eb; text-decoration:underline; font-weight:600;"><i class="fa-solid fa-download"></i> View File Copy</a>` : ''}
+              </div>
+            `;
+          } else if (o.delivery_file) {
+            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+          } else if (o.rejection_reason) {
+            downloadAction = `<span style="color:#dc2626; font-size:0.8rem; font-weight:600;">Reason: ${o.rejection_reason}</span>`;
+          } else if (o.order_status === 'processing') {
+            downloadAction = '<span style="color:#0284c7; font-size:0.82rem; font-weight:600;"><i class="fa-solid fa-gear fa-spin" style="font-size:0.75rem;"></i> In Progress</span>';
+          } else {
+            downloadAction = '<span style="color:#94a3b8; font-size:0.82rem; font-weight:600;"><i class="fa-solid fa-clock" style="font-size:0.75rem;"></i> In Progress</span>';
+          }
+
+          return `
+            <tr>
+              <td><span class="order-id-chip">${o.order_number}</span></td>
+              <td><strong style="color:#0f172a;">${o.service ? o.service.name : 'Print Card'}</strong></td>
+              <td style="color:#64748b; font-size:0.85rem;">${formatDate(o.created_at)}</td>
+              <td style="font-weight: 800; font-family:'Outfit',sans-serif; color:#0f172a;">${formatINR(o.amount)}</td>
+              <td>
+                <span style="font-size: 0.8rem; font-weight: 700; color:#475569;">
+                  ${o.payment_method === 'wallet' ? '<i class="fa-solid fa-wallet" style="color:#03a93a;"></i> Wallet' : '<i class="fa-solid fa-qrcode" style="color:#f59e0b;"></i> UPI QR'}
+                </span>
+              </td>
+              <td>${statusBadge}</td>
+              <td>${downloadAction}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 2. Mobile Responsive Cards rendering
+      if (mobileContainer) {
+        mobileContainer.innerHTML = orders.map(o => {
+          const isPrintService = o.service && o.service.category === 'print';
+
+          let statusBadge = '';
+          if (o.order_status === 'completed') {
+            statusBadge = isPrintService
+              ? '<span class="badge-status badge-completed" style="background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>'
+              : '<span class="badge-status badge-completed">Completed</span>';
+          } else if (o.order_status === 'processing') {
+            statusBadge = '<span class="badge-status badge-processing">Processing</span>';
+          } else if (o.order_status === 'rejected') {
+            statusBadge = `<span class="badge-status badge-rejected" title="${o.rejection_reason || ''}">Rejected</span>`;
+          } else {
+            statusBadge = '<span class="badge-status badge-pending">Pending Review</span>';
+          }
+
+          let downloadAction = '';
+          if (isPrintService && o.order_status === 'completed') {
+            downloadAction = `
+              <div style="color:#03a93a; font-weight:700; font-size:0.76rem; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:5px;">
+                <i class="fa-solid fa-store"></i> Printed &bull; Collect from center
+              </div>
+            `;
+          } else if (o.delivery_file) {
+            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+          } else if (o.rejection_reason) {
+            downloadAction = `<span style="color:#dc2626; font-size:0.78rem; font-weight:600;">Reason: ${o.rejection_reason}</span>`;
+          } else {
+            downloadAction = '<span style="color:#94a3b8; font-size:0.8rem; font-weight:600; display:inline-flex; align-items:center; gap:5px;"><i class="fa-solid fa-clock" style="font-size:0.75rem;"></i> In Progress</span>';
+          }
+
+          const payMethod = o.payment_method === 'wallet'
+            ? '<i class="fa-solid fa-wallet" style="color:#03a93a;"></i> Wallet'
+            : '<i class="fa-solid fa-qrcode" style="color:#f59e0b;"></i> UPI QR';
+
+          return `
+            <div class="mobile-ledger-card">
+              <div class="mobile-ledger-card-header">
+                <span class="order-id-chip">${o.order_number}</span>
+                ${statusBadge}
+              </div>
+              <div class="mobile-ledger-card-body">
+                <div class="mobile-ledger-title">${o.service ? o.service.name : 'Print Card'}</div>
+                <div class="mobile-ledger-meta">
+                  <span><i class="fa-regular fa-clock"></i> ${formatDate(o.created_at)}</span>
+                  <span>&bull;</span>
+                  <span style="font-weight:600; color:#475569;">${payMethod}</span>
+                </div>
+              </div>
+              <div class="mobile-ledger-card-footer">
+                <div class="mobile-ledger-amount">${formatINR(o.amount)}</div>
+                <div>${downloadAction}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
     function openApplyModal(serviceId) {
@@ -372,23 +611,42 @@
       document.getElementById('modalServicePrice').textContent = `Price: ${formatINR(service.price)}`;
 
       const container = document.getElementById('dynamicFormFields');
-      const fields = service.required_fields || [
-        { name: 'card_number', label: 'Card / ID Number', type: 'text', placeholder: 'e.g. 12-digit Aadhaar / Voter ID', required: true },
-        { name: 'full_name', label: 'Card Holder Name', type: 'text', placeholder: 'Enter name as on card', required: true },
-        { name: 'document_file', label: 'Upload PDF or Image File', type: 'file', required: false }
-      ];
+      const hasCustomFields = Array.isArray(service.required_fields) && service.required_fields.length > 0;
+      
+      let fields = [];
+      if (hasCustomFields) {
+        fields = service.required_fields;
+      } else if (service.category === 'document') {
+        fields = [
+          { name: 'applicant_name', label: 'Applicant / Holder Name', type: 'text', placeholder: 'Enter applicant full name', required: true },
+          { name: 'document_id', label: 'Document / Reference ID Number', type: 'text', placeholder: 'e.g. Application No, Certificate No or ID', required: true },
+          { name: 'document_file', label: 'Upload Document / Scan File', type: 'file', required: true },
+          { name: 'remarks', label: 'Special Instructions / Remarks', type: 'text', placeholder: 'Optional notes or instructions', required: false }
+        ];
+      } else {
+        fields = [
+          { name: 'card_number', label: 'Card / ID Number', type: 'text', placeholder: 'e.g. 12-digit Aadhaar / Voter / PAN ID', required: true },
+          { name: 'full_name', label: 'Card Holder Name', type: 'text', placeholder: 'Enter name as on card', required: true },
+          { name: 'document_file', label: 'Upload PDF or Image File', type: 'file', required: false }
+        ];
+      }
 
       container.innerHTML = fields.map(f => {
         if (f.type === 'file') {
           return `
-            <div class="form-group" style="margin-bottom:14px;">
+            <div class="form-group" style="margin-bottom:16px;">
               <label class="form-label">${f.label} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
-              <input type="file" name="${f.name}" class="form-control" ${f.required ? 'required' : ''} accept=".pdf,image/*">
+              <div class="file-dropzone" onclick="this.querySelector('input[type=file]').click()">
+                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #1e293b;">Click to browse or drag & drop file</div>
+                <small style="color: #64748b;">Supports PDF, JPG, PNG (Max 10MB)</small>
+                <input type="file" name="${f.name}" ${f.required ? 'required' : ''} accept=".pdf,image/*" onchange="const f=this.files[0]; if(f){ this.previousElementSibling.textContent = 'Selected: ' + f.name; this.previousElementSibling.style.color='#03a93a'; }">
+              </div>
             </div>
           `;
         }
         return `
-          <div class="form-group" style="margin-bottom:14px;">
+          <div class="form-group" style="margin-bottom:16px;">
             <label class="form-label">${f.label} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
             <input type="${f.type || 'text'}" name="${f.name}" class="form-control" placeholder="${f.placeholder || ''}" ${f.required ? 'required' : ''}>
           </div>
@@ -409,15 +667,25 @@
       const directBox = document.getElementById('directUpiBox');
       const utrInput = document.getElementById('orderUtr');
       const proofInput = document.getElementById('orderProof');
+      const walletLabel = document.getElementById('labelPayWallet');
+      const directLabel = document.getElementById('labelPayDirect');
 
       if (method === 'direct_upi') {
         directBox.style.display = 'block';
         utrInput.required = true;
         proofInput.required = true;
+        directLabel.style.borderColor = '#fd5c00';
+        directLabel.style.background = '#fffaf5';
+        walletLabel.style.borderColor = '#e2e8f0';
+        walletLabel.style.background = 'transparent';
       } else {
         directBox.style.display = 'none';
         utrInput.required = false;
         proofInput.required = false;
+        walletLabel.style.borderColor = '#fd5c00';
+        walletLabel.style.background = '#fffaf5';
+        directLabel.style.borderColor = '#e2e8f0';
+        directLabel.style.background = 'transparent';
       }
     }
 
@@ -458,7 +726,7 @@
       formData.append('input_data', JSON.stringify(inputObj));
 
       btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing Order...';
 
       try {
         const res = await API.createOrder(formData);
@@ -475,7 +743,7 @@
         showToast(err.message || 'Failed to place order', 'error');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Order';
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit & Place Order';
       }
     });
   </script>

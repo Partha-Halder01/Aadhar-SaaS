@@ -15,17 +15,20 @@ class ServiceController extends Controller
     public function index(Request $request)
     {
         $category = $request->query('category', 'all');
-        $cacheKey = 'active_services_' . $category;
 
-        $services = Cache::remember($cacheKey, 300, function () use ($category) {
-            $query = Service::where('is_active', true);
+        $query = Service::where('is_active', true);
 
-            if ($category !== 'all') {
+        if ($category !== 'all' && !empty($category)) {
+            if ($category === 'pan' || $category === 'pan_find') {
+                $query->whereIn('category', ['pan', 'pan_find']);
+            } elseif ($category === 'print' || $category === 'print_doc') {
+                $query->whereIn('category', ['print', 'document']);
+            } else {
                 $query->where('category', $category);
             }
+        }
 
-            return $query->orderBy('id', 'asc')->get()->toArray();
-        });
+        $services = $query->orderBy('id', 'asc')->get()->toArray();
 
         return response()->json([
             'status' => 'success',

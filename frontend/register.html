@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/png" href="logo-icon.png">
   <link rel="stylesheet" href="css/style.css">
   
   <style>
@@ -18,85 +19,310 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
+      padding: 40px 16px;
       position: relative;
-      background: radial-gradient(circle at 50% 15%, rgba(255, 107, 0, 0.14) 0%, transparent 55%),
-                  radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.1) 0%, transparent 55%),
-                  #fbfbf9;
+      background: radial-gradient(circle at 50% 8%, rgba(0, 102, 204, 0.08) 0%, transparent 45%),
+                  radial-gradient(circle at 85% 85%, rgba(253, 92, 0, 0.06) 0%, transparent 45%),
+                  #f8fafc;
+      overflow-x: hidden;
     }
+    
     .auth-card {
       background: #ffffff;
       border: 1.5px solid #e2e8f0;
       border-radius: 24px;
-      box-shadow: 0 25px 55px -12px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(226, 232, 240, 0.6);
-      max-width: 500px;
+      box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+      max-width: 520px;
       width: 100%;
       overflow: hidden;
       position: relative;
       z-index: 2;
-      backdrop-filter: blur(16px);
+      transition: all 0.3s ease;
     }
-    .auth-header {
-      background: linear-gradient(135deg, #0b1120 0%, #1e293b 100%);
-      padding: 34px 24px;
-      text-align: center;
-      color: #ffffff;
-      position: relative;
-    }
-    .auth-header::after {
+
+    .auth-card::before {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; right: 0;
+      top: 0; left: 0; right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #ff6b00, #10b981);
+      background: linear-gradient(90deg, #0066cc 0%, #fd5c00 50%, #03a93a 100%);
+      z-index: 3;
     }
+
+    .auth-header {
+      background: #ffffff;
+      padding: 34px 28px 20px;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .auth-logo-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      margin-bottom: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .auth-logo-link:hover {
+      transform: scale(1.02);
+    }
+
+    .auth-logo-img {
+      height: 44px;
+      width: auto;
+      max-width: 220px;
+      object-fit: contain;
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+
+    .auth-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0b1120;
+      letter-spacing: -0.025em;
+      margin-bottom: 6px;
+    }
+
+    .auth-subtitle {
+      font-size: 0.9rem;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    .role-context-banner {
+      padding: 11px 14px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.84rem;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #0066cc;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
     .auth-body {
-      padding: 32px 28px;
+      padding: 26px 28px 32px;
     }
+
     .form-group {
       margin-bottom: 18px;
     }
+
     .form-label {
       display: block;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 700;
-      color: #334155;
+      color: #1e293b;
       margin-bottom: 6px;
     }
+
     .input-wrapper {
       position: relative;
       display: flex;
       align-items: center;
+      width: 100%;
     }
+
     .input-wrapper i.icon-lead {
       position: absolute;
       left: 14px;
       color: #94a3b8;
-      font-size: 1rem;
+      font-size: 0.98rem;
+      transition: color 0.2s ease;
+      pointer-events: none;
     }
+
     .form-control {
       width: 100%;
       padding: 12px 14px 12px 42px;
       border: 1.5px solid #cbd5e1;
       border-radius: 12px;
-      font-size: 0.92rem;
-      color: #1e293b;
-      transition: all 0.25s ease;
+      font-size: 0.94rem;
+      color: #0f172a;
+      background: #ffffff;
+      transition: all 0.22s ease;
       outline: none;
+      box-sizing: border-box;
     }
+
     .form-control:focus {
-      border-color: #ff6b00;
-      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
+      border-color: #0066cc;
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
     }
-    @media (max-width: 500px) {
+
+    .input-wrapper:focus-within i.icon-lead {
+      color: #0066cc;
+    }
+
+    .btn-rz-primary {
+      background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 13px 20px;
+      font-weight: 800;
+      font-size: 0.96rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0, 102, 204, 0.28);
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-rz-primary:hover {
+      background: linear-gradient(135deg, #0052a3 0%, #014183 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 102, 204, 0.38);
+    }
+
+    .btn-rz-primary:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Modal Styles */
+    .otp-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.68);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 9999;
+      animation: fadeIn 0.22s ease-out;
+    }
+    .otp-modal-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 34px 28px;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+      animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.94); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .otp-icon-badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #eff6ff;
+      border: 2px solid #bfdbfe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: #0066cc;
+      margin: 0 auto 16px;
+    }
+
+    .otp-boxes-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 22px 0 16px;
+    }
+    .otp-box {
+      width: 48px;
+      height: 56px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 1.6rem;
+      font-weight: 800;
+      text-align: center;
+      color: #0f172a;
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .otp-box:focus {
+      border-color: #0066cc;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.18);
+      transform: translateY(-2px);
+    }
+
+    .dev-otp-helper {
+      background: rgba(3, 169, 58, 0.08);
+      border: 1px dashed rgba(3, 169, 58, 0.35);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      color: #028a2f;
+      margin-bottom: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .dev-otp-helper:hover {
+      background: rgba(3, 169, 58, 0.14);
+      transform: translateY(-1px);
+    }
+
+    .btn-resend-link {
+      background: transparent;
+      border: none;
+      color: #0066cc;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-resend-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 520px) {
       .auth-container {
         padding: 20px 14px;
       }
       .auth-header {
-        padding: 24px 18px;
+        padding: 24px 18px 16px;
       }
       .auth-body {
         padding: 22px 18px;
+      }
+      .otp-box {
+        width: 42px;
+        height: 50px;
+        font-size: 1.35rem;
+      }
+      .otp-boxes-container {
+        gap: 6px;
       }
     }
   </style>
@@ -106,73 +332,141 @@
   <div class="auth-container">
     <div class="auth-card">
       <div class="auth-header">
-        <a href="index.html" class="brand-logo" style="justify-content: center; color: #fff; margin-bottom: 8px;">
-          <div class="brand-logo-icon" style="width:38px; height:38px; font-size:1.1rem;">
-            <i class="fa-solid fa-print"></i>
-          </div>
-          <span style="color:#ffffff;">UTKAL<span style="color:#ff8a00;">PRINT</span></span>
-          <span class="brand-badge">PRO</span>
+        <a href="index.html" class="auth-logo-link">
+          <img src="logo .png" alt="Instant Online Seva" class="auth-logo-img">
         </a>
-        <p style="font-size: 0.88rem; color: #cbd5e1; margin: 0;">Register for instant print & PAN verification services</p>
+        <h1 class="auth-title">Create Free Account</h1>
+        <div class="auth-subtitle">Direct Citizen Printing & PAN Partnership Portal</div>
       </div>
 
       <div class="auth-body">
+        <div class="role-context-banner">
+          <i class="fa-solid fa-bolt" style="color: #fd5c00; font-size: 1rem;"></i>
+          <span>Instant Activation &bull; Start printing PVC Cards in under 2 minutes</span>
+        </div>
+
         <form id="registerForm">
           <!-- Full Name -->
           <div class="form-group">
-            <label class="form-label" for="regName">Full Name</label>
+            <label class="form-label" for="regName">Full Name / Store Name <span style="color:#ef4444">*</span></label>
             <div class="input-wrapper">
               <i class="fa-solid fa-user icon-lead"></i>
-              <input type="text" id="regName" class="form-control" placeholder="e.g. Ramesh Kumar Patra" required autofocus>
+              <input type="text" id="regName" class="form-control" placeholder="e.g. Rahul Sharma" required autofocus>
             </div>
           </div>
 
           <!-- Email Address -->
           <div class="form-group">
-            <label class="form-label" for="regEmail">Email Address</label>
+            <label class="form-label" for="regEmail">Email Address (Login ID) <span style="color:#ef4444">*</span></label>
             <div class="input-wrapper">
               <i class="fa-solid fa-envelope icon-lead"></i>
-              <input type="email" id="regEmail" class="form-control" placeholder="ramesh@example.com" required>
+              <input type="email" id="regEmail" class="form-control" placeholder="user@example.com" required>
             </div>
           </div>
 
           <!-- Phone Number -->
           <div class="form-group">
-            <label class="form-label" for="regPhone">Mobile Number (WhatsApp Enabled)</label>
+            <label class="form-label" for="regPhone">WhatsApp Mobile Number <span style="color:#ef4444">*</span></label>
             <div class="input-wrapper">
               <i class="fa-solid fa-phone icon-lead"></i>
-              <input type="tel" id="regPhone" class="form-control" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+              <input type="tel" id="regPhone" class="form-control" placeholder="10-digit mobile number" pattern="[6-9][0-9]{9}" maxlength="10" required>
             </div>
+            <span style="font-size: 0.78rem; color: #64748b; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-shield-halved" style="color: #03a93a;"></i> 6-digit verification code will be sent via SMS
+            </span>
           </div>
 
-          <!-- Password -->
-          <div class="form-group">
-            <label class="form-label" for="regPassword">Password (Min 6 characters)</label>
-            <div class="input-wrapper">
-              <i class="fa-solid fa-lock icon-lead"></i>
-              <input type="password" id="regPassword" class="form-control" placeholder="Create a secure password" minlength="6" required>
+          <!-- Password Grid (responsive) -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="regPassword">Password <span style="color:#ef4444">*</span></label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock icon-lead"></i>
+                <input type="password" id="regPassword" class="form-control" placeholder="Min 6 chars" minlength="6" required>
+              </div>
             </div>
-          </div>
 
-          <!-- Confirm Password -->
-          <div class="form-group">
-            <label class="form-label" for="regPasswordConfirm">Confirm Password</label>
-            <div class="input-wrapper">
-              <i class="fa-solid fa-shield-halved icon-lead"></i>
-              <input type="password" id="regPasswordConfirm" class="form-control" placeholder="Re-enter your password" minlength="6" required>
+            <div class="form-group">
+              <label class="form-label" for="regPasswordConfirm">Confirm <span style="color:#ef4444">*</span></label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-shield-halved icon-lead"></i>
+                <input type="password" id="regPasswordConfirm" class="form-control" placeholder="Repeat" minlength="6" required>
+              </div>
             </div>
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" id="btnSubmit" class="btn-tiranga" style="width: 100%; justify-content: center; padding: 13px; font-size: 1rem; border-radius: 12px; margin-top: 10px;">
-            <i class="fa-solid fa-user-check"></i> Register Free Account
+          <button type="submit" id="btnSubmit" class="btn-rz-primary" style="margin-top: 10px;">
+            <i class="fa-solid fa-paper-plane"></i> Send OTP & Verify Mobile
           </button>
         </form>
 
-        <div style="text-align: center; margin-top: 24px; font-size: 0.9rem; color: #64748b;">
-          Already have an account? 
-          <a href="login.html" style="color: #ff6b00; font-weight: 700; text-decoration: none;">Login here</a>
+        <div style="text-align: center; margin-top: 22px; font-size: 0.88rem; color: #64748b;">
+          Already registered? 
+          <a href="login.html" style="color: #0066cc; font-weight: 800; text-decoration: none;">Login to portal</a>
         </div>
+
+        <!-- Trust Badges -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 24px; padding-top: 18px; border-top: 1px solid #f1f5f9; font-size: 0.76rem; color: #64748b; flex-wrap: wrap;">
+          <span><i class="fa-solid fa-wallet" style="color: #03a93a;"></i> Zero Activation Fee</span>
+          <span>&bull;</span>
+          <span><i class="fa-solid fa-bolt" style="color: #fd5c00;"></i> Instant SMS OTP</span>
+          <span>&bull;</span>
+          <span><i class="fa-solid fa-shield-check" style="color: #0066cc;"></i> UIDAI Compliant</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive OTP Verification Modal Dialog -->
+  <div id="otpModal" class="otp-modal-backdrop" style="display: none;">
+    <div class="otp-modal-card">
+      <div class="otp-icon-badge">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+      </div>
+      
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Verify Mobile Number</h3>
+      <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 12px; line-height: 1.45;">
+        We have dispatched a 6-digit SMS verification code to <br>
+        <strong id="displayOtpPhone" style="color: #0f172a; font-size: 0.98rem; font-family: 'JetBrains Mono', monospace;">+91 ----------</strong>
+      </p>
+
+      <!-- Dev Mode Helper -->
+      <div id="devOtpBanner" class="dev-otp-helper" style="display: none;" onclick="autoFillDevOtp()">
+        <i class="fa-solid fa-bolt-lightning" style="color: #03a93a;"></i>
+        <span>Simulator Code: <strong id="devOtpCode">------</strong> <span style="text-decoration: underline;">(Click to fill)</span></span>
+      </div>
+
+      <!-- 6 Digit Input Boxes -->
+      <div class="otp-boxes-container">
+        <input type="text" maxlength="1" class="otp-box" data-index="0" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+        <input type="text" maxlength="1" class="otp-box" data-index="1" inputmode="numeric" pattern="[0-9]*">
+        <input type="text" maxlength="1" class="otp-box" data-index="2" inputmode="numeric" pattern="[0-9]*">
+        <input type="text" maxlength="1" class="otp-box" data-index="3" inputmode="numeric" pattern="[0-9]*">
+        <input type="text" maxlength="1" class="otp-box" data-index="4" inputmode="numeric" pattern="[0-9]*">
+        <input type="text" maxlength="1" class="otp-box" data-index="5" inputmode="numeric" pattern="[0-9]*">
+      </div>
+
+      <!-- Countdown Timer & Resend Link -->
+      <div style="margin-bottom: 22px; font-size: 0.86rem; color: #64748b;">
+        <span id="timerContainer">
+          <i class="fa-regular fa-clock"></i> Resend code in <strong id="timerCount" style="color: #0066cc;">60</strong>s
+        </span>
+        <button type="button" id="btnResendOtp" class="btn-resend-link" style="display: none;" onclick="resendOtp()">
+          <i class="fa-solid fa-rotate-right"></i> Resend SMS OTP
+        </button>
+      </div>
+
+      <!-- Submit Verification -->
+      <button type="button" id="btnVerifyOtp" class="btn-rz-primary" style="margin-bottom: 14px;" onclick="submitOtpVerification()">
+        <i class="fa-solid fa-circle-check"></i> Verify & Complete Registration
+      </button>
+
+      <!-- Edit Phone / Cancel -->
+      <div>
+        <button type="button" onclick="closeOtpModal()" style="background: none; border: none; color: #64748b; font-size: 0.84rem; cursor: pointer; text-decoration: underline;">
+          <i class="fa-solid fa-arrow-left"></i> Change Phone Number
+        </button>
       </div>
     </div>
   </div>
@@ -182,7 +476,121 @@
   <script>
     const form = document.getElementById('registerForm');
     const btnSubmit = document.getElementById('btnSubmit');
+    const otpModal = document.getElementById('otpModal');
+    const displayOtpPhone = document.getElementById('displayOtpPhone');
+    const devOtpBanner = document.getElementById('devOtpBanner');
+    const devOtpCode = document.getElementById('devOtpCode');
+    const timerContainer = document.getElementById('timerContainer');
+    const timerCount = document.getElementById('timerCount');
+    const btnResendOtp = document.getElementById('btnResendOtp');
+    const btnVerifyOtp = document.getElementById('btnVerifyOtp');
+    const otpBoxes = document.querySelectorAll('.otp-box');
 
+    let pendingRegistration = null;
+    let countdownInterval = null;
+    let currentDevOtp = null;
+
+    // Handle 6-digit box focus and input flow
+    otpBoxes.forEach((box, idx) => {
+      box.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = val ? val[val.length - 1] : '';
+
+        if (val && idx < otpBoxes.length - 1) {
+          otpBoxes[idx + 1].focus();
+        }
+
+        checkAutoSubmit();
+      });
+
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && idx > 0) {
+          otpBoxes[idx - 1].focus();
+        }
+      });
+
+      box.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text').trim();
+        const digits = text.replace(/[^0-9]/g, '').slice(0, 6);
+        if (digits) {
+          digits.split('').forEach((d, i) => {
+            if (otpBoxes[i]) otpBoxes[i].value = d;
+          });
+          const nextIndex = Math.min(digits.length, otpBoxes.length - 1);
+          otpBoxes[nextIndex].focus();
+          checkAutoSubmit();
+        }
+      });
+    });
+
+    function getEnteredOtp() {
+      let otp = '';
+      otpBoxes.forEach(b => otp += b.value.trim());
+      return otp;
+    }
+
+    function checkAutoSubmit() {
+      const otp = getEnteredOtp();
+      if (otp.length === 6) {
+        btnVerifyOtp.focus();
+      }
+    }
+
+    function startTimer(seconds = 60) {
+      clearInterval(countdownInterval);
+      timerContainer.style.display = 'inline';
+      btnResendOtp.style.display = 'none';
+      let remaining = seconds;
+      timerCount.textContent = remaining;
+
+      countdownInterval = setInterval(() => {
+        remaining--;
+        timerCount.textContent = remaining;
+        if (remaining <= 0) {
+          clearInterval(countdownInterval);
+          timerContainer.style.display = 'none';
+          btnResendOtp.style.display = 'inline-flex';
+        }
+      }, 1000);
+    }
+
+    function autoFillDevOtp() {
+      if (currentDevOtp && currentDevOtp.length === 6) {
+        currentDevOtp.split('').forEach((d, i) => {
+          if (otpBoxes[i]) otpBoxes[i].value = d;
+        });
+        showToast('Demo OTP filled!', 'success');
+        btnVerifyOtp.focus();
+      }
+    }
+
+    function openOtpModal(phone, devOtp) {
+      displayOtpPhone.textContent = `+91 ${phone.substring(0, 5)} ${phone.substring(5)}`;
+      otpBoxes.forEach(b => b.value = '');
+      
+      currentDevOtp = devOtp;
+      if (devOtp) {
+        devOtpCode.textContent = devOtp;
+        devOtpBanner.style.display = 'inline-flex';
+      } else {
+        devOtpBanner.style.display = 'none';
+      }
+
+      otpModal.style.display = 'flex';
+      startTimer(60);
+      setTimeout(() => otpBoxes[0].focus(), 150);
+    }
+
+    function closeOtpModal() {
+      clearInterval(countdownInterval);
+      otpModal.style.display = 'none';
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send OTP & Verify Mobile';
+      document.getElementById('regPhone').focus();
+    }
+
+    // Step 1: Submit initial registration form -> Dispatches SMS OTP
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('regName').value.trim();
@@ -191,23 +599,89 @@
       const password = document.getElementById('regPassword').value;
       const password_confirmation = document.getElementById('regPasswordConfirm').value;
 
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        showToast('Please enter a valid 10-digit Indian mobile number (starts with 6-9)', 'error');
+        return;
+      }
+
       if (password !== password_confirmation) {
         showToast('Passwords do not match!', 'error');
         return;
       }
 
+      pendingRegistration = { name, email, phone, password, password_confirmation };
+
       btnSubmit.disabled = true;
-      btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating Account...';
+      btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending SMS OTP...';
 
       try {
-        const res = await API.register({ name, email, phone, password, password_confirmation });
-        window.location.href = getAppPath('user/dashboard.html');
+        const res = await API.sendOtp({ phone, purpose: 'register' });
+        showToast(res.message || 'OTP sent successfully to your mobile.', 'success');
+        openOtpModal(phone, res.dev_otp);
       } catch (err) {
-        showToast(err.message || 'Registration failed. Please check your inputs.', 'error');
+        showToast(err.message || 'Failed to send verification OTP.', 'error');
         btnSubmit.disabled = false;
-        btnSubmit.innerHTML = '<i class="fa-solid fa-user-check"></i> Register Free Account';
+        btnSubmit.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send OTP & Verify Mobile';
       }
     });
+
+    // Step 2: Resend OTP
+    async function resendOtp() {
+      if (!pendingRegistration) return;
+      btnResendOtp.disabled = true;
+      btnResendOtp.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
+      try {
+        const res = await API.sendOtp({ phone: pendingRegistration.phone, purpose: 'register' });
+        showToast('New OTP dispatched to your mobile!', 'success');
+        currentDevOtp = res.dev_otp;
+        if (res.dev_otp) {
+          devOtpCode.textContent = res.dev_otp;
+          devOtpBanner.style.display = 'inline-flex';
+        } else {
+          devOtpBanner.style.display = 'none';
+        }
+        startTimer(60);
+        otpBoxes.forEach(b => b.value = '');
+        otpBoxes[0].focus();
+      } catch (err) {
+        showToast(err.message || 'Could not resend OTP. Please try again in a moment.', 'error');
+      } finally {
+        btnResendOtp.disabled = false;
+        btnResendOtp.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Resend SMS OTP';
+      }
+    }
+
+    // Step 3: Verify OTP & finalize registration
+    async function submitOtpVerification() {
+      const otp = getEnteredOtp();
+      if (otp.length !== 6) {
+        showToast('Please enter the complete 6-digit OTP code', 'error');
+        return;
+      }
+
+      btnVerifyOtp.disabled = true;
+      btnVerifyOtp.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying Code...';
+
+      try {
+        const payload = {
+          ...pendingRegistration,
+          otp: otp
+        };
+
+        const res = await API.register(payload);
+        showToast('Mobile verified! Creating your account...', 'success');
+        setTimeout(() => {
+          window.location.href = getAppPath('user/dashboard.html');
+        }, 600);
+      } catch (err) {
+        showToast(err.message || 'OTP verification failed. Please try again.', 'error');
+        btnVerifyOtp.disabled = false;
+        btnVerifyOtp.innerHTML = '<i class="fa-solid fa-circle-check"></i> Verify & Complete Registration';
+        otpBoxes.forEach(b => b.value = '');
+        otpBoxes[0].focus();
+      }
+    }
   </script>
 </body>
 </html>

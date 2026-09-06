@@ -10,80 +10,96 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/png" href="../logo-icon.png">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
   <div class="portal-wrapper">
     <!-- Admin Sidebar Navigation -->
-    <aside class="portal-sidebar" style="background: linear-gradient(180deg, #0b1120 0%, #0f172a 60%, #1e293b 100%); border-right-color: #334155;">
-      <div class="sidebar-header" style="border-bottom-color: rgba(255,255,255,0.12);">
-        <a href="dashboard.html" class="brand-logo" style="font-size: 1.15rem; color:#fff;">
-          <div class="brand-logo-icon" style="width:34px; height:34px; font-size:1rem;">
-            <i class="fa-solid fa-shield-halved"></i>
-          </div>
-          <div>
-            <span style="color:#fff;">ADMIN</span><span style="color: #ff6b00;">PANEL</span>
-            <span class="brand-badge" style="background:#dc2626;">ROOT</span>
-          </div>
+    <aside class="portal-sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="brand-logo" style="display:flex; align-items:center; gap:8px;">
+          <img src="../logo .png" alt="Instant Online Seva" class="brand-logo-img">
+          <img src="../logo-icon.png" alt="Instant Online Seva" class="brand-logo-icon-img">
+          <span class="brand-badge" style="background:#dc2626; font-size:0.65rem; padding:3px 7px;">ADMIN</span>
         </a>
       </div>
 
       <ul class="sidebar-menu">
+        <li class="sidebar-category-header">Overview</li>
         <li class="sidebar-item">
-          <a href="dashboard.html" class="sidebar-link" style="color:#94a3b8;">
-            <i class="fa-solid fa-chart-pie" style="color:#ff7a00;"></i>
-            <span>Dashboard</span>
+          <a href="dashboard.html" class="sidebar-link">
+            <i class="fa-solid fa-chart-pie" style="color:#0066cc;"></i>
+            <span>Executive Dashboard</span>
           </a>
         </li>
 
+        <li class="sidebar-category-header">Fulfillment & Ops</li>
         <li class="sidebar-item active">
-          <a href="orders.html" class="sidebar-link active" style="color:#ff6b00 !important; background: rgba(255, 107, 0, 0.12); border-left: 3px solid #ff7a00;">
-            <i class="fa-solid fa-list-check" style="color:#ff6b00;"></i>
+          <a href="orders.html" class="sidebar-link active">
+            <i class="fa-solid fa-list-check" style="color:#0284c7;"></i>
             <span>All Orders</span>
           </a>
         </li>
 
         <li class="sidebar-item">
-          <a href="wallet-requests.html" class="sidebar-link" style="color:#94a3b8;">
-            <i class="fa-solid fa-money-bill-transfer" style="color:#4ade80;"></i>
+          <a href="wallet-requests.html" class="sidebar-link">
+            <i class="fa-solid fa-money-bill-transfer" style="color:#03a93a;"></i>
             <span>Wallet Top-ups</span>
           </a>
         </li>
 
+        <li class="sidebar-category-header">Catalog & Accounts</li>
         <li class="sidebar-item">
-          <a href="services.html" class="sidebar-link" style="color:#94a3b8;">
-            <i class="fa-solid fa-layer-group" style="color:#fbbf24;"></i>
+          <a href="services.html" class="sidebar-link">
+            <i class="fa-solid fa-layer-group" style="color:#e04d00;"></i>
             <span>Services & Rates</span>
           </a>
         </li>
 
         <li class="sidebar-item">
-          <a href="users.html" class="sidebar-link" style="color:#94a3b8;">
-            <i class="fa-solid fa-users" style="color:#a855f7;"></i>
-            <span>Customer List</span>
+          <a href="users.html" class="sidebar-link">
+            <i class="fa-solid fa-users" style="color:#7c3aed;"></i>
+            <span>Customer Accounts</span>
           </a>
         </li>
 
         <li class="sidebar-item">
-          <a href="complaints.html" class="sidebar-link" style="color:#94a3b8;">
-            <i class="fa-solid fa-headset" style="color:#f87171;"></i>
+          <a href="complaints.html" class="sidebar-link">
+            <i class="fa-solid fa-headset" style="color:#dc2626;"></i>
             <span>Support Tickets</span>
           </a>
         </li>
 
+        <li class="sidebar-category-header">Website & CMS</li>
         <li class="sidebar-item">
-          <a href="settings.html" class="sidebar-link" style="color:#94a3b8;">
-            <i class="fa-solid fa-sliders" style="color:#38bdf8;"></i>
-            <span>UPI & Settings</span>
+          <a href="landing-page.html" class="sidebar-link">
+            <i class="fa-solid fa-desktop" style="color:#0066cc;"></i>
+            <span>Landing Page CMS</span>
+          </a>
+        </li>
+
+        <li class="sidebar-category-header">System Config</li>
+        <li class="sidebar-item">
+          <a href="settings.html" class="sidebar-link">
+            <i class="fa-solid fa-sliders" style="color:#64748b;"></i>
+            <span>UPI & Global Settings</span>
           </a>
         </li>
       </ul>
 
-      <div style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.12);">
-        <a href="#" class="sidebar-link btn-logout-action" style="color: #f87171;">
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <span>Logout</span>
+      <!-- Admin Identity & Logout -->
+      <div class="sidebar-user-footer">
+        <div class="sidebar-user-info">
+          <div class="topbar-avatar user-initials-display" style="width: 34px; height: 34px; font-size: 0.75rem; background: #dc2626;">AD</div>
+          <div class="sidebar-user-details">
+            <div class="user-name-display">Administrator</div>
+            <div class="user-role-display">Root Console</div>
+          </div>
+        </div>
+        <a href="#" class="btn-icon-action danger btn-logout-action" title="Sign Out">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
         </a>
       </div>
     </aside>
@@ -96,57 +112,66 @@
             <i class="fa-solid fa-bars"></i>
           </button>
           <div>
-            <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;">Order Management & Fulfillment</h1>
-            <small style="color: #64748b; font-size: 0.84rem;">Verify payments, inspect card data, and upload final documents</small>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Console &bull; Operations</div>
+            <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;"><span>Orders</span><span class="page-title-sub"> Management</span></h1>
           </div>
         </div>
 
-        <button onclick="loadOrders()" class="btn-secondary" style="font-size: 0.85rem; padding: 7px 14px;">
-          <i class="fa-solid fa-rotate" id="refreshIcon"></i> Refresh
-        </button>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button onclick="loadOrders()" class="btn-secondary" style="font-size: 0.82rem; padding: 7px 14px;">
+            <i class="fa-solid fa-rotate" id="refreshIcon"></i> Refresh Orders
+          </button>
+          <button class="btn-primary-orange btn-logout-action" style="padding: 7px 14px; font-size: 0.82rem;">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+          </button>
+        </div>
       </header>
 
       <div class="portal-content">
         <!-- Quick Stats Row -->
-        <div class="quick-stats-row">
-          <div class="quick-stat-pill">
-            <div class="quick-stat-icon" style="background: #fff7ed; color: #ff7a00;">
-              <i class="fa-solid fa-bag-shopping"></i>
+        <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Total Orders</span>
+              <div class="kpi-icon" style="background: rgba(253, 92, 0,0.1); color: var(--primary);">
+                <i class="fa-solid fa-bag-shopping"></i>
+              </div>
             </div>
-            <div>
-              <div class="quick-stat-label">Total Orders</div>
-              <div class="quick-stat-value" id="statTotalOrders">0</div>
-            </div>
+            <div class="kpi-value" id="statTotalOrders">0</div>
+            <div class="kpi-footer" style="color: #64748b;">Cumulative applications</div>
           </div>
 
-          <div class="quick-stat-pill">
-            <div class="quick-stat-icon" style="background: #fef3c7; color: #d97706;">
-              <i class="fa-solid fa-clock"></i>
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Pending Payment</span>
+              <div class="kpi-icon" style="background: rgba(253, 92, 0,0.1); color: #e04d00;">
+                <i class="fa-solid fa-clock"></i>
+              </div>
             </div>
-            <div>
-              <div class="quick-stat-label">Pending Verify</div>
-              <div class="quick-stat-value" id="statPendingOrders">0</div>
-            </div>
+            <div class="kpi-value" id="statPendingOrders" style="color: #e04d00;">0</div>
+            <div class="kpi-footer" style="color: #e04d00; font-weight: 600;">Requires verification</div>
           </div>
 
-          <div class="quick-stat-pill">
-            <div class="quick-stat-icon" style="background: #e0f2fe; color: #0284c7;">
-              <i class="fa-solid fa-arrows-rotate"></i>
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Processing Queue</span>
+              <div class="kpi-icon" style="background: rgba(0, 102, 204,0.1); color: #0284c7;">
+                <i class="fa-solid fa-arrows-rotate"></i>
+              </div>
             </div>
-            <div>
-              <div class="quick-stat-label">In Processing</div>
-              <div class="quick-stat-value" id="statProcessingOrders">0</div>
-            </div>
+            <div class="kpi-value" id="statProcessingOrders" style="color: #0284c7;">0</div>
+            <div class="kpi-footer" style="color: #0284c7; font-weight: 600;">Ready for delivery PDF</div>
           </div>
 
-          <div class="quick-stat-pill">
-            <div class="quick-stat-icon" style="background: #dcfce7; color: #16a34a;">
-              <i class="fa-solid fa-circle-check"></i>
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Completed Orders</span>
+              <div class="kpi-icon" style="background: rgba(3, 169, 58,0.1); color: #03a93a;">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
             </div>
-            <div>
-              <div class="quick-stat-label">Delivered</div>
-              <div class="quick-stat-value" id="statCompletedOrders">0</div>
-            </div>
+            <div class="kpi-value" id="statCompletedOrders" style="color: #03a93a;">0</div>
+            <div class="kpi-footer" style="color: #03a93a; font-weight: 600;">Delivered to user</div>
           </div>
         </div>
 
@@ -218,74 +243,74 @@
 
   <!-- Order Details & Payment Review Modal -->
   <div class="modal-backdrop-custom" id="modalOrderDetails">
-    <div class="modal-dialog-custom" style="max-width: 660px;">
-      <div class="modal-header-custom">
-        <div style="display:flex; align-items:center; gap: 10px;">
-          <div style="width: 36px; height: 36px; border-radius: 8px; background:#fff7ed; color:#ff7a00; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+    <div class="modal-dialog-custom" style="max-width: 680px;">
+      <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 22px 26px;">
+        <div style="display:flex; align-items:center; gap: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background:#eff6ff; color:#0066cc; border: 1.5px solid #bfdbfe; display:flex; align-items:center; justify-content:center; font-size:1.25rem;">
             <i class="fa-solid fa-file-invoice"></i>
           </div>
           <div>
-            <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0; color:#0f172a;">Order Details</h3>
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color:#0f172a; font-family:'Outfit', sans-serif;">Order Details & Review</h3>
             <span id="modalOrderNumber" class="order-num-tag" style="margin-top: 2px;"></span>
           </div>
         </div>
-        <button onclick="closeModal('modalOrderDetails')" style="background:transparent; border:none; font-size: 1.2rem; cursor:pointer; color:#94a3b8;">
+        <button onclick="closeModal('modalOrderDetails')" class="btn-icon-action" style="border-radius: 50%;" title="Close">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <div class="modal-body-custom" id="modalOrderBody">
+      <div class="modal-body-custom" id="modalOrderBody" style="padding: 24px 26px;">
         <!-- Injected via JS -->
       </div>
 
-      <div class="modal-footer-custom" id="modalOrderFooter">
-        <button type="button" class="btn-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
+      <div class="modal-footer-custom" id="modalOrderFooter" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 18px 26px;">
+        <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
       </div>
     </div>
   </div>
 
   <!-- Fulfill & Upload Delivery Modal -->
   <div class="modal-backdrop-custom" id="modalFulfill">
-    <div class="modal-dialog-custom">
-      <div class="modal-header-custom">
-        <div style="display:flex; align-items:center; gap: 10px;">
-          <div style="width: 36px; height: 36px; border-radius: 8px; background:#f0fdf4; color:#16a34a; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+    <div class="modal-dialog-custom" style="max-width: 580px;">
+      <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 22px 26px;">
+        <div style="display:flex; align-items:center; gap: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background:#f0fdf4; color:#03a93a; border: 1.5px solid #bbf7d0; display:flex; align-items:center; justify-content:center; font-size:1.25rem;">
             <i class="fa-solid fa-cloud-arrow-up"></i>
           </div>
           <div>
-            <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0; color:#0f172a;">Deliver Ready Document</h3>
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color:#0f172a; font-family:'Outfit', sans-serif;">Deliver Ready Document</h3>
             <small style="color: #64748b;" id="fulfillOrderSubtitle">Upload finalized PDF or Card image</small>
           </div>
         </div>
-        <button onclick="closeModal('modalFulfill')" style="background:transparent; border:none; font-size: 1.2rem; cursor:pointer; color:#94a3b8;">
+        <button onclick="closeModal('modalFulfill')" class="btn-icon-action" style="border-radius: 50%;" title="Close">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
       <form id="fulfillForm">
-        <div class="modal-body-custom">
+        <div class="modal-body-custom" style="padding: 24px 26px;">
           <input type="hidden" id="fulfillOrderId">
 
           <div class="form-group">
-            <label class="form-label" for="deliveryFileInput">Upload Completed File (PDF / JPEG / PNG) <span style="color:red">*</span></label>
-            <div style="border: 2px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center; background: #f8fafc; cursor: pointer;" onclick="document.getElementById('deliveryFileInput').click()">
-              <i class="fa-solid fa-file-arrow-up" style="font-size: 2rem; color: #ff7a00; margin-bottom: 8px;"></i>
-              <div style="font-weight: 600; font-size: 0.9rem; color: #334155;">Click to select delivery file</div>
-              <small style="color: #94a3b8;">Max size: 10 MB (PDF, JPG, PNG)</small>
-              <div id="selectedFileName" style="margin-top: 8px; font-weight: 700; color: #16a34a; font-size: 0.85rem;"></div>
+            <label class="form-label" for="deliveryFileInput">Upload Completed File (PDF / JPEG / PNG) <span style="color: #ef4444;">*</span></label>
+            <div style="border: 2px dashed #bfdbfe; border-radius: 14px; padding: 26px 20px; text-align: center; background: #eff6ff; cursor: pointer; transition: all 0.2s ease;" onclick="document.getElementById('deliveryFileInput').click()" onmouseover="this.style.borderColor='#0066cc'; this.style.background='#e0f2fe';" onmouseout="this.style.borderColor='#bfdbfe'; this.style.background='#eff6ff';">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.2rem; color: #0066cc; margin-bottom: 8px;"></i>
+              <div style="font-weight: 700; font-size: 0.92rem; color: #0f172a;">Click to select delivery file</div>
+              <small style="color: #64748b;">Max size: 10 MB (PDF, JPG, PNG)</small>
+              <div id="selectedFileName" style="margin-top: 8px; font-weight: 800; color: #03a93a; font-size: 0.85rem;"></div>
             </div>
             <input type="file" id="deliveryFileInput" class="form-control" accept=".pdf,image/*" required style="display:none;" onchange="handleFileSelected(this)">
           </div>
 
-          <div class="form-group">
+          <div class="form-group" style="margin-top: 16px;">
             <label class="form-label" for="adminNotesInput">Admin Remarks / Notes for Customer (Optional)</label>
-            <textarea id="adminNotesInput" class="form-control" rows="2" placeholder="e.g. Card verified with QR & dispatched / ready for print download."></textarea>
+            <textarea id="adminNotesInput" class="form-control" rows="2" placeholder="e.g. Document verified with digital seal & ready for instant download."></textarea>
           </div>
         </div>
 
-        <div class="modal-footer-custom">
-          <button type="button" class="btn-secondary" onclick="closeModal('modalFulfill')">Cancel</button>
-          <button type="submit" id="btnSubmitFulfill" class="btn-tiranga">
+        <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 18px 26px;">
+          <button type="button" class="btn-rz-secondary" onclick="closeModal('modalFulfill')">Cancel</button>
+          <button type="submit" id="btnSubmitFulfill" class="btn-rz-primary">
             <i class="fa-solid fa-check-double"></i> Complete & Deliver Order
           </button>
         </div>
@@ -297,17 +322,29 @@
   <script src="../js/auth.js"></script>
   <script>
     let allOrders = [];
+    let currentFilter = '';
+
+    // Initialize filter from URL query param if present (?status=pending, etc.)
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('status')) {
+        currentFilter = urlParams.get('status') || '';
+      }
+    } catch (e) {}
+
     // Instant Cache-First Hydration (0ms)
     try {
       const cached = sessionStorage.getItem('utkal_admin_orders');
       if (cached) {
         allOrders = JSON.parse(cached);
         updateStatsAndTabs();
+        syncTabUI(currentFilter);
         renderOrdersTable();
       }
     } catch (e) {}
 
     document.addEventListener('DOMContentLoaded', () => {
+      syncTabUI(currentFilter);
       loadOrders();
     });
 
@@ -320,6 +357,7 @@
         allOrders = res.data || [];
         sessionStorage.setItem('utkal_admin_orders', JSON.stringify(allOrders));
         updateStatsAndTabs();
+        syncTabUI(currentFilter);
         renderOrdersTable();
       } catch (err) {
         showToast(err.message || 'Failed to load orders', 'error');
@@ -347,15 +385,29 @@
       document.getElementById('countRejected').textContent = rejected;
     }
 
-    function filterOrders(status) {
-      currentFilter = status;
+    function syncTabUI(status) {
       document.querySelectorAll('.segmented-tab').forEach(b => b.classList.remove('active'));
       
-      if (status === '') document.getElementById('tabAll').classList.add('active');
-      if (status === 'pending') document.getElementById('tabPending').classList.add('active');
-      if (status === 'processing') document.getElementById('tabProcessing').classList.add('active');
-      if (status === 'completed') document.getElementById('tabCompleted').classList.add('active');
-      if (status === 'rejected') document.getElementById('tabRejected').classList.add('active');
+      if (status === '') document.getElementById('tabAll')?.classList.add('active');
+      if (status === 'pending') document.getElementById('tabPending')?.classList.add('active');
+      if (status === 'processing') document.getElementById('tabProcessing')?.classList.add('active');
+      if (status === 'completed') document.getElementById('tabCompleted')?.classList.add('active');
+      if (status === 'rejected') document.getElementById('tabRejected')?.classList.add('active');
+    }
+
+    function filterOrders(status) {
+      currentFilter = status;
+      syncTabUI(status);
+
+      try {
+        const url = new URL(window.location);
+        if (status) {
+          url.searchParams.set('status', status);
+        } else {
+          url.searchParams.delete('status');
+        }
+        window.history.replaceState({}, '', url);
+      } catch (e) {}
 
       renderOrdersTable();
     }
@@ -412,15 +464,15 @@
         const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
 
         // Payment status badge
-        let paymentBadge = `<span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending</span>`;
-        if (order.payment_status === 'approved') paymentBadge = `<span class="badge-status badge-completed"><i class="fa-solid fa-circle-check"></i> Approved</span>`;
-        if (order.payment_status === 'rejected') paymentBadge = `<span class="badge-status badge-rejected"><i class="fa-solid fa-circle-xmark"></i> Rejected</span>`;
+        let paymentBadge = `<span class="badge-status badge-pending">Pending</span>`;
+        if (order.payment_status === 'approved') paymentBadge = `<span class="badge-status badge-completed">Approved</span>`;
+        if (order.payment_status === 'rejected') paymentBadge = `<span class="badge-status badge-rejected">Rejected</span>`;
 
         // Order status badge
-        let orderBadge = `<span class="badge-status badge-pending"><i class="fa-solid fa-hourglass-half"></i> Pending</span>`;
-        if (order.order_status === 'processing') orderBadge = `<span class="badge-status badge-processing"><i class="fa-solid fa-gear fa-spin"></i> Processing</span>`;
-        if (order.order_status === 'completed') orderBadge = `<span class="badge-status badge-completed"><i class="fa-solid fa-circle-check"></i> Delivered</span>`;
-        if (order.order_status === 'rejected') orderBadge = `<span class="badge-status badge-rejected"><i class="fa-solid fa-ban"></i> Rejected</span>`;
+        let orderBadge = `<span class="badge-status badge-pending">Pending</span>`;
+        if (order.order_status === 'processing') orderBadge = `<span class="badge-status badge-processing">Processing</span>`;
+        if (order.order_status === 'completed') orderBadge = `<span class="badge-status badge-completed">Delivered</span>`;
+        if (order.order_status === 'rejected') orderBadge = `<span class="badge-status badge-rejected">Rejected</span>`;
 
         // Action buttons
         const isPendingPayment = order.payment_status === 'pending';
@@ -430,10 +482,10 @@
         return `
           <tr>
             <td>
-              <div class="order-num-tag" title="Click to view details" onclick="openOrderDetailsModal(${order.id})" style="cursor:pointer;">
-                <i class="fa-solid fa-receipt"></i> ${order.order_number}
+              <div class="order-id-chip" title="Click to view details" onclick="openOrderDetailsModal(${order.id})" style="cursor:pointer;">
+                ${order.order_number}
               </div>
-              <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 3px;">${formatDate(order.created_at)}</div>
+              <div style="font-size: 0.74rem; color: #94a3b8; margin-top: 3px; font-weight: 500;">${formatDate(order.created_at)}</div>
             </td>
             <td>
               <div class="customer-cell">
@@ -474,17 +526,34 @@
                   </button>
                 ` : ''}
 
-                ${isProcessing ? `
-                  <button onclick="openFulfillModal(${order.id}, '${order.order_number}')" class="btn-blue-soft" title="Fulfill with document">
-                    <i class="fa-solid fa-upload"></i> Deliver
-                  </button>
-                ` : ''}
+                ${isProcessing ? (
+                  (order.service && order.service.category === 'print') ? `
+                    <button onclick="markOrderPrinted(${order.id})" class="btn-success-soft" title="Mark as Printed & Ready for Pickup" style="padding: 6px 12px; font-weight: 700; font-size: 0.8rem; background: #f0fdf4; color: #03a93a; border: 1px solid #bbf7d0;">
+                      <i class="fa-solid fa-print"></i> Printed
+                    </button>
+                  ` : `
+                    <button onclick="openFulfillModal(${order.id}, '${order.order_number}')" class="btn-blue-soft" title="Fulfill with document">
+                      <i class="fa-solid fa-upload"></i> Deliver
+                    </button>
+                  `
+                ) : ''}
 
-                ${isDelivered && order.delivery_file ? `
-                  <a href="${STORAGE_BASE_URL}/${order.delivery_file}" target="_blank" class="btn-success-soft" title="View Delivered Document">
-                    <i class="fa-solid fa-download"></i> File
-                  </a>
-                ` : ''}
+                ${isDelivered ? (
+                  (order.service && order.service.category === 'print') ? `
+                    <span style="font-size:0.75rem; font-weight:700; color:#03a93a; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px; display:inline-flex; align-items:center; gap:4px;">
+                      <i class="fa-solid fa-check-double"></i> Printed
+                    </span>
+                    ${order.delivery_file ? `
+                      <a href="${STORAGE_BASE_URL}/${order.delivery_file}" target="_blank" class="btn-success-soft" title="View Delivered Document">
+                        <i class="fa-solid fa-download"></i> File
+                      </a>
+                    ` : ''}
+                  ` : (order.delivery_file ? `
+                    <a href="${STORAGE_BASE_URL}/${order.delivery_file}" target="_blank" class="btn-success-soft" title="View Delivered Document">
+                      <i class="fa-solid fa-download"></i> File
+                    </a>
+                  ` : '')
+                ) : ''}
               </div>
             </td>
           </tr>
@@ -553,6 +622,19 @@
 
         ${paymentProofHtml}
 
+        ${(order.service && order.service.category === 'print' && order.order_status === 'completed') ? `
+          <div style="margin-top: 16px; padding: 14px 16px; background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 10px;">
+            <div style="font-weight: 800; color: #166534; font-size: 0.92rem; display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-store" style="font-size:1.15rem; color:#03a93a;"></i>
+              <span>Printed Successfully &bull; Ready for customer pickup at center</span>
+            </div>
+            <div style="font-size: 0.84rem; color: #15803d; margin-top: 4px;">
+              Customer can collect physical PVC card from your center.
+            </div>
+            ${order.admin_notes ? `<div style="margin-top: 6px; font-size: 0.82rem; color: #166534;"><strong>Note:</strong> ${order.admin_notes}</div>` : ''}
+          </div>
+        ` : ''}
+
         ${order.delivery_file ? `
           <div style="margin-top: 16px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;">
             <div style="font-weight: 700; color: #166534; font-size: 0.85rem; margin-bottom: 4px;">
@@ -566,7 +648,7 @@
         ` : ''}
       `;
 
-      let footerActions = `<button type="button" class="btn-secondary" onclick="closeModal('modalOrderDetails')">Close</button>`;
+      let footerActions = `<button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>`;
       if (order.payment_status === 'pending') {
         footerActions = `
           <button type="button" class="btn-danger-soft" onclick="closeModal('modalOrderDetails'); verifyPaymentModal(${order.id}, 'reject')">
@@ -577,16 +659,44 @@
           </button>
         `;
       } else if (order.order_status === 'processing') {
-        footerActions = `
-          <button type="button" class="btn-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
-          <button type="button" class="btn-tiranga" onclick="closeModal('modalOrderDetails'); openFulfillModal(${order.id}, '${order.order_number}')">
-            <i class="fa-solid fa-upload"></i> Deliver Order Document
-          </button>
-        `;
+        const isPrintService = order.service && order.service.category === 'print';
+        if (isPrintService) {
+          footerActions = `
+            <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
+            <button type="button" class="btn-rz-green" onclick="markOrderPrinted(${order.id})">
+              <i class="fa-solid fa-print"></i> Printed (Ready for Pickup)
+            </button>
+          `;
+        } else {
+          footerActions = `
+            <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
+            <button type="button" class="btn-rz-primary" onclick="closeModal('modalOrderDetails'); openFulfillModal(${order.id}, '${order.order_number}')">
+              <i class="fa-solid fa-upload"></i> Deliver Order Document
+            </button>
+          `;
+        }
       }
 
       document.getElementById('modalOrderFooter').innerHTML = footerActions;
       openModal('modalOrderDetails');
+    }
+
+    async function markOrderPrinted(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      if (!confirm(`Are you sure you want to mark Order #${order.order_number} as Printed?\n\nThe customer will see: "Printed Successfully - Collect from our center".`)) {
+        return;
+      }
+
+      try {
+        const res = await API.admin.markOrderPrinted(orderId);
+        showToast(res.message || 'Order marked as printed successfully!', 'success');
+        closeModal('modalOrderDetails');
+        loadOrders();
+      } catch (err) {
+        showToast(err.message || 'Failed to update order status', 'error');
+      }
     }
 
     async function verifyPaymentModal(orderId, action) {

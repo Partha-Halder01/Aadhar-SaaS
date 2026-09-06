@@ -122,9 +122,10 @@ const API = {
 
       if (!response.ok) {
         if (response.status === 401 && !endpoint.includes('/login')) {
+          const isAdmin = window.location.pathname.includes('/admin/');
           this.clearAuth();
-          if (!window.location.pathname.includes('login.html')) {
-            window.location.href = getAppPath('login.html');
+          if (!window.location.pathname.includes('login.html') && !window.location.pathname.includes('admin.html')) {
+            window.location.href = getAppPath(isAdmin ? 'admin.html' : 'login.html');
           }
         }
 
@@ -155,6 +156,31 @@ const API = {
     return res;
   },
 
+  async sendOtp(data) {
+    return await this.request('/auth/send-otp', {
+      method: 'POST',
+      body: data
+    });
+  },
+
+  async verifyOtp(data) {
+    return await this.request('/auth/verify-otp', {
+      method: 'POST',
+      body: data
+    });
+  },
+
+  async loginWithOtp(data) {
+    const res = await this.request('/auth/login-otp', {
+      method: 'POST',
+      body: data
+    });
+    this.setToken(res.token);
+    this.setUser(res.user);
+    this.cache.invalidate();
+    return res;
+  },
+
   async register(data) {
     const res = await this.request('/auth/register', {
       method: 'POST',
@@ -167,11 +193,12 @@ const API = {
   },
 
   async logout() {
+    const isAdmin = window.location.pathname.includes('/admin/');
     try {
       await this.request('/auth/logout', { method: 'POST' });
     } catch (e) {}
     this.clearAuth();
-    window.location.href = getAppPath('login.html');
+    window.location.href = getAppPath(isAdmin ? 'admin.html' : 'login.html');
   },
 
   async getProfile() {
@@ -197,19 +224,9 @@ const API = {
     });
   },
 
-  // Public & User Services (with Instant Cache)
+  // Public & User Services
   async getServices(category = '') {
-    const cacheKey = `services_${category || 'all'}`;
-    const cached = this.cache.get(cacheKey);
-    
-    // Background fetch to refresh
-    const fetchPromise = this.request(`/services${category ? '?category=' + encodeURIComponent(category) : ''}`)
-      .then(res => {
-        this.cache.set(cacheKey, res, 120);
-        return res;
-      });
-
-    return cached ? Promise.resolve(cached) : fetchPromise;
+    return await this.request(`/services${category ? '?category=' + encodeURIComponent(category) : ''}`);
   },
 
   async getPublicSettings() {
@@ -349,6 +366,15 @@ const API = {
       return res;
     },
 
+    async markOrderPrinted(orderId, adminNotes = '') {
+      const res = await API.request(`/admin/orders/${orderId}/mark-printed`, {
+        method: 'POST',
+        body: { admin_notes: adminNotes || 'Printed successfully. Collect from our center.' }
+      });
+      API.cache.invalidate('orders');
+      return res;
+    },
+
     async getWalletRequests() {
       return await API.request('/admin/wallet-requests');
     },
@@ -425,7 +451,33 @@ const API = {
       });
       API.cache.invalidate('public_settings');
       return res;
+    },
+
+    async getLandingPage() {
+      return await API.request('/admin/landing-page');
+    },
+
+    async updateLandingPage(data) {
+      const res = await API.request('/admin/landing-page', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      API.cache.invalidate('landing_page_content');
+      return res;
+    },
+
+    async resetLandingPage() {
+      const res = await API.request('/admin/landing-page/reset', {
+        method: 'POST'
+      });
+      API.cache.invalidate('landing_page_content');
+      return res;
     }
+  },
+
+  async getLandingPageContent() {
+    return await this.request('/landing-page', { useCache: true, cacheTtl: 60 });
   },
 
   // Alias for admin dashboard

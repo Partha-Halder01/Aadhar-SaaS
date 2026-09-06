@@ -114,4 +114,31 @@ class AdminOrderController extends Controller
             'data' => $order,
         ]);
     }
+
+    /**
+     * Mark print service order as printed (customer collects physical card)
+     */
+    public function markPrinted(Request $request, $id)
+    {
+        $order = ServiceOrder::with('service')->findOrFail($id);
+
+        if ($order->service && $order->service->category !== 'print') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This action is only applicable for Print Services.'
+            ], 422);
+        }
+
+        $order->update([
+            'payment_status' => 'approved',
+            'order_status' => 'completed',
+            'admin_notes' => $request->input('admin_notes', 'Printed successfully. Collect from our center.'),
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order marked as printed successfully! Customer notified to collect.',
+            'data' => $order,
+        ]);
+    }
 }

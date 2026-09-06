@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Utkal Print Portal</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="icon" type="image/png" href="logo-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      background: radial-gradient(circle at 50% 12%, rgba(220, 38, 38, 0.08) 0%, transparent 55%),
+                  radial-gradient(circle at 85% 85%, rgba(253, 92, 0, 0.06) 0%, transparent 55%),
+                  #f8fafc;
+    }
+    .auth-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      box-shadow: 0 25px 55px -12px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(226, 232, 240, 0.8);
+      max-width: 470px;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+      backdrop-filter: blur(16px);
+    }
+    .auth-header {
+      background: #ffffff;
+      padding: 32px 24px 24px;
+      text-align: center;
+      color: #0f172a;
+      position: relative;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .auth-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #dc2626, #f97316, #dc2626);
+    }
+    .auth-header .auth-logo-img {
+      background: transparent;
+      padding: 0;
+      box-shadow: none;
+      height: 42px;
+      width: auto;
+      max-width: 210px;
+      object-fit: contain;
+    }
+    .auth-body {
+      padding: 28px 28px 32px;
+      background: #ffffff;
+    }
+
+    /* Admin Role Context Banner */
+    .role-context-banner {
+      padding: 13px 16px;
+      border-radius: 12px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.84rem;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      line-height: 1.45;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrapper i.icon-lead {
+      position: absolute;
+      left: 14px;
+      color: #64748b;
+      font-size: 1rem;
+    }
+    .form-control-admin {
+      width: 100%;
+      padding: 12px 14px 12px 42px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      color: #0f172a;
+      transition: all 0.25s ease;
+      outline: none;
+    }
+    .form-control-admin:focus {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3.5px rgba(220, 38, 38, 0.15);
+      background: #ffffff;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      color: #64748b;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    .toggle-password:hover {
+      color: #0f172a;
+    }
+    .demo-box {
+      background: #f8fafc;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 22px;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+    .demo-btn {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #1e293b;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      transition: all 0.2s ease;
+      width: 100%;
+      justify-content: center;
+    }
+    .demo-btn:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #0f172a;
+      transform: translateY(-1px);
+    }
+
+    .btn-admin-submit {
+      width: 100%;
+      justify-content: center;
+      padding: 13px;
+      font-size: 0.98rem;
+      border-radius: 12px;
+      margin-top: 8px;
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      color: #ffffff;
+      border: none;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(220, 38, 38, 0.32);
+      transition: all 0.22s ease;
+    }
+    .btn-admin-submit:hover {
+      background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+      box-shadow: 0 6px 24px rgba(220, 38, 38, 0.42);
+      transform: translateY(-1px);
+    }
+
+    .user-switch-link {
+      margin-top: 20px;
+      padding: 11px 14px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: #334155;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .user-switch-link:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    @media (max-width: 500px) {
+      .auth-container {
+        padding: 20px 14px;
+      }
+      .auth-header {
+        padding: 24px 18px;
+      }
+      .auth-body {
+        padding: 22px 18px;
+      }
+      .demo-box {
+        padding: 10px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a href="index.html" class="brand-logo" style="justify-content: center; align-items: center; margin-bottom: 12px; gap: 8px;">
+          <img src="logo .png" alt="Instant Online Seva" class="auth-logo-img">
+          <span class="brand-badge" style="background: #dc2626; font-size: 0.75rem;">ADMIN</span>
+        </a>
+        <div style="font-size: 0.88rem; color: #64748b; font-weight: 600;">
+          <i class="fa-solid fa-lock" style="color: #dc2626;"></i> Executive & Administrative Console
+        </div>
+      </div>
+
+      <div class="auth-body">
+        <!-- Security Warning Banner -->
+        <div class="role-context-banner">
+          <i class="fa-solid fa-triangle-exclamation" style="color: #dc2626; font-size: 1.15rem; margin-top: 2px;"></i>
+          <span><strong>Restricted Portal:</strong> Authorized system personnel only. All access attempts, user agents, and IP addresses are audited.</span>
+        </div>
+
+        <form id="adminLoginForm">
+          <!-- Administrator Identifier -->
+          <div class="form-group">
+            <label class="form-label" for="adminIdentifier">Administrator Email ID</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-shield-halved icon-lead" style="color: #dc2626;"></i>
+              <input type="text" id="adminIdentifier" class="form-control-admin" placeholder="admin@utkalprint.com" required autofocus>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" for="adminPassword" style="margin:0;">Master Security Password</label>
+            </div>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock icon-lead"></i>
+              <input type="password" id="adminPassword" class="form-control-admin" placeholder="••••••••" required>
+              <i class="fa-solid fa-eye toggle-password" id="togglePasswordBtn"></i>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="btnAdminSubmit" class="btn-admin-submit">
+            <i class="fa-solid fa-shield-check"></i> Authenticate & Enter Admin Panel
+          </button>
+        </form>
+
+        <!-- Quick Demo Autofill Box -->
+        <div class="demo-box" id="demoBox">
+          <div style="font-weight: 800; margin-bottom: 8px; color:#334155; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-bolt-lightning" style="color:#dc2626;"></i> 1-Click Admin Credentials
+          </div>
+          <button type="button" class="demo-btn" id="btnFillAdminDemo">
+            <i class="fa-solid fa-shield-halved" style="color: #dc2626;"></i> Fill Admin Demo (admin@utkalprint.com)
+          </button>
+        </div>
+
+        <!-- Link back to User Portal -->
+        <a href="login.html" class="user-switch-link">
+          <span style="display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-users" style="color: #e04d00;"></i>
+            <span>Looking for customer portal?</span>
+          </span>
+          <span style="color: #e04d00; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+            User Login <i class="fa-solid fa-arrow-right" style="font-size: 0.75rem;"></i>
+          </span>
+        </a>
+
+        <!-- Trust Badges -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 22px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 0.75rem; color: #64748b;">
+          <span><i class="fa-solid fa-shield-halved" style="color: #dc2626;"></i> RBAC Security</span>
+          <span>&bull;</span>
+          <span><i class="fa-solid fa-fingerprint" style="color: #03a93a;"></i> Token Auth</span>
+          <span>&bull;</span>
+          <span><i class="fa-solid fa-terminal" style="color: #0284c7;"></i> Audit Logging</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    const adminIdentifier = document.getElementById('adminIdentifier');
+    const adminPassword = document.getElementById('adminPassword');
+    const btnAdminSubmit = document.getElementById('btnAdminSubmit');
+    const btnFillAdminDemo = document.getElementById('btnFillAdminDemo');
+    const togglePwd = document.getElementById('togglePasswordBtn');
+    const form = document.getElementById('adminLoginForm');
+
+    togglePwd.addEventListener('click', () => {
+      const type = adminPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      adminPassword.setAttribute('type', type);
+      togglePwd.classList.toggle('fa-eye');
+      togglePwd.classList.toggle('fa-eye-slash');
+    });
+
+    btnFillAdminDemo.addEventListener('click', () => {
+      adminIdentifier.value = 'admin@utkalprint.com';
+      adminPassword.value = 'Admin@123';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const identifier = adminIdentifier.value.trim();
+      const password = adminPassword.value;
+
+      if (!identifier || !password) {
+        showToast('Please enter administrator credentials', 'error');
+        return;
+      }
+
+      btnAdminSubmit.disabled = true;
+      btnAdminSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying Admin Access...';
+
+      try {
+        const res = await API.login({ identifier, password });
+
+        if (res.user.role !== 'admin') {
+          API.clearAuth();
+          showToast('Access Denied: This account does not have Administrator privileges. Please use User Login.', 'error');
+          btnAdminSubmit.disabled = false;
+          btnAdminSubmit.innerHTML = '<i class="fa-solid fa-shield-check"></i> Authenticate & Enter Admin Panel';
+          return;
+        }
+
+        showToast('Welcome Administrator! Access granted.', 'success');
+        window.location.href = getAppPath('admin/dashboard.html');
+      } catch (err) {
+        showToast(err.message || 'Authentication failed. Please check administrator credentials.', 'error');
+        btnAdminSubmit.disabled = false;
+        btnAdminSubmit.innerHTML = '<i class="fa-solid fa-shield-check"></i> Authenticate & Enter Admin Panel';
+      }
+    });
+  </script>
+</body>
+</html>
