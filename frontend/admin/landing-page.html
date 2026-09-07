@@ -21,6 +21,7 @@
       padding: 6px 4px 14px 4px;
       margin-bottom: 20px;
       border-bottom: 1.5px solid #e2e8f0;
+      scrollbar-width: thin;
     }
     .cms-tab-btn {
       padding: 10px 18px;
@@ -66,6 +67,7 @@
       padding: 24px 28px;
       margin-bottom: 24px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      position: relative;
     }
     .cms-card-title {
       font-family: 'Outfit', sans-serif;
@@ -123,7 +125,8 @@
       font-family: inherit;
     }
     .cms-form-group input:focus,
-    .cms-form-group textarea:focus {
+    .cms-form-group textarea:focus,
+    .cms-form-group select:focus {
       border-color: #0066cc;
       background: #ffffff;
       box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
@@ -190,23 +193,27 @@
     input:checked + .cms-slider:before {
       transform: translateX(22px);
     }
-    .faq-item-box {
+    .dynamic-item-box {
       background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
       position: relative;
+      transition: border-color 0.2s;
     }
-    .faq-delete-btn {
+    .dynamic-item-box:hover {
+      border-color: #cbd5e1;
+    }
+    .item-delete-btn {
       position: absolute;
       top: 14px;
       right: 14px;
       background: #fee2e2;
       color: #dc2626;
       border: none;
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
       cursor: pointer;
       display: inline-flex;
@@ -214,8 +221,42 @@
       justify-content: center;
       transition: all 0.2s;
     }
-    .faq-delete-btn:hover {
+    .item-delete-btn:hover {
       background: #fca5a5;
+      transform: scale(1.05);
+    }
+    .btn-add-item {
+      background: #eff6ff;
+      color: #0066cc;
+      border: 1.5px dashed #93c5fd;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      width: 100%;
+      justify-content: center;
+      margin-top: 6px;
+    }
+    .btn-add-item:hover {
+      background: #dbeafe;
+      border-color: #3b82f6;
+    }
+    .item-header-badge {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
   </style>
 </head>
@@ -315,7 +356,7 @@
             <i class="fa-solid fa-bars"></i>
           </button>
           <div>
-            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Admin Console &bull; Content Management System</div>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Admin Console &bull; Complete Website Controller</div>
             <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;">Landing Page CMS</h1>
           </div>
         </div>
@@ -336,8 +377,8 @@
         <!-- Top Flash / Status Banner -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
           <div>
-            <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">Home Page Content Controller</h2>
-            <p style="color: #64748b; font-size: 0.88rem; margin: 0;">Edit headlines, badges, services, pricing cards, FAQs, and testimonials rendered on <code style="background:#eff6ff; color:#0066cc; padding:2px 6px; border-radius:6px; font-weight:700;">http://127.0.0.1:3000/</code>.</p>
+            <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">Home Page Full Controller</h2>
+            <p style="color: #64748b; font-size: 0.88rem; margin: 0;">Edit every announcement, headline, core service card, pricing tier, workflow step, review, FAQ, and footer on <code style="background:#eff6ff; color:#0066cc; padding:2px 6px; border-radius:6px; font-weight:700;">http://127.0.0.1:3000/</code>.</p>
           </div>
           <div style="display: flex; gap: 10px;">
             <button type="button" class="btn-secondary" id="btnResetDefaults" style="color: #dc2626; border-color: #fecaca; background: #fff5f5; font-size: 0.85rem; padding: 8px 14px;">
@@ -348,8 +389,11 @@
 
         <!-- Tab Switcher Bar -->
         <div class="cms-tab-bar">
-          <button type="button" class="cms-tab-btn active" data-tab="tab-hero">
-            <i class="fa-solid fa-bullhorn"></i> Hero & Headline
+          <button type="button" class="cms-tab-btn active" data-tab="tab-announcement">
+            <i class="fa-solid fa-bullhorn"></i> Top Notice Bar
+          </button>
+          <button type="button" class="cms-tab-btn" data-tab="tab-hero">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Hero & Showcase
           </button>
           <button type="button" class="cms-tab-btn" data-tab="tab-services">
             <i class="fa-solid fa-layer-group"></i> Core Services
@@ -377,8 +421,53 @@
         <!-- Form Container -->
         <form id="landingCmsForm">
 
-          <!-- TAB 1: HERO & HEADLINE -->
-          <div class="cms-tab-panel active" id="tab-hero">
+          <!-- TAB 0: TOP ANNOUNCEMENT STRIP -->
+          <div class="cms-tab-panel active" id="tab-announcement">
+            <div class="cms-card">
+              <div class="cms-card-title"><i class="fa-solid fa-bullhorn" style="color:#0066cc;"></i> Top Announcement Bar</div>
+              <div class="cms-card-sub">The notification strip pinned at the very top of the public landing page.</div>
+              
+              <div class="cms-toggle-row" style="margin-bottom:20px;">
+                <div class="cms-toggle-info">
+                  <h5>Enable Announcement Bar</h5>
+                  <p>Turn on or off the top notification strip entirely.</p>
+                </div>
+                <label class="cms-switch">
+                  <input type="checkbox" id="announcement_enabled" checked>
+                  <span class="cms-slider"></span>
+                </label>
+              </div>
+
+              <div class="cms-grid-2">
+                <div class="cms-form-group">
+                  <label>Live Badge Tag</label>
+                  <input type="text" id="announcement_badge" placeholder="LIVE 2.0">
+                </div>
+                <div class="cms-form-group">
+                  <label>Announcement Text Message</label>
+                  <input type="text" id="announcement_text" placeholder="Instant Aadhaar HD PVC Formatting & UPI Fast Approvals under 2 mins!">
+                </div>
+              </div>
+
+              <div class="cms-grid-3">
+                <div class="cms-form-group">
+                  <label>Helpline Text Display</label>
+                  <input type="text" id="announcement_helpline_text" placeholder="Helpline: +91 98765 43210">
+                </div>
+                <div class="cms-form-group">
+                  <label>Helpline Phone Dial Link</label>
+                  <input type="text" id="announcement_helpline_link" placeholder="tel:+919876543210">
+                </div>
+                <div class="cms-form-group">
+                  <label>Safety & Trust Tag</label>
+                  <input type="text" id="announcement_safe_text" placeholder="100% UIDAI/Govt Safe">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 1: HERO & SHOWCASE -->
+          <div class="cms-tab-panel" id="tab-hero">
             <div class="cms-card">
               <div class="cms-card-title"><i class="fa-solid fa-certificate" style="color:#fd5c00;"></i> Hero Announcement Badge</div>
               <div class="cms-card-sub">The glowing capsule pill displayed directly above the main title.</div>
@@ -389,7 +478,7 @@
                 </div>
                 <div class="cms-form-group">
                   <label>Badge Text</label>
-                  <input type="text" id="hero_badge_text" placeholder="Instant Digital Seva Engine 2026...">
+                  <input type="text" id="hero_badge_text" placeholder="India's #1 Citizen Printing & Instant PAN Recovery Engine">
                 </div>
               </div>
             </div>
@@ -414,7 +503,7 @@
             </div>
 
             <div class="cms-card">
-              <div class="cms-card-title"><i class="fa-solid fa-square-arrow-up-right" style="color:#03a93a;"></i> Call to Action (CTA) Buttons</div>
+              <div class="cms-card-title"><i class="fa-solid fa-square-arrow-up-right" style="color:#03a93a;"></i> Hero Call to Action (CTA) Buttons</div>
               <div class="cms-card-sub">The two primary buttons in the hero section.</div>
               <div class="cms-grid-2">
                 <div class="cms-form-group">
@@ -454,6 +543,45 @@
                 </div>
               </div>
             </div>
+
+            <div class="cms-card">
+              <div class="cms-card-title"><i class="fa-solid fa-id-card" style="color:#7c3aed;"></i> Right-Side Showcase Card Details</div>
+              <div class="cms-card-sub">The interactive 3D PVC card preview widget rendered on the right side of the hero section.</div>
+              <div class="cms-grid-2">
+                <div class="cms-form-group">
+                  <label>Floating Badge 1 (Top Right Title)</label>
+                  <input type="text" id="showcase_chip1_title" placeholder="PAN Extracted">
+                </div>
+                <div class="cms-form-group">
+                  <label>Floating Badge 1 Subtitle</label>
+                  <input type="text" id="showcase_chip1_sub" placeholder="Matched in 0.8s">
+                </div>
+                <div class="cms-form-group">
+                  <label>Floating Badge 2 (Bottom Left Title)</label>
+                  <input type="text" id="showcase_chip2_title" placeholder="Wallet Auto-Credited">
+                </div>
+                <div class="cms-form-group">
+                  <label>Floating Badge 2 Subtitle</label>
+                  <input type="text" id="showcase_chip2_sub" placeholder="+₹500.00 via UPI QR">
+                </div>
+                <div class="cms-form-group">
+                  <label>Card Preview Applicant Name</label>
+                  <input type="text" id="showcase_applicant_name" placeholder="RAJESH KUMAR PATRA">
+                </div>
+                <div class="cms-form-group">
+                  <label>Card Preview Meta (DOB/Gender)</label>
+                  <input type="text" id="showcase_applicant_meta" placeholder="DOB: 15/08/1994 | Male">
+                </div>
+                <div class="cms-form-group">
+                  <label>Card Preview State/Region</label>
+                  <input type="text" id="showcase_applicant_state" placeholder="State: Odisha, India">
+                </div>
+                <div class="cms-form-group">
+                  <label>Card Preview Masked Aadhaar</label>
+                  <input type="text" id="showcase_applicant_aadhaar" placeholder="XXXX XXXX 8924">
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- TAB 2: CORE SERVICES -->
@@ -476,8 +604,19 @@
               </div>
             </div>
 
-            <!-- Service Cards Loop (5 core cards) -->
-            <div id="serviceCardsContainer"></div>
+            <!-- Dynamic Services Cards -->
+            <div class="cms-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+                <div class="cms-card-title" style="margin:0;"><i class="fa-solid fa-table-cells-large"></i> Bento Service Cards</div>
+                <button type="button" class="btn-secondary" id="btnAddService" style="padding: 7px 14px; font-size: 0.84rem;">
+                  <i class="fa-solid fa-plus"></i> Add New Service Card
+                </button>
+              </div>
+              <div id="serviceCardsContainer"></div>
+              <button type="button" class="btn-add-item" id="btnAddServiceBottom">
+                <i class="fa-solid fa-plus"></i> Add Another Service Card
+              </button>
+            </div>
           </div>
 
           <!-- TAB 3: RATES & PRICING -->
@@ -491,7 +630,7 @@
                 </div>
                 <div class="cms-form-group">
                   <label>Section Title</label>
-                  <input type="text" id="pricing_title" placeholder="Predictable, Low Unit Costs for Higher Margins">
+                  <input type="text" id="pricing_title" placeholder="Predictable Rates & Turnaround Times">
                 </div>
               </div>
               <div class="cms-form-group">
@@ -500,71 +639,53 @@
               </div>
             </div>
 
-            <div id="pricingCardsContainer"></div>
+            <!-- Dynamic Pricing Tiers -->
+            <div class="cms-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+                <div class="cms-card-title" style="margin:0;"><i class="fa-solid fa-table-list"></i> Pricing Table Rows</div>
+                <button type="button" class="btn-secondary" id="btnAddPricing" style="padding: 7px 14px; font-size: 0.84rem;">
+                  <i class="fa-solid fa-plus"></i> Add New Pricing Tier
+                </button>
+              </div>
+              <div id="pricingCardsContainer"></div>
+              <button type="button" class="btn-add-item" id="btnAddPricingBottom">
+                <i class="fa-solid fa-plus"></i> Add Another Pricing Tier
+              </button>
+            </div>
           </div>
 
           <!-- TAB 4: WORKFLOW (HOW IT WORKS) -->
           <div class="cms-tab-panel" id="tab-workflow">
             <div class="cms-card">
               <div class="cms-card-title"><i class="fa-solid fa-diagram-project" style="color:#0066cc;"></i> Workflow Header & Steps</div>
-              <div class="cms-form-group">
-                <label>Section Tag</label>
-                <input type="text" id="workflow_tag" placeholder="Instant Workflow">
+              <div class="cms-grid-2">
+                <div class="cms-form-group">
+                  <label>Section Tag</label>
+                  <input type="text" id="workflow_tag" placeholder="Rapid Workflow">
+                </div>
+                <div class="cms-form-group">
+                  <label>Section Title</label>
+                  <input type="text" id="workflow_title" placeholder="How The Platform Works">
+                </div>
               </div>
               <div class="cms-form-group">
-                <label>Section Title</label>
-                <input type="text" id="workflow_title" placeholder="How Instant Online Seva Works in 3 Simple Steps">
+                <label>Section Description</label>
+                <textarea id="workflow_desc" rows="2" placeholder="From onboarding to downloading print-ready documents in less than 2 minutes."></textarea>
               </div>
             </div>
 
-            <div class="cms-grid-2" style="gap: 16px;">
-              <div class="cms-card">
-                <div class="cms-card-title">Step 1</div>
-                <div class="cms-form-group">
-                  <label>Step Title</label>
-                  <input type="text" id="step_0_title" placeholder="Create Free Account">
-                </div>
-                <div class="cms-form-group">
-                  <label>Step Description</label>
-                  <textarea id="step_0_desc" rows="3"></textarea>
-                </div>
+            <!-- Dynamic Workflow Steps -->
+            <div class="cms-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+                <div class="cms-card-title" style="margin:0;"><i class="fa-solid fa-list-ol"></i> Step-by-Step Process</div>
+                <button type="button" class="btn-secondary" id="btnAddStep" style="padding: 7px 14px; font-size: 0.84rem;">
+                  <i class="fa-solid fa-plus"></i> Add New Step
+                </button>
               </div>
-
-              <div class="cms-card">
-                <div class="cms-card-title">Step 2</div>
-                <div class="cms-form-group">
-                  <label>Step Title</label>
-                  <input type="text" id="step_1_title" placeholder="Top Up Wallet">
-                </div>
-                <div class="cms-form-group">
-                  <label>Step Description</label>
-                  <textarea id="step_1_desc" rows="3"></textarea>
-                </div>
-              </div>
-
-              <div class="cms-card">
-                <div class="cms-card-title">Step 3</div>
-                <div class="cms-form-group">
-                  <label>Step Title</label>
-                  <input type="text" id="step_2_title" placeholder="Submit Order">
-                </div>
-                <div class="cms-form-group">
-                  <label>Step Description</label>
-                  <textarea id="step_2_desc" rows="3"></textarea>
-                </div>
-              </div>
-
-              <div class="cms-card">
-                <div class="cms-card-title">Step 4</div>
-                <div class="cms-form-group">
-                  <label>Step Title</label>
-                  <input type="text" id="step_3_title" placeholder="Instant HD Download">
-                </div>
-                <div class="cms-form-group">
-                  <label>Step Description</label>
-                  <textarea id="step_3_desc" rows="3"></textarea>
-                </div>
-              </div>
+              <div id="workflowStepsContainer"></div>
+              <button type="button" class="btn-add-item" id="btnAddStepBottom">
+                <i class="fa-solid fa-plus"></i> Add Another Step
+              </button>
             </div>
           </div>
 
@@ -575,20 +696,32 @@
               <div class="cms-grid-2">
                 <div class="cms-form-group">
                   <label>Section Tag</label>
-                  <input type="text" id="testimonials_tag" placeholder="Retailer Reviews">
+                  <input type="text" id="testimonials_tag" placeholder="Verified Feedback">
                 </div>
                 <div class="cms-form-group">
                   <label>Section Title</label>
-                  <input type="text" id="testimonials_title" placeholder="Trusted by 12,000+ Operators Across India">
+                  <input type="text" id="testimonials_title" placeholder="Trusted By 12,000+ Cyber Cafe Owners">
                 </div>
               </div>
               <div class="cms-form-group">
                 <label>Section Description</label>
-                <textarea id="testimonials_desc" rows="2"></textarea>
+                <textarea id="testimonials_desc" rows="2" placeholder="Hear why CSC operators and digital centers across India rely on Instant Online Seva."></textarea>
               </div>
             </div>
 
-            <div id="testimonialsContainer"></div>
+            <!-- Dynamic Reviews -->
+            <div class="cms-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+                <div class="cms-card-title" style="margin:0;"><i class="fa-solid fa-star" style="color:#f59e0b;"></i> Customer Reviews</div>
+                <button type="button" class="btn-secondary" id="btnAddTestimonial" style="padding: 7px 14px; font-size: 0.84rem;">
+                  <i class="fa-solid fa-plus"></i> Add New Review
+                </button>
+              </div>
+              <div id="testimonialsContainer"></div>
+              <button type="button" class="btn-add-item" id="btnAddTestimonialBottom">
+                <i class="fa-solid fa-plus"></i> Add Another Review
+              </button>
+            </div>
           </div>
 
           <!-- TAB 6: FAQ ACCORDION -->
@@ -598,23 +731,30 @@
               <div class="cms-grid-2">
                 <div class="cms-form-group">
                   <label>Section Tag</label>
-                  <input type="text" id="faq_tag" placeholder="Common Questions">
+                  <input type="text" id="faq_tag" placeholder="Got Questions?">
                 </div>
                 <div class="cms-form-group">
                   <label>Section Title</label>
                   <input type="text" id="faq_title" placeholder="Frequently Asked Questions">
                 </div>
               </div>
+              <div class="cms-form-group">
+                <label>Section Description</label>
+                <textarea id="faq_desc" rows="2" placeholder="Everything you need to know about wallet recharges..."></textarea>
+              </div>
             </div>
 
             <div class="cms-card">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
                 <div class="cms-card-title" style="margin:0;"><i class="fa-solid fa-list-ul"></i> Questions & Answers</div>
-                <button type="button" class="btn-secondary" id="btnAddFaq" style="padding: 7px 14px; font-size: 0.82rem;">
+                <button type="button" class="btn-secondary" id="btnAddFaq" style="padding: 7px 14px; font-size: 0.84rem;">
                   <i class="fa-solid fa-plus"></i> Add New Question
                 </button>
               </div>
               <div id="faqListContainer"></div>
+              <button type="button" class="btn-add-item" id="btnAddFaqBottom">
+                <i class="fa-solid fa-plus"></i> Add Another Question
+              </button>
             </div>
           </div>
 
@@ -634,7 +774,7 @@
               </div>
               <div class="cms-form-group">
                 <label>Banner Subtitle</label>
-                <textarea id="cta_subtitle" rows="2"></textarea>
+                <textarea id="cta_subtitle" rows="2" placeholder="Join thousands of cyber cafe operators..."></textarea>
               </div>
               <div class="cms-grid-2">
                 <div class="cms-form-group">
@@ -642,8 +782,16 @@
                   <input type="text" id="cta_primary_text" placeholder="Create Free Account">
                 </div>
                 <div class="cms-form-group">
+                  <label>Primary Button Link (URL)</label>
+                  <input type="text" id="cta_primary_link" placeholder="register.html">
+                </div>
+                <div class="cms-form-group">
                   <label>Secondary Button Text</label>
                   <input type="text" id="cta_secondary_text" placeholder="User Login">
+                </div>
+                <div class="cms-form-group">
+                  <label>Secondary Button Link (URL)</label>
+                  <input type="text" id="cta_secondary_link" placeholder="login.html">
                 </div>
               </div>
             </div>
@@ -674,7 +822,41 @@
               </div>
               <div class="cms-form-group">
                 <label>Copyright Notice</label>
-                <input type="text" id="footer_copyright" placeholder="© 2026 Instant Online Seva. All rights reserved.">
+                <input type="text" id="footer_copyright" placeholder="© 2026 Instant Online Seva. All rights reserved. Built for Indian Digital Retailers.">
+              </div>
+            </div>
+
+            <div class="cms-card">
+              <div class="cms-card-title"><i class="fa-solid fa-share-nodes" style="color:#0066cc;"></i> Footer Social Media & Legal Links</div>
+              <div class="cms-grid-2">
+                <div class="cms-form-group">
+                  <label><i class="fa-brands fa-facebook" style="color:#1877f2;"></i> Facebook Page URL</label>
+                  <input type="text" id="footer_facebook_link" placeholder="https://facebook.com/yourpage">
+                </div>
+                <div class="cms-form-group">
+                  <label><i class="fa-brands fa-x-twitter"></i> Twitter / X URL</label>
+                  <input type="text" id="footer_twitter_link" placeholder="https://twitter.com/yourhandle">
+                </div>
+                <div class="cms-form-group">
+                  <label><i class="fa-brands fa-whatsapp" style="color:#22c55e;"></i> WhatsApp Direct Link</label>
+                  <input type="text" id="footer_whatsapp_link" placeholder="https://wa.me/919876543210">
+                </div>
+                <div class="cms-form-group">
+                  <label><i class="fa-brands fa-telegram" style="color:#38bdf8;"></i> Telegram Channel URL</label>
+                  <input type="text" id="footer_telegram_link" placeholder="https://t.me/yourchannel">
+                </div>
+                <div class="cms-form-group">
+                  <label>Privacy Policy URL</label>
+                  <input type="text" id="footer_privacy_url" placeholder="#">
+                </div>
+                <div class="cms-form-group">
+                  <label>Terms of Service URL</label>
+                  <input type="text" id="footer_terms_url" placeholder="#">
+                </div>
+                <div class="cms-form-group">
+                  <label>Refund Policy URL</label>
+                  <input type="text" id="footer_refund_url" placeholder="#">
+                </div>
               </div>
             </div>
           </div>
@@ -687,11 +869,33 @@
 
               <div class="cms-toggle-row">
                 <div class="cms-toggle-info">
-                  <h5>Hero & Header Section</h5>
-                  <p>Display the top title, badges, and quick CTA buttons.</p>
+                  <h5>Top Announcement Strip</h5>
+                  <p>Display the realtime alert bar pinned at top of the page.</p>
+                </div>
+                <label class="cms-switch">
+                  <input type="checkbox" id="toggle_announcement" checked>
+                  <span class="cms-slider"></span>
+                </label>
+              </div>
+
+              <div class="cms-toggle-row">
+                <div class="cms-toggle-info">
+                  <h5>Hero Header Section</h5>
+                  <p>Display the top title, badges, copy, and quick CTA buttons.</p>
                 </div>
                 <label class="cms-switch">
                   <input type="checkbox" id="toggle_hero" checked>
+                  <span class="cms-slider"></span>
+                </label>
+              </div>
+
+              <div class="cms-toggle-row">
+                <div class="cms-toggle-info">
+                  <h5>Right-Side PVC Showcase Preview</h5>
+                  <p>Display the interactive 3D PVC ID card preview card next to the title.</p>
+                </div>
+                <label class="cms-switch">
+                  <input type="checkbox" id="toggle_showcase" checked>
                   <span class="cms-slider"></span>
                 </label>
               </div>
@@ -709,22 +913,22 @@
 
               <div class="cms-toggle-row">
                 <div class="cms-toggle-info">
-                  <h5>Rates & Pricing Matrix</h5>
-                  <p>Display the unit rate and delivery turnaround cards.</p>
+                  <h5>How It Works (Workflow Steps)</h5>
+                  <p>Display the rapid workflow process cards.</p>
                 </div>
                 <label class="cms-switch">
-                  <input type="checkbox" id="toggle_pricing" checked>
+                  <input type="checkbox" id="toggle_workflow" checked>
                   <span class="cms-slider"></span>
                 </label>
               </div>
 
               <div class="cms-toggle-row">
                 <div class="cms-toggle-info">
-                  <h5>How It Works (Workflow Steps)</h5>
-                  <p>Display the 3-step rapid workflow process cards.</p>
+                  <h5>Rates & Pricing Matrix</h5>
+                  <p>Display the unit rate and delivery turnaround cards.</p>
                 </div>
                 <label class="cms-switch">
-                  <input type="checkbox" id="toggle_workflow" checked>
+                  <input type="checkbox" id="toggle_pricing" checked>
                   <span class="cms-slider"></span>
                 </label>
               </div>
@@ -762,6 +966,17 @@
                 </label>
               </div>
 
+              <div class="cms-toggle-row">
+                <div class="cms-toggle-info">
+                  <h5>Website Modern Footer</h5>
+                  <p>Display the bottom branding, contact desk, and policy links.</p>
+                </div>
+                <label class="cms-switch">
+                  <input type="checkbox" id="toggle_footer" checked>
+                  <span class="cms-slider"></span>
+                </label>
+              </div>
+
             </div>
           </div>
 
@@ -786,29 +1001,34 @@
   <script>
     // State
     let currentConfig = null;
-    let faqItems = [];
     let serviceItems = [];
     let pricingCards = [];
+    let workflowSteps = [];
     let testimonialItems = [];
-
-    // Ensure Admin Session
-    if (!Auth.requireRole('admin')) {
-      // Redirect handled by Auth
-    }
+    let faqItems = [];
 
     // Tabs switching
     document.querySelectorAll('.cms-tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
         document.querySelectorAll('.cms-tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.cms-tab-panel').forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
         const tabId = btn.getAttribute('data-tab');
-        document.getElementById(tabId).classList.add('active');
+        const targetPanel = document.getElementById(tabId);
+        if (targetPanel) {
+          targetPanel.classList.add('active');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       });
     });
 
     // Load configuration on startup
-    document.addEventListener('DOMContentLoaded', loadCmsConfig);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadCmsConfig);
+    } else {
+      loadCmsConfig();
+    }
 
     async function loadCmsConfig() {
       try {
@@ -823,23 +1043,48 @@
     }
 
     function populateForm(data) {
+      // 0. Top Announcement
+      if (data.announcement) {
+        const a = data.announcement;
+        document.getElementById('announcement_enabled').checked = a.enabled !== false;
+        document.getElementById('announcement_badge').value = a.badge || '';
+        document.getElementById('announcement_text').value = a.text || '';
+        document.getElementById('announcement_helpline_text').value = a.helpline_text || '';
+        document.getElementById('announcement_helpline_link').value = a.helpline_link || '';
+        document.getElementById('announcement_safe_text').value = a.safe_text || '';
+      }
+
       // 1. Hero
       if (data.hero) {
-        document.getElementById('hero_badge_icon').value = data.hero.badge_icon || '';
-        document.getElementById('hero_badge_text').value = data.hero.badge_text || '';
-        document.getElementById('hero_title_highlight').value = data.hero.title_highlight || '';
-        document.getElementById('hero_title_rest').value = data.hero.title_rest || '';
-        document.getElementById('hero_subtitle').value = data.hero.subtitle || '';
-        document.getElementById('hero_cta_primary_text').value = data.hero.cta_primary_text || '';
-        document.getElementById('hero_cta_primary_link').value = data.hero.cta_primary_link || '';
-        document.getElementById('hero_cta_secondary_text').value = data.hero.cta_secondary_text || '';
-        document.getElementById('hero_cta_secondary_link').value = data.hero.cta_secondary_link || '';
+        const h = data.hero;
+        document.getElementById('hero_badge_icon').value = h.badge_icon || '';
+        document.getElementById('hero_badge_text').value = h.badge_text || '';
+        document.getElementById('hero_title_highlight').value = h.title_highlight || '';
+        document.getElementById('hero_title_rest').value = h.title_rest || '';
+        document.getElementById('hero_subtitle').value = h.subtitle || '';
+        document.getElementById('hero_cta_primary_text').value = h.cta_primary_text || '';
+        document.getElementById('hero_cta_primary_link').value = h.cta_primary_link || '';
+        document.getElementById('hero_cta_secondary_text').value = h.cta_secondary_text || '';
+        document.getElementById('hero_cta_secondary_link').value = h.cta_secondary_link || '';
 
-        if (Array.isArray(data.hero.trust_items)) {
-          if (data.hero.trust_items[0]) document.getElementById('hero_trust_0_text').value = data.hero.trust_items[0].text || '';
-          if (data.hero.trust_items[1]) document.getElementById('hero_trust_1_text').value = data.hero.trust_items[1].text || '';
-          if (data.hero.trust_items[2]) document.getElementById('hero_trust_2_text').value = data.hero.trust_items[2].text || '';
+        if (Array.isArray(h.trust_items)) {
+          if (h.trust_items[0]) document.getElementById('hero_trust_0_text').value = h.trust_items[0].text || '';
+          if (h.trust_items[1]) document.getElementById('hero_trust_1_text').value = h.trust_items[1].text || '';
+          if (h.trust_items[2]) document.getElementById('hero_trust_2_text').value = h.trust_items[2].text || '';
         }
+      }
+
+      // 1.1 Showcase
+      if (data.showcase) {
+        const sc = data.showcase;
+        document.getElementById('showcase_chip1_title').value = sc.chip1_title || '';
+        document.getElementById('showcase_chip1_sub').value = sc.chip1_sub || '';
+        document.getElementById('showcase_chip2_title').value = sc.chip2_title || '';
+        document.getElementById('showcase_chip2_sub').value = sc.chip2_sub || '';
+        document.getElementById('showcase_applicant_name').value = sc.applicant_name || '';
+        document.getElementById('showcase_applicant_meta').value = sc.applicant_meta || '';
+        document.getElementById('showcase_applicant_state').value = sc.applicant_state || '';
+        document.getElementById('showcase_applicant_aadhaar').value = sc.applicant_aadhaar || '';
       }
 
       // 2. Services
@@ -847,7 +1092,7 @@
         document.getElementById('services_tag').value = data.services.tag || '';
         document.getElementById('services_title').value = data.services.title || '';
         document.getElementById('services_desc').value = data.services.desc || '';
-        serviceItems = data.services.items || [];
+        serviceItems = Array.isArray(data.services.items) ? JSON.parse(JSON.stringify(data.services.items)) : [];
         renderServiceCards();
       }
 
@@ -856,7 +1101,7 @@
         document.getElementById('pricing_tag').value = data.pricing.tag || '';
         document.getElementById('pricing_title').value = data.pricing.title || '';
         document.getElementById('pricing_desc').value = data.pricing.desc || '';
-        pricingCards = data.pricing.cards || [];
+        pricingCards = Array.isArray(data.pricing.cards) ? JSON.parse(JSON.stringify(data.pricing.cards)) : [];
         renderPricingCards();
       }
 
@@ -864,24 +1109,9 @@
       if (data.workflow) {
         document.getElementById('workflow_tag').value = data.workflow.tag || '';
         document.getElementById('workflow_title').value = data.workflow.title || '';
-        if (Array.isArray(data.workflow.steps)) {
-          if (data.workflow.steps[0]) {
-            document.getElementById('step_0_title').value = data.workflow.steps[0].title || '';
-            document.getElementById('step_0_desc').value = data.workflow.steps[0].desc || '';
-          }
-          if (data.workflow.steps[1]) {
-            document.getElementById('step_1_title').value = data.workflow.steps[1].title || '';
-            document.getElementById('step_1_desc').value = data.workflow.steps[1].desc || '';
-          }
-          if (data.workflow.steps[2]) {
-            document.getElementById('step_2_title').value = data.workflow.steps[2].title || '';
-            document.getElementById('step_2_desc').value = data.workflow.steps[2].desc || '';
-          }
-          if (data.workflow.steps[3]) {
-            document.getElementById('step_3_title').value = data.workflow.steps[3].title || '';
-            document.getElementById('step_3_desc').value = data.workflow.steps[3].desc || '';
-          }
-        }
+        document.getElementById('workflow_desc').value = data.workflow.desc || '';
+        workflowSteps = Array.isArray(data.workflow.steps) ? JSON.parse(JSON.stringify(data.workflow.steps)) : [];
+        renderWorkflowSteps();
       }
 
       // 5. Testimonials
@@ -889,7 +1119,7 @@
         document.getElementById('testimonials_tag').value = data.testimonials.tag || '';
         document.getElementById('testimonials_title').value = data.testimonials.title || '';
         document.getElementById('testimonials_desc').value = data.testimonials.desc || '';
-        testimonialItems = data.testimonials.items || [];
+        testimonialItems = Array.isArray(data.testimonials.items) ? JSON.parse(JSON.stringify(data.testimonials.items)) : [];
         renderTestimonials();
       }
 
@@ -897,7 +1127,8 @@
       if (data.faq) {
         document.getElementById('faq_tag').value = data.faq.tag || '';
         document.getElementById('faq_title').value = data.faq.title || '';
-        faqItems = data.faq.items || [];
+        document.getElementById('faq_desc').value = data.faq.desc || '';
+        faqItems = Array.isArray(data.faq.items) ? JSON.parse(JSON.stringify(data.faq.items)) : [];
         renderFaqList();
       }
 
@@ -907,77 +1138,214 @@
         document.getElementById('cta_title').value = data.cta.title || '';
         document.getElementById('cta_subtitle').value = data.cta.subtitle || '';
         document.getElementById('cta_primary_text').value = data.cta.primary_text || '';
+        document.getElementById('cta_primary_link').value = data.cta.primary_link || 'register.html';
         document.getElementById('cta_secondary_text').value = data.cta.secondary_text || '';
+        document.getElementById('cta_secondary_link').value = data.cta.secondary_link || 'login.html';
       }
 
       if (data.footer) {
-        document.getElementById('footer_slogan').value = data.footer.slogan || '';
-        document.getElementById('footer_phone').value = data.footer.phone || '';
-        document.getElementById('footer_whatsapp').value = data.footer.whatsapp || '';
-        document.getElementById('footer_email').value = data.footer.email || '';
-        document.getElementById('footer_hours').value = data.footer.hours || '';
-        document.getElementById('footer_copyright').value = data.footer.copyright || '';
+        const ft = data.footer;
+        document.getElementById('footer_slogan').value = ft.slogan || '';
+        document.getElementById('footer_phone').value = ft.phone || '';
+        document.getElementById('footer_whatsapp').value = ft.whatsapp || '';
+        document.getElementById('footer_email').value = ft.email || '';
+        document.getElementById('footer_hours').value = ft.hours || '';
+        document.getElementById('footer_copyright').value = ft.copyright || '';
+        document.getElementById('footer_facebook_link').value = ft.facebook_link || '';
+        document.getElementById('footer_twitter_link').value = ft.twitter_link || '';
+        document.getElementById('footer_whatsapp_link').value = ft.whatsapp_link || '';
+        document.getElementById('footer_telegram_link').value = ft.telegram_link || '';
+        document.getElementById('footer_privacy_url').value = ft.privacy_url || '#';
+        document.getElementById('footer_terms_url').value = ft.terms_url || '#';
+        document.getElementById('footer_refund_url').value = ft.refund_url || '#';
       }
 
       // 8. Visibility
       if (data.visibility) {
-        document.getElementById('toggle_hero').checked = data.visibility.hero !== false;
-        document.getElementById('toggle_services').checked = data.visibility.services !== false;
-        document.getElementById('toggle_pricing').checked = data.visibility.pricing !== false;
-        document.getElementById('toggle_workflow').checked = data.visibility.workflow !== false;
-        document.getElementById('toggle_testimonials').checked = data.visibility.testimonials !== false;
-        document.getElementById('toggle_faq').checked = data.visibility.faq !== false;
-        document.getElementById('toggle_cta').checked = data.visibility.cta !== false;
+        const v = data.visibility;
+        document.getElementById('toggle_announcement').checked = v.announcement !== false;
+        document.getElementById('toggle_hero').checked = v.hero !== false;
+        document.getElementById('toggle_showcase').checked = v.showcase !== false;
+        document.getElementById('toggle_services').checked = v.services !== false;
+        document.getElementById('toggle_workflow').checked = v.workflow !== false;
+        document.getElementById('toggle_pricing').checked = v.pricing !== false;
+        document.getElementById('toggle_testimonials').checked = v.testimonials !== false;
+        document.getElementById('toggle_faq').checked = v.faq !== false;
+        document.getElementById('toggle_cta').checked = v.cta !== false;
+        document.getElementById('toggle_footer').checked = v.footer !== false;
       }
     }
 
-    // Render Service Cards
+    // ==========================================
+    // 2. Services Management (CRUD)
+    // ==========================================
     function renderServiceCards() {
       const container = document.getElementById('serviceCardsContainer');
-      container.innerHTML = serviceItems.map((svc, idx) => `
-        <div class="cms-card">
-          <div class="cms-card-title"><i class="fa-solid ${svc.icon || 'fa-id-card'}"></i> Service Card #${idx + 1}: ${escapeHtml(svc.title)}</div>
+      if (serviceItems.length === 0) {
+        container.innerHTML = '<div style="color:#64748b; font-style:italic; padding:12px;">No service cards configured. Click Add New Service Card below.</div>';
+        return;
+      }
+      container.innerHTML = serviceItems.map((svc, idx) => {
+        const titleVal = escapeAttr(svc.title);
+        const badgeVal = escapeAttr(svc.badge);
+        const priceVal = escapeAttr(svc.price);
+        const iconVal = escapeAttr(svc.icon || 'fa-id-card');
+        const descVal = escapeHtml(svc.desc);
+        const actionTextVal = escapeAttr(svc.action_text || 'Start Service');
+        const actionLinkVal = escapeAttr(svc.action_link || 'register.html');
+        const featuresVal = Array.isArray(svc.features) ? svc.features.join('\n') : '';
+
+        return `
+        <div class="dynamic-item-box" data-idx="${idx}">
+          <button type="button" class="item-delete-btn" onclick="removeServiceCard(${idx})" title="Delete this service card">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+          <div class="item-header-badge">Service Card #${idx + 1}</div>
           <div class="cms-grid-3">
             <div class="cms-form-group">
               <label>Service Title</label>
-              <input type="text" id="svc_${idx}_title" value="${escapeAttr(svc.title)}">
+              <input type="text" id="svc_${idx}_title" value="${titleVal}">
             </div>
             <div class="cms-form-group">
               <label>Badge / Speed</label>
-              <input type="text" id="svc_${idx}_badge" value="${escapeAttr(svc.badge)}">
+              <input type="text" id="svc_${idx}_badge" value="${badgeVal}">
             </div>
             <div class="cms-form-group">
-              <label>Unit Rate / Fee Tag</label>
-              <input type="text" id="svc_${idx}_price" value="${escapeAttr(svc.price)}">
+              <label>Price / Fee Tag</label>
+              <input type="text" id="svc_${idx}_price" value="${priceVal}">
+            </div>
+          </div>
+          <div class="cms-grid-3">
+            <div class="cms-form-group">
+              <label>FontAwesome Icon</label>
+              <input type="text" id="svc_${idx}_icon" value="${iconVal}" placeholder="fa-id-card">
+            </div>
+            <div class="cms-form-group">
+              <label>Filter Category</label>
+              <select id="svc_${idx}_category">
+                <option value="print" ${svc.category === 'print' ? 'selected' : ''}>PVC ID Printing (print)</option>
+                <option value="pan" ${svc.category === 'pan' ? 'selected' : ''}>PAN Recovery (pan)</option>
+                <option value="wallet" ${svc.category === 'wallet' ? 'selected' : ''}>UPI Wallet (wallet)</option>
+                <option value="all" ${svc.category === 'all' ? 'selected' : ''}>General / All (all)</option>
+              </select>
+            </div>
+            <div class="cms-form-group">
+              <label>Border Theme Color</label>
+              <select id="svc_${idx}_color">
+                <option value="orange" ${svc.color === 'orange' ? 'selected' : ''}>Brand Orange</option>
+                <option value="green" ${svc.color === 'green' ? 'selected' : ''}>Brand Green</option>
+                <option value="blue" ${svc.color === 'blue' ? 'selected' : ''}>Brand Blue</option>
+                <option value="purple" ${svc.color === 'purple' ? 'selected' : ''}>Brand Purple</option>
+              </select>
             </div>
           </div>
           <div class="cms-form-group">
-            <label>Service Summary</label>
-            <textarea id="svc_${idx}_desc" rows="2">${escapeHtml(svc.desc)}</textarea>
+            <label>Detailed Description</label>
+            <textarea id="svc_${idx}_desc" rows="2">${descVal}</textarea>
           </div>
-        </div>
-      `).join('');
-    }
-
-    // Render Pricing Cards
-    function renderPricingCards() {
-      const container = document.getElementById('pricingCardsContainer');
-      container.innerHTML = pricingCards.map((card, idx) => `
-        <div class="cms-card">
-          <div class="cms-card-title"><i class="fa-solid fa-tag"></i> Pricing Tier #${idx + 1}: ${escapeHtml(card.title)}</div>
           <div class="cms-grid-2">
             <div class="cms-form-group">
-              <label>Tier Title</label>
+              <label>Action Button Text</label>
+              <input type="text" id="svc_${idx}_action_text" value="${actionTextVal}">
+            </div>
+            <div class="cms-form-group">
+              <label>Action Button Target Link</label>
+              <input type="text" id="svc_${idx}_action_link" value="${actionLinkVal}">
+            </div>
+          </div>
+          <div class="cms-form-group" style="margin-bottom:0;">
+            <label>Features (1 feature per line)</label>
+            <textarea id="svc_${idx}_features" rows="3" placeholder="Standard CR-80 Dimensions&#10;300 DPI Vector PDF output&#10;Auto photo correction">${featuresVal}</textarea>
+          </div>
+        </div>
+        `;
+      }).join('');
+    }
+
+    function syncServicesValues() {
+      serviceItems.forEach((svc, idx) => {
+        const t = document.getElementById(`svc_${idx}_title`);
+        const b = document.getElementById(`svc_${idx}_badge`);
+        const p = document.getElementById(`svc_${idx}_price`);
+        const i = document.getElementById(`svc_${idx}_icon`);
+        const c = document.getElementById(`svc_${idx}_category`);
+        const clr = document.getElementById(`svc_${idx}_color`);
+        const d = document.getElementById(`svc_${idx}_desc`);
+        const at = document.getElementById(`svc_${idx}_action_text`);
+        const al = document.getElementById(`svc_${idx}_action_link`);
+        const f = document.getElementById(`svc_${idx}_features`);
+        if (t) svc.title = t.value;
+        if (b) svc.badge = b.value;
+        if (p) svc.price = p.value;
+        if (i) svc.icon = i.value;
+        if (c) svc.category = c.value;
+        if (clr) svc.color = clr.value;
+        if (d) svc.desc = d.value;
+        if (at) svc.action_text = at.value;
+        if (al) svc.action_link = al.value;
+        if (f) svc.features = f.value.split('\n').map(x => x.trim()).filter(Boolean);
+      });
+    }
+
+    function addServiceCard() {
+      syncServicesValues();
+      serviceItems.push({
+        id: 'svc_' + Date.now(),
+        title: 'New Citizen Service',
+        badge: 'Instant Delivery',
+        price: '₹20',
+        icon: 'fa-id-card',
+        category: 'print',
+        color: 'orange',
+        desc: 'Quick turnaround high-definition digital processing service.',
+        action_text: 'Order Now',
+        action_link: 'register.html',
+        features: [
+          'High resolution output format',
+          'Instant automated formatting'
+        ]
+      });
+      renderServiceCards();
+    }
+
+    function removeServiceCard(idx) {
+      if (!confirm('Are you sure you want to remove this service card?')) return;
+      syncServicesValues();
+      serviceItems.splice(idx, 1);
+      renderServiceCards();
+    }
+
+    document.getElementById('btnAddService').addEventListener('click', addServiceCard);
+    document.getElementById('btnAddServiceBottom').addEventListener('click', addServiceCard);
+
+    // ==========================================
+    // 3. Pricing Matrix Management (CRUD)
+    // ==========================================
+    function renderPricingCards() {
+      const container = document.getElementById('pricingCardsContainer');
+      if (pricingCards.length === 0) {
+        container.innerHTML = '<div style="color:#64748b; font-style:italic; padding:12px;">No pricing tiers configured. Click Add New Pricing Tier below.</div>';
+        return;
+      }
+      container.innerHTML = pricingCards.map((card, idx) => `
+        <div class="dynamic-item-box" data-idx="${idx}">
+          <button type="button" class="item-delete-btn" onclick="removePricingCard(${idx})" title="Delete this pricing tier">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+          <div class="item-header-badge">Pricing Tier #${idx + 1}</div>
+          <div class="cms-grid-2">
+            <div class="cms-form-group">
+              <label>Service Offering Title</label>
               <input type="text" id="price_${idx}_title" value="${escapeAttr(card.title)}">
             </div>
             <div class="cms-form-group">
-              <label>Rate / Price</label>
+              <label>Standard Fee / Price</label>
               <input type="text" id="price_${idx}_price" value="${escapeAttr(card.price)}">
             </div>
           </div>
           <div class="cms-grid-2">
             <div class="cms-form-group">
-              <label>Delivery Speed SLA</label>
+              <label>Turnaround Speed SLA</label>
               <input type="text" id="price_${idx}_speed" value="${escapeAttr(card.speed)}">
             </div>
             <div class="cms-form-group">
@@ -985,76 +1353,213 @@
               <input type="text" id="price_${idx}_format" value="${escapeAttr(card.format || '')}">
             </div>
           </div>
-          <div class="cms-form-group">
-            <label>Format / Subtitle Note</label>
+          <div class="cms-form-group" style="margin-bottom:0;">
+            <label>Sub-Description / Format Details</label>
             <input type="text" id="price_${idx}_desc" value="${escapeAttr(card.desc)}">
           </div>
         </div>
       `).join('');
     }
 
-    // Render Testimonials
-    function renderTestimonials() {
-      const container = document.getElementById('testimonialsContainer');
-      container.innerHTML = testimonialItems.map((item, idx) => `
-        <div class="cms-card">
-          <div class="cms-card-title"><i class="fa-solid fa-user-check"></i> Reviewer #${idx + 1}</div>
+    function syncPricingValues() {
+      pricingCards.forEach((card, idx) => {
+        const t = document.getElementById(`price_${idx}_title`);
+        const p = document.getElementById(`price_${idx}_price`);
+        const s = document.getElementById(`price_${idx}_speed`);
+        const f = document.getElementById(`price_${idx}_format`);
+        const d = document.getElementById(`price_${idx}_desc`);
+        if (t) card.title = t.value;
+        if (p) card.price = p.value;
+        if (s) card.speed = s.value;
+        if (f) card.format = f.value;
+        if (d) card.desc = d.value;
+      });
+    }
+
+    function addPricingCard() {
+      syncPricingValues();
+      pricingCards.push({
+        title: 'New Service Rate',
+        price: '₹ 20.00',
+        speed: '1 - 2 mins',
+        format: 'HD Digital PDF',
+        desc: 'Standardized verified deliverable layout'
+      });
+      renderPricingCards();
+    }
+
+    function removePricingCard(idx) {
+      if (!confirm('Are you sure you want to remove this pricing row?')) return;
+      syncPricingValues();
+      pricingCards.splice(idx, 1);
+      renderPricingCards();
+    }
+
+    document.getElementById('btnAddPricing').addEventListener('click', addPricingCard);
+    document.getElementById('btnAddPricingBottom').addEventListener('click', addPricingCard);
+
+    // ==========================================
+    // 4. Workflow Steps Management (CRUD)
+    // ==========================================
+    function renderWorkflowSteps() {
+      const container = document.getElementById('workflowStepsContainer');
+      if (workflowSteps.length === 0) {
+        container.innerHTML = '<div style="color:#64748b; font-style:italic; padding:12px;">No workflow steps configured. Click Add New Step below.</div>';
+        return;
+      }
+      container.innerHTML = workflowSteps.map((st, idx) => `
+        <div class="dynamic-item-box" data-idx="${idx}">
+          <button type="button" class="item-delete-btn" onclick="removeWorkflowStep(${idx})" title="Delete this step">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+          <div class="item-header-badge">Step #${idx + 1}</div>
           <div class="cms-grid-2">
             <div class="cms-form-group">
-              <label>Operator Name</label>
-              <input type="text" id="rev_${idx}_author" value="${escapeAttr(item.author)}">
+              <label>Step Number Display (e.g. 01, 02)</label>
+              <input type="text" id="step_${idx}_num" value="${escapeAttr(st.step_num || String(idx + 1).padStart(2, '0'))}">
             </div>
             <div class="cms-form-group">
-              <label>Cyber Cafe / City</label>
-              <input type="text" id="rev_${idx}_role" value="${escapeAttr(item.role)}">
+              <label>Step Title</label>
+              <input type="text" id="step_${idx}_title" value="${escapeAttr(st.title)}">
             </div>
           </div>
-          <div class="cms-form-group">
-            <label>Review Quote</label>
-            <textarea id="rev_${idx}_quote" rows="2">${escapeHtml(item.quote)}</textarea>
+          <div class="cms-form-group" style="margin-bottom:0;">
+            <label>Step Description</label>
+            <textarea id="step_${idx}_desc" rows="2">${escapeHtml(st.desc)}</textarea>
           </div>
         </div>
       `).join('');
     }
 
-    // Render FAQ List
+    function syncWorkflowValues() {
+      workflowSteps.forEach((st, idx) => {
+        const n = document.getElementById(`step_${idx}_num`);
+        const t = document.getElementById(`step_${idx}_title`);
+        const d = document.getElementById(`step_${idx}_desc`);
+        if (n) st.step_num = n.value;
+        if (t) st.title = t.value;
+        if (d) st.desc = d.value;
+      });
+    }
+
+    function addWorkflowStep() {
+      syncWorkflowValues();
+      workflowSteps.push({
+        step_num: String(workflowSteps.length + 1).padStart(2, '0'),
+        title: 'New Process Step',
+        desc: 'Simple, direct instruction for the retailer.'
+      });
+      renderWorkflowSteps();
+    }
+
+    function removeWorkflowStep(idx) {
+      if (!confirm('Are you sure you want to remove this workflow step?')) return;
+      syncWorkflowValues();
+      workflowSteps.splice(idx, 1);
+      renderWorkflowSteps();
+    }
+
+    document.getElementById('btnAddStep').addEventListener('click', addWorkflowStep);
+    document.getElementById('btnAddStepBottom').addEventListener('click', addWorkflowStep);
+
+    // ==========================================
+    // 5. Testimonials Management (CRUD)
+    // ==========================================
+    function renderTestimonials() {
+      const container = document.getElementById('testimonialsContainer');
+      if (testimonialItems.length === 0) {
+        container.innerHTML = '<div style="color:#64748b; font-style:italic; padding:12px;">No customer reviews yet. Click Add New Review below.</div>';
+        return;
+      }
+      container.innerHTML = testimonialItems.map((rev, idx) => `
+        <div class="dynamic-item-box" data-idx="${idx}">
+          <button type="button" class="item-delete-btn" onclick="removeTestimonial(${idx})" title="Delete this review">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+          <div class="item-header-badge">Review #${idx + 1}</div>
+          <div class="cms-grid-3">
+            <div class="cms-form-group">
+              <label>Operator Name</label>
+              <input type="text" id="rev_${idx}_author" value="${escapeAttr(rev.author)}">
+            </div>
+            <div class="cms-form-group">
+              <label>Center / City Role</label>
+              <input type="text" id="rev_${idx}_role" value="${escapeAttr(rev.role)}">
+            </div>
+            <div class="cms-form-group">
+              <label>Avatar Initials (2 letters)</label>
+              <input type="text" id="rev_${idx}_initials" value="${escapeAttr(rev.initials || '')}" placeholder="SP" maxlength="3">
+            </div>
+          </div>
+          <div class="cms-form-group" style="margin-bottom:0;">
+            <label>Review Quote</label>
+            <textarea id="rev_${idx}_quote" rows="2">${escapeHtml(rev.quote)}</textarea>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function syncTestimonialValues() {
+      testimonialItems.forEach((rev, idx) => {
+        const a = document.getElementById(`rev_${idx}_author`);
+        const r = document.getElementById(`rev_${idx}_role`);
+        const ini = document.getElementById(`rev_${idx}_initials`);
+        const q = document.getElementById(`rev_${idx}_quote`);
+        if (a) rev.author = a.value;
+        if (r) rev.role = r.value;
+        if (ini) rev.initials = ini.value;
+        if (q) rev.quote = q.value;
+      });
+    }
+
+    function addTestimonial() {
+      syncTestimonialValues();
+      testimonialItems.push({
+        author: 'Verified Retailer',
+        role: 'Digital Cyber Point, City',
+        initials: 'VR',
+        quote: 'Highly efficient and reliable platform for citizen document formatting.',
+        stars: 5
+      });
+      renderTestimonials();
+    }
+
+    function removeTestimonial(idx) {
+      if (!confirm('Are you sure you want to remove this review?')) return;
+      syncTestimonialValues();
+      testimonialItems.splice(idx, 1);
+      renderTestimonials();
+    }
+
+    document.getElementById('btnAddTestimonial').addEventListener('click', addTestimonial);
+    document.getElementById('btnAddTestimonialBottom').addEventListener('click', addTestimonial);
+
+    // ==========================================
+    // 6. FAQ Management (CRUD)
+    // ==========================================
     function renderFaqList() {
       const container = document.getElementById('faqListContainer');
       if (faqItems.length === 0) {
-        container.innerHTML = '<div style="color:#64748b; font-style:italic; padding:10px 0;">No FAQ items yet. Click Add New Question above.</div>';
+        container.innerHTML = '<div style="color:#64748b; font-style:italic; padding:12px;">No FAQ items yet. Click Add New Question below.</div>';
         return;
       }
       container.innerHTML = faqItems.map((faq, idx) => `
-        <div class="faq-item-box" data-idx="${idx}">
-          <button type="button" class="faq-delete-btn" onclick="removeFaq(${idx})" title="Delete this question">
+        <div class="dynamic-item-box" data-idx="${idx}">
+          <button type="button" class="item-delete-btn" onclick="removeFaq(${idx})" title="Delete this question">
             <i class="fa-solid fa-trash"></i>
           </button>
+          <div class="item-header-badge">Question #${idx + 1}</div>
           <div class="cms-form-group" style="padding-right: 40px;">
-            <label>Question #${idx + 1}</label>
+            <label>Question Title</label>
             <input type="text" id="faq_${idx}_q" value="${escapeAttr(faq.question)}">
           </div>
           <div class="cms-form-group" style="margin-bottom:0;">
-            <label>Answer</label>
+            <label>Detailed Answer</label>
             <textarea id="faq_${idx}_a" rows="2">${escapeHtml(faq.answer)}</textarea>
           </div>
         </div>
       `).join('');
     }
-
-    function removeFaq(idx) {
-      faqItems.splice(idx, 1);
-      renderFaqList();
-    }
-
-    document.getElementById('btnAddFaq').addEventListener('click', () => {
-      // Collect current typed values first
-      syncFaqValues();
-      faqItems.push({
-        question: 'New Question Title?',
-        answer: 'Detailed helpful explanation for retailers...'
-      });
-      renderFaqList();
-    });
 
     function syncFaqValues() {
       faqItems.forEach((item, idx) => {
@@ -1065,10 +1570,37 @@
       });
     }
 
-    // Save Form Handler
+    function addFaq() {
+      syncFaqValues();
+      faqItems.push({
+        question: 'New Question Title?',
+        answer: 'Detailed helpful explanation for retailers...'
+      });
+      renderFaqList();
+    }
+
+    function removeFaq(idx) {
+      if (!confirm('Are you sure you want to remove this question?')) return;
+      syncFaqValues();
+      faqItems.splice(idx, 1);
+      renderFaqList();
+    }
+
+    document.getElementById('btnAddFaq').addEventListener('click', addFaq);
+    document.getElementById('btnAddFaqBottom').addEventListener('click', addFaq);
+
+    // ==========================================
+    // Master Save Handler
+    // ==========================================
     document.getElementById('landingCmsForm').addEventListener('submit', saveCmsConfig);
-    document.getElementById('btnTopSave').addEventListener('click', () => {
-      document.getElementById('landingCmsForm').dispatchEvent(new Event('submit'));
+    document.getElementById('btnTopSave').addEventListener('click', (e) => {
+      e.preventDefault();
+      const form = document.getElementById('landingCmsForm');
+      if (typeof form.requestSubmit === 'function') {
+        form.requestSubmit();
+      } else {
+        saveCmsConfig(e);
+      }
     });
 
     async function saveCmsConfig(e) {
@@ -1080,53 +1612,32 @@
       });
 
       try {
+        syncServicesValues();
+        syncPricingValues();
+        syncWorkflowValues();
+        syncTestimonialValues();
         syncFaqValues();
-
-        // Sync Services
-        serviceItems.forEach((svc, idx) => {
-          const t = document.getElementById(`svc_${idx}_title`);
-          const b = document.getElementById(`svc_${idx}_badge`);
-          const p = document.getElementById(`svc_${idx}_price`);
-          const d = document.getElementById(`svc_${idx}_desc`);
-          if (t) svc.title = t.value;
-          if (b) svc.badge = b.value;
-          if (p) svc.price = p.value;
-          if (d) svc.desc = d.value;
-        });
-
-        // Sync Pricing
-        pricingCards.forEach((card, idx) => {
-          const t = document.getElementById(`price_${idx}_title`);
-          const p = document.getElementById(`price_${idx}_price`);
-          const s = document.getElementById(`price_${idx}_speed`);
-          const f = document.getElementById(`price_${idx}_format`);
-          const d = document.getElementById(`price_${idx}_desc`);
-          if (t) card.title = t.value;
-          if (p) card.price = p.value;
-          if (s) card.speed = s.value;
-          if (f) card.format = f.value;
-          if (d) card.desc = d.value;
-        });
-
-        // Sync Testimonials
-        testimonialItems.forEach((rev, idx) => {
-          const a = document.getElementById(`rev_${idx}_author`);
-          const r = document.getElementById(`rev_${idx}_role`);
-          const q = document.getElementById(`rev_${idx}_quote`);
-          if (a) rev.author = a.value;
-          if (r) rev.role = r.value;
-          if (q) rev.quote = q.value;
-        });
 
         const payload = {
           visibility: {
+            announcement: document.getElementById('toggle_announcement').checked,
             hero: document.getElementById('toggle_hero').checked,
+            showcase: document.getElementById('toggle_showcase').checked,
             services: document.getElementById('toggle_services').checked,
-            pricing: document.getElementById('toggle_pricing').checked,
             workflow: document.getElementById('toggle_workflow').checked,
+            pricing: document.getElementById('toggle_pricing').checked,
             testimonials: document.getElementById('toggle_testimonials').checked,
             faq: document.getElementById('toggle_faq').checked,
-            cta: document.getElementById('toggle_cta').checked
+            cta: document.getElementById('toggle_cta').checked,
+            footer: document.getElementById('toggle_footer').checked
+          },
+          announcement: {
+            enabled: document.getElementById('announcement_enabled').checked,
+            badge: document.getElementById('announcement_badge').value,
+            text: document.getElementById('announcement_text').value,
+            helpline_text: document.getElementById('announcement_helpline_text').value,
+            helpline_link: document.getElementById('announcement_helpline_link').value,
+            safe_text: document.getElementById('announcement_safe_text').value
           },
           hero: {
             badge_icon: document.getElementById('hero_badge_icon').value,
@@ -1144,6 +1655,16 @@
               { text: document.getElementById('hero_trust_2_text').value, icon: 'fa-lock' }
             ]
           },
+          showcase: {
+            chip1_title: document.getElementById('showcase_chip1_title').value,
+            chip1_sub: document.getElementById('showcase_chip1_sub').value,
+            chip2_title: document.getElementById('showcase_chip2_title').value,
+            chip2_sub: document.getElementById('showcase_chip2_sub').value,
+            applicant_name: document.getElementById('showcase_applicant_name').value,
+            applicant_meta: document.getElementById('showcase_applicant_meta').value,
+            applicant_state: document.getElementById('showcase_applicant_state').value,
+            applicant_aadhaar: document.getElementById('showcase_applicant_aadhaar').value
+          },
           services: {
             tag: document.getElementById('services_tag').value,
             title: document.getElementById('services_title').value,
@@ -1159,12 +1680,8 @@
           workflow: {
             tag: document.getElementById('workflow_tag').value,
             title: document.getElementById('workflow_title').value,
-            steps: [
-              { step_num: '01', title: document.getElementById('step_0_title').value, desc: document.getElementById('step_0_desc').value },
-              { step_num: '02', title: document.getElementById('step_1_title').value, desc: document.getElementById('step_1_desc').value },
-              { step_num: '03', title: document.getElementById('step_2_title').value, desc: document.getElementById('step_2_desc').value },
-              { step_num: '04', title: document.getElementById('step_3_title').value, desc: document.getElementById('step_3_desc').value }
-            ]
+            desc: document.getElementById('workflow_desc').value,
+            steps: workflowSteps
           },
           testimonials: {
             tag: document.getElementById('testimonials_tag').value,
@@ -1175,6 +1692,7 @@
           faq: {
             tag: document.getElementById('faq_tag').value,
             title: document.getElementById('faq_title').value,
+            desc: document.getElementById('faq_desc').value,
             items: faqItems
           },
           cta: {
@@ -1182,9 +1700,9 @@
             title: document.getElementById('cta_title').value,
             subtitle: document.getElementById('cta_subtitle').value,
             primary_text: document.getElementById('cta_primary_text').value,
-            primary_link: 'register.html',
+            primary_link: document.getElementById('cta_primary_link').value,
             secondary_text: document.getElementById('cta_secondary_text').value,
-            secondary_link: 'login.html'
+            secondary_link: document.getElementById('cta_secondary_link').value
           },
           footer: {
             slogan: document.getElementById('footer_slogan').value,
@@ -1193,10 +1711,13 @@
             email: document.getElementById('footer_email').value,
             hours: document.getElementById('footer_hours').value,
             copyright: document.getElementById('footer_copyright').value,
-            facebook_link: '#',
-            twitter_link: '#',
-            whatsapp_link: '#',
-            telegram_link: '#'
+            facebook_link: document.getElementById('footer_facebook_link').value,
+            twitter_link: document.getElementById('footer_twitter_link').value,
+            whatsapp_link: document.getElementById('footer_whatsapp_link').value,
+            telegram_link: document.getElementById('footer_telegram_link').value,
+            privacy_url: document.getElementById('footer_privacy_url').value,
+            terms_url: document.getElementById('footer_terms_url').value,
+            refund_url: document.getElementById('footer_refund_url').value
           }
         };
 

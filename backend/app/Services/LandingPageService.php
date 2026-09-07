@@ -19,7 +19,7 @@ class LandingPageService
             if ($raw) {
                 $decoded = json_decode($raw, true);
                 if (is_array($decoded)) {
-                    return array_replace_recursive($this->getDefaultConfig(), $decoded);
+                    return $this->mergeConfig($this->getDefaultConfig(), $decoded);
                 }
             }
             return $this->getDefaultConfig();
@@ -31,7 +31,7 @@ class LandingPageService
      */
     public function saveConfig(array $data): array
     {
-        $merged = array_replace_recursive($this->getDefaultConfig(), $data);
+        $merged = $this->mergeConfig($this->getDefaultConfig(), $data);
         Setting::set('landing_page_content', json_encode($merged, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         Cache::forget(self::CACHE_KEY);
         return $merged;
@@ -49,23 +49,65 @@ class LandingPageService
     }
 
     /**
+     * Merge incoming config into defaults safely.
+     * Associative arrays (dictionaries) are merged recursively so missing keys get defaults.
+     * Sequential/Indexed arrays (lists of items/cards/steps) in incoming completely replace defaults!
+     */
+    public function mergeConfig(array $default, array $incoming): array
+    {
+        $result = $default;
+        foreach ($incoming as $key => $value) {
+            if (is_array($value)) {
+                if ($this->isAssoc($value) && isset($result[$key]) && is_array($result[$key]) && $this->isAssoc($result[$key])) {
+                    $result[$key] = $this->mergeConfig($result[$key], $value);
+                } else {
+                    $result[$key] = $value;
+                }
+            } else {
+                $result[$key] = $value;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Check if an array is associative (key-value dictionary) or sequential list
+     */
+    private function isAssoc(array $arr): bool
+    {
+        if ([] === $arr) return false;
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
+    /**
      * System default landing page content
      */
     public function getDefaultConfig(): array
     {
         return [
             'visibility' => [
+                'announcement' => true,
                 'hero' => true,
+                'showcase' => true,
                 'services' => true,
                 'pricing' => true,
                 'workflow' => true,
                 'testimonials' => true,
                 'faq' => true,
                 'cta' => true,
+                'footer' => true,
+            ],
+            'announcement' => [
+                'enabled' => true,
+                'badge' => 'LIVE 2.0',
+                'text' => 'Instant Aadhaar HD PVC Formatting & UPI Fast Approvals under 2 mins!',
+                'helpline_text' => 'Helpline: +91 98765 43210',
+                'helpline_link' => 'tel:+919876543210',
+                'safe_text' => '100% UIDAI/Govt Safe',
             ],
             'hero' => [
                 'badge_icon' => 'fa-bolt-lightning',
-                'badge_text' => 'Instant Digital Seva Engine 2026 • Razorpay-Grade Speed',
+                'badge_text' => "India's #1 Citizen Printing & Instant PAN Recovery Engine",
                 'title_highlight' => 'Instant Document',
                 'title_rest' => 'Printing & PAN Recovery Suite',
                 'subtitle' => 'High-definition Aadhaar PVC card formatting, instant lost PAN recovery by Aadhaar, Voter ID prints, and seamless zero-delay UPI wallet recharges built specifically for Cyber Cafes and CSC Retailers.',
@@ -79,6 +121,20 @@ class LandingPageService
                     ['text' => '256-Bit Bank Grade Safe', 'icon' => 'fa-lock'],
                 ],
             ],
+            'showcase' => [
+                'chip1_title' => 'PAN Extracted',
+                'chip1_sub' => 'Matched in 0.8s',
+                'chip2_title' => 'Wallet Auto-Credited',
+                'chip2_sub' => '+₹500.00 via UPI QR',
+                'card_title' => 'Smart PVC ID Engine',
+                'applicant_name' => 'RAJESH KUMAR PATRA',
+                'applicant_meta' => 'DOB: 15/08/1994 | Male',
+                'applicant_state' => 'State: Odisha, India',
+                'applicant_aadhaar' => 'XXXX XXXX 8924',
+                'footer_text' => 'Auto CR80 Dimension Ratio',
+                'cta_text' => 'Try It Live',
+                'cta_link' => 'register.html',
+            ],
             'services' => [
                 'tag' => 'Enterprise Suite',
                 'title' => 'Everything Your Cyber Cafe Needs in One Place',
@@ -86,179 +142,208 @@ class LandingPageService
                 'items' => [
                     [
                         'id' => 'aadhaar_pvc',
+                        'category' => 'print',
                         'icon' => 'fa-id-card',
-                        'title' => 'Aadhaar PVC Print',
-                        'badge' => '0.8s Rendering',
-                        'desc' => 'Instant front and back dual-sided layout generator conforming strictly to standard 85.60 x 53.98 mm ISO dimensions. Upload citizen PDF and get crystal-clear 300 DPI layout ready for PVC printing.',
-                        'price' => '₹15',
+                        'color' => 'orange',
+                        'title' => 'Aadhaar HD Smart PVC Print',
+                        'badge' => 'Starting ₹20 / card',
+                        'price' => '₹20',
+                        'desc' => 'Upload password-protected e-Aadhaar PDFs or scans. Our engine automatically crops, straightens, removes masks, sharpens photographs, and aligns dual-sided CR-80 standard PVC printable formats in crisp 300 DPI vector clarity.',
                         'features' => [
-                            '100% Exact 85.60 x 53.98 mm ISO Specs',
-                            '300 DPI High Definition Print Output',
-                            'Instant Auto-Crop Front & Back Layout'
-                        ]
+                            'Standard CR-80 PVC Dimensions (85.60 × 53.98 mm)',
+                            'Auto photo contrast correction & QR code enhancement',
+                            'High-resolution 300 DPI PDF output ready for direct tray printing'
+                        ],
+                        'action_text' => 'Start Aadhaar Print',
+                        'action_link' => 'register.html'
                     ],
                     [
                         'id' => 'pan_find',
+                        'category' => 'pan',
                         'icon' => 'fa-magnifying-glass-location',
-                        'title' => 'Instant PAN Find by Aadhaar',
-                        'badge' => '30s Recovery',
-                        'desc' => 'Customer lost their PAN card? Enter only their 12-digit Aadhaar number to fetch their official 10-digit PAN number securely in real-time from official government databases.',
-                        'price' => '₹25',
+                        'color' => 'green',
+                        'title' => 'Lost PAN Recovery by Aadhaar',
+                        'badge' => 'Starting ₹30 / search',
+                        'price' => '₹30',
+                        'desc' => 'Client lost their PAN card? Enter Aadhaar number and applicant details to cross-match official NSDL/UTIITSL databases and recover verified PAN numbers in seconds.',
                         'features' => [
-                            'Validates against NSDL & UTI databases',
-                            'Instant 10-Digit PAN Number Retrieval',
-                            'Instant Direct Print Ready'
-                        ]
-                    ],
-                    [
-                        'id' => 'wallet_topup',
-                        'icon' => 'fa-wallet',
-                        'title' => 'Instant Wallet & UPI Topup',
-                        'badge' => 'Instant Credit',
-                        'desc' => 'Top up balance immediately via PhonePe, Google Pay, Paytm, or BHIM. Zero payment gateway deduction fees. Wallet updates on confirmation for uninterrupted citizen services.',
-                        'price' => '0% Surcharge',
-                        'features' => [
-                            'Dynamic UPI QR for PhonePe, GPay, Paytm',
-                            'Zero Transaction Gateway Fees',
-                            'Immediate Balance Update for Printing'
-                        ]
-                    ],
-                    [
-                        'id' => 'ayushman',
-                        'icon' => 'fa-heart-pulse',
-                        'title' => 'Ayushman Bharat PVC Card',
-                        'badge' => 'HD Format',
-                        'desc' => 'Standardize PMJAY health cards into crisp print-ready layouts with embedded QR code enhancement. Perfect color depth and card-holder clarity.',
-                        'price' => '₹15',
-                        'features' => [
-                            'Automated PVC Card Dimensions',
-                            'High Contrast QR Code Generation',
-                            'No Photoshop or Manual Editing Needed'
-                        ]
+                            '100% Accurate NSDL/UTI database match',
+                            'Operative & Active status confirmation'
+                        ],
+                        'action_text' => 'Find Lost PAN',
+                        'action_link' => 'register.html'
                     ],
                     [
                         'id' => 'voter_id',
+                        'category' => 'print',
                         'icon' => 'fa-person-booth',
-                        'title' => 'Voter ID (EPIC) Print',
-                        'badge' => 'Direct Print',
-                        'desc' => 'Generate clean dual-sided voter identity cards with official hologram placement margin. Fast formatting optimized for inkjet PVC trays.',
-                        'price' => '₹15',
+                        'color' => 'blue',
+                        'title' => 'Voter ID (e-EPIC) HD Print',
+                        'badge' => 'Starting ₹20 / card',
+                        'price' => '₹20',
+                        'desc' => 'Convert modern digital e-EPIC documents into clear laminated PVC printable sheets with official Election Commission formatting.',
                         'features' => [
-                            'Pre-Formatted Front & Back Layout',
-                            'Crystal-Clear Text & Hologram Placement',
-                            'Thermal & Inkjet PVC Tray Ready'
-                        ]
-                    ],
-                ]
-            ],
-            'pricing' => [
-                'tag' => 'Transparent Pricing',
-                'title' => 'Predictable, Low Unit Costs for Higher Margins',
-                'desc' => 'No recurring subscriptions. No hidden onboarding fees. Pay strictly per print request from your pre-funded prepaid wallet.',
-                'cards' => [
-                    [
-                        'title' => 'Aadhaar PVC Card',
-                        'price' => '₹15',
-                        'unit' => '/ card',
-                        'badge' => 'Most Popular',
-                        'desc' => 'Front & back auto-arranged ISO card with crop guides.',
-                        'speed' => 'Instant (0.8s)',
-                        'format' => '300 DPI HD PDF'
+                            'Dual-sided auto separation',
+                            'Clean vector export'
+                        ],
+                        'action_text' => 'Order Voter ID',
+                        'action_link' => 'register.html'
                     ],
                     [
-                        'title' => 'PAN Find by Aadhaar',
+                        'id' => 'ayushman',
+                        'category' => 'print',
+                        'icon' => 'fa-heart-pulse',
+                        'color' => 'purple',
+                        'title' => 'Ayushman PM-JAY Golden Card',
+                        'badge' => 'Starting ₹25 / card',
                         'price' => '₹25',
-                        'unit' => '/ query',
-                        'badge' => 'Highest Margin',
-                        'desc' => 'Instant NSDL & UTI matching for lost PAN retrieval.',
-                        'speed' => 'Under 30 Seconds',
-                        'format' => 'Official 10-Digit Number'
+                        'desc' => 'Standardize government health cards and state schemes with family ID and ABHA number into durable pocket PVC cards.',
+                        'features' => [
+                            'Official PM-JAY layout compliance',
+                            'Crisp QR scan guarantee'
+                        ],
+                        'action_text' => 'Format Health Card',
+                        'action_link' => 'register.html'
                     ],
                     [
-                        'title' => 'Voter ID (EPIC) Print',
-                        'price' => '₹15',
-                        'unit' => '/ card',
-                        'badge' => 'Fast SLA',
-                        'desc' => 'National Voter Services layout ready for PVC trays.',
-                        'speed' => 'Instant Print Ready',
-                        'format' => 'PVC Dual-Sided Layout'
-                    ],
-                    [
-                        'title' => 'Ayushman PVC Card',
-                        'price' => '₹15',
-                        'unit' => '/ card',
-                        'badge' => 'Healthcare ID',
-                        'desc' => 'Golden card print layout with barcode sharpening.',
-                        'speed' => 'Instant HD Format',
-                        'format' => 'Standard CR80 Size'
+                        'id' => 'wallet_topup',
+                        'category' => 'wallet',
+                        'icon' => 'fa-wallet',
+                        'color' => 'green',
+                        'title' => 'Instant Wallet & UPI QR Topup',
+                        'badge' => '0% Fees (FREE)',
+                        'price' => '0% Fees',
+                        'desc' => 'Recharge your balance 24x7 using PhonePe, Google Pay, or Paytm. Submit the payment reference for approval within ~2 mins.',
+                        'features' => [
+                            'Zero gateway fees or convenience charge',
+                            'Realtime transaction ledger'
+                        ],
+                        'action_text' => 'Top Up Wallet',
+                        'action_link' => 'register.html'
                     ]
                 ]
             ],
             'workflow' => [
-                'tag' => 'Instant Workflow',
-                'title' => 'How Instant Online Seva Works in 3 Simple Steps',
+                'tag' => 'Rapid Workflow',
+                'title' => 'How The Platform Works',
+                'desc' => 'From onboarding to downloading print-ready documents in less than 2 minutes.',
                 'steps' => [
                     [
                         'step_num' => '01',
-                        'title' => 'Create Account & Top Up Wallet',
-                        'desc' => 'Register your user account with Name, Mobile, and Email in under 30 seconds with 0 onboarding fees. Scan dynamic UPI QR to credit balance instantly.'
+                        'title' => 'Create Free Account',
+                        'desc' => 'Register your retailer account with Name, Mobile, and Email in under 30 seconds with 0 onboarding fees.'
                     ],
                     [
                         'step_num' => '02',
-                        'title' => 'Upload Citizen Data or Enter Details',
-                        'desc' => 'Upload citizen PDF file or enter Aadhaar number for lost PAN search. Our AI engine processes and structures data automatically in milliseconds.'
+                        'title' => 'Top Up Wallet',
+                        'desc' => 'Scan the Admin UPI QR code, submit the 12-digit UTR reference, and balance is credited rapidly.'
                     ],
                     [
                         'step_num' => '03',
-                        'title' => 'Instant 1-Click Generation & Print',
-                        'desc' => 'Download ISO-standard 300 DPI dual-sided PDF layout ready for direct printing on any PVC inkjet card printer, Epson tray, or thermal machine.'
+                        'title' => 'Submit Order',
+                        'desc' => 'Upload your Aadhaar PDF, enter PAN query details, or submit Voter ID for automated formatting.'
+                    ],
+                    [
+                        'step_num' => '04',
+                        'title' => 'Instant HD Download',
+                        'desc' => 'Download pixel-perfect 300 DPI CR-80 PDFs directly to your system ready for immediate printing.'
+                    ]
+                ]
+            ],
+            'pricing' => [
+                'tag' => 'Transparent Pricing',
+                'title' => 'Predictable Rates & Turnaround Times',
+                'desc' => 'No monthly subscriptions, no lock-ins, and no hidden fees. Pay strictly for the orders you submit.',
+                'cards' => [
+                    [
+                        'title' => 'Aadhaar HD Smart PVC Print',
+                        'price' => '₹ 20.00',
+                        'speed' => '1 - 2 mins',
+                        'format' => 'HD Vector PDF (300 DPI)',
+                        'desc' => 'Front & Back CR-80 auto-aligned layout'
+                    ],
+                    [
+                        'title' => 'Lost PAN Find by Aadhaar',
+                        'price' => '₹ 30.00',
+                        'speed' => '< 30 secs',
+                        'format' => 'Verified Number & Status',
+                        'desc' => 'Official NSDL / UTIITSL cross-match'
+                    ],
+                    [
+                        'title' => 'Voter ID (e-EPIC) HD Print',
+                        'price' => '₹ 20.00',
+                        'speed' => '1 - 2 mins',
+                        'format' => 'CR-80 PVC Layout',
+                        'desc' => 'Election Commission format standard'
+                    ],
+                    [
+                        'title' => 'Ayushman Golden Card Print',
+                        'price' => '₹ 25.00',
+                        'speed' => '1 - 2 mins',
+                        'format' => 'PVC Print Sheet',
+                        'desc' => 'PM-JAY beneficiary card formatting'
+                    ],
+                    [
+                        'title' => 'Manual UPI Wallet Recharge',
+                        'price' => '0% (FREE)',
+                        'speed' => '1 - 2 mins',
+                        'format' => 'Direct Wallet Credit',
+                        'desc' => 'Google Pay, PhonePe, Paytm, BHIM UPI'
                     ]
                 ]
             ],
             'testimonials' => [
-                'tag' => 'Retailer Reviews',
-                'title' => 'Trusted by 12,000+ Operators Across India',
+                'tag' => 'Verified Feedback',
+                'title' => 'Trusted By 12,000+ Cyber Cafe Owners',
                 'desc' => 'Hear why CSC operators and digital centers across India rely on Instant Online Seva.',
                 'items' => [
                     [
                         'quote' => 'Instant Online Seva has changed how our Cyber Cafe operates. The PVC card dimensions are always 100% accurate and our customers are delighted with the HD 300 DPI print quality.',
-                        'author' => 'Rakesh Mohapatra',
-                        'role' => 'Digital Seva Kendra, Cuttack',
+                        'author' => 'Soumya Ranjan Panda',
+                        'role' => 'Maa Tarini Cyber Cafe, Bhubaneswar',
+                        'initials' => 'SP',
                         'stars' => 5
                     ],
                     [
-                        'quote' => 'PAN Find feature alone has recovered 150+ lost PAN cards for our local customers this month. The UPI instant wallet top-up saves so much time.',
-                        'author' => 'Amitava Ghosh',
-                        'role' => 'CSC Center, Kolkata',
+                        'quote' => 'Finding lost PAN numbers by Aadhaar used to take days. Here we get the result in seconds. The manual UPI wallet recharge is verified within 2 minutes flat. Fantastic portal!',
+                        'author' => 'Biswajit Mohapatra',
+                        'role' => 'CSC Seva Kendra, Cuttack',
+                        'initials' => 'BM',
                         'stars' => 5
                     ],
                     [
-                        'quote' => 'We run 3 Epson L805 PVC tray printers. The auto-arranged front and back layout prints in 1 click without any Photoshop scaling errors.',
-                        'author' => 'Pooja Verma',
-                        'role' => 'Cyber World, Patna',
+                        'quote' => 'Customer support is always active. Whenever there is any query regarding document formatting or wallet, the team resolves it immediately on WhatsApp. Highly recommended!',
+                        'author' => 'Anil Kumar Sethi',
+                        'role' => 'Digital Print Hub, Sambalpur',
+                        'initials' => 'AK',
                         'stars' => 5
                     ]
                 ]
             ],
             'faq' => [
-                'tag' => 'Common Questions',
+                'tag' => 'Got Questions?',
                 'title' => 'Frequently Asked Questions',
+                'desc' => 'Everything you need to know about wallet recharges, document formats, and turnaround.',
                 'items' => [
                     [
-                        'question' => 'What equipment or printer do I need to print PVC cards?',
-                        'answer' => 'Any standard inkjet printer with a PVC card ID tray (like Epson L805, L850, L8050, Canon G1010/G2010 series) or specialized thermal card printers. Our generated PDFs adhere strictly to standard CR80 ISO dimensions (85.60 x 53.98 mm).'
+                        'question' => 'How fast does the PAN Find by Aadhaar service work?',
+                        'answer' => 'PAN recovery by Aadhaar is processed within seconds once submitted. You will immediately see the retrieved PAN number with official status report inside your completed orders dashboard.'
                     ],
                     [
-                        'question' => 'How does PAN Find work if the customer lost their card?',
-                        'answer' => 'Simply enter the citizen\'s 12-digit Aadhaar number. Our secure API connects to NSDL/UTI databases to verify and retrieve the registered 10-digit PAN number within seconds.'
+                        'question' => 'How do I recharge my wallet balance?',
+                        'answer' => 'Navigate to the Wallet tab in your dashboard, scan the Admin UPI QR Code using Google Pay, PhonePe, or Paytm, enter the 12-digit UTR/Transaction Reference Number, and upload the payment screenshot. Admin verifies and credits your wallet within 1-2 minutes.'
                     ],
                     [
-                        'question' => 'How do I add balance to my wallet?',
-                        'answer' => 'Click on \'Recharge Wallet via UPI\', choose your top-up amount (e.g., ₹100, ₹500, ₹1000), and scan the dynamic UPI QR code with any app like PhonePe, Google Pay, or Paytm. Balance reflects in your wallet immediately.'
+                        'question' => 'Are the downloaded files ready for direct PVC ID Card printing?',
+                        'answer' => 'Yes! All generated PDF files are exported strictly in standard ISO/IEC 7810 CR80 dimensions (85.60 × 53.98 mm) at 300 DPI high resolution, perfectly sized for direct printing on Epson, Canon, Magicard, Fargo, or Evolis card printers.'
                     ],
                     [
-                        'question' => 'Is citizen data secure and confidential?',
-                        'answer' => 'Absolutely. We adhere to stringent 256-bit encryption standards. Uploaded documents and processed records are stored securely in protected storage and accessible only by your verified account.'
+                        'question' => 'What happens if an order is rejected or data is not found?',
+                        'answer' => 'If any order cannot be processed or if data is not found, your wallet points/funds are instantly refunded 100% with a clear rejection reason displayed in your dashboard.'
+                    ],
+                    [
+                        'question' => 'Is customer data safe, secure, and confidential?',
+                        'answer' => 'Absolutely. We adhere to stringent 256-bit encryption standards. Uploaded documents and processed records are stored securely in protected storage and accessible only by your verified retailer account.'
                     ]
                 ]
             ],
@@ -272,7 +357,7 @@ class LandingPageService
                 'secondary_link' => 'login.html'
             ],
             'footer' => [
-                'slogan' => 'India\'s foremost digital print formatting and PAN retrieval suite designed for retailers, cyber cafes, and customer service centers.',
+                'slogan' => "India's foremost digital print formatting and PAN retrieval suite designed for retailers, cyber cafes, and customer service centers.",
                 'phone' => '+91 98765 43210',
                 'whatsapp' => '+91 98765 43210',
                 'email' => 'support@utkalprint.com',
@@ -281,7 +366,10 @@ class LandingPageService
                 'facebook_link' => '#',
                 'twitter_link' => '#',
                 'whatsapp_link' => '#',
-                'telegram_link' => '#'
+                'telegram_link' => '#',
+                'privacy_url' => '#',
+                'terms_url' => '#',
+                'refund_url' => '#'
             ]
         ];
     }
