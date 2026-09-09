@@ -17,6 +17,8 @@ class AdminServiceController extends Controller
         Cache::forget('active_services_pan');
         Cache::forget('active_services_pan_find');
         Cache::forget('active_services_document');
+        Cache::forget(\App\Services\LandingPageService::CACHE_KEY);
+        Cache::forget('landing_page_config');
     }
 
     /**
@@ -39,21 +41,51 @@ class AdminServiceController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'category' => 'required|in:print,pan_find,document',
+            'category' => 'required|string|max:100',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            'required_fields' => 'nullable|array',
+            'required_fields' => 'nullable',
+            'icon_type' => 'nullable|string|in:icon,image',
+            'icon' => 'nullable|string|max:100',
+            'icon_bg' => 'nullable|string|max:50',
+            'icon_color' => 'nullable|string|max:50',
+            'btn_text' => 'nullable|string|max:100',
+            'btn_icon' => 'nullable|string|max:100',
         ]);
+
+        if (isset($validated['required_fields']) && is_string($validated['required_fields'])) {
+            $decoded = json_decode($validated['required_fields'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $validated['required_fields'] = $decoded;
+            }
+        }
+
+        $iconImagePath = null;
+        if ($request->hasFile('icon_image')) {
+            $request->validate([
+                'icon_image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+            ]);
+            $iconImagePath = $request->file('icon_image')->store('services/icons', 'public');
+        } elseif ($request->filled('icon_image') && is_string($request->input('icon_image'))) {
+            $iconImagePath = $request->input('icon_image');
+        }
 
         $slug = Str::slug($validated['name']) . '-' . Str::random(4);
 
         $service = Service::create([
             'name' => $validated['name'],
             'slug' => $slug,
-            'category' => $validated['category'],
+            'category' => strtolower(trim(preg_replace('/\s+/', '_', $validated['category']))),
             'price' => $validated['price'],
             'description' => $validated['description'] ?? null,
             'required_fields' => $validated['required_fields'] ?? null,
+            'icon_type' => $validated['icon_type'] ?? 'icon',
+            'icon' => $validated['icon'] ?? null,
+            'icon_image' => $iconImagePath,
+            'icon_bg' => $validated['icon_bg'] ?? null,
+            'icon_color' => $validated['icon_color'] ?? null,
+            'btn_text' => $validated['btn_text'] ?? null,
+            'btn_icon' => $validated['btn_icon'] ?? null,
             'is_active' => true,
         ]);
 
@@ -75,11 +107,43 @@ class AdminServiceController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'category' => 'required|in:print,pan_find,document',
+            'category' => 'required|string|max:100',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            'required_fields' => 'nullable|array',
+            'required_fields' => 'nullable',
+            'icon_type' => 'nullable|string|in:icon,image',
+            'icon' => 'nullable|string|max:100',
+            'icon_bg' => 'nullable|string|max:50',
+            'icon_color' => 'nullable|string|max:50',
+            'btn_text' => 'nullable|string|max:100',
+            'btn_icon' => 'nullable|string|max:100',
         ]);
+
+        $validated['category'] = strtolower(trim(preg_replace('/\s+/', '_', $validated['category'])));
+
+        if (isset($validated['required_fields']) && is_string($validated['required_fields'])) {
+            $decoded = json_decode($validated['required_fields'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $validated['required_fields'] = $decoded;
+            }
+        }
+
+        if ($request->hasFile('icon_image')) {
+            $request->validate([
+                'icon_image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+            ]);
+            if ($service->icon_image && !str_starts_with($service->icon_image, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($service->icon_image);
+            }
+            $validated['icon_image'] = $request->file('icon_image')->store('services/icons', 'public');
+        } elseif ($request->input('remove_icon_image') === '1' || $request->input('remove_icon_image') === true || $request->input('remove_icon_image') === 'true') {
+            if ($service->icon_image && !str_starts_with($service->icon_image, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($service->icon_image);
+            }
+            $validated['icon_image'] = null;
+        } elseif ($request->has('icon_image') && is_string($request->input('icon_image')) && !empty($request->input('icon_image'))) {
+            $validated['icon_image'] = $request->input('icon_image');
+        }
 
         $service->update($validated);
         Cache::forget("service_detail_{$id}");
@@ -88,7 +152,24 @@ class AdminServiceController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Service updated successfully.',
-            'data' => $service,
+            'data' => $service->fresh(),
+        ]);
+    }
+
+    /**
+     * Get distinct service categories
+     */
+    public function categories()
+    {
+        $categories = Service::distinct()
+            ->orderBy('category')
+            ->pluck('category')
+            ->filter()
+            ->values();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $categories,
         ]);
     }
 

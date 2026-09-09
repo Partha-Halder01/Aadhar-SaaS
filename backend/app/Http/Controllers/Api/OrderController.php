@@ -25,7 +25,7 @@ class OrderController extends Controller
             $cat = $request->category;
             $query->whereHas('service', function ($q) use ($cat) {
                 if ($cat === 'print' || $cat === 'print_doc') {
-                    $q->whereIn('category', ['print', 'document']);
+                    $q->whereNotIn('category', ['pan', 'pan_find']);
                 } elseif ($cat === 'pan' || $cat === 'pan_find') {
                     $q->whereIn('category', ['pan', 'pan_find']);
                 } else {

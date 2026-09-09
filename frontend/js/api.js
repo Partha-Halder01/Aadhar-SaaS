@@ -411,10 +411,16 @@ const API = {
       return await API.request('/admin/services');
     },
 
+    async getServiceCategories() {
+      return await API.request('/admin/services/categories');
+    },
+
     async saveService(data) {
-      const isEdit = !!data.id;
-      const res = await API.request(isEdit ? `/admin/services/${data.id}` : '/admin/services', {
-        method: isEdit ? 'PUT' : 'POST',
+      const isFormData = data instanceof FormData;
+      const isEdit = isFormData ? !!data.get('id') : !!data.id;
+      const id = isFormData ? data.get('id') : data.id;
+      const res = await API.request(isEdit ? `/admin/services/${id}` : '/admin/services', {
+        method: 'POST',
         body: data
       });
       API.cache.invalidate('services');
@@ -483,6 +489,17 @@ const API = {
   // Alias for admin dashboard
   async getAdminDashboardStats() {
     return await this.admin.getStats();
+  },
+
+  async submitReview(data) {
+    return await this.request('/reviews', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async getReviews(limit = 10) {
+    return await this.request(`/reviews?limit=${limit}`);
   }
 };
 

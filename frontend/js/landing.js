@@ -1,16 +1,86 @@
-/**
- * Utkal Print Portal - Dynamic Landing Page Hydration Client
- * Seamlessly hydrates http://127.0.0.1:3000/ with live Admin CMS settings
- */
+function enrichServicesWithCatalog(servicesObj, catalogList) {
+  if (!servicesObj || !Array.isArray(servicesObj.items) || !Array.isArray(catalogList) || catalogList.length === 0) return;
+
+  servicesObj.items.forEach(item => {
+    const itemId = (item.id || '').toLowerCase();
+    const itemTitle = (item.title || '').toLowerCase();
+
+    const matched = catalogList.find(s => {
+      const sSlug = (s.slug || '').toLowerCase();
+      const sName = (s.name || '').toLowerCase();
+
+      if (itemId === 'pan_find' || itemId.includes('pan') || itemTitle.includes('lost pan') || itemTitle.includes('pan recovery')) {
+        return sSlug.includes('pan') && (sSlug.includes('find') || s.category === 'pan_find');
+      }
+      if (itemId === 'aadhaar_pvc' || (itemTitle.includes('aadhaar') && !itemTitle.includes('pan'))) {
+        return sSlug.includes('aadhaar') && !sSlug.includes('pan');
+      }
+      if (itemId === 'voter_id' || itemId.includes('voter') || itemTitle.includes('voter')) {
+        return sSlug.includes('voter') || sName.includes('voter');
+      }
+      if (itemId === 'ayushman' || itemId.includes('ayushman') || itemTitle.includes('ayushman')) {
+        return sSlug.includes('ayushman') || sName.includes('ayushman');
+      }
+      return false;
+    });
+
+    if (matched) {
+      item.icon_type = matched.icon_type || (matched.icon_image ? 'image' : 'icon');
+      if (matched.icon) item.icon = matched.icon;
+      if (matched.icon_image) item.icon_image = matched.icon_image;
+      if (matched.icon_image_url) item.icon_image_url = matched.icon_image_url;
+      if (matched.icon_bg) item.icon_bg = matched.icon_bg;
+      if (matched.icon_color) item.icon_color = matched.icon_color;
+    }
+  });
+}
+
+// Instant synchronous hydration from localStorage cache to prevent any flash of content on refresh
+try {
+  const cachedData = localStorage.getItem('utkal_landing_data');
+  const cachedCatalog = JSON.parse(localStorage.getItem('utkal_services_cache') || '[]');
+  if (cachedData) {
+    const parsed = JSON.parse(cachedData);
+    if (parsed.services && Array.isArray(cachedCatalog) && cachedCatalog.length > 0) {
+      enrichServicesWithCatalog(parsed.services, cachedCatalog);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => hydrateLandingPage(parsed));
+    } else {
+      hydrateLandingPage(parsed);
+    }
+  }
+} catch (e) {}
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    // Add cache busting timestamp to ensure fresh content after admin saves
+    // 1. Fetch live landing page data
     const res = await API.request('/landing-page?t=' + Date.now(), { useCache: false });
-    if (!res || !res.data) return;
+    const data = res && res.data ? res.data : null;
 
-    const data = res.data;
-    hydrateLandingPage(data);
+    // 2. Fetch catalog services to guarantee 100% real-time icon/image synchronization
+    let catalog = null;
+    try {
+      const catRes = await API.request('/services');
+      if (catRes && Array.isArray(catRes.data)) {
+        catalog = catRes.data;
+        try { localStorage.setItem('utkal_services_cache', JSON.stringify(catalog)); } catch(e){}
+      }
+    } catch(e) {}
+
+    if (!catalog) {
+      try { catalog = JSON.parse(localStorage.getItem('utkal_services_cache') || '[]'); } catch(e){}
+    }
+
+    if (data) {
+      if (catalog && data.services) {
+        enrichServicesWithCatalog(data.services, catalog);
+      }
+      try {
+        localStorage.setItem('utkal_landing_data', JSON.stringify(data));
+      } catch (e) {}
+      hydrateLandingPage(data);
+    }
   } catch (err) {
     console.warn('Using default fallback landing page content:', err.message);
   }
@@ -72,7 +142,7 @@ function hydrateLandingPage(data) {
     const h = data.hero;
     const heroBadge = document.getElementById('heroBadge');
     if (heroBadge && h.badge_text) {
-      heroBadge.innerHTML = `<i class="fa-solid ${h.badge_icon || 'fa-bolt-lightning'}"></i> ${escapeHtml(h.badge_text)}`;
+      heroBadge.innerHTML = `<span class="rz-badge-tag"><i class="fa-solid ${h.badge_icon || 'fa-bolt-lightning'}"></i> SEVA 2.0</span> <span>${escapeHtml(h.badge_text)}</span>`;
     }
 
     const heroTitle = document.getElementById('heroTitle');
@@ -149,12 +219,38 @@ function hydrateLandingPage(data) {
         const actionLink = svc.action_link || 'register.html';
         const badge = svc.badge || svc.price || 'Starting ₹20 / card';
 
+        const iconType = svc.icon_type || (svc.icon_image ? 'image' : 'icon');
+        const imgUrl = svc.icon_image_url || (svc.icon_image && (svc.icon_image.startsWith('http') ? svc.icon_image : `${STORAGE_BASE_URL}/${svc.icon_image}`));
+        const iconBg = svc.icon_bg;
+        const iconColor = svc.icon_color;
+
+        let iconBoxHtml = '';
+        if (iconType === 'image' && imgUrl) {
+          const bgStyle = iconBg ? `background: ${iconBg};` : '';
+          const iconClean = icon.replace(/^fa-solid\s+/, '').replace(/^fa-\w+\s+/, '');
+          iconBoxHtml = `
+            <div class="rz-bento-icon ${color}" id="svcIconBox_${idx}" style="${bgStyle} overflow: hidden; padding: 6px; display: flex; align-items: center; justify-content: center;">
+              <img src="${imgUrl}" alt="${escapeAttr(svc.title)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'fa-solid ${escapeAttr(iconClean)}\\'></i>';">
+            </div>
+          `;
+        } else {
+          const customStyle = [
+            iconBg ? `background: ${iconBg};` : '',
+            iconColor ? `color: ${iconColor};` : ''
+          ].filter(Boolean).join(' ');
+          const styleAttr = customStyle ? `style="${customStyle}"` : '';
+          const iconClean = icon.startsWith('fa-') ? icon : `fa-solid ${icon}`;
+          iconBoxHtml = `
+            <div class="rz-bento-icon ${color}" id="svcIconBox_${idx}" ${styleAttr}>
+              <i class="${escapeAttr(iconClean)}"></i>
+            </div>
+          `;
+        }
+
         return `
         <div class="rz-bento-card ${colClass} border-${color}" data-category="${escapeAttr(category)}">
           <div class="rz-bento-badge-row">
-            <div class="rz-bento-icon ${color}">
-              <i class="fa-solid ${escapeAttr(icon)}"></i>
-            </div>
+            ${iconBoxHtml}
             <span class="rz-bento-price-tag ${color}" id="svcBadge_${idx}">${escapeHtml(badge)}</span>
           </div>
           <h3 class="rz-bento-title" id="svcTitle_${idx}">${escapeHtml(svc.title)}</h3>
@@ -263,6 +359,9 @@ function hydrateLandingPage(data) {
         </div>
         `;
       }).join('');
+      if (typeof renderTestimonialDots === 'function') {
+        renderTestimonialDots();
+      }
     }
   }
 
@@ -331,9 +430,9 @@ function hydrateLandingPage(data) {
     if (ft.whatsapp_link) setHref('footerSocialWhatsapp', ft.whatsapp_link);
     if (ft.telegram_link) setHref('footerSocialTelegram', ft.telegram_link);
 
-    if (ft.privacy_url) setHref('footerPrivacyLink', ft.privacy_url);
-    if (ft.terms_url) setHref('footerTermsLink', ft.terms_url);
-    if (ft.refund_url) setHref('footerRefundLink', ft.refund_url);
+    setHref('footerPrivacyLink', (ft.privacy_url && ft.privacy_url !== '#') ? ft.privacy_url : 'privacy.html');
+    setHref('footerTermsLink', (ft.terms_url && ft.terms_url !== '#') ? ft.terms_url : 'terms.html');
+    setHref('footerRefundLink', (ft.refund_url && ft.refund_url !== '#') ? ft.refund_url : 'refund.html');
   }
 }
 
@@ -370,4 +469,242 @@ function escapeHtml(str) {
 function escapeAttr(str) {
   if (!str) return '';
   return String(str).replace(/"/g, '&quot;');
+}
+
+// ==========================================
+// User Reviews & Star Rating System
+// ==========================================
+
+const RATING_DESCRIPTIONS = {
+  1: '★☆☆☆☆ 1/5 - Poor experience',
+  2: '★★☆☆☆ 2/5 - Fair, needs improvement',
+  3: '★★★☆☆ 3/5 - Good, satisfactory service',
+  4: '★★★★☆ 4/5 - Very Good, high quality',
+  5: '★★★★★ 5/5 - Excellent & Highly Recommended!'
+};
+
+function openReviewModal() {
+  const modal = document.getElementById('reviewModal');
+  if (!modal) return;
+
+  // Pre-fill user data if logged in
+  try {
+    const user = (typeof API !== 'undefined' && API.getUser) ? API.getUser() : null;
+    if (user && user.name) {
+      const nameInput = document.getElementById('reviewAuthorName');
+      if (nameInput && !nameInput.value) {
+        nameInput.value = user.name;
+      }
+    }
+  } catch (e) {}
+
+  // Reset star rating to 5
+  setReviewRating(5);
+  
+  // Clear alert box
+  const alertBox = document.getElementById('reviewAlertBox');
+  if (alertBox) alertBox.style.display = 'none';
+
+  modal.classList.add('active');
+  modal.style.display = 'flex';
+  modal.style.opacity = '1';
+  modal.style.pointerEvents = 'auto';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeReviewModal() {
+  const modal = document.getElementById('reviewModal');
+  if (!modal) return;
+  modal.classList.remove('active');
+  modal.style.display = 'none';
+  modal.style.opacity = '0';
+  modal.style.pointerEvents = 'none';
+  document.body.style.overflow = '';
+}
+
+window.openReviewModal = openReviewModal;
+window.closeReviewModal = closeReviewModal;
+
+function setReviewRating(rating) {
+  const input = document.getElementById('reviewRatingInput');
+  if (input) input.value = rating;
+
+  const desc = document.getElementById('ratingDescription');
+  if (desc && RATING_DESCRIPTIONS[rating]) {
+    desc.textContent = RATING_DESCRIPTIONS[rating];
+  }
+
+  const starItems = document.querySelectorAll('#starPicker .star-item');
+  starItems.forEach(star => {
+    const val = parseInt(star.getAttribute('data-val'), 10);
+    if (val <= rating) {
+      star.style.color = '#eab308';
+      star.classList.add('active');
+    } else {
+      star.style.color = '#cbd5e1';
+      star.classList.remove('active');
+    }
+  });
+}
+
+// Hover effect on stars
+document.addEventListener('DOMContentLoaded', () => {
+  const starPicker = document.getElementById('starPicker');
+  if (starPicker) {
+    const stars = starPicker.querySelectorAll('.star-item');
+    stars.forEach(star => {
+      star.addEventListener('mouseenter', () => {
+        const hoverVal = parseInt(star.getAttribute('data-val'), 10);
+        stars.forEach(s => {
+          const val = parseInt(s.getAttribute('data-val'), 10);
+          s.style.color = val <= hoverVal ? '#f59e0b' : '#cbd5e1';
+        });
+      });
+    });
+
+    starPicker.addEventListener('mouseleave', () => {
+      const currentVal = parseInt(document.getElementById('reviewRatingInput')?.value || '5', 10);
+      setReviewRating(currentVal);
+    });
+  }
+
+  const modalEl = document.getElementById('reviewModal');
+  if (modalEl) {
+    modalEl.addEventListener('click', (e) => {
+      if (e.target === modalEl) closeReviewModal();
+    });
+  }
+});
+
+async function handleReviewSubmit(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById('btnSubmitReview');
+  const alertBox = document.getElementById('reviewAlertBox');
+  const authorName = document.getElementById('reviewAuthorName').value.trim();
+  const role = document.getElementById('reviewRole').value.trim();
+  const rating = parseInt(document.getElementById('reviewRatingInput').value, 10) || 5;
+  const comment = document.getElementById('reviewComment').value.trim();
+
+  if (!authorName || authorName.length < 2) {
+    showReviewAlert('Please enter your full name.', 'error');
+    return;
+  }
+  if (!comment || comment.length < 5) {
+    showReviewAlert('Please write at least a few words for your review.', 'error');
+    return;
+  }
+
+  // Set loading state
+  const originalBtnText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+  try {
+    const token = (typeof API !== 'undefined' && API.getToken) ? API.getToken() : null;
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const apiUrl = (typeof API_BASE_URL !== 'undefined') ? `${API_BASE_URL}/reviews` : 'http://127.0.0.1:8000/api/reviews';
+    const res = await fetch(apiUrl, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        author_name: authorName,
+        role_or_business: role,
+        rating: rating,
+        comment: comment
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || 'Failed to submit review');
+    }
+
+    showReviewAlert('🎉 Thank you! Your review has been published live.', 'success');
+
+    // Dynamically insert into the carousel track immediately
+    prependReviewToCarousel(data.data || {
+      author: authorName,
+      role: role || 'Digital Center Retailer',
+      initials: authorName.substring(0, 2).toUpperCase(),
+      stars: rating,
+      quote: comment
+    });
+
+    // Reset form
+    document.getElementById('reviewForm').reset();
+    const charEl = document.getElementById('charCount');
+    if (charEl) charEl.textContent = '0/600';
+
+    setTimeout(() => {
+      closeReviewModal();
+      const sec = document.getElementById('testimonialsSection');
+      if (sec) {
+        sec.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 1200);
+
+  } catch (err) {
+    showReviewAlert(err.message || 'Network error submitting review.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalBtnText;
+  }
+}
+
+function showReviewAlert(msg, type) {
+  const alertBox = document.getElementById('reviewAlertBox');
+  if (!alertBox) return;
+  alertBox.style.display = 'block';
+  if (type === 'success') {
+    alertBox.style.background = '#dcfce7';
+    alertBox.style.color = '#166534';
+    alertBox.style.border = '1px solid #86efac';
+  } else {
+    alertBox.style.background = '#fee2e2';
+    alertBox.style.color = '#991b1b';
+    alertBox.style.border = '1px solid #fca5a5';
+  }
+  alertBox.innerHTML = msg;
+}
+
+function prependReviewToCarousel(rev) {
+  const track = document.getElementById('testimonialsTrack') || document.querySelector('.testimonials-grid');
+  if (!track) return;
+
+  const starsHtml = Array.from({ length: rev.stars || 5 }).map(() => '<i class="fa-solid fa-star"></i>').join('');
+  const cardHtml = `
+    <div class="testimonial-card-modern" style="border: 2px solid #0066cc; box-shadow: 0 10px 30px rgba(0,102,204,0.12);">
+      <div>
+        <div class="testimonial-stars">
+          ${starsHtml}
+        </div>
+        <p class="testimonial-quote">
+          "${escapeHtml(rev.quote.replace(/^"|"$/g, ''))}"
+        </p>
+      </div>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background: linear-gradient(135deg, #0066cc, #38bdf8); color: #ffffff;">${escapeHtml(rev.initials || 'U')}</div>
+        <div class="author-info">
+          <h5>${escapeHtml(rev.author)} <span style="font-size:0.7rem; font-weight:700; color:#16a34a; background:#dcfce7; padding:2px 6px; border-radius:4px; margin-left:4px;">NEW</span></h5>
+          <p>${escapeHtml(rev.role)}</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  track.insertAdjacentHTML('afterbegin', cardHtml);
+
+  if (typeof renderTestimonialDots === 'function') {
+    renderTestimonialDots();
+  }
+  track.scrollTo({ left: 0, behavior: 'smooth' });
 }

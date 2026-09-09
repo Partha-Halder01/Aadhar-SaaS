@@ -14,9 +14,20 @@ class Service extends Model
         'name',
         'slug',
         'description',
+        'icon_type',
+        'icon',
+        'icon_image',
+        'icon_bg',
+        'icon_color',
+        'btn_text',
+        'btn_icon',
         'price',
         'required_fields',
         'is_active',
+    ];
+
+    protected $appends = [
+        'icon_image_url',
     ];
 
     protected $casts = [
@@ -24,6 +35,17 @@ class Service extends Model
         'price' => 'decimal:2',
         'is_active' => 'boolean',
     ];
+
+    public function getIconImageUrlAttribute(): ?string
+    {
+        if (!$this->icon_image) {
+            return null;
+        }
+        if (str_starts_with($this->icon_image, 'http://') || str_starts_with($this->icon_image, 'https://')) {
+            return $this->icon_image;
+        }
+        return asset('storage/' . ltrim($this->icon_image, '/'));
+    }
 
     public function orders()
     {

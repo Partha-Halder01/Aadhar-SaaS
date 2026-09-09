@@ -109,8 +109,8 @@
       <!-- Left Column: Copy & Value Proposition -->
       <div class="rz-hero-copy-col">
         <div class="rz-hero-badge" id="heroBadge">
-          <span class="rz-badge-tag">SEVA 2.0</span>
-          <span>India's #1 Citizen Printing & PAN Recovery Engine</span>
+          <span class="rz-badge-tag"><i class="fa-solid fa-bolt-lightning"></i> SEVA 2.0</span>
+          <span>India's #1 Citizen Printing & Instant PAN Recovery Engine</span>
         </div>
 
         <h1 class="rz-hero-title" id="heroTitle">
@@ -174,75 +174,9 @@
           </div>
         </div>
 
-        <!-- Glass Showcase Container -->
-        <div class="rz-showcase-glass-card">
-          
-          <!-- Card Switcher Tab Header -->
-          <div class="rz-card-switch-header">
-            <div class="rz-card-switch-title">
-              <i class="fa-solid fa-id-card" style="color:#0066cc;"></i>
-              <span>Smart PVC ID Engine</span>
-            </div>
-            <div class="rz-card-tab-buttons">
-              <button type="button" class="rz-tab-btn active" id="tabFrontBtn" onclick="switchCardSide('front')">Front View</button>
-              <button type="button" class="rz-tab-btn" id="tabBackBtn" onclick="switchCardSide('back')">Back View</button>
-            </div>
-          </div>
-
-          <!-- Realistic PVC Card Preview -->
-          <div class="rz-pvc-card-preview" id="pvcCardInteractive">
-            <div class="rz-pvc-flag-strip">
-              <div class="rz-gov-emblem-text">
-                <i class="fa-solid fa-shield-halved" style="color:#0066cc;"></i>
-                <span>UNIQUE IDENTIFICATION AUTHORITY OF INDIA</span>
-              </div>
-              <span class="rz-pvc-badge-dpi">HD 300 DPI</span>
-            </div>
-
-            <!-- Front Side View -->
-            <div class="rz-card-front-content" id="cardFrontView">
-              <div class="rz-card-photo-box">
-                <i class="fa-solid fa-user"></i>
-                <div style="position:absolute; bottom:2px; font-size:0.55rem; font-weight:800; color:#475569;">PHOTO</div>
-              </div>
-              <div class="rz-card-details-box">
-                <div class="rz-applicant-name">RAJESH KUMAR PATRA</div>
-                <div class="rz-applicant-meta">DOB: 15/08/1994 | Male</div>
-                <div class="rz-applicant-meta" style="font-size:0.75rem;">State: Odisha, India</div>
-                <div class="rz-aadhaar-number-display">
-                  XXXX XXXX 8924
-                </div>
-              </div>
-            </div>
-
-            <!-- Back Side View -->
-            <div class="rz-card-back-content" id="cardBackView">
-              <div class="rz-address-label">Address / ଠିକଣା:</div>
-              <div class="rz-address-text">
-                S/O: Ramesh Patra, Plot No. 412, Arunodaya Nagar, Badambadi, Cuttack, Odisha, PIN - 753012
-              </div>
-              <div class="rz-barcode-mock"></div>
-              <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:0.72rem; color:#64748b;">
-                <span>Helpline: 1947</span>
-                <span>www.uidai.gov.in</span>
-              </div>
-            </div>
-
-            <!-- PVC Card Footer -->
-            <div class="rz-pvc-card-footer">
-              <span><i class="fa-solid fa-qrcode"></i> Secure Scannable QR</span>
-              <span style="color:#03a93a; font-weight:700;"><i class="fa-solid fa-circle-check"></i> CR80 Print Ready</span>
-            </div>
-          </div>
-
-          <!-- Mini Quick Action Row inside Showcase -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; font-size:0.82rem;">
-            <span style="color:#64748b;"><i class="fa-solid fa-microchip" style="color:#0066cc;"></i> Auto CR80 Dimension Ratio</span>
-            <a href="register.html" style="color:#0066cc; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-              Try It Live <i class="fa-solid fa-arrow-right" style="font-size:0.75rem;"></i>
-            </a>
-          </div>
-
+        <!-- Glass Showcase Container with Service Infographic -->
+        <div class="rz-showcase-glass-card rz-showcase-media-card">
+          <img src="service.png?v=3" alt="Government & Citizen Services at Digital Seva Kendra" class="rz-service-showcase-img" loading="eager">
         </div>
       </div>
 
@@ -260,15 +194,6 @@
       </p>
     </div>
 
-    <!-- Category Filter Tabs (Razorpay Style) -->
-    <div class="rz-filter-tabs-wrapper">
-      <div class="rz-filter-tabs">
-        <button type="button" class="rz-filter-btn active" onclick="filterBentoServices('all', this)">All Solutions</button>
-        <button type="button" class="rz-filter-btn" onclick="filterBentoServices('print', this)">PVC ID Printing</button>
-        <button type="button" class="rz-filter-btn" onclick="filterBentoServices('pan', this)">PAN Recovery</button>
-        <button type="button" class="rz-filter-btn" onclick="filterBentoServices('wallet', this)">UPI Wallet</button>
-      </div>
-    </div>
 
     <!-- Asymmetric Bento Grid -->
     <div class="rz-bento-grid" id="servicesGrid">
@@ -276,8 +201,8 @@
       <!-- Bento Card 1: Large Featured Card (Aadhaar PVC) -->
       <div class="rz-bento-card rz-col-span-8 border-orange" data-category="print">
         <div class="rz-bento-badge-row">
-          <div class="rz-bento-icon orange">
-            <i class="fa-solid fa-id-card"></i>
+          <div class="rz-bento-icon orange" id="svcIconBox_0" style="background: #fff7ed; overflow: hidden; padding: 6px; display: flex; align-items: center; justify-content: center;">
+            <img src="http://127.0.0.1:8000/storage/services/icons/TJSRiv5jzQvGzWpxb7CLFxZkkH4zk0n37MoBErP5.png" alt="Aadhaar PVC" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa-solid fa-id-card\'></i>';">
           </div>
           <span class="rz-bento-price-tag orange" id="svcBadge_0">Starting ₹20 / card</span>
         </div>
@@ -498,59 +423,113 @@
       <span class="rz-section-tag" id="testimonialsTag"><i class="fa-solid fa-star"></i> Verified Feedback</span>
       <h2 class="rz-section-title" id="testimonialsTitle">Trusted By 12,000+ Cyber Cafe Owners</h2>
       <p class="rz-section-desc" id="testimonialsDesc">Hear why CSC operators and digital centers across India rely on Instant Online Seva.</p>
+      <div style="margin-top: 18px;">
+        <button type="button" class="btn-tiranga" onclick="openReviewModal()" style="display: inline-flex; align-items: center; gap: 8px; padding: 11px 26px; border-radius: 9999px; font-weight: 700; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 18px rgba(0,102,204,0.18);">
+          <i class="fa-solid fa-pen-to-square"></i>
+          <span>Write a Review / Share Feedback</span>
+        </button>
+      </div>
     </div>
 
-    <div class="testimonials-grid" style="max-width: 1280px; margin: 0 auto;">
-      <div class="testimonial-card-modern">
-        <div>
-          <div class="testimonial-stars">
-            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+    <div class="testimonials-hero-row">
+      <!-- Left Side Relatable Card: CSC Retailer -->
+      <div class="testimonial-side-feature left">
+        <div class="testimonial-side-card">
+          <div class="side-img-wrapper">
+            <img src="image2.png" alt="CSC Cyber Cafe Operator" loading="lazy">
+            <div class="side-img-overlay">
+              <span class="side-badge orange"><i class="fa-solid fa-bolt"></i> 1 - 2 Mins Turnaround</span>
+            </div>
           </div>
-          <p class="testimonial-quote" id="reviewQuote_0">
-            "Instant Online Seva has changed how our Cyber Cafe operates. The PVC card dimensions are always 100% accurate and our customers are delighted with the HD 300 DPI print quality."
-          </p>
-        </div>
-        <div class="testimonial-author">
-          <div class="author-avatar">SP</div>
-          <div class="author-info">
-            <h5 id="reviewAuthor_0">Soumya Ranjan Panda</h5>
-            <p id="reviewRole_0">Maa Tarini Cyber Cafe, Bhubaneswar</p>
+          <div class="side-card-footer">
+            <h6>CSC & Cyber Cafe Retailers</h6>
+            <p>Empowering digital kiosks with instant HD PVC prints and PAN recovery</p>
           </div>
         </div>
       </div>
 
-      <div class="testimonial-card-modern">
-        <div>
-          <div class="testimonial-stars">
-            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+      <!-- Center Single Review Carousel -->
+      <div class="testimonial-center-carousel">
+        <div class="testimonials-carousel-wrapper">
+          <button type="button" class="testimonial-nav-btn prev" onclick="scrollTestimonials(-1)" aria-label="Previous Review">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          <div class="testimonials-grid" id="testimonialsTrack">
+            <div class="testimonial-card-modern">
+              <div>
+                <div class="testimonial-stars">
+                  <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="testimonial-quote" id="reviewQuote_0">
+                  "Instant Online Seva has changed how our Cyber Cafe operates. The PVC card dimensions are always 100% accurate and our customers are delighted with the HD 300 DPI print quality."
+                </p>
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">SP</div>
+                <div class="author-info">
+                  <h5 id="reviewAuthor_0">Soumya Ranjan Panda</h5>
+                  <p id="reviewRole_0">Maa Tarini Cyber Cafe, Bhubaneswar</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-card-modern">
+              <div>
+                <div class="testimonial-stars">
+                  <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="testimonial-quote" id="reviewQuote_1">
+                  "Finding lost PAN numbers by Aadhaar used to take days. Here we get the result in seconds. The manual UPI wallet recharge is verified within 2 minutes flat. Fantastic portal!"
+                </p>
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar" style="background: linear-gradient(135deg, #dcfce7, #86efac); color: #166534;">BM</div>
+                <div class="author-info">
+                  <h5 id="reviewAuthor_1">Biswajit Mohapatra</h5>
+                  <p id="reviewRole_1">CSC Seva Kendra, Cuttack</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-card-modern">
+              <div>
+                <div class="testimonial-stars">
+                  <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="testimonial-quote" id="reviewQuote_2">
+                  "Customer support is always active. Whenever there is any query regarding document formatting or wallet, the team resolves it immediately on WhatsApp. Highly recommended!"
+                </p>
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar" style="background: linear-gradient(135deg, #e0f2fe, #7dd3fc); color: #0369a1;">AK</div>
+                <div class="author-info">
+                  <h5 id="reviewAuthor_2">Anil Kumar Sethi</h5>
+                  <p id="reviewRole_2">Digital Print Hub, Sambalpur</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <p class="testimonial-quote" id="reviewQuote_1">
-            "Finding lost PAN numbers by Aadhaar used to take days. Here we get the result in seconds. The manual UPI wallet recharge is verified within 2 minutes flat. Fantastic portal!"
-          </p>
+
+          <button type="button" class="testimonial-nav-btn next" onclick="scrollTestimonials(1)" aria-label="Next Review">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
         </div>
-        <div class="testimonial-author">
-          <div class="author-avatar" style="background: linear-gradient(135deg, #dcfce7, #86efac); color: #166534;">BM</div>
-          <div class="author-info">
-            <h5 id="reviewAuthor_1">Biswajit Mohapatra</h5>
-            <p id="reviewRole_1">CSC Seva Kendra, Cuttack</p>
-          </div>
-        </div>
+        <div class="testimonial-dots" id="testimonialDots"></div>
       </div>
 
-      <div class="testimonial-card-modern">
-        <div>
-          <div class="testimonial-stars">
-            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+      <!-- Right Side Relatable Card: Satisfied Citizen -->
+      <div class="testimonial-side-feature right">
+        <div class="testimonial-side-card">
+          <div class="side-img-wrapper">
+            <img src="imagere.png" alt="Satisfied Citizen Customer" loading="lazy">
+            <div class="side-img-overlay">
+              <span class="side-badge green"><i class="fa-solid fa-circle-check"></i> 100% Verified Quality</span>
+            </div>
           </div>
-          <p class="testimonial-quote" id="reviewQuote_2">
-            "Customer support is always active. Whenever there is any query regarding document formatting or wallet, the team resolves it immediately on WhatsApp. Highly recommended!"
-          </p>
-        </div>
-        <div class="testimonial-author">
-          <div class="author-avatar" style="background: linear-gradient(135deg, #e0f2fe, #7dd3fc); color: #0369a1;">AK</div>
-          <div class="author-info">
-            <h5 id="reviewAuthor_2">Anil Kumar Sethi</h5>
-            <p id="reviewRole_2">Digital Print Hub, Sambalpur</p>
+          <div class="side-card-footer">
+            <h6>Delighted Citizen Customers</h6>
+            <p>Official 300 DPI CR-80 PVC cards delivered straight to citizens</p>
           </div>
         </div>
       </div>
@@ -712,9 +691,9 @@
           © 2026 Instant Online Seva. All rights reserved. Built for Indian Digital Retailers.
         </div>
         <div style="display:flex; gap:20px;">
-          <a href="#" id="footerPrivacyLink">Privacy Policy</a>
-          <a href="#" id="footerTermsLink">Terms of Service</a>
-          <a href="#" id="footerRefundLink">Refund Policy</a>
+          <a href="privacy.html" id="footerPrivacyLink">Privacy Policy</a>
+          <a href="terms.html" id="footerTermsLink">Terms of Service</a>
+          <a href="refund.html" id="footerRefundLink">Refund Policy</a>
         </div>
       </div>
     </div>
@@ -742,20 +721,91 @@
       }
     }
 
-    // Category Filter for Bento Services
-    function filterBentoServices(category, btn) {
-      document.querySelectorAll('.rz-filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
 
-      const cards = document.querySelectorAll('.rz-bento-card');
-      cards.forEach(card => {
-        if (category === 'all' || card.getAttribute('data-category') === category) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
+    // Testimonials Single-Card Carousel Navigation
+    function scrollTestimonials(direction) {
+      const track = document.getElementById('testimonialsTrack') || document.querySelector('.testimonials-grid');
+      if (!track) return;
+      const card = track.querySelector('.testimonial-card-modern');
+      const step = card ? card.offsetWidth : track.offsetWidth;
+      track.scrollBy({ left: direction * step, behavior: 'smooth' });
+    }
+
+    function goToTestimonial(index) {
+      const track = document.getElementById('testimonialsTrack') || document.querySelector('.testimonials-grid');
+      if (!track) return;
+      const cards = track.querySelectorAll('.testimonial-card-modern');
+      if (cards[index]) {
+        cards[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    }
+
+    function renderTestimonialDots() {
+      const track = document.getElementById('testimonialsTrack') || document.querySelector('.testimonials-grid');
+      const dotsContainer = document.getElementById('testimonialDots');
+      if (!track || !dotsContainer) return;
+
+      const cards = track.querySelectorAll('.testimonial-card-modern');
+      if (cards.length <= 1) {
+        dotsContainer.innerHTML = '';
+        return;
+      }
+
+      dotsContainer.innerHTML = Array.from(cards).map((_, i) => 
+        `<button type="button" class="testimonial-dot ${i === 0 ? 'active' : ''}" onclick="goToTestimonial(${i})" aria-label="Review ${i + 1}"></button>`
+      ).join('');
+
+      track.removeEventListener('scroll', updateActiveTestimonialDot);
+      track.addEventListener('scroll', updateActiveTestimonialDot, { passive: true });
+    }
+
+    function updateActiveTestimonialDot() {
+      const track = document.getElementById('testimonialsTrack') || document.querySelector('.testimonials-grid');
+      const dotsContainer = document.getElementById('testimonialDots');
+      if (!track || !dotsContainer) return;
+      const width = track.offsetWidth || 1;
+      const activeIdx = Math.round(track.scrollLeft / width);
+      const dots = dotsContainer.querySelectorAll('.testimonial-dot');
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === activeIdx);
       });
     }
+
+    // Testimonials Drag-to-Scroll Support
+    function initTestimonialsCarousel() {
+      const track = document.getElementById('testimonialsTrack') || document.querySelector('.testimonials-grid');
+      if (!track || track.dataset.carouselInit) return;
+      track.dataset.carouselInit = 'true';
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      track.addEventListener('mousedown', (e) => {
+        isDown = true;
+        track.classList.add('grabbing');
+        startX = e.pageX - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+      });
+      track.addEventListener('mouseleave', () => {
+        isDown = false;
+        track.classList.remove('grabbing');
+      });
+      track.addEventListener('mouseup', () => {
+        isDown = false;
+        track.classList.remove('grabbing');
+      });
+      track.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - track.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        track.scrollLeft = scrollLeft - walk;
+      });
+
+      renderTestimonialDots();
+    }
+
+    document.addEventListener('DOMContentLoaded', initTestimonialsCarousel);
 
     // Accordion FAQ Toggle
     function toggleRzFaq(trigger) {
@@ -799,6 +849,84 @@
       }
     }, { passive: true });
   </script>
+
+  <!-- User Review / Feedback Modal -->
+  <div id="reviewModal" class="modal-backdrop-custom" style="z-index: 99999;">
+    <div class="modal-dialog-custom" style="background: #ffffff; border-radius: 24px; max-width: 520px; width: 100%; padding: 32px; box-shadow: 0 25px 60px -15px rgba(0,0,0,0.3); border: 1.5px solid #e2e8f0; position: relative; max-height: 90vh; overflow-y: auto;">
+      
+      <!-- Close Button -->
+      <button type="button" onclick="closeReviewModal()" aria-label="Close" style="position: absolute; top: 18px; right: 20px; background: #f1f5f9; border: none; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1rem; cursor: pointer; transition: all 0.2s ease;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
+        <div style="width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #0066cc; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <div>
+          <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a; font-family: 'Outfit', sans-serif;">Rate Your Experience</h3>
+          <p style="margin: 0; font-size: 0.82rem; color: #64748b;">Share your feedback with fellow CSC and Cyber Cafe owners</p>
+        </div>
+      </div>
+
+      <!-- Alert Message Box -->
+      <div id="reviewAlertBox" style="display: none; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; font-size: 0.88rem;"></div>
+
+      <!-- Review Form -->
+      <form id="reviewForm" onsubmit="handleReviewSubmit(event)">
+        <!-- Star Rating Picker -->
+        <div style="margin-bottom: 20px; text-align: center; background: #f8fafc; padding: 16px; border-radius: 16px; border: 1px dashed #cbd5e1;">
+          <label style="display: block; font-size: 0.84rem; font-weight: 700; color: #475569; margin-bottom: 8px;">Select Your Rating</label>
+          <div id="starPicker" style="display: inline-flex; gap: 8px; font-size: 1.8rem; color: #eab308; cursor: pointer;">
+            <i class="fa-solid fa-star star-item" data-val="1" onclick="setReviewRating(1)"></i>
+            <i class="fa-solid fa-star star-item" data-val="2" onclick="setReviewRating(2)"></i>
+            <i class="fa-solid fa-star star-item" data-val="3" onclick="setReviewRating(3)"></i>
+            <i class="fa-solid fa-star star-item" data-val="4" onclick="setReviewRating(4)"></i>
+            <i class="fa-solid fa-star star-item" data-val="5" onclick="setReviewRating(5)"></i>
+          </div>
+          <input type="hidden" id="reviewRatingInput" value="5">
+          <div id="ratingDescription" style="font-size: 0.82rem; font-weight: 700; color: #0066cc; margin-top: 6px;">★★★★★ 5/5 - Excellent & Highly Recommended!</div>
+        </div>
+
+        <!-- Author Name -->
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 0.84rem; font-weight: 700; color: #334155; margin-bottom: 6px;">
+            Your Name <span style="color: #ef4444;">*</span>
+          </label>
+          <input type="text" id="reviewAuthorName" required placeholder="e.g. Ramesh Kumar Panda" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.92rem; font-family: 'Inter', sans-serif; box-sizing: border-box; outline: none; transition: border-color 0.2s;">
+        </div>
+
+        <!-- Shop / Center Name -->
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 0.84rem; font-weight: 700; color: #334155; margin-bottom: 6px;">
+            Shop / CSC Center & City <span style="color: #94a3b8; font-weight: 500;">(Optional)</span>
+          </label>
+          <input type="text" id="reviewRole" placeholder="e.g. Maa Tarini Cyber Cafe, Cuttack" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.92rem; font-family: 'Inter', sans-serif; box-sizing: border-box; outline: none; transition: border-color 0.2s;">
+        </div>
+
+        <!-- Comment -->
+        <div style="margin-bottom: 22px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <label style="font-size: 0.84rem; font-weight: 700; color: #334155;">
+              Your Review / Feedback <span style="color: #ef4444;">*</span>
+            </label>
+            <span id="charCount" style="font-size: 0.76rem; color: #94a3b8;">0/600</span>
+          </div>
+          <textarea id="reviewComment" required rows="3" maxlength="600" placeholder="Tell other kiosk owners about your experience with card prints, wallet recharges, and turnaround speed..." style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.92rem; font-family: 'Inter', sans-serif; box-sizing: border-box; outline: none; resize: vertical; min-height: 85px;" oninput="document.getElementById('charCount').textContent = `${this.value.length}/600`"></textarea>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button type="button" onclick="closeReviewModal()" class="btn-outline-custom" style="padding: 10px 20px; border-radius: 9999px; font-weight: 600; cursor: pointer;">Cancel</button>
+          <button type="submit" id="btnSubmitReview" class="btn-tiranga" style="padding: 10px 24px; border-radius: 9999px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Submit Review</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="js/api.js"></script>
   <script src="js/landing.js"></script>

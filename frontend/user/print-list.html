@@ -219,7 +219,7 @@
     <div class="modal-dialog-custom">
       <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 22px 26px;">
         <div style="display: flex; align-items: center; gap: 14px;">
-          <div style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; color: #0066cc; border: 1.5px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+          <div id="modalCornerBadge" style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; color: #0066cc; border: 1.5px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
             <i class="fa-solid fa-id-card"></i>
           </div>
           <div>
@@ -333,43 +333,70 @@
         }
 
         printServices = res.data || [];
-        updateServiceCounts();
+        try {
+          const old = JSON.parse(localStorage.getItem('utkal_services_cache') || '[]');
+          const merged = [...printServices, ...old.filter(o => !printServices.some(p => p.id === o.id))];
+          localStorage.setItem('utkal_services_cache', JSON.stringify(merged));
+        } catch(e){}
+        renderCategoryTabs();
         applyFilterAndRender();
       } catch (err) {
         console.error(err);
         printServices = [];
+        renderCategoryTabs();
         applyFilterAndRender();
       }
     }
 
-    function updateServiceCounts() {
+    function formatUserCategoryLabel(cat) {
+      if (cat === 'print') return 'PVC Cards';
+      if (cat === 'document') return 'Documents';
+      if (cat === 'pan_find' || cat === 'pan') return 'PAN Cards';
+      return (cat || '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+
+    function renderCategoryTabs() {
+      const container = document.getElementById('categoryFilterTabs');
+      if (!container) return;
+
       const allCount = printServices.length;
-      const printCount = printServices.filter(s => s.category === 'print').length;
-      const docCount = printServices.filter(s => s.category === 'document').length;
-      
-      const elAll = document.getElementById('countAll');
-      const elPrint = document.getElementById('countPrint');
-      const elDoc = document.getElementById('countDoc');
-      if (elAll) elAll.textContent = allCount;
-      if (elPrint) elPrint.textContent = printCount;
-      if (elDoc) elDoc.textContent = docCount;
+      const counts = {};
+      printServices.forEach(s => {
+        const c = s.category || 'print';
+        counts[c] = (counts[c] || 0) + 1;
+      });
+
+      const uniqueCats = Object.keys(counts).sort((a, b) => {
+        if (a === 'print') return -1;
+        if (b === 'print') return 1;
+        if (a === 'document') return -1;
+        if (b === 'document') return 1;
+        return a.localeCompare(b);
+      });
+
+      let html = `
+        <button type="button" class="tab-btn ${currentCategoryFilter === 'all' ? 'active' : ''}" data-cat="all" onclick="filterServices('all')" style="padding: 6px 14px; font-size: 0.82rem; font-weight: ${currentCategoryFilter === 'all' ? '700' : '600'}; border-radius: 8px; border: none; background: ${currentCategoryFilter === 'all' ? '#ffffff' : 'transparent'}; color: ${currentCategoryFilter === 'all' ? '#0f172a' : '#64748b'}; box-shadow: ${currentCategoryFilter === 'all' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'}; cursor: pointer; transition: all 0.2s;">
+          All (${allCount})
+        </button>
+      `;
+
+      uniqueCats.forEach(cat => {
+        const count = counts[cat];
+        const isActive = currentCategoryFilter === cat;
+        const label = formatUserCategoryLabel(cat);
+        html += `
+          <button type="button" class="tab-btn ${isActive ? 'active' : ''}" data-cat="${cat}" onclick="filterServices('${cat}')" style="padding: 6px 14px; font-size: 0.82rem; font-weight: ${isActive ? '700' : '600'}; border-radius: 8px; border: none; background: ${isActive ? '#ffffff' : 'transparent'}; color: ${isActive ? '#0f172a' : '#64748b'}; box-shadow: ${isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'}; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
+            ${label} (${count})
+          </button>
+        `;
+      });
+
+      container.innerHTML = html;
     }
 
     function filterServices(category) {
       currentCategoryFilter = category;
-      document.querySelectorAll('#categoryFilterTabs .tab-btn').forEach(btn => {
-        if (btn.dataset.cat === category) {
-          btn.style.background = '#ffffff';
-          btn.style.color = '#0f172a';
-          btn.style.fontWeight = '700';
-          btn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-        } else {
-          btn.style.background = 'transparent';
-          btn.style.color = '#64748b';
-          btn.style.fontWeight = '600';
-          btn.style.boxShadow = 'none';
-        }
-      });
+      renderCategoryTabs();
       applyFilterAndRender();
     }
 
@@ -381,6 +408,36 @@
       renderServices(filtered);
     }
 
+    function getServiceBadgeHtml(s, size = 44, fontSize = '1.35rem') {
+      const iconType = s.icon_type || (s.icon_image ? 'image' : 'icon');
+      const imgUrl = s.icon_image_url || (s.icon_image && (s.icon_image.startsWith('http') ? s.icon_image : `${STORAGE_BASE_URL}/${s.icon_image}`));
+      const bg = s.icon_bg || (s.category === 'document' ? '#f0fdf4' : '#fff7ed');
+      const color = s.icon_color || (s.category === 'document' ? '#03a93a' : '#e04d00');
+
+      let iconClass = s.icon;
+      if (!iconClass) {
+        if (s.category === 'document') iconClass = 'fa-solid fa-file-lines';
+        else if (s.slug && s.slug.includes('voter')) iconClass = 'fa-solid fa-person-booth';
+        else if (s.slug && s.slug.includes('pan')) iconClass = 'fa-solid fa-address-card';
+        else if (s.slug && s.slug.includes('ayushman')) iconClass = 'fa-solid fa-heart-pulse';
+        else iconClass = 'fa-solid fa-id-card';
+      }
+
+      if (iconType === 'image' && imgUrl) {
+        return `
+          <div style="width: ${size}px; height: ${size}px; min-width: ${size}px; border-radius: 12px; background: ${bg}; border: 1.5px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+            <img src="${imgUrl}" alt="${s.name}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${iconClass}\\' style=\\'color:${color}; font-size:${fontSize};\\'></i>';">
+          </div>
+        `;
+      }
+
+      return `
+        <div style="width: ${size}px; height: ${size}px; min-width: ${size}px; border-radius: 12px; background: ${bg}; color: ${color}; border: 1.5px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; font-size: ${fontSize}; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+          <i class="${iconClass}"></i>
+        </div>
+      `;
+    }
+
     function renderServices(services) {
       const grid = document.getElementById('printServicesGrid');
       if (!services || services.length === 0) {
@@ -389,39 +446,29 @@
       }
 
       grid.innerHTML = services.map(s => {
-        let iconClass = 'fa-solid fa-id-card';
-        let iconBg = '#fff7ed';
-        let iconColor = '#e04d00';
-        let catBadge = '<span style="display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; font-weight:700; background:#fff7ed; color:#e04d00; border:1px solid #fed7aa; padding:2px 8px; border-radius:6px;"><i class="fa-solid fa-id-card"></i> PVC Card</span>';
-        let btnText = '<i class="fa-solid fa-print"></i> Order Print Service';
+        const badgeHtml = getServiceBadgeHtml(s, 44, '1.35rem');
 
+        let catBadge = '';
         if (s.category === 'document') {
-          iconClass = 'fa-solid fa-file-lines';
-          iconBg = '#f0fdf4';
-          iconColor = '#03a93a';
           catBadge = '<span style="display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; font-weight:700; background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0; padding:2px 8px; border-radius:6px;"><i class="fa-solid fa-file-lines"></i> Document</span>';
-          btnText = '<i class="fa-solid fa-file-arrow-up"></i> Apply Document Service';
-        } else if (s.slug && s.slug.includes('voter')) {
-          iconClass = 'fa-solid fa-person-booth';
-          iconBg = '#f0fdf4';
-          iconColor = '#03a93a';
-        } else if (s.slug && s.slug.includes('pan')) {
-          iconClass = 'fa-solid fa-address-card';
-          iconBg = '#eff6ff';
-          iconColor = '#2563eb';
-        } else if (s.slug && s.slug.includes('ayushman')) {
-          iconClass = 'fa-solid fa-heart-pulse';
-          iconBg = '#fdf2f8';
-          iconColor = '#db2777';
+        } else if (s.category === 'pan_find' || s.category === 'pan') {
+          catBadge = '<span style="display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; font-weight:700; background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; padding:2px 8px; border-radius:6px;"><i class="fa-solid fa-magnifying-glass"></i> PAN Search</span>';
+        } else if (s.category === 'print') {
+          catBadge = '<span style="display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; font-weight:700; background:#fff7ed; color:#e04d00; border:1px solid #fed7aa; padding:2px 8px; border-radius:6px;"><i class="fa-solid fa-id-card"></i> PVC Card</span>';
+        } else {
+          const customCatLabel = (s.category || 'Service').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          catBadge = `<span style="display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; font-weight:700; background:#f5f3ff; color:#7c3aed; border:1px solid #ddd6fe; padding:2px 8px; border-radius:6px;"><i class="fa-solid fa-layer-group"></i> ${customCatLabel}</span>`;
         }
+
+        const btnText = s.btn_text || (s.category === 'document' ? 'Apply Document Service' : 'Order Print Service');
+        const btnIcon = s.btn_icon || (s.category === 'document' ? 'fa-solid fa-file-arrow-up' : 'fa-solid fa-print');
+        const btnContent = btnIcon ? `<i class="${btnIcon}"></i> ${btnText}` : btnText;
 
         return `
           <div class="glass-card" style="display:flex; flex-direction:column; justify-content:space-between; padding:22px; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 28px -6px rgba(15,23,42,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)';">
             <div>
               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
-                <div style="width: 44px; height: 44px; border-radius: 12px; background: ${iconBg}; color: ${iconColor}; display: flex; align-items: center; justify-content: center; font-size: 1.35rem;">
-                  <i class="${iconClass}"></i>
-                </div>
+                ${badgeHtml}
                 <div style="text-align: right;">
                   <span style="font-size: 1.35rem; font-weight: 800; font-family:'Outfit',sans-serif; color: #03a93a;">${formatINR(s.price)}</span>
                   <div style="margin-top: 2px;">${catBadge}</div>
@@ -431,7 +478,7 @@
               <p style="color: #64748b; font-size: 0.86rem; line-height: 1.5; margin-bottom: 18px;">${s.description || (s.category === 'document' ? 'Digital document processing and verification service.' : 'High-definition PVC smart card print service with protective overlay.')}</p>
             </div>
             <button onclick="openApplyModal(${s.id})" class="btn-tiranga" style="width: 100%; justify-content: center; padding: 11px; border-radius: 10px;">
-              ${btnText}
+              ${btnContent}
             </button>
           </div>
         `;
@@ -609,6 +656,11 @@
       document.getElementById('modalServiceId').value = service.id;
       document.getElementById('modalServiceTitle').textContent = service.name;
       document.getElementById('modalServicePrice').textContent = `Price: ${formatINR(service.price)}`;
+
+      const badgeContainer = document.getElementById('modalCornerBadge');
+      if (badgeContainer) {
+        badgeContainer.outerHTML = `<div id="modalCornerBadge">${getServiceBadgeHtml(service, 44, '1.25rem')}</div>`;
+      }
 
       const container = document.getElementById('dynamicFormFields');
       const hasCustomFields = Array.isArray(service.required_fields) && service.required_fields.length > 0;

@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Admin\AdminComplaintController;
 use App\Http\Controllers\Api\Admin\AdminDashboardController;
 use App\Http\Controllers\Api\Admin\AdminLandingPageController;
 use App\Http\Controllers\Api\Admin\AdminOrderController;
+use App\Http\Controllers\Api\Admin\AdminReviewController;
 use App\Http\Controllers\Api\Admin\AdminServiceController;
 use App\Http\Controllers\Api\Admin\AdminSettingController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Api\ComplaintController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\LandingPageController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\WalletController;
@@ -38,6 +40,8 @@ Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/services/{id}', [ServiceController::class, 'show']);
 Route::get('/settings/public', [SettingController::class, 'publicSettings']);
 Route::get('/landing-page', [LandingPageController::class, 'index']);
+Route::get('/reviews', [ReviewController::class, 'index']);
+Route::post('/reviews', [ReviewController::class, 'store']);
 
 /*
 |--------------------------------------------------------------------------
@@ -95,8 +99,9 @@ Route::middleware(['api.auth', 'role:admin'])->prefix('admin')->group(function (
 
     // Manage Services
     Route::get('/services', [AdminServiceController::class, 'index']);
+    Route::get('/services/categories', [AdminServiceController::class, 'categories']);
     Route::post('/services', [AdminServiceController::class, 'store']);
-    Route::put('/services/{id}', [AdminServiceController::class, 'update']);
+    Route::match(['put', 'post'], '/services/{id}', [AdminServiceController::class, 'update']);
     Route::post('/services/{id}/toggle', [AdminServiceController::class, 'toggle']);
 
     // Manage Complaints
@@ -111,4 +116,9 @@ Route::middleware(['api.auth', 'role:admin'])->prefix('admin')->group(function (
     Route::get('/landing-page', [AdminLandingPageController::class, 'index']);
     Route::post('/landing-page', [AdminLandingPageController::class, 'update']);
     Route::post('/landing-page/reset', [AdminLandingPageController::class, 'reset']);
+
+    // Manage User Reviews & Testimonials
+    Route::get('/reviews', [AdminReviewController::class, 'index']);
+    Route::post('/reviews/{id}/toggle', [AdminReviewController::class, 'toggleStatus']);
+    Route::delete('/reviews/{id}', [AdminReviewController::class, 'destroy']);
 });

@@ -22,7 +22,7 @@ class ServiceController extends Controller
             if ($category === 'pan' || $category === 'pan_find') {
                 $query->whereIn('category', ['pan', 'pan_find']);
             } elseif ($category === 'print' || $category === 'print_doc') {
-                $query->whereIn('category', ['print', 'document']);
+                $query->whereNotIn('category', ['pan', 'pan_find']);
             } else {
                 $query->where('category', $category);
             }

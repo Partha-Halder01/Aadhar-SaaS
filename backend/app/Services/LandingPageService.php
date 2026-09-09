@@ -16,14 +16,119 @@ class LandingPageService
     {
         return Cache::remember(self::CACHE_KEY, 300, function () {
             $raw = Setting::get('landing_page_content');
+            $config = $this->getDefaultConfig();
             if ($raw) {
                 $decoded = json_decode($raw, true);
                 if (is_array($decoded)) {
-                    return $this->mergeConfig($this->getDefaultConfig(), $decoded);
+                    $config = $this->mergeConfig($config, $decoded);
                 }
             }
-            return $this->getDefaultConfig();
+            return $this->enrichWithLiveServices($config);
         });
+    }
+
+    /**
+     * Enrich landing page services items with live database Service model data
+     * (icon_type, icon_image, icon_image_url, icon_bg, icon_color, icon)
+     */
+    public function enrichWithLiveServices(array $config): array
+    {
+        try {
+            if (!isset($config['services']['items']) || !is_array($config['services']['items'])) {
+                return $config;
+            }
+
+            $dbServices = \App\Models\Service::where('is_active', true)->get();
+            if ($dbServices->isEmpty()) {
+                return $config;
+            }
+
+            foreach ($config['services']['items'] as &$item) {
+                $itemId = strtolower($item['id'] ?? '');
+                $itemTitle = strtolower($item['title'] ?? '');
+
+                // Find matching service from catalog with prioritized specificity
+                $matched = $dbServices->first(function ($s) use ($itemId, $itemTitle) {
+                    $sSlug = strtolower($s->slug ?? '');
+                    $sName = strtolower($s->name ?? '');
+
+                    if ($itemId === 'pan_find' || str_contains($itemId, 'pan') || str_contains($itemTitle, 'lost pan') || str_contains($itemTitle, 'pan recovery')) {
+                        return str_contains($sSlug, 'pan') && (str_contains($sSlug, 'find') || $s->category === 'pan_find');
+                    }
+                    if ($itemId === 'aadhaar_pvc' || (str_contains($itemTitle, 'aadhaar') && !str_contains($itemTitle, 'pan'))) {
+                        return str_contains($sSlug, 'aadhaar') && !str_contains($sSlug, 'pan');
+                    }
+                    if ($itemId === 'voter_id' || str_contains($itemId, 'voter') || str_contains($itemTitle, 'voter')) {
+                        return str_contains($sSlug, 'voter') || str_contains($sName, 'voter');
+                    }
+                    if ($itemId === 'ayushman' || str_contains($itemId, 'ayushman') || str_contains($itemTitle, 'ayushman')) {
+                        return str_contains($sSlug, 'ayushman') || str_contains($sName, 'ayushman');
+                    }
+                    return false;
+                });
+
+                if ($matched) {
+                    $item['icon_type'] = $matched->icon_type ?? ($matched->icon_image ? 'image' : 'icon');
+                    if ($matched->icon) {
+                        $item['icon'] = $matched->icon;
+                    }
+                    if ($matched->icon_image) {
+                        $item['icon_image'] = $matched->icon_image;
+                        $item['icon_image_url'] = $matched->icon_image_url;
+                    }
+                    if ($matched->icon_bg) {
+                        $item['icon_bg'] = $matched->icon_bg;
+                    }
+                    if ($matched->icon_color) {
+                        $item['icon_color'] = $matched->icon_color;
+                    }
+                }
+            }
+            unset($item);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Error enriching landing page services: ' . $e->getMessage());
+        }
+
+        // Ensure policy links point to dedicated pages if currently empty or '#'
+        if (isset($config['footer'])) {
+            if (empty($config['footer']['privacy_url']) || $config['footer']['privacy_url'] === '#') {
+                $config['footer']['privacy_url'] = 'privacy.html';
+            }
+            if (empty($config['footer']['terms_url']) || $config['footer']['terms_url'] === '#') {
+                $config['footer']['terms_url'] = 'terms.html';
+            }
+            if (empty($config['footer']['refund_url']) || $config['footer']['refund_url'] === '#') {
+                $config['footer']['refund_url'] = 'refund.html';
+            }
+        }
+
+        // Enrich testimonials with live customer reviews from Review model
+        try {
+            $liveReviews = \App\Models\Review::where('is_approved', true)
+                ->latest()
+                ->take(15)
+                ->get();
+
+            if ($liveReviews->isNotEmpty()) {
+                $reviewItems = [];
+                foreach ($liveReviews as $rev) {
+                    $reviewItems[] = [
+                        'id' => $rev->id,
+                        'quote' => $rev->comment,
+                        'author' => $rev->author_name,
+                        'role' => $rev->role_or_business ?: 'CSC & Cyber Cafe Operator',
+                        'initials' => $rev->initials,
+                        'stars' => (int) $rev->rating,
+                        'created_at' => $rev->created_at->diffForHumans(),
+                    ];
+                }
+                $config['testimonials']['items'] = $reviewItems;
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Error enriching live testimonials: ' . $e->getMessage());
+        }
+
+        return $config;
     }
 
     /**
@@ -108,8 +213,8 @@ class LandingPageService
             'hero' => [
                 'badge_icon' => 'fa-bolt-lightning',
                 'badge_text' => "India's #1 Citizen Printing & Instant PAN Recovery Engine",
-                'title_highlight' => 'Instant Document',
-                'title_rest' => 'Printing & PAN Recovery Suite',
+                'title_highlight' => 'Digital Document & PAN',
+                'title_rest' => 'Next-Gen',
                 'subtitle' => 'High-definition Aadhaar PVC card formatting, instant lost PAN recovery by Aadhaar, Voter ID prints, and seamless zero-delay UPI wallet recharges built specifically for Cyber Cafes and CSC Retailers.',
                 'cta_primary_text' => 'Launch Portal Free',
                 'cta_primary_link' => 'register.html',
@@ -367,9 +472,9 @@ class LandingPageService
                 'twitter_link' => '#',
                 'whatsapp_link' => '#',
                 'telegram_link' => '#',
-                'privacy_url' => '#',
-                'terms_url' => '#',
-                'refund_url' => '#'
+                'privacy_url' => 'privacy.html',
+                'terms_url' => 'terms.html',
+                'refund_url' => 'refund.html'
             ]
         ];
     }

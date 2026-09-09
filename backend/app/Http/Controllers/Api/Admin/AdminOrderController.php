@@ -122,10 +122,10 @@ class AdminOrderController extends Controller
     {
         $order = ServiceOrder::with('service')->findOrFail($id);
 
-        if ($order->service && $order->service->category !== 'print') {
+        if ($order->service && in_array($order->service->category, ['pan', 'pan_find'])) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'This action is only applicable for Print Services.'
+                'message' => 'This action is not applicable for PAN Find Services.'
             ], 422);
         }
 

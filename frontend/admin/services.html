@@ -72,14 +72,6 @@
           </a>
         </li>
 
-        <li class="sidebar-category-header">Website & CMS</li>
-        <li class="sidebar-item">
-          <a href="landing-page.html" class="sidebar-link">
-            <i class="fa-solid fa-desktop" style="color:#0066cc;"></i>
-            <span>Landing Page CMS</span>
-          </a>
-        </li>
-
         <li class="sidebar-category-header">System Config</li>
         <li class="sidebar-item">
           <a href="settings.html" class="sidebar-link">
@@ -167,15 +159,15 @@
 
   <!-- Service Add / Edit Modal -->
   <div id="serviceModal" class="modal-backdrop-custom">
-    <div class="modal-dialog-custom" style="max-width: 560px;">
-      <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 22px 26px;">
+    <div class="modal-dialog-custom" style="max-width: 660px; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
         <div style="display: flex; align-items: center; gap: 14px;">
-          <div style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; color: #0066cc; border: 1.5px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+          <div id="modalHeaderBadge" style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; color: #0066cc; border: 1.5px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
             <i class="fa-solid fa-layer-group"></i>
           </div>
           <div>
             <h3 id="serviceModalTitle" style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color: #0f172a; font-family: 'Outfit', sans-serif;">Add Service</h3>
-            <span style="font-size: 0.82rem; color: #64748b;">Configure citizen service catalog & customer pricing</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Configure citizen service catalog, pricing & corner badges</span>
           </div>
         </div>
         <button type="button" onclick="closeServiceModal()" class="btn-icon-action" style="border-radius: 50%;" title="Close">
@@ -183,38 +175,231 @@
         </button>
       </div>
 
-      <form id="serviceForm">
+      <form id="serviceForm" style="display: flex; flex-direction: column; overflow: hidden; flex: 1;">
         <input type="hidden" id="serviceId">
-        <div class="modal-body-custom" style="padding: 24px 26px;">
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label" for="srvName">Service Title <span style="color: #ef4444;">*</span></label>
-            <input type="text" id="srvName" class="form-control" placeholder="e.g. Aadhaar Smart Card Print" required>
-          </div>
+        <input type="hidden" id="removeIconImage" value="0">
+        <input type="hidden" id="srvExistingImageUrl" value="">
 
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label" for="srvCategory">Service Category <span style="color: #ef4444;">*</span></label>
-            <select id="srvCategory" class="form-control" required style="cursor: pointer;">
-              <option value="print">Print Services (Aadhaar, Voter, PVC)</option>
-              <option value="pan_find">PAN Find Services</option>
-              <option value="document">Document Services</option>
-            </select>
-          </div>
+        <div class="modal-body-custom" style="padding: 22px 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 18px;">
+          
+          <!-- Basic Details Card -->
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px;">
+            <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-circle-info" style="color: #0066cc;"></i> Service Details
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label" for="srvName">Service Title <span style="color: #ef4444;">*</span></label>
+              <input type="text" id="srvName" class="form-control" placeholder="e.g. Aadhaar Smart Card PVC Print" required oninput="updateLiveBadgePreview()">
+            </div>
 
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label" for="srvPrice">Customer Fee / Price (₹) <span style="color: #ef4444;">*</span></label>
-            <div style="position: relative;">
-              <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-weight: 800; color: #64748b;">₹</span>
-              <input type="number" id="srvPrice" class="form-control" placeholder="50" min="0" step="1" required style="padding-left: 32px; font-weight: 700; font-family: 'Outfit', sans-serif;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label class="form-label" for="srvCategory" style="margin-bottom: 0;">Service Category <span style="color: #ef4444;">*</span></label>
+                  <button type="button" id="btnToggleCustomCategory" onclick="toggleCustomCategoryMode(true)" style="font-size: 0.76rem; color: #0066cc; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; font-weight: 700;">
+                    <i class="fa-solid fa-plus"></i> Custom Category
+                  </button>
+                </div>
+                <div id="srvCategorySelectWrapper">
+                  <select id="srvCategory" class="form-control" onchange="handleCategoryDropdownChange(this.value)" style="cursor: pointer;">
+                    <option value="print">Print Services (Aadhaar, Voter, PVC)</option>
+                    <option value="pan_find">PAN Find Services</option>
+                    <option value="document">Document Services</option>
+                    <option value="__custom__">➕ Add Custom Category...</option>
+                  </select>
+                </div>
+                <div id="srvCustomCategoryWrapper" style="display: none; margin-top: 6px;">
+                  <div style="display: flex; gap: 6px; align-items: center;">
+                    <input type="text" id="srvCustomCategoryInput" class="form-control" placeholder="Type category name (e.g. Passport, Ayushman)" style="font-size: 0.86rem;">
+                    <button type="button" onclick="toggleCustomCategoryMode(false)" title="Back to presets" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 7px 11px; font-size: 0.78rem; cursor: pointer; color: #475569; font-weight: 700; white-space: nowrap;">
+                      <i class="fa-solid fa-rotate-left"></i> Preset
+                    </button>
+                  </div>
+                  <div style="font-size: 0.72rem; color: #03a93a; font-weight: 600; margin-top: 4px;">
+                    <i class="fa-solid fa-circle-check"></i> Custom category will auto-create tabs & badges on user portal
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="srvPrice">Customer Fee / Price (₹) <span style="color: #ef4444;">*</span></label>
+                <div style="position: relative;">
+                  <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-weight: 800; color: #64748b;">₹</span>
+                  <input type="number" id="srvPrice" class="form-control" placeholder="50" min="0" step="1" required style="padding-left: 32px; font-weight: 700; font-family: 'Outfit', sans-serif;">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="srvDesc">Short Description (Optional)</label>
+              <textarea id="srvDesc" class="form-control" rows="2" placeholder="Brief info shown on the customer portal card..."></textarea>
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="srvDesc">Short Description (Optional)</label>
-            <textarea id="srvDesc" class="form-control" rows="3" placeholder="Explain what the citizen receives upon ordering..."></textarea>
+          <!-- Corner Icon / Image Customizer Card -->
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 18px;">
+            <div style="margin-bottom: 14px;">
+              <div style="font-weight: 800; font-size: 0.95rem; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-palette" style="color: #0066cc;"></i> Left Corner Badge Customizer
+              </div>
+              <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+                Customize the top-left 44×44px card corner icon or upload a custom image
+              </div>
+            </div>
+
+            <!-- Type Selector: FontAwesome Icon vs Custom Image -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+              <label style="border: 2px solid #0066cc; background: #eff6ff; border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s ease;" id="labelTypeIcon">
+                <input type="radio" name="srvIconType" value="icon" checked onchange="switchIconType('icon')">
+                <div>
+                  <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;"><i class="fa-solid fa-icons" style="color: #0066cc;"></i> FontAwesome Icon</div>
+                  <div style="font-size: 0.74rem; color: #64748b;">Vector icon with custom colors</div>
+                </div>
+              </label>
+
+              <label style="border: 2px solid #e2e8f0; background: #ffffff; border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s ease;" id="labelTypeImage">
+                <input type="radio" name="srvIconType" value="image" onchange="switchIconType('image')">
+                <div>
+                  <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;"><i class="fa-solid fa-image" style="color: #03a93a;"></i> Custom Image / Logo</div>
+                  <div style="font-size: 0.74rem; color: #64748b;">Upload PNG/JPG/SVG or URL</div>
+                </div>
+              </label>
+            </div>
+
+            <!-- Icon Controls -->
+            <div id="iconControlsSection">
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+                  <span>Icon Class (FontAwesome 6)</span>
+                  <span style="font-size: 0.75rem; color: #64748b;">e.g. <code>fa-solid fa-id-card</code></span>
+                </label>
+                <input type="text" id="srvIconClass" class="form-control" value="fa-solid fa-id-card" placeholder="fa-solid fa-id-card" oninput="updateLiveBadgePreview()">
+              </div>
+
+              <!-- Quick Icon Pickers -->
+              <div style="margin-bottom: 14px;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">Quick Pick Icon:</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;" id="quickIconChips">
+                  <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="pickIcon('fa-solid fa-id-card')"><i class="fa-solid fa-id-card"></i> Aadhaar</button>
+                  <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="pickIcon('fa-solid fa-person-booth')"><i class="fa-solid fa-person-booth"></i> Voter</button>
+                  <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="pickIcon('fa-solid fa-address-card')"><i class="fa-solid fa-address-card"></i> PAN Card</button>
+                  <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="pickIcon('fa-solid fa-heart-pulse')"><i class="fa-solid fa-heart-pulse"></i> Ayushman</button>
+                  <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="pickIcon('fa-solid fa-file-lines')"><i class="fa-solid fa-file-lines"></i> Document</button>
+                  <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="pickIcon('fa-solid fa-magnifying-glass-chart')"><i class="fa-solid fa-magnifying-glass-chart"></i> Search PAN</button>
+                  <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="pickIcon('fa-solid fa-print')"><i class="fa-solid fa-print"></i> Printer</button>
+                  <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="pickIcon('fa-solid fa-id-badge')"><i class="fa-solid fa-id-badge"></i> License</button>
+                  <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="pickIcon('fa-solid fa-passport')"><i class="fa-solid fa-passport"></i> Passport</button>
+                  <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="pickIcon('fa-solid fa-shield-halved')"><i class="fa-solid fa-shield-halved"></i> Security</button>
+                </div>
+              </div>
+
+              <!-- Colors -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label">Badge Background Color</label>
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="color" id="srvIconBgColor" value="#fff7ed" style="width: 38px; height: 38px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; padding: 2px;" oninput="syncColorInput('bg', this.value)">
+                    <input type="text" id="srvIconBg" class="form-control" value="#fff7ed" placeholder="#fff7ed" oninput="syncColorInput('bg-text', this.value)" style="font-family: monospace;">
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label">Icon Color</label>
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="color" id="srvIconColorColor" value="#e04d00" style="width: 38px; height: 38px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; padding: 2px;" oninput="syncColorInput('color', this.value)">
+                    <input type="text" id="srvIconColor" class="form-control" value="#e04d00" placeholder="#e04d00" oninput="syncColorInput('color-text', this.value)" style="font-family: monospace;">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Color Presets -->
+              <div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">Color Presets:</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <button type="button" class="btn-secondary" style="padding: 3px 8px; font-size: 0.74rem; background: #fff7ed; color: #e04d00; border: 1px solid #fed7aa;" onclick="applyColorPreset('#fff7ed', '#e04d00')">Orange</button>
+                  <button type="button" class="btn-secondary" style="padding: 3px 8px; font-size: 0.74rem; background: #f0fdf4; color: #03a93a; border: 1px solid #bbf7d0;" onclick="applyColorPreset('#f0fdf4', '#03a93a')">Green</button>
+                  <button type="button" class="btn-secondary" style="padding: 3px 8px; font-size: 0.74rem; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;" onclick="applyColorPreset('#eff6ff', '#2563eb')">Blue</button>
+                  <button type="button" class="btn-secondary" style="padding: 3px 8px; font-size: 0.74rem; background: #fdf2f8; color: #db2777; border: 1px solid #fbcfe8;" onclick="applyColorPreset('#fdf2f8', '#db2777')">Pink</button>
+                  <button type="button" class="btn-secondary" style="padding: 3px 8px; font-size: 0.74rem; background: #faf5ff; color: #9333ea; border: 1px solid #e9d5ff;" onclick="applyColorPreset('#faf5ff', '#9333ea')">Purple</button>
+                  <button type="button" class="btn-secondary" style="padding: 3px 8px; font-size: 0.74rem; background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1;" onclick="applyColorPreset('#f1f5f9', '#0f172a')">Dark</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image Controls -->
+            <div id="imageControlsSection" style="display: none;">
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label">Upload Custom Image File</label>
+                <div style="border: 2px dashed #cbd5e1; border-radius: 10px; background: #ffffff; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s ease;" onclick="document.getElementById('srvIconFile').click()" onmouseover="this.style.borderColor='#0066cc'; this.style.background='#eff6ff';" onmouseout="this.style.borderColor='#cbd5e1'; this.style.background='#ffffff';">
+                  <input type="file" id="srvIconFile" accept="image/png, image/jpeg, image/svg+xml, image/webp" style="display: none;" onchange="handleImageFileSelected(this)">
+                  <div id="uploadPlaceholder">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.8rem; color: #0066cc; margin-bottom: 6px;"></i>
+                    <div style="font-weight: 700; font-size: 0.86rem; color: #0f172a;">Click to browse image file</div>
+                    <div style="font-size: 0.74rem; color: #64748b;">Supports PNG, JPG, SVG, WebP (Square ratio recommended)</div>
+                  </div>
+                  <div id="selectedFileInfo" style="display: none; align-items: center; justify-content: center; gap: 8px; font-weight: 700; color: #03a93a; font-size: 0.85rem;">
+                    <i class="fa-solid fa-circle-check"></i> <span id="selectedFileName">file.png</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label" for="srvIconImageUrl">Or Enter Image URL (External / Web Link)</label>
+                <input type="url" id="srvIconImageUrl" class="form-control" placeholder="https://example.com/icon.png" oninput="updateLiveBadgePreview()">
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label class="form-label" style="margin: 0; font-size: 0.8rem;">Image Badge Background:</label>
+                  <input type="color" id="srvImageBgColor" value="#ffffff" style="width: 32px; height: 32px; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; padding: 1px;" oninput="syncImageBg(this.value)">
+                  <input type="text" id="srvImageBg" class="form-control" value="#ffffff" placeholder="#ffffff" style="width: 90px; padding: 4px 8px; font-size: 0.8rem; font-family: monospace;" oninput="syncImageBgText(this.value)">
+                </div>
+                <button type="button" id="btnRemoveImage" class="btn-danger-soft" style="padding: 4px 10px; font-size: 0.75rem; display: none;" onclick="removeCurrentImage()">
+                  <i class="fa-solid fa-trash-can"></i> Remove Image
+                </button>
+              </div>
+            </div>
+
+            <!-- Live Badge Preview -->
+            <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #e2e8f0;">
+              <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em;">Live Preview (Card Corner Badge):</div>
+              <div style="display: flex; align-items: center; gap: 14px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px;">
+                <!-- 44x44 badge preview -->
+                <div id="liveBadgePreview" style="width: 44px; height: 44px; min-width: 44px; border-radius: 12px; background: #fff7ed; color: #e04d00; border: 1.5px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; font-size: 1.35rem; box-shadow: 0 2px 6px rgba(0,0,0,0.04); overflow: hidden;">
+                  <i class="fa-solid fa-id-card"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div id="livePreviewTitle" style="font-weight: 800; font-size: 0.95rem; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Aadhaar Smart Card PVC Print</div>
+                  <div style="font-size: 0.74rem; color: #64748b;">Top-left corner badge will appear exactly like this on citizen service cards</div>
+                </div>
+              </div>
+            </div>
+
           </div>
+
+          <!-- Action Button Customizer Card -->
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px;">
+            <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-computer-mouse" style="color: #0066cc;"></i> Card Action Button (Optional)
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="srvBtnText">Button Label</label>
+                <input type="text" id="srvBtnText" class="form-control" placeholder="e.g. Order Print Service">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="srvBtnIcon">Button Icon (FontAwesome)</label>
+                <input type="text" id="srvBtnIcon" class="form-control" placeholder="e.g. fa-solid fa-print">
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 18px 26px;">
+        <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 16px 24px;">
           <button type="button" onclick="closeServiceModal()" class="btn-rz-secondary">Cancel</button>
           <button type="submit" id="btnSaveService" class="btn-rz-primary">
             <i class="fa-solid fa-check"></i> Save Service
@@ -228,15 +413,110 @@
   <script src="../js/auth.js"></script>
   <script>
     let servicesList = [];
+    let distinctCategories = ['print', 'pan_find', 'document'];
+    let tempImagePreviewSrc = null;
 
     document.addEventListener('DOMContentLoaded', async () => {
+      await loadCategories();
       loadServices();
     });
+
+    async function loadCategories() {
+      try {
+        const res = await API.admin.getServiceCategories();
+        if (res && res.data && Array.isArray(res.data)) {
+          const set = new Set(['print', 'pan_find', 'document', ...res.data]);
+          distinctCategories = Array.from(set);
+        }
+      } catch (err) {
+        console.warn('Could not load categories:', err);
+      }
+    }
+
+    function formatCategoryName(cat) {
+      if (cat === 'print') return 'Print Services (Aadhaar, Voter, PVC)';
+      if (cat === 'pan_find') return 'PAN Find Services';
+      if (cat === 'document') return 'Document Services';
+      const pretty = (cat || '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      return `${pretty} Services`;
+    }
+
+    function populateCategoryDropdown(selectedVal = 'print') {
+      const select = document.getElementById('srvCategory');
+      if (!select) return;
+
+      const allCats = new Set([...distinctCategories]);
+      servicesList.forEach(s => {
+        if (s.category) allCats.add(s.category);
+      });
+      if (selectedVal && selectedVal !== '__custom__') {
+        allCats.add(selectedVal);
+      }
+
+      const standardCats = ['print', 'pan_find', 'document'];
+      const customCats = Array.from(allCats).filter(c => !standardCats.includes(c));
+
+      let html = '';
+      standardCats.forEach(cat => {
+        html += `<option value="${cat}">${formatCategoryName(cat)}</option>`;
+      });
+
+      if (customCats.length > 0) {
+        html += `<optgroup label="Custom Categories">`;
+        customCats.forEach(cat => {
+          html += `<option value="${cat}">${formatCategoryName(cat)}</option>`;
+        });
+        html += `</optgroup>`;
+      }
+
+      html += `<option value="__custom__">➕ Add Custom Category...</option>`;
+      select.innerHTML = html;
+
+      if (selectedVal && Array.from(allCats).includes(selectedVal)) {
+        select.value = selectedVal;
+        toggleCustomCategoryMode(false);
+      } else if (selectedVal === '__custom__') {
+        select.value = '__custom__';
+        toggleCustomCategoryMode(true);
+      } else {
+        select.value = 'print';
+        toggleCustomCategoryMode(false);
+      }
+    }
+
+    function toggleCustomCategoryMode(isCustom) {
+      const selectWrap = document.getElementById('srvCategorySelectWrapper');
+      const customWrap = document.getElementById('srvCustomCategoryWrapper');
+      const toggleBtn = document.getElementById('btnToggleCustomCategory');
+      const customInput = document.getElementById('srvCustomCategoryInput');
+      const select = document.getElementById('srvCategory');
+
+      if (isCustom) {
+        selectWrap.style.display = 'none';
+        customWrap.style.display = 'block';
+        if (toggleBtn) toggleBtn.style.display = 'none';
+        if (customInput) customInput.focus();
+      } else {
+        selectWrap.style.display = 'block';
+        customWrap.style.display = 'none';
+        if (toggleBtn) toggleBtn.style.display = 'inline-block';
+        if (select.value === '__custom__') {
+          select.value = 'print';
+        }
+      }
+    }
+
+    function handleCategoryDropdownChange(val) {
+      if (val === '__custom__') {
+        toggleCustomCategoryMode(true);
+      }
+    }
 
     async function loadServices() {
       try {
         const res = await API.admin.getServices();
         servicesList = res.data || [];
+        try { localStorage.setItem('utkal_services_cache', JSON.stringify(servicesList)); } catch(e){}
         const tbody = document.getElementById('servicesTableTbody');
 
         if (servicesList.length === 0) {
@@ -255,17 +535,29 @@
         }
 
         tbody.innerHTML = servicesList.map(s => {
-          let catIcon = 'fa-print';
-          if (s.category === 'pan_find') catIcon = 'fa-magnifying-glass';
-          if (s.category === 'document') catIcon = 'fa-file-lines';
+          const iconType = s.icon_type || (s.icon_image ? 'image' : 'icon');
+          const imgUrl = s.icon_image_url || (s.icon_image && (s.icon_image.startsWith('http') ? s.icon_image : `${STORAGE_BASE_URL}/${s.icon_image}`));
+          
+          let badgeHtml = '';
+          if (iconType === 'image' && imgUrl) {
+            badgeHtml = `
+              <div style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px; background: ${s.icon_bg || '#f8fafc'}; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <img src="${imgUrl}" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+              </div>
+            `;
+          } else {
+            badgeHtml = `
+              <div style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px; background: ${s.icon_bg || '#eff6ff'}; color: ${s.icon_color || '#0066cc'}; border: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <i class="${s.icon || 'fa-solid fa-id-card'}"></i>
+              </div>
+            `;
+          }
 
           return `
             <tr>
               <td>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(253, 92, 0,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.88rem;">
-                    <i class="fa-solid ${catIcon}"></i>
-                  </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  ${badgeHtml}
                   <div>
                     <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">${s.name}</div>
                     <div style="font-size: 0.74rem; color: #64748b; font-family:'JetBrains Mono', monospace;">ID: SVC-${s.id}</div>
@@ -273,11 +565,11 @@
                 </div>
               </td>
               <td>
-                <span class="badge-status badge-processing" style="font-size: 0.72rem; text-transform: uppercase;">
-                  ${s.category.replace(/_/g, ' ')}
+                <span class="badge-status" style="font-size: 0.74rem; font-weight: 700; background: #f8fafc; color: #334155; border: 1px solid #e2e8f0; text-transform: capitalize; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px;">
+                  <i class="fa-solid fa-tag" style="font-size: 0.68rem; color: #0066cc;"></i> ${(s.category || 'print').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </span>
               </td>
-              <td style="color: #64748b; font-size: 0.82rem; max-width: 280px; line-height: 1.4;">${s.description || 'Standard government card processing'}</td>
+              <td style="color: #64748b; font-size: 0.82rem; max-width: 260px; line-height: 1.4;">${s.description || 'Standard government card processing'}</td>
               <td>
                 <span style="font-weight: 800; color: #03a93a; font-size: 1.02rem; font-family: 'JetBrains Mono', monospace;">${formatINR(s.price)}</span>
               </td>
@@ -288,7 +580,7 @@
               </td>
               <td style="text-align: right;">
                 <div style="display: inline-flex; gap: 6px;">
-                  <button onclick='editService(${JSON.stringify(s)})' class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">
+                  <button onclick='editService(${JSON.stringify(s).replace(/'/g, "&apos;")})' class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">
                     <i class="fa-solid fa-pen-to-square"></i> Edit
                   </button>
                   <button onclick="toggleService(${s.id})" class="${s.is_active ? 'btn-danger-soft' : 'btn-success-soft'}" style="padding: 6px 12px; font-size: 0.78rem;">
@@ -304,9 +596,159 @@
       }
     }
 
+    function switchIconType(type) {
+      const radioIcon = document.querySelector('input[name="srvIconType"][value="icon"]');
+      const radioImage = document.querySelector('input[name="srvIconType"][value="image"]');
+      const labelIcon = document.getElementById('labelTypeIcon');
+      const labelImage = document.getElementById('labelTypeImage');
+      const iconSec = document.getElementById('iconControlsSection');
+      const imgSec = document.getElementById('imageControlsSection');
+
+      if (type === 'image') {
+        radioImage.checked = true;
+        labelImage.style.border = '2px solid #0066cc';
+        labelImage.style.background = '#eff6ff';
+        labelIcon.style.border = '2px solid #e2e8f0';
+        labelIcon.style.background = '#ffffff';
+        iconSec.style.display = 'none';
+        imgSec.style.display = 'block';
+      } else {
+        radioIcon.checked = true;
+        labelIcon.style.border = '2px solid #0066cc';
+        labelIcon.style.background = '#eff6ff';
+        labelImage.style.border = '2px solid #e2e8f0';
+        labelImage.style.background = '#ffffff';
+        iconSec.style.display = 'block';
+        imgSec.style.display = 'none';
+      }
+      updateLiveBadgePreview();
+    }
+
+    function pickIcon(iconClass) {
+      document.getElementById('srvIconClass').value = iconClass;
+      updateLiveBadgePreview();
+    }
+
+    function syncColorInput(type, val) {
+      if (type === 'bg') {
+        document.getElementById('srvIconBg').value = val;
+      } else if (type === 'bg-text') {
+        if (/^#[0-9A-F]{6}$/i.test(val)) document.getElementById('srvIconBgColor').value = val;
+      } else if (type === 'color') {
+        document.getElementById('srvIconColor').value = val;
+      } else if (type === 'color-text') {
+        if (/^#[0-9A-F]{6}$/i.test(val)) document.getElementById('srvIconColorColor').value = val;
+      }
+      updateLiveBadgePreview();
+    }
+
+    function applyColorPreset(bg, color) {
+      document.getElementById('srvIconBg').value = bg;
+      document.getElementById('srvIconBgColor').value = bg;
+      document.getElementById('srvIconColor').value = color;
+      document.getElementById('srvIconColorColor').value = color;
+      updateLiveBadgePreview();
+    }
+
+    function syncImageBg(val) {
+      document.getElementById('srvImageBg').value = val;
+      updateLiveBadgePreview();
+    }
+
+    function syncImageBgText(val) {
+      if (/^#[0-9A-F]{6}$/i.test(val)) document.getElementById('srvImageBgColor').value = val;
+      updateLiveBadgePreview();
+    }
+
+    function handleImageFileSelected(input) {
+      const file = input.files[0];
+      if (file) {
+        document.getElementById('selectedFileName').textContent = file.name;
+        document.getElementById('selectedFileInfo').style.display = 'flex';
+        document.getElementById('uploadPlaceholder').style.display = 'none';
+        document.getElementById('btnRemoveImage').style.display = 'inline-flex';
+        document.getElementById('removeIconImage').value = '0';
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempImagePreviewSrc = e.target.result;
+          updateLiveBadgePreview();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removeCurrentImage() {
+      document.getElementById('srvIconFile').value = '';
+      document.getElementById('srvIconImageUrl').value = '';
+      document.getElementById('srvExistingImageUrl').value = '';
+      tempImagePreviewSrc = null;
+      document.getElementById('removeIconImage').value = '1';
+      document.getElementById('selectedFileInfo').style.display = 'none';
+      document.getElementById('uploadPlaceholder').style.display = 'block';
+      document.getElementById('btnRemoveImage').style.display = 'none';
+      updateLiveBadgePreview();
+    }
+
+    function updateLiveBadgePreview() {
+      const title = document.getElementById('srvName').value.trim() || 'Service Preview';
+      document.getElementById('livePreviewTitle').textContent = title;
+
+      const type = document.querySelector('input[name="srvIconType"]:checked')?.value || 'icon';
+      const badge = document.getElementById('liveBadgePreview');
+
+      if (type === 'image') {
+        const urlInput = document.getElementById('srvIconImageUrl').value.trim();
+        const existingUrl = document.getElementById('srvExistingImageUrl').value.trim();
+        const imgSrc = tempImagePreviewSrc || urlInput || existingUrl;
+        const bg = document.getElementById('srvImageBg').value || '#ffffff';
+
+        if (imgSrc) {
+          badge.style.background = bg;
+          badge.style.color = 'inherit';
+          badge.innerHTML = `<img src="${imgSrc}" alt="Preview" style="width: 100%; height: 100%; object-fit: contain; display: block;">`;
+        } else {
+          badge.style.background = bg;
+          badge.style.color = '#94a3b8';
+          badge.innerHTML = '<i class="fa-solid fa-image"></i>';
+        }
+      } else {
+        const iconClass = document.getElementById('srvIconClass').value.trim() || 'fa-solid fa-id-card';
+        const bg = document.getElementById('srvIconBg').value.trim() || '#fff7ed';
+        const color = document.getElementById('srvIconColor').value.trim() || '#e04d00';
+
+        badge.style.background = bg;
+        badge.style.color = color;
+        badge.innerHTML = `<i class="${iconClass}"></i>`;
+      }
+    }
+
     function openServiceModal() {
       document.getElementById('serviceId').value = '';
       document.getElementById('serviceForm').reset();
+      document.getElementById('removeIconImage').value = '0';
+      document.getElementById('srvExistingImageUrl').value = '';
+      tempImagePreviewSrc = null;
+
+      populateCategoryDropdown('print');
+      document.getElementById('srvCustomCategoryInput').value = '';
+      toggleCustomCategoryMode(false);
+
+      document.getElementById('selectedFileInfo').style.display = 'none';
+      document.getElementById('uploadPlaceholder').style.display = 'block';
+      document.getElementById('btnRemoveImage').style.display = 'none';
+
+      document.getElementById('srvIconClass').value = 'fa-solid fa-id-card';
+      document.getElementById('srvIconBg').value = '#fff7ed';
+      document.getElementById('srvIconBgColor').value = '#fff7ed';
+      document.getElementById('srvIconColor').value = '#e04d00';
+      document.getElementById('srvIconColorColor').value = '#e04d00';
+      document.getElementById('srvImageBg').value = '#ffffff';
+      document.getElementById('srvImageBgColor').value = '#ffffff';
+      document.getElementById('srvBtnText').value = '';
+      document.getElementById('srvBtnIcon').value = '';
+
+      switchIconType('icon');
       document.getElementById('serviceModalTitle').textContent = 'Add New Service';
       document.getElementById('serviceModal').classList.add('active');
     }
@@ -314,9 +756,53 @@
     function editService(s) {
       document.getElementById('serviceId').value = s.id;
       document.getElementById('srvName').value = s.name;
-      document.getElementById('srvCategory').value = s.category;
+
+      const cat = (s.category || 'print').trim();
+      populateCategoryDropdown(cat);
+      document.getElementById('srvCustomCategoryInput').value = cat;
+      toggleCustomCategoryMode(false);
+
       document.getElementById('srvPrice').value = s.price;
       document.getElementById('srvDesc').value = s.description || '';
+      document.getElementById('srvBtnText').value = s.btn_text || '';
+      document.getElementById('srvBtnIcon').value = s.btn_icon || '';
+
+      document.getElementById('removeIconImage').value = '0';
+      tempImagePreviewSrc = null;
+      document.getElementById('srvIconFile').value = '';
+
+      const iconType = s.icon_type || (s.icon_image ? 'image' : 'icon');
+      const imgUrl = s.icon_image_url || (s.icon_image && (s.icon_image.startsWith('http') ? s.icon_image : `${STORAGE_BASE_URL}/${s.icon_image}`));
+
+      if (imgUrl) {
+        document.getElementById('srvExistingImageUrl').value = imgUrl;
+        document.getElementById('srvIconImageUrl').value = s.icon_image.startsWith('http') ? s.icon_image : '';
+        document.getElementById('selectedFileName').textContent = 'Current Image Uploaded';
+        document.getElementById('selectedFileInfo').style.display = 'flex';
+        document.getElementById('uploadPlaceholder').style.display = 'none';
+        document.getElementById('btnRemoveImage').style.display = 'inline-flex';
+      } else {
+        document.getElementById('srvExistingImageUrl').value = '';
+        document.getElementById('srvIconImageUrl').value = '';
+        document.getElementById('selectedFileInfo').style.display = 'none';
+        document.getElementById('uploadPlaceholder').style.display = 'block';
+        document.getElementById('btnRemoveImage').style.display = 'none';
+      }
+
+      document.getElementById('srvIconClass').value = s.icon || 'fa-solid fa-id-card';
+      const bg = s.icon_bg || (s.category === 'print' ? '#fff7ed' : '#f0fdf4');
+      const color = s.icon_color || (s.category === 'print' ? '#e04d00' : '#03a93a');
+
+      document.getElementById('srvIconBg').value = bg;
+      if (/^#[0-9A-F]{6}$/i.test(bg)) document.getElementById('srvIconBgColor').value = bg;
+
+      document.getElementById('srvIconColor').value = color;
+      if (/^#[0-9A-F]{6}$/i.test(color)) document.getElementById('srvIconColorColor').value = color;
+
+      document.getElementById('srvImageBg').value = s.icon_bg || '#ffffff';
+      if (/^#[0-9A-F]{6}$/i.test(s.icon_bg || '')) document.getElementById('srvImageBgColor').value = s.icon_bg;
+
+      switchIconType(iconType);
       document.getElementById('serviceModalTitle').textContent = 'Edit Service';
       document.getElementById('serviceModal').classList.add('active');
     }
@@ -324,6 +810,7 @@
     function closeServiceModal() {
       document.getElementById('serviceModal').classList.remove('active');
       document.getElementById('serviceForm').reset();
+      tempImagePreviewSrc = null;
     }
 
     async function toggleService(id) {
@@ -340,18 +827,80 @@
       e.preventDefault();
       const id = document.getElementById('serviceId').value;
       const name = document.getElementById('srvName').value.trim();
-      const category = document.getElementById('srvCategory').value;
+
+      const customWrapper = document.getElementById('srvCustomCategoryWrapper');
+      const isCustomMode = customWrapper && customWrapper.style.display !== 'none';
+      let category = '';
+
+      const btn = document.getElementById('btnSaveService');
+
+      if (isCustomMode) {
+        const customCatVal = document.getElementById('srvCustomCategoryInput').value.trim();
+        if (!customCatVal) {
+          showToast('Please enter a custom category name.', 'error');
+          document.getElementById('srvCustomCategoryInput').focus();
+          return;
+        }
+        category = customCatVal.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+      } else {
+        category = document.getElementById('srvCategory').value;
+        if (category === '__custom__') {
+          const customCatVal = document.getElementById('srvCustomCategoryInput').value.trim();
+          if (!customCatVal) {
+            showToast('Please enter a custom category name.', 'error');
+            toggleCustomCategoryMode(true);
+            return;
+          }
+          category = customCatVal.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+        }
+      }
+
       const price = document.getElementById('srvPrice').value;
       const description = document.getElementById('srvDesc').value.trim();
-      const btn = document.getElementById('btnSaveService');
+      const iconType = document.querySelector('input[name="srvIconType"]:checked')?.value || 'icon';
+      const iconClass = document.getElementById('srvIconClass').value.trim();
+      const iconBg = iconType === 'image' ? document.getElementById('srvImageBg').value.trim() : document.getElementById('srvIconBg').value.trim();
+      const iconColor = document.getElementById('srvIconColor').value.trim();
+      const btnText = document.getElementById('srvBtnText').value.trim();
+      const btnIcon = document.getElementById('srvBtnIcon').value.trim();
+      const iconImageUrl = document.getElementById('srvIconImageUrl').value.trim();
+      const removeIconImage = document.getElementById('removeIconImage').value;
 
       btn.disabled = true;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
       try {
-        const res = await API.admin.saveService({ id, name, category, price, description });
+        const formData = new FormData();
+        if (id) formData.append('id', id);
+        formData.append('name', name);
+        formData.append('category', category);
+        formData.append('price', price);
+        formData.append('description', description);
+        formData.append('icon_type', iconType);
+        formData.append('icon', iconClass);
+        formData.append('icon_bg', iconBg);
+        formData.append('icon_color', iconColor);
+        formData.append('btn_text', btnText);
+        formData.append('btn_icon', btnIcon);
+
+        const fileInput = document.getElementById('srvIconFile');
+        if (fileInput && fileInput.files[0]) {
+          formData.append('icon_image', fileInput.files[0]);
+        } else if (iconImageUrl) {
+          formData.append('icon_image', iconImageUrl);
+        }
+
+        if (removeIconImage === '1') {
+          formData.append('remove_icon_image', '1');
+        }
+
+        const res = await API.admin.saveService(formData);
         showToast(res.message || 'Service saved successfully!', 'success');
+        if (!distinctCategories.includes(category)) {
+          distinctCategories.push(category);
+        }
         closeServiceModal();
+        await loadCategories();
         loadServices();
       } catch (err) {
         showToast(err.message || 'Failed to save service', 'error');
