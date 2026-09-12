@@ -45,10 +45,13 @@ class Otp extends Model
                 ->first();
 
             if ($recent) {
-                $waitSeconds = max(1, (int) ceil(60 - now()->diffInSeconds($recent->created_at)));
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    'phone' => ["Please wait {$waitSeconds} seconds before requesting a new OTP."],
-                ]);
+                $elapsed = max(0, now()->getTimestamp() - $recent->created_at->getTimestamp());
+                if ($elapsed < 60) {
+                    $waitSeconds = max(1, min(60, 60 - $elapsed));
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'phone' => ["Please wait {$waitSeconds} seconds before requesting a new OTP."],
+                    ]);
+                }
             }
 
             // 2. Hourly rate check: max 5 OTP requests per hour per phone

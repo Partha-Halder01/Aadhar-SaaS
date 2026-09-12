@@ -98,31 +98,112 @@
 
     <!-- Main Content -->
     <main class="portal-main">
+      <!-- Structured Executive Topbar -->
       <header class="portal-topbar">
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <button class="sidebar-toggle" aria-label="Toggle Sidebar">
-            <i class="fa-solid fa-bars"></i>
+        <!-- Left Section: Navigation Toggle + Breadcrumb & Title -->
+        <div class="topbar-left">
+          <button type="button" class="sidebar-toggle" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation" title="Toggle Navigation">
+            <i class="fa-solid fa-bars-staggered"></i>
           </button>
-          <div>
-            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Portal &bull; User Billing</div>
-            <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;"><span>My Wallet</span><span class="page-title-sub"> & Prepaid Balance</span></h1>
+          
+          <div class="topbar-heading-group">
+            <nav class="topbar-breadcrumb" aria-label="Breadcrumb">
+              <a href="dashboard.html" class="crumb-link"><i class="fa-solid fa-house"></i> Home</a>
+              <span class="crumb-sep"><i class="fa-solid fa-chevron-right"></i></span>
+              <span class="crumb-tag"><i class="fa-solid fa-wallet"></i> Finance & Billing</span>
+            </nav>
+            <div class="topbar-title-row">
+              <h1 class="topbar-title">
+                <span>My Wallet</span>
+                <span class="title-accent-badge">Passbook</span>
+              </h1>
+              <span class="topbar-pill-tag"><i class="fa-solid fa-shield-check"></i> UPI Verified</span>
+            </div>
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <a href="wallet.html" class="topbar-wallet-pill" title="Current Wallet Balance">
-            <i class="fa-solid fa-wallet"></i>
-            <span class="user-wallet-display">₹0</span>
-            <span class="pill-add-btn"><i class="fa-solid fa-plus"></i></span>
+
+
+        <!-- Right Section: Actions + Wallet Card + User Dropdown -->
+        <div class="topbar-right">
+          <!-- Quick Action: Refresh -->
+          <button type="button" class="topbar-icon-btn" id="topbarRefreshBtn" onclick="if(typeof fetchWalletData==='function')fetchWalletData();" title="Sync & Refresh Wallet">
+            <i class="fa-solid fa-arrows-rotate"></i>
+          </button>
+
+          <!-- Quick Action: Support -->
+          <a href="complaint.html" class="topbar-icon-btn" title="Helpdesk Support">
+            <i class="fa-solid fa-headset"></i>
           </a>
 
-          <a href="profile.html" class="topbar-user-badge">
-            <div class="topbar-avatar user-initials-display">UP</div>
-            <div style="display: flex; flex-direction: column;">
-              <span class="user-name-display" style="font-weight: 700; font-size: 0.84rem; line-height: 1.2;">Member</span>
-              <span class="user-role-display" style="font-size: 0.68rem; color: #64748b; line-height: 1;">User</span>
+          <!-- Structured Wallet Card -->
+          <a href="wallet.html" class="topbar-wallet-card" title="Current Wallet Balance">
+            <div class="wallet-icon-box">
+              <i class="fa-solid fa-wallet"></i>
             </div>
+            <div class="wallet-data">
+              <span class="wallet-data-label">Balance</span>
+              <span class="wallet-data-val user-wallet-display">₹0</span>
+            </div>
+            <span class="wallet-add-action">
+              <i class="fa-solid fa-plus"></i> Topup
+            </span>
           </a>
+
+          <!-- Structured Interactive User Dropdown Menu -->
+          <div class="topbar-user-dropdown" id="topbarUserDropdown">
+            <button type="button" class="user-dropdown-btn" id="userMenuBtn" aria-expanded="false" aria-haspopup="true">
+              <div class="user-avatar-wrap">
+                <div class="topbar-avatar user-initials-display">UP</div>
+                <span class="avatar-online-dot" title="Online"></span>
+              </div>
+              <div class="user-meta-info">
+                <span class="user-name-display user-meta-name">Member</span>
+                <span class="user-role-display user-meta-role">Active User</span>
+              </div>
+              <i class="fa-solid fa-chevron-down user-meta-chevron"></i>
+            </button>
+
+            <!-- Dropdown Flyout Card -->
+            <div class="user-dropdown-menu" id="userDropdownFlyout">
+              <div class="flyout-header">
+                <div class="topbar-avatar user-initials-display flyout-avatar">UP</div>
+                <div class="flyout-info">
+                  <div class="user-name-display flyout-name">Member</div>
+                  <div class="user-phone-display flyout-phone"></div>
+                  <span class="flyout-role-badge user-role-display">Active User</span>
+                </div>
+              </div>
+              <div class="flyout-divider"></div>
+              <div class="flyout-menu-list">
+                <a href="profile.html" class="flyout-item">
+                  <i class="fa-solid fa-user-gear"></i>
+                  <span>My Profile & Settings</span>
+                </a>
+                <a href="orders.html" class="flyout-item">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                  <span>My Orders & Prints</span>
+                </a>
+                <a href="documents.html" class="flyout-item">
+                  <i class="fa-solid fa-file-pdf"></i>
+                  <span>My Documents Vault</span>
+                </a>
+                <a href="wallet.html" class="flyout-item active">
+                  <i class="fa-solid fa-wallet"></i>
+                  <span>Wallet & Transactions</span>
+                </a>
+                <a href="complaint.html" class="flyout-item">
+                  <i class="fa-solid fa-headset"></i>
+                  <span>Helpdesk Support</span>
+                </a>
+              </div>
+              <div class="flyout-divider"></div>
+              <a href="#" class="flyout-item flyout-logout btn-logout-action">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Sign Out</span>
+              </a>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -164,37 +245,122 @@
           </div>
         </div>
 
-        <!-- Quick Top Up Presets -->
-        <div class="glass-card" style="margin-bottom: 24px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
-            <div>
-              <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Quick Top-Up Presets</h2>
-              <small style="color: #64748b;">Select an amount to generate instant QR code for UPI scanning</small>
+        <!-- Fast Fintech Wallet Top-Up Panel -->
+        <div class="wallet-topup-panel">
+          <div class="wallet-topup-header">
+            <div class="topup-header-title-group">
+              <div class="topup-header-icon">
+                <i class="fa-solid fa-bolt-lightning"></i>
+              </div>
+              <div>
+                <h2 class="topup-title">Instant Wallet Top-Up</h2>
+                <p class="topup-subtitle">Select a preset or enter a custom amount to generate verified UPI QR code</p>
+              </div>
             </div>
-            <div class="quick-topup-badge">
-              <i class="fa-solid fa-bolt-lightning" style="color:#fd5c00;"></i> Instant Credit
+            <div class="topup-header-badges">
+              <span class="topup-trust-tag"><i class="fa-solid fa-shield-check"></i> 0% Fee</span>
+              <span class="topup-trust-tag"><i class="fa-solid fa-clock-rotate-left"></i> ~2 Min Credit</span>
+              <span class="topup-live-badge"><i class="fa-solid fa-bolt"></i> Instant QR</span>
             </div>
           </div>
-          <div class="wallet-presets-grid">
-            <button type="button" class="amount-chip" onclick="openRechargeModal(100)">
-              <span class="chip-label">+ ₹100</span>
-            </button>
-            <button type="button" class="amount-chip" onclick="openRechargeModal(200)">
-              <span class="chip-label">+ ₹200</span>
-            </button>
-            <button type="button" class="amount-chip chip-popular" onclick="openRechargeModal(500)">
-              <span class="popular-tag">MOST POPULAR</span>
-              <span class="chip-label">+ ₹500</span>
-            </button>
-            <button type="button" class="amount-chip" onclick="openRechargeModal(1000)">
-              <span class="chip-label">+ ₹1,000</span>
-            </button>
-            <button type="button" class="amount-chip" onclick="openRechargeModal(2000)">
-              <span class="chip-label">+ ₹2,000</span>
-            </button>
-            <button type="button" class="amount-chip chip-custom" onclick="openRechargeModal()">
-              <span class="chip-label">+ Custom Amount</span>
-            </button>
+
+          <div class="wallet-topup-grid">
+            <!-- Left: Interactive Amount Selector & Top-Up Trigger -->
+            <div class="topup-form-col">
+              <div class="topup-field-header">
+                <label class="topup-field-label" for="quickTopupInput">Amount to Add (INR)</label>
+                <span class="topup-field-hint">Min ₹50 • Max ₹50,000</span>
+              </div>
+
+              <div class="topup-input-cta-row">
+                <div class="topup-input-container">
+                  <span class="topup-currency-prefix">₹</span>
+                  <input 
+                    type="number" 
+                    id="quickTopupInput" 
+                    class="topup-amount-input" 
+                    placeholder="500" 
+                    value="500" 
+                    min="10" 
+                    max="50000"
+                    step="10"
+                    autocomplete="off"
+                    aria-label="Recharge Amount"
+                  >
+                  <button type="button" class="topup-clear-btn" id="quickTopupClear" title="Clear amount" onclick="clearQuickTopup()">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                  </button>
+                </div>
+
+                <button type="button" class="topup-proceed-cta" id="btnQuickTopupProceed" onclick="proceedQuickTopup()">
+                  <span>Proceed to Pay</span>
+                  <span class="cta-amount-pill" id="topupCtaAmountPreview">₹500</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+
+              <!-- Quick Presets Row -->
+              <div class="topup-presets-section">
+                <span class="topup-presets-label">Popular Retailer Packs:</span>
+                <div class="topup-presets-row" id="topupPresetsRow">
+                  <button type="button" class="wallet-preset-chip" data-amount="100" onclick="selectTopupPreset(100)">
+                    <span class="preset-amount">₹100</span>
+                    <span class="preset-meta">Starter</span>
+                  </button>
+                  <button type="button" class="wallet-preset-chip" data-amount="200" onclick="selectTopupPreset(200)">
+                    <span class="preset-amount">₹200</span>
+                    <span class="preset-meta">Standard</span>
+                  </button>
+                  <button type="button" class="wallet-preset-chip is-popular active" data-amount="500" onclick="selectTopupPreset(500)">
+                    <span class="preset-popular-tag">MOST POPULAR</span>
+                    <span class="preset-amount">₹500</span>
+                    <span class="preset-meta">Recommended</span>
+                  </button>
+                  <button type="button" class="wallet-preset-chip" data-amount="1000" onclick="selectTopupPreset(1000)">
+                    <span class="preset-amount">₹1,000</span>
+                    <span class="preset-meta">Pro Pack</span>
+                  </button>
+                  <button type="button" class="wallet-preset-chip" data-amount="2000" onclick="selectTopupPreset(2000)">
+                    <span class="preset-amount">₹2,000</span>
+                    <span class="preset-meta">Bulk Store</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Dynamic Retailer Benefits & Trust Rail -->
+            <div class="topup-info-col">
+              <div class="topup-benefit-card">
+                <div class="benefit-icon-box">
+                  <i class="fa-solid fa-print"></i>
+                </div>
+                <div class="benefit-text-box">
+                  <div class="benefit-highlight" id="topupPrintsBadge">Estimated 25 PVC Card Prints</div>
+                  <div class="benefit-desc">Calculated at standard retailer rate of ₹20 / card print</div>
+                </div>
+              </div>
+
+              <div class="topup-benefit-card">
+                <div class="benefit-icon-box blue-icon">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="benefit-text-box">
+                  <div class="benefit-highlight">Direct UTR Reconciliation</div>
+                  <div class="benefit-desc">Scan QR on next step & enter 12-digit UTR for automatic ledger credit</div>
+                </div>
+              </div>
+
+              <div class="topup-apps-row">
+                <span class="apps-label">Supported UPI:</span>
+                <div class="apps-badges">
+                  <span class="app-chip">GPay</span>
+                  <span class="app-chip">PhonePe</span>
+                  <span class="app-chip">Paytm</span>
+                  <span class="app-chip">BHIM</span>
+                  <span class="app-chip">Any UPI</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -334,6 +500,21 @@
     document.addEventListener('DOMContentLoaded', () => {
       Promise.all([loadWalletSettings(), loadWalletHistory()]);
 
+      // Initialize Top-Up form events
+      const quickInput = document.getElementById('quickTopupInput');
+      if (quickInput) {
+        quickInput.addEventListener('input', (e) => {
+          updateTopupUI(e.target.value);
+        });
+        quickInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            proceedQuickTopup();
+          }
+        });
+      }
+      updateTopupUI(500);
+
       // Auto-open recharge modal if navigated with ?recharge=true
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('recharge') === 'true' || window.location.hash === '#recharge') {
@@ -357,6 +538,68 @@
         }
       });
     });
+
+    // Fast Fintech Top-Up Helpers
+    function selectTopupPreset(amount) {
+      const input = document.getElementById('quickTopupInput');
+      if (input) {
+        input.value = amount;
+      }
+      updateTopupUI(amount);
+    }
+
+    function updateTopupUI(amount) {
+      const num = parseInt(amount, 10) || 0;
+
+      // Update CTA button amount pill
+      const previewEl = document.getElementById('topupCtaAmountPreview');
+      if (previewEl) {
+        previewEl.textContent = num > 0 ? `₹${num.toLocaleString('en-IN')}` : '₹0';
+      }
+
+      // Update estimated card prints count (assuming ₹20 per standard PVC print)
+      const printsBadge = document.getElementById('topupPrintsBadge');
+      if (printsBadge) {
+        const prints = Math.floor(num / 20);
+        printsBadge.textContent = prints > 0 ? `Estimated ${prints} PVC Card Prints` : 'Enter amount for print estimate';
+      }
+
+      // Toggle active states on preset chips
+      const chips = document.querySelectorAll('.wallet-preset-chip');
+      chips.forEach(chip => {
+        const chipAmt = parseInt(chip.getAttribute('data-amount'), 10);
+        if (chipAmt === num) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+
+      // Clear button visibility
+      const clearBtn = document.getElementById('quickTopupClear');
+      if (clearBtn) {
+        clearBtn.style.display = num > 0 ? 'inline-flex' : 'none';
+      }
+    }
+
+    function clearQuickTopup() {
+      const input = document.getElementById('quickTopupInput');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      updateTopupUI(0);
+    }
+
+    function proceedQuickTopup() {
+      const input = document.getElementById('quickTopupInput');
+      let amount = parseInt(input?.value, 10);
+      if (!amount || isNaN(amount) || amount < 10) {
+        amount = 500;
+        if (input) input.value = 500;
+      }
+      openRechargeModal(amount);
+    }
 
     async function loadWalletSettings() {
       try {

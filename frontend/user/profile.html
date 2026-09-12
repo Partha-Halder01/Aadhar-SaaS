@@ -98,31 +98,110 @@
 
     <!-- Main Content -->
     <main class="portal-main">
+      <!-- Structured Executive Topbar -->
       <header class="portal-topbar">
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <button class="sidebar-toggle" aria-label="Toggle Sidebar">
-            <i class="fa-solid fa-bars"></i>
+        <!-- Left Section: Navigation Toggle + Breadcrumb & Title -->
+        <div class="topbar-left">
+          <button type="button" class="sidebar-toggle" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation" title="Toggle Navigation">
+            <i class="fa-solid fa-bars-staggered"></i>
           </button>
-          <div>
-            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Account &bull; Security</div>
-            <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;"><span>My Account</span><span class="page-title-sub"> Settings</span></h1>
+          
+          <div class="topbar-heading-group">
+            <nav class="topbar-breadcrumb" aria-label="Breadcrumb">
+              <a href="dashboard.html" class="crumb-link"><i class="fa-solid fa-house"></i> Home</a>
+              <span class="crumb-sep"><i class="fa-solid fa-chevron-right"></i></span>
+              <span class="crumb-tag"><i class="fa-solid fa-user-gear"></i> Account Security</span>
+            </nav>
+            <div class="topbar-title-row">
+              <h1 class="topbar-title">
+                <span>My Account</span>
+                <span class="title-accent-badge">Profile</span>
+              </h1>
+              <span class="topbar-pill-tag"><i class="fa-solid fa-shield-halved"></i> 2FA Secured</span>
+            </div>
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <!-- Wallet Pill -->
-          <a href="wallet.html" class="topbar-wallet-pill" title="View Wallet Balance">
-            <i class="fa-solid fa-wallet" style="color: #03a93a;"></i>
-            <span class="user-wallet-display">₹0</span>
-            <span class="badge-topup"><i class="fa-solid fa-plus"></i> Topup</span>
+
+
+        <!-- Right Section: Actions + Wallet Card + User Dropdown -->
+        <div class="topbar-right">
+          <!-- Quick Action: Refresh -->
+          <button type="button" class="topbar-icon-btn" id="topbarRefreshBtn" onclick="if(typeof loadProfileData==='function')loadProfileData();" title="Sync & Refresh Profile">
+            <i class="fa-solid fa-arrows-rotate"></i>
+          </button>
+
+          <!-- Quick Action: Support -->
+          <a href="complaint.html" class="topbar-icon-btn" title="Helpdesk Support">
+            <i class="fa-solid fa-headset"></i>
           </a>
 
-          <!-- User Chip -->
-          <div class="topbar-user-chip">
-            <div class="topbar-avatar user-initials-display">UP</div>
-            <div>
-              <div class="user-name-display" style="line-height: 1.1;">User</div>
-              <div class="user-role-display" style="font-size: 0.68rem; color: #64748b; font-weight: 600;">Active User</div>
+          <!-- Structured Wallet Card -->
+          <a href="wallet.html" class="topbar-wallet-card" title="Click to view wallet or add funds">
+            <div class="wallet-icon-box">
+              <i class="fa-solid fa-wallet"></i>
+            </div>
+            <div class="wallet-data">
+              <span class="wallet-data-label">Balance</span>
+              <span class="wallet-data-val user-wallet-display">₹0</span>
+            </div>
+            <span class="wallet-add-action">
+              <i class="fa-solid fa-plus"></i> Topup
+            </span>
+          </a>
+
+          <!-- Structured Interactive User Dropdown Menu -->
+          <div class="topbar-user-dropdown" id="topbarUserDropdown">
+            <button type="button" class="user-dropdown-btn" id="userMenuBtn" aria-expanded="false" aria-haspopup="true">
+              <div class="user-avatar-wrap">
+                <div class="topbar-avatar user-initials-display">UP</div>
+                <span class="avatar-online-dot" title="Online"></span>
+              </div>
+              <div class="user-meta-info">
+                <span class="user-name-display user-meta-name">Member</span>
+                <span class="user-role-display user-meta-role">Active User</span>
+              </div>
+              <i class="fa-solid fa-chevron-down user-meta-chevron"></i>
+            </button>
+
+            <!-- Dropdown Flyout Card -->
+            <div class="user-dropdown-menu" id="userDropdownFlyout">
+              <div class="flyout-header">
+                <div class="topbar-avatar user-initials-display flyout-avatar">UP</div>
+                <div class="flyout-info">
+                  <div class="user-name-display flyout-name">Member</div>
+                  <div class="user-phone-display flyout-phone"></div>
+                  <span class="flyout-role-badge user-role-display">Active User</span>
+                </div>
+              </div>
+              <div class="flyout-divider"></div>
+              <div class="flyout-menu-list">
+                <a href="profile.html" class="flyout-item active">
+                  <i class="fa-solid fa-user-gear"></i>
+                  <span>My Profile & Settings</span>
+                </a>
+                <a href="orders.html" class="flyout-item">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                  <span>My Orders & Prints</span>
+                </a>
+                <a href="documents.html" class="flyout-item">
+                  <i class="fa-solid fa-file-pdf"></i>
+                  <span>My Documents Vault</span>
+                </a>
+                <a href="wallet.html" class="flyout-item">
+                  <i class="fa-solid fa-wallet"></i>
+                  <span>Wallet & Transactions</span>
+                </a>
+                <a href="complaint.html" class="flyout-item">
+                  <i class="fa-solid fa-headset"></i>
+                  <span>Helpdesk Support</span>
+                </a>
+              </div>
+              <div class="flyout-divider"></div>
+              <a href="#" class="flyout-item flyout-logout btn-logout-action">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Sign Out</span>
+              </a>
             </div>
           </div>
         </div>

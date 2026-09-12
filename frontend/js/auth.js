@@ -189,10 +189,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sidebarToggle) {
       sidebarToggle.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (portalSidebar.classList.contains('show')) {
-          closeSidebar();
+        if (window.innerWidth <= 991) {
+          if (portalSidebar.classList.contains('show')) {
+            closeSidebar();
+          } else {
+            openSidebar();
+          }
         } else {
-          openSidebar();
+          const isNowCollapsed = portalSidebar.classList.toggle('collapsed');
+          localStorage.setItem('utkal_sidebar_collapsed', isNowCollapsed ? 'true' : 'false');
         }
       });
     }
@@ -203,6 +208,48 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && portalSidebar.classList.contains('show')) {
         closeSidebar();
+      }
+    });
+
+    // Universal Topbar User Dropdown Controller
+    document.querySelectorAll('.topbar-user-dropdown').forEach(dropdown => {
+      const trigger = dropdown.querySelector('.user-dropdown-btn, #userMenuBtn');
+      if (!trigger) return;
+
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.topbar-user-dropdown.open').forEach(d => {
+          if (d !== dropdown) d.classList.remove('open');
+        });
+        const isOpen = dropdown.classList.toggle('open');
+        trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+
+      dropdown.querySelectorAll('.flyout-item').forEach(item => {
+        item.addEventListener('click', () => {
+          dropdown.classList.remove('open');
+          trigger.setAttribute('aria-expanded', 'false');
+        });
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.topbar-user-dropdown')) {
+        document.querySelectorAll('.topbar-user-dropdown.open').forEach(d => {
+          d.classList.remove('open');
+          const btn = d.querySelector('.user-dropdown-btn');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.topbar-user-dropdown.open').forEach(d => {
+          d.classList.remove('open');
+          const btn = d.querySelector('.user-dropdown-btn');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
       }
     });
 

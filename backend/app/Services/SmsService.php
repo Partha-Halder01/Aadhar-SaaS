@@ -78,18 +78,37 @@ class SmsService
 
         $url = 'https://apitxt.com/api/sendOTP?' . http_build_query($queryParams);
 
+        $verifySsl = (bool) ($this->config['verify_ssl'] ?? false);
+
         try {
             $curl = curl_init();
             curl_setopt_array($curl, [
                 CURLOPT_URL            => $url,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT        => 12,
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => $verifySsl,
+                CURLOPT_SSL_VERIFYHOST => $verifySsl ? 2 : 0,
             ]);
             $response = curl_exec($curl);
             $err = curl_error($curl);
+            $errNo = curl_errno($curl);
             curl_close($curl);
+
+            // If SSL CA bundle verification fails (e.g. error 60 on Windows / local server), retry with fallback
+            if ($err && ($errNo === 60 || str_contains($err, 'certificate') || str_contains($err, 'issuer') || str_contains($err, 'SSL'))) {
+                Log::warning("APITXT SSL verification failed ({$err}). Retrying without SSL peer verification...");
+                $curl = curl_init();
+                curl_setopt_array($curl, [
+                    CURLOPT_URL            => $url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_TIMEOUT        => 12,
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => 0,
+                ]);
+                $response = curl_exec($curl);
+                $err = curl_error($curl);
+                curl_close($curl);
+            }
 
             if ($err) {
                 Log::error("APITXT cURL Error: {$err}");

@@ -68,6 +68,9 @@ class AuthController extends Controller
         $result = $smsService->sendOtp($phone, $otp->otp, $purpose);
 
         if (!($result['success'] ?? false)) {
+            // Clean up un-dispatched OTP so user is not blocked by cooldown
+            $otp->delete();
+
             return response()->json([
                 'status' => 'error',
                 'message' => $result['message'] ?? 'Failed to deliver OTP to your mobile. Please try again.',
