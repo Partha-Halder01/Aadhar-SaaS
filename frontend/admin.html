@@ -130,38 +130,6 @@
     .toggle-password:hover {
       color: #0f172a;
     }
-    .demo-box {
-      background: #f8fafc;
-      border: 1.5px dashed #cbd5e1;
-      border-radius: 14px;
-      padding: 14px;
-      margin-top: 22px;
-      font-size: 0.82rem;
-      color: #475569;
-    }
-    .demo-btn {
-      background: #ffffff;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 9px 14px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #1e293b;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-      transition: all 0.2s ease;
-      width: 100%;
-      justify-content: center;
-    }
-    .demo-btn:hover {
-      background: #f1f5f9;
-      border-color: #cbd5e1;
-      color: #0f172a;
-      transform: translateY(-1px);
-    }
 
     .btn-admin-submit {
       width: 100%;
@@ -218,9 +186,6 @@
       .auth-body {
         padding: 22px 18px;
       }
-      .demo-box {
-        padding: 10px 12px;
-      }
     }
   </style>
 </head>
@@ -269,19 +234,9 @@
 
           <!-- Submit Button -->
           <button type="submit" id="btnAdminSubmit" class="btn-admin-submit">
-            <i class="fa-solid fa-shield-check"></i> Authenticate & Enter Admin Panel
+            <i class="fa-solid fa-shield-halved"></i> Authenticate & Enter Admin Panel
           </button>
         </form>
-
-        <!-- Quick Demo Autofill Box -->
-        <div class="demo-box" id="demoBox">
-          <div style="font-weight: 800; margin-bottom: 8px; color:#334155; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; display: flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-bolt-lightning" style="color:#fd5c00;"></i> 1-Click Admin Credentials
-          </div>
-          <button type="button" class="demo-btn" id="btnFillAdminDemo">
-            <i class="fa-solid fa-shield-halved" style="color: #0066cc;"></i> Fill Admin Demo (admin@utkalprint.com)
-          </button>
-        </div>
 
         <!-- Link back to User Portal -->
         <a href="login.html" class="user-switch-link">
@@ -312,7 +267,6 @@
     const adminIdentifier = document.getElementById('adminIdentifier');
     const adminPassword = document.getElementById('adminPassword');
     const btnAdminSubmit = document.getElementById('btnAdminSubmit');
-    const btnFillAdminDemo = document.getElementById('btnFillAdminDemo');
     const togglePwd = document.getElementById('togglePasswordBtn');
     const form = document.getElementById('adminLoginForm');
 
@@ -321,11 +275,6 @@
       adminPassword.setAttribute('type', type);
       togglePwd.classList.toggle('fa-eye');
       togglePwd.classList.toggle('fa-eye-slash');
-    });
-
-    btnFillAdminDemo.addEventListener('click', () => {
-      adminIdentifier.value = 'admin@utkalprint.com';
-      adminPassword.value = 'Admin@123';
     });
 
     form.addEventListener('submit', async (e) => {
@@ -348,7 +297,7 @@
           API.clearAuth();
           showToast('Access Denied: This account does not have Administrator privileges. Please use User Login.', 'error');
           btnAdminSubmit.disabled = false;
-          btnAdminSubmit.innerHTML = '<i class="fa-solid fa-shield-check"></i> Authenticate & Enter Admin Panel';
+          btnAdminSubmit.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Authenticate & Enter Admin Panel';
           return;
         }
 
@@ -357,7 +306,7 @@
       } catch (err) {
         showToast(err.message || 'Authentication failed. Please check administrator credentials.', 'error');
         btnAdminSubmit.disabled = false;
-        btnAdminSubmit.innerHTML = '<i class="fa-solid fa-shield-check"></i> Authenticate & Enter Admin Panel';
+        btnAdminSubmit.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Authenticate & Enter Admin Panel';
       }
     });
   </script>

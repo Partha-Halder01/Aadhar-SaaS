@@ -38,7 +38,7 @@ return [
     'sms' => [
         'driver' => env('SMS_DRIVER', 'apitxt'),
         'apitxt' => [
-            'auth_key' => env('APITXT_AUTH_KEY', 'vmjlLxnuukyZjiYOf7lg6GOcIfeWbMCVSgycJiLar-I'),
+            'auth_key' => env('APITXT_AUTH_KEY'),
             'channel' => env('APITXT_CHANNEL', ''),
             'template_id' => env('APITXT_TEMPLATE_ID', ''),
             'country' => env('APITXT_COUNTRY', '91'),

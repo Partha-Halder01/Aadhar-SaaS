@@ -225,6 +225,18 @@ const API = {
   },
 
   // Public & User Services
+  async getServiceCategories() {
+    const cacheKey = 'service_categories_list';
+    const cached = this.cache.get(cacheKey);
+
+    const fetchPromise = this.request('/service-categories').then(res => {
+      this.cache.set(cacheKey, res, 60);
+      return res;
+    });
+
+    return cached ? Promise.resolve(cached) : fetchPromise;
+  },
+
   async getServices(category = '') {
     return await this.request(`/services${category ? '?category=' + encodeURIComponent(category) : ''}`);
   },
@@ -268,6 +280,15 @@ const API = {
 
   async getOrder(id) {
     return await this.request(`/orders/${id}`);
+  },
+
+  async submitMissingDocument(orderId, formData) {
+    const res = await this.request(`/orders/${orderId}/submit-document`, {
+      method: 'POST',
+      body: formData
+    });
+    this.cache.invalidate('orders');
+    return res;
   },
 
   // Wallet
@@ -375,6 +396,15 @@ const API = {
       return res;
     },
 
+    async requestDocument(orderId, docName, message) {
+      const res = await API.request(`/admin/orders/${orderId}/request-document`, {
+        method: 'POST',
+        body: { doc_name: docName, message }
+      });
+      API.cache.invalidate('orders');
+      return res;
+    },
+
     async getWalletRequests() {
       return await API.request('/admin/wallet-requests');
     },
@@ -413,6 +443,29 @@ const API = {
 
     async getServiceCategories() {
       return await API.request('/admin/services/categories');
+    },
+
+    async getCategories() {
+      return await API.request('/admin/service-categories');
+    },
+
+    async saveCategory(data) {
+      const isFormData = data instanceof FormData;
+      const isEdit = isFormData ? !!data.get('id') : !!data.id;
+      const id = isFormData ? data.get('id') : data.id;
+      const res = await API.request(isEdit ? `/admin/service-categories/${id}` : '/admin/service-categories', {
+        method: 'POST',
+        body: data
+      });
+      API.cache.invalidate('service_categories');
+      API.cache.invalidate('services');
+      return res;
+    },
+
+    async toggleCategory(id) {
+      const res = await API.request(`/admin/service-categories/${id}/toggle`, { method: 'POST' });
+      API.cache.invalidate('service_categories');
+      return res;
     },
 
     async saveService(data) {
@@ -479,6 +532,39 @@ const API = {
       });
       API.cache.invalidate('landing_page_content');
       return res;
+    },
+
+    // Review Moderation
+    async getReviews(params = {}) {
+      const query = new URLSearchParams(params).toString();
+      return await API.request(`/admin/reviews${query ? '?' + query : ''}`);
+    },
+
+    async toggleReview(id) {
+      const res = await API.request(`/admin/reviews/${id}/toggle`, { method: 'POST' });
+      API.cache.invalidate('landing_page_content');
+      return res;
+    },
+
+    async deleteReview(id) {
+      const res = await API.request(`/admin/reviews/${id}`, { method: 'DELETE' });
+      API.cache.invalidate('landing_page_content');
+      return res;
+    },
+
+    async blockReviewUser(id, action = 'block') {
+      return await API.request(`/admin/reviews/${id}/block-user`, {
+        method: 'POST',
+        body: { action }
+      });
+    },
+
+    async blockAndDeleteReview(id) {
+      const res = await API.request(`/admin/reviews/${id}/block-and-delete`, {
+        method: 'POST'
+      });
+      API.cache.invalidate('landing_page_content');
+      return res;
     }
   },
 
@@ -538,3 +624,15 @@ function formatDate(dateStr) {
   const d = new Date(dateStr);
   return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
+
+// Utility: Escape HTML string to prevent XSS and rendering breakages
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+

@@ -4,20 +4,305 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Terms of Service - Instant Online Seva</title>
-  <meta name="description" content="Terms of Service and operational guidelines for retailers, CSC kiosk operators, and businesses using Instant Online Seva.">
+  <meta name="description" content="Simple, transparent, point-to-point Terms of Service and operational guidelines of Instant Online Seva portal.">
   <link rel="icon" type="image/png" href="logo-icon.png">
+  
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  
   <!-- FontAwesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
   <!-- Core CSS -->
   <link rel="stylesheet" href="css/style.css">
-</head>
-<body style="background: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif;">
 
-  <!-- Sticky Glassmorphism Navigation Bar -->
+  <style>
+    body {
+      background: #f8fafc;
+      color: #334155;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.65;
+    }
+
+    .policy-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    /* Simple & Clean Header */
+    .policy-header {
+      text-align: center;
+      margin-bottom: 36px;
+      padding-bottom: 28px;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+
+    .policy-breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 14px;
+    }
+
+    .policy-breadcrumb a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    .policy-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .policy-subtitle {
+      font-size: 1rem;
+      color: #64748b;
+      max-width: 620px;
+      margin: 0 auto 16px;
+    }
+
+    .policy-meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #eff6ff;
+      color: #0066cc;
+      border: 1px solid #bfdbfe;
+      border-radius: 9999px;
+      padding: 5px 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    /* Key Guarantees Box */
+    .guarantees-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .guarantee-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .guarantee-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .guarantee-title {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #0f172a;
+      margin-bottom: 3px;
+    }
+
+    .guarantee-desc {
+      font-size: 0.8rem;
+      color: #64748b;
+      line-height: 1.45;
+    }
+
+    /* Policy Content Card */
+    .policy-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 36px 40px;
+      box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
+    }
+
+    /* Point-to-Point Section Styling */
+    .policy-section {
+      margin-bottom: 32px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .policy-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #0066cc;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    /* Point-by-Point Bullet List */
+    .point-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .point-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #334155;
+    }
+
+    .point-item i {
+      color: #03a93a;
+      font-size: 0.85rem;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .point-item strong {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    /* Highlight Warning / Alert */
+    .notice-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #fd5c00;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.86rem;
+      color: #9a3412;
+      margin-top: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+
+    .notice-box i {
+      font-size: 1rem;
+      margin-top: 2px;
+      color: #fd5c00;
+    }
+
+    .notice-box-danger {
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      border-left: 4px solid #e11d48;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.86rem;
+      color: #881337;
+      margin-top: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+
+    .notice-box-danger i {
+      font-size: 1rem;
+      margin-top: 2px;
+      color: #e11d48;
+    }
+
+    /* Contact Table / Box */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .contact-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .contact-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .contact-val {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .contact-sub {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 640px) {
+      .policy-container {
+        padding: 24px 14px 60px;
+      }
+      .policy-card {
+        padding: 24px 18px;
+      }
+      .policy-title {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
   <nav class="navbar-custom" id="mainNavbar" style="position: sticky; top: 0; z-index: 1000;">
     <div class="navbar-inner">
       <a href="index.html" class="brand-logo">
@@ -44,242 +329,279 @@
     </div>
   </nav>
 
-  <!-- Breadcrumb & Header Hero -->
-  <header style="background: linear-gradient(135deg, #090e17 0%, #0f172a 60%, #1e293b 100%); color: #ffffff; padding: 50px 20px 60px; position: relative; overflow: hidden;">
-    <div style="position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(0,102,204,0.2) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+  <!-- Main Container -->
+  <div class="policy-container">
     
-    <div style="max-width: 1000px; margin: 0 auto; position: relative; z-index: 2;">
-      <div style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #94a3b8; margin-bottom: 16px;">
-        <a href="index.html" style="color: #cbd5e1; text-decoration: none;"><i class="fa-solid fa-house"></i> Home</a>
+    <!-- Clean Header -->
+    <header class="policy-header">
+      <div class="policy-breadcrumb">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
         <span>&bull;</span>
-        <span style="color: #38bdf8;">Legal Policies</span>
-        <span>&bull;</span>
-        <span style="color: #ffffff; font-weight: 600;">Terms of Service</span>
+        <span>Terms of Service</span>
       </div>
-
-      <span class="rz-section-tag" style="background: rgba(56,189,248,0.12); color: #38bdf8; border: 1px solid rgba(56,189,248,0.25); display: inline-flex; margin-bottom: 14px;">
-        <i class="fa-solid fa-scale-balanced"></i> Operational Agreement
-      </span>
-      <h1 style="font-size: 2.3rem; font-weight: 800; font-family: 'Outfit', sans-serif; margin: 0 0 12px; letter-spacing: -0.02em;">Terms of Service</h1>
-      <p style="color: #94a3b8; font-size: 1rem; max-width: 720px; line-height: 1.6; margin: 0;">
-        These terms govern your access to Instant Online Seva software, digital card generation, PAN retrieval utilities, and prepaid wallet operations.
+      <h1 class="policy-title">Terms of Service</h1>
+      <p class="policy-subtitle">
+        Operational rules and service guidelines for portal partners, retailers, and users — clearly explained point by point.
       </p>
-      
-      <div style="margin-top: 20px; display: inline-flex; align-items: center; gap: 14px; font-size: 0.8rem; background: rgba(255,255,255,0.06); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-        <span><i class="fa-regular fa-calendar-check" style="color: #38bdf8;"></i> Last Updated: September 2026</span>
-        <span>&bull;</span>
-        <span><i class="fa-solid fa-circle-check" style="color: #03a93a;"></i> Legally Enforceable in India</span>
+      <div class="policy-meta-pill">
+        <i class="fa-solid fa-scale-balanced"></i>
+        <span>Last Updated: September 2026 &bull; Legally Enforceable in India</span>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <!-- Main Legal Document Body -->
-  <main style="max-width: 1000px; margin: -30px auto 70px; padding: 0 20px; position: relative; z-index: 10;">
-    <div class="glass-card" style="background: #ffffff; border-radius: 20px; padding: 40px 48px; box-shadow: 0 16px 40px -10px rgba(15,23,42,0.07); border: 1px solid #e2e8f0;">
-      
-      <!-- Table of Contents -->
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px 24px; margin-bottom: 36px;">
-        <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0 0 12px; color: #0f172a; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-list-check" style="color: #0066cc;"></i> Table of Contents
-        </h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; font-size: 0.84rem;">
-          <a href="#sec-acceptance" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 1. Acceptance & Eligibility</a>
-          <a href="#sec-account" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 2. Account Registration & Credentials</a>
-          <a href="#sec-scope" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 3. Scope of Services & Assisted Delivery</a>
-          <a href="#sec-wallet" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 4. Wallet Recharges, Fees & Deductions</a>
-          <a href="#sec-lawful" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 5. Lawful Usage & Zero Tolerance on Fraud</a>
-          <a href="#sec-ip" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 6. System Uptime & Software Licensing</a>
-          <a href="#sec-liability" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 7. Limitation of Liability & Third Parties</a>
-          <a href="#sec-jurisdiction" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 8. Governing Law & Dispute Resolution</a>
+    <!-- Top 3 Quick Highlights -->
+    <div class="guarantees-grid">
+      <div class="guarantee-card">
+        <div class="guarantee-icon" style="background:#eff6ff; color:#0066cc;">
+          <i class="fa-solid fa-wallet"></i>
+        </div>
+        <div>
+          <div class="guarantee-title">Pay Per Use</div>
+          <div class="guarantee-desc">Charges deducted only upon successful PDF generation or valid query result.</div>
         </div>
       </div>
 
+      <div class="guarantee-card">
+        <div class="guarantee-icon" style="background:#f0fdf4; color:#16a34a;">
+          <i class="fa-solid fa-rotate-left"></i>
+        </div>
+        <div>
+          <div class="guarantee-title">Auto Failed Refund</div>
+          <div class="guarantee-desc">If a service fails or server is unreachable, funds instantly return to your wallet.</div>
+        </div>
+      </div>
+
+      <div class="guarantee-card">
+        <div class="guarantee-icon" style="background:#fef2f2; color:#dc2626;">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <div class="guarantee-title">Zero Tolerance on Fraud</div>
+          <div class="guarantee-desc">Strict ban on forged documents and counterfeit identity cards.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="policy-card">
+
       <!-- Section 1 -->
-      <section id="sec-acceptance" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          1. Acceptance & Eligibility
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          By creating an account, browsing our website, or using any automated services on <strong>Instant Online Seva</strong> (the "Portal", "Platform", or "Service"), you agree to be bound by these Terms of Service. If you do not agree to these terms, you must discontinue using our services immediately.
-        </p>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569;">
-          You must be at least 18 years of age and legally competent under the Indian Contract Act, 1872 to register as a service merchant, retailer, or business operator on this platform.
-        </p>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">1</div>
+          <h2 class="section-title">Acceptance & Eligibility (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Binding Agreement:</strong> By accessing the portal, creating an account, or purchasing credits on Instant Online Seva, you agree to these Terms of Service.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Minimum Age:</strong> You must be at least 18 years old and legally competent under Indian law to register as a service partner or merchant.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Independent Tech Platform:</strong> Instant Online Seva is an independent B2B print-formatting software and lookup assistance suite. We are NOT an official government agency (such as UIDAI, NSDL, UTIITSL, or ECI).</div>
+          </li>
+        </ul>
       </section>
 
       <!-- Section 2 -->
-      <section id="sec-account" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          2. Account Registration & Credentials
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          Retailers and center operators must provide accurate, current, and complete mobile numbers and business identifiers upon onboarding.
-        </p>
-        <div style="background: #f1f5f9; border-left: 4px solid #0066cc; padding: 14px 18px; border-radius: 0 10px 10px 0; margin-bottom: 12px; font-size: 0.88rem; color: #334155;">
-          <strong>Security Duty:</strong> You are solely responsible for maintaining the confidentiality of your account credentials, login passwords, and session tokens. All activity conducted through your authenticated account is presumed to be initiated by you.
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">2</div>
+          <h2 class="section-title">Account Registration & Security (Point to Point)</h2>
         </div>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569;">
-          Notify our support team immediately if you detect unauthorized access or credential compromise.
-        </p>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Accurate Details:</strong> You must register with an active mobile phone number and accurate business/operator details.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Credential Protection:</strong> You are solely responsible for keeping your login credentials, master passwords, and OTPs confidential.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Account Activity:</strong> All orders, wallet debits, and support inquiries originating from your authenticated session are presumed to be conducted by you.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Compromise Alert:</strong> If you detect unauthorized login or misuse of your account, notify our support desk immediately.</div>
+          </li>
+        </ul>
       </section>
 
       <!-- Section 3 -->
-      <section id="sec-scope" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          3. Scope of Services & Assisted Delivery
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          Instant Online Seva provides productivity tools, print-layout formatting engines, PVC-ready PDF creators, and assisted record lookup utilities (such as Aadhaar print formatting, Voter ID card rendering, Ayushman Card printing, and PAN find verification assistance).
-        </p>
-        <ul style="font-size: 0.92rem; line-height: 1.7; color: #475569; padding-left: 20px; margin-bottom: 12px;">
-          <li><strong>Technical Formatting:</strong> Our service transforms valid government PDFs and authorized document exports into standardized CR80 / PVC card layouts with high-resolution crop marks.</li>
-          <li><strong>Autonomous Status:</strong> Instant Online Seva is an independent B2B technology enablement platform and is NOT an official government authority (UIDAI, NSDL, UTIITSL, ECI, or NHA).</li>
-          <li><strong>Source Verification:</strong> You certify that all documents uploaded or numbers queried belong to citizens who have explicitly requested your kiosk or center to print or retrieve their documentation.</li>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">3</div>
+          <h2 class="section-title">Scope of Services & Customer Consent (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Automated Formatting:</strong> Our tools crop, align, dual-side, and convert government-issued e-PDFs into standard 300 DPI CR-80 PVC printable files.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Assisted Record Lookup:</strong> We provide verification assistance for lost PAN cards based on valid demographic and Aadhaar inputs provided by the customer.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Mandatory Client Consent:</strong> Retailers certify that every uploaded file or citizen record queried belongs to a customer who physically visited their center and explicitly gave consent.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>No Modification of Identity Data:</strong> Our software does not alter or falsify any demographic data, names, photos, or numbers found on the original documents.</div>
+          </li>
         </ul>
       </section>
 
       <!-- Section 4 -->
-      <section id="sec-wallet" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          4. Wallet Recharges, Fees & Deductions
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          Services are charged on a prepaid per-transaction basis. Retailers maintain a prepaid portal wallet:
-        </p>
-        <ul style="font-size: 0.92rem; line-height: 1.7; color: #475569; padding-left: 20px; margin-bottom: 12px;">
-          <li><strong>Prepaid Balance:</strong> Balance is loaded via authorized UPI QR codes or automated payment gateways. Recharges are credited once the bank UTR confirmation is verified.</li>
-          <li><strong>Deduction on Generation:</strong> Wallet points or cash balance are automatically debited when a print file or verified inquiry is successfully processed and made available for download.</li>
-          <li><strong>Failed Order Protection:</strong> If a service transaction fails due to upstream portal downtime or invalid database records, the deducted wallet amount is automatically reimbursed to your portal balance in accordance with our <a href="refund.html" style="color: #0066cc; font-weight: 600;">Refund Policy</a>.</li>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">4</div>
+          <h2 class="section-title">Prepaid Wallet & Pricing (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Prepaid Billing:</strong> Services operate on a transparent pay-per-order prepaid wallet balance model.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Debit on Delivery:</strong> Wallet funds are debited only when the generated print file or verified lookup result is successfully ready for download.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>QR Recharge Credit:</strong> Wallet top-ups via dynamic UPI QR code are verified and credited within seconds of submitting the 12-digit bank UTR number.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Instant Failure Reversal:</strong> If an order fails due to system error, timeout, or missing records, the deducted amount is immediately refunded to your portal wallet.</div>
+          </li>
         </ul>
       </section>
 
       <!-- Section 5 -->
-      <section id="sec-lawful" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          5. Lawful Usage & Zero Tolerance on Fraud
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          You agree to strictly comply with all applicable laws of the Republic of India, including the Aadhaar Act, 2016, the Information Technology Act, 2000, and the Digital Personal Data Protection Act, 2023.
-        </p>
-        <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 12px; padding: 18px 22px; margin-bottom: 14px;">
-          <h4 style="color: #e11d48; margin: 0 0 8px; font-size: 0.92rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-triangle-exclamation"></i> Strictly Prohibited Conduct
-          </h4>
-          <ul style="margin: 0; padding-left: 18px; font-size: 0.86rem; color: #881337; line-height: 1.6;">
-            <li>Uploading counterfeit, forged, or unauthorized identity cards or credentials.</li>
-            <li>Harvesting, scraping, or mass-querying citizen identity numbers without physical kiosk consent.</li>
-            <li>Attempting to reverse engineer, decompile, or breach the Portal's security infrastructure.</li>
-            <li>Using automated bots or headless scripts to exploit the platform's API endpoints.</li>
-          </ul>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">5</div>
+          <h2 class="section-title">Prohibited Conduct & Anti-Fraud Policy (Point to Point)</h2>
         </div>
-        <p style="font-size: 0.9rem; color: #64748b; font-style: italic;">
-          Violation of these provisions will lead to instantaneous account termination, forfeiture of remaining wallet credits, and forwarding of forensic logs to law enforcement agencies.
-        </p>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>No Forgery:</strong> Uploading manipulated, forged, photoshopped, or counterfeit documents is strictly illegal.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>No Mass Scraping:</strong> Automated scraping, bot access, or bulk querying without individual customer requests is prohibited.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>No Reverse Engineering:</strong> Attempting to decompile, exploit, or bypass security safeguards will result in immediate termination.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Strict Enforcement:</strong> Accounts caught engaging in fraudulent activity are banned immediately without refund and reported to cyber law authorities.</div>
+          </li>
+        </ul>
+
+        <div class="notice-box-danger">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <div>
+            <strong>Zero Tolerance on Fake Cards:</strong> Any account attempting to forge citizen credentials or fabricate government cards will be permanently blocked and audited.
+          </div>
+        </div>
       </section>
 
       <!-- Section 6 -->
-      <section id="sec-ip" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          6. System Uptime & Software Licensing
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          Instant Online Seva grants you a revocable, non-exclusive, non-transferable, limited license to access our cloud software for commercial retail printing purposes.
-        </p>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569;">
-          While we strive for 99.9% uptime on our cloud infrastructure, scheduled maintenance or third-party government server slowdowns may temporarily affect response latencies. We provide real-time service status alerts within your user dashboard.
-        </p>
-      </section>
-
-      <!-- Section 7 -->
-      <section id="sec-liability" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          7. Limitation of Liability & Disclaimers
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          Our software and print conversion tools are provided on an "as is" and "as available" basis. To the maximum extent permitted by applicable law:
-        </p>
-        <ul style="font-size: 0.92rem; line-height: 1.7; color: #475569; padding-left: 20px; margin-bottom: 12px;">
-          <li>We are not liable for typographical mistakes, blurry source scans, or incorrect parameters provided by the user during document submission.</li>
-          <li>We shall not be liable for any indirect, incidental, or consequential damages resulting from upstream portal outages or retailer hardware malfunction.</li>
-          <li>Our cumulative liability in all circumstances is limited to the exact transaction fee paid for the specific order under question.</li>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">6</div>
+          <h2 class="section-title">System Uptime & Disclaimers (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>High Availability:</strong> We maintain cloud server infrastructure optimized for 99.9% uptime for digital print rendering.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Upstream Delays:</strong> Periodic maintenance or network slowdowns on official government databases can temporarily impact response times.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>User Input Responsibility:</strong> The portal is not responsible for errors resulting from incorrect Aadhaar numbers or corrupted files provided by the retailer.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Liability Cap:</strong> In all circumstances, maximum liability is strictly limited to the transaction fee paid for the specific order under question.</div>
+          </li>
         </ul>
       </section>
 
-      <!-- Section 8 -->
-      <section id="sec-jurisdiction">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          8. Governing Law & Dispute Resolution
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 16px;">
-          These Terms of Service are governed by and construed in accordance with the laws of the Republic of India. Any legal dispute, controversy, or claim arising out of or relating to these terms shall be submitted to the exclusive jurisdiction of the competent courts having jurisdiction over our primary registered operating office in Odisha / West Bengal, India.
-        </p>
-        
-        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-          <div>
-            <div style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Legal Compliance Contact</div>
-            <div style="font-weight: 800; color: #0f172a; font-size: 1rem;">Legal & Operational Affairs Cell</div>
-            <div style="font-size: 0.84rem; color: #475569;">Email: legal@utkalprint.com | support@utkalprint.com</div>
+      <!-- Section 7 -->
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">7</div>
+          <h2 class="section-title">Governing Law & Dispute Resolution (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Jurisdiction:</strong> These terms are governed exclusively by the laws of the Republic of India.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Fast Redressal:</strong> Any billing dispute, stuck order, or service query is resolved via our dedicated helpdesk within 24 business hours.</div>
+          </li>
+        </ul>
+
+        <div class="contact-grid">
+          <div class="contact-item">
+            <div class="contact-label"><i class="fa-solid fa-envelope" style="color:#0066cc;"></i> Legal & Support Desk</div>
+            <div class="contact-val">support@utkalprint.com</div>
+            <div class="contact-sub">Response within 24 hours</div>
           </div>
-          <a href="mailto:legal@utkalprint.com" class="nav-btn-cta" style="text-decoration: none;">
-            <span>Contact Legal Team</span>
-            <i class="fa-solid fa-paper-plane"></i>
-          </a>
+
+          <div class="contact-item">
+            <div class="contact-label"><i class="fa-solid fa-phone" style="color:#fd5c00;"></i> Merchant Helpline</div>
+            <div class="contact-val">+91 98765 43210</div>
+            <div class="contact-sub">Mon - Sat: 8:00 AM - 10:00 PM</div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-label"><i class="fa-brands fa-whatsapp" style="color:#16a34a;"></i> WhatsApp Support</div>
+            <div class="contact-val">+91 98765 43210</div>
+            <div class="contact-sub">Direct Live Chat</div>
+          </div>
         </div>
       </section>
 
     </div>
-  </main>
+  </div>
 
-  <!-- Global Portal Footer (Matching index.html) -->
-  <footer class="footer-modern" style="background: #090e17; color: #cbd5e1; padding: 60px 20px 30px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-    <div style="max-width: 1200px; margin: 0 auto;">
-      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; margin-bottom: 50px;">
-        <div>
-          <a href="index.html" class="brand-logo" style="margin-bottom: 16px; display: inline-block;">
-            <img src="logo .png" alt="Instant Online Seva" style="height: 38px;">
-          </a>
-          <p style="color: #94a3b8; font-size: 0.88rem; line-height: 1.6; max-width: 320px;">
-            India's foremost digital print formatting and PAN retrieval suite designed for retailers, cyber cafes, and customer service centers.
-          </p>
-        </div>
-
-        <div>
-          <h5 class="footer-col-title" style="color: #ffffff; font-size: 0.92rem; font-weight: 700; margin-bottom: 18px;">Core Solutions</h5>
-          <ul class="footer-links-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.86rem;">
-            <li><a href="login.html" style="color: #94a3b8; text-decoration: none;">Aadhaar PVC Print</a></li>
-            <li><a href="login.html" style="color: #94a3b8; text-decoration: none;">PAN Find by Aadhaar</a></li>
-            <li><a href="login.html" style="color: #94a3b8; text-decoration: none;">Voter ID (EPIC) Print</a></li>
-            <li><a href="login.html" style="color: #94a3b8; text-decoration: none;">Ayushman Card Print</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h5 class="footer-col-title" style="color: #ffffff; font-size: 0.92rem; font-weight: 700; margin-bottom: 18px;">Quick Links</h5>
-          <ul class="footer-links-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.86rem;">
-            <li><a href="index.html#services" style="color: #94a3b8; text-decoration: none;">Our Solutions</a></li>
-            <li><a href="index.html#pricing" style="color: #94a3b8; text-decoration: none;">Rates & Speeds</a></li>
-            <li><a href="index.html#how-it-works" style="color: #94a3b8; text-decoration: none;">Workflow</a></li>
-            <li><a href="login.html" style="color: #94a3b8; text-decoration: none;">User Login</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h5 class="footer-col-title" style="color: #ffffff; font-size: 0.92rem; font-weight: 700; margin-bottom: 18px;">Support Desk</h5>
-          <div style="font-size: 0.86rem; color: #94a3b8; display: flex; flex-direction: column; gap: 10px;">
-            <div><i class="fa-solid fa-phone" style="color: #fd5c00; width: 20px;"></i> +91 98765 43210</div>
-            <div><i class="fa-brands fa-whatsapp" style="color: #22c55e; width: 20px;"></i> +91 98765 43210 (Live Chat)</div>
-            <div><i class="fa-solid fa-envelope" style="color: #38bdf8; width: 20px;"></i> support@utkalprint.com</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; font-size: 0.82rem; color: #64748b; flex-wrap: wrap; gap: 14px;">
-        <div>&copy; 2026 Instant Online Seva. All rights reserved. Built for Indian Digital Retailers.</div>
-        <div style="display: flex; gap: 20px;">
+  <!-- Global Footer -->
+  <footer class="footer-modern" style="background: #090e17; color: #cbd5e1; padding: 50px 20px 30px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 24px; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <a href="index.html" class="brand-logo">
+          <img src="logo .png" alt="Instant Online Seva" style="height: 36px;">
+        </a>
+        <div style="display: flex; gap: 24px; font-size: 0.86rem;">
           <a href="privacy.html" style="color: #94a3b8; text-decoration: none;">Privacy Policy</a>
           <a href="terms.html" style="color: #38bdf8; font-weight: 700; text-decoration: none;">Terms of Service</a>
           <a href="refund.html" style="color: #94a3b8; text-decoration: none;">Refund Policy</a>
         </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: #64748b; flex-wrap: wrap; gap: 10px;">
+        <div>&copy; 2026 Instant Online Seva. All rights reserved. Secure PVC Print & PAN Retrieval Portal.</div>
+        <div><i class="fa-solid fa-lock" style="color: #03a93a;"></i> 256-Bit SSL Encrypted</div>
       </div>
     </div>
   </footer>

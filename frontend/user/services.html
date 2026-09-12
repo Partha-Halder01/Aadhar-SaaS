@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Citizen Services & Smart Prints - Utkal Print Portal</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/png" href="../logo-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    /* ============================================================
+       CITIZEN SERVICES HUB - STRUCTURED & PREMIUM STYLING
+       ============================================================ */
+
+    /* Sticky Portal Topbar Navigation */
+    .portal-wrapper {
+      overflow-x: clip !important;
+    }
+    .portal-main {
+      overflow-x: clip !important;
+    }
+    .portal-topbar {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(16px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+      border-bottom: 1.5px solid rgba(226, 232, 240, 0.85) !important;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
+    }
+
+    /* Hero Section Banner */
+    .services-hero-banner {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 26px 30px;
+      margin-bottom: 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 22px;
+      box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.04);
+      position: relative;
+      overflow: hidden;
+    }
+    .services-hero-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(180deg, #0066cc 0%, #fd5c00 50%, #03a93a 100%);
+    }
+    .hero-super-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #0066cc;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .hero-main-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 6px;
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: -0.01em;
+    }
+    .hero-subtitle {
+      color: #64748b;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin: 0;
+      max-width: 620px;
+    }
+    .hero-stats-strip {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .hero-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 10px 16px;
+      border-radius: 14px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+    }
+    .hero-stat-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+    .hero-stat-val {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #0f172a;
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.2;
+    }
+    .hero-stat-lbl {
+      font-size: 0.70rem;
+      color: #64748b;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Filter & Search Toolbar */
+    .categories-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .toolbar-search-box {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 440px;
+    }
+    .toolbar-search-box i.fa-magnifying-glass {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.92rem;
+    }
+    .toolbar-search-box input {
+      width: 100%;
+      padding: 10px 38px 10px 42px;
+      font-size: 0.88rem;
+      border-radius: 12px;
+      border: 1.5px solid #e2e8f0;
+      background: #ffffff;
+      color: #0f172a;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .toolbar-search-box input:focus {
+      border-color: #0066cc;
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12);
+    }
+    .toolbar-category-tabs {
+      display: flex;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+      overflow-x: auto;
+      max-width: 100%;
+    }
+    .cat-filter-btn {
+      padding: 7px 15px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .cat-filter-btn:hover {
+      color: #0f172a;
+    }
+    .cat-filter-btn.active {
+      background: #ffffff;
+      color: #0066cc;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+    }
+
+    /* Structured Category Card */
+    .cat-card-structured {
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1.5px solid #e2e8f0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.24s ease, border-color 0.24s ease;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+      position: relative;
+    }
+    .cat-card-structured:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.12);
+      border-color: #93c5fd;
+    }
+    .cat-card-structured:hover .cat-card-banner img {
+      transform: scale(1.05);
+    }
+    .cat-card-structured:hover .btn-explore-category {
+      background: #0066cc;
+      border-color: #0066cc;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+    }
+    .cat-card-structured:hover .btn-explore-category i {
+      transform: translateX(5px);
+    }
+
+    /* Card Banner */
+    .cat-card-banner {
+      height: 140px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+      padding: 14px 16px;
+    }
+    .cat-card-banner img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+    .cat-banner-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(15,23,42,0.3) 0%, rgba(15,23,42,0.1) 40%, rgba(15,23,42,0.65) 100%);
+      pointer-events: none;
+    }
+    .cat-watermark-icon {
+      position: absolute;
+      right: -12px;
+      bottom: -18px;
+      font-size: 7.2rem;
+      color: rgba(255, 255, 255, 0.14);
+      transform: rotate(-10deg);
+      pointer-events: none;
+    }
+    .cat-banner-top-bar {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cat-badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .cat-badge-counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.94);
+      color: #0f172a;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .pulse-indicator {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.4);
+    }
+
+    /* Floating Squircle Icon Container */
+    .cat-icon-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 22px;
+      margin-top: -26px;
+      position: relative;
+      z-index: 3;
+    }
+    .cat-icon-squircle {
+      width: 52px;
+      height: 52px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45rem;
+      border: 3.5px solid #ffffff;
+      box-shadow: 0 8px 16px -2px rgba(15, 23, 42, 0.12);
+      flex-shrink: 0;
+    }
+    .cat-turnaround-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #028a2f;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 3px 10px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Card Body */
+    .cat-card-body {
+      padding: 16px 22px 18px;
+      flex: 1;
+    }
+    .cat-card-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 6px;
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.3;
+    }
+    .cat-card-desc {
+      font-size: 0.86rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin: 0 0 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 40px;
+    }
+    .cat-chips-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .svc-feature-chip {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #334155;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 3px 9px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .svc-feature-chip i {
+      color: #0066cc;
+      font-size: 0.68rem;
+    }
+    .svc-feature-chip.more-chip {
+      background: #eff6ff;
+      color: #0066cc;
+      border-color: #bfdbfe;
+    }
+    .cat-specs-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+    .cat-spec-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .cat-spec-label {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .cat-spec-val {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .cat-spec-divider {
+      width: 1px;
+      height: 22px;
+      background: #cbd5e1;
+    }
+
+    /* Card Footer */
+    .cat-card-footer {
+      padding: 14px 22px;
+      background: #f8fafc;
+      border-top: 1px solid #f1f5f9;
+    }
+    .btn-explore-category {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: #0066cc;
+      font-size: 0.84rem;
+      font-weight: 800;
+      padding: 9px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-explore-category i {
+      transition: transform 0.2s ease;
+    }
+
+    /* Structured Ledger Accordion & Rows */
+    .ledger-header-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .ledger-title-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .ledger-title-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #eff6ff;
+      color: #0066cc;
+      border: 1.5px solid #bfdbfe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .order-accordion-row {
+      display: none;
+      background: #f8fafc;
+    }
+    .order-accordion-row.open {
+      display: table-row;
+    }
+    .order-details-drawer {
+      padding: 16px 20px;
+      border-left: 4px solid #0066cc;
+      margin: 8px 12px 12px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .drawer-item-lbl {
+      font-size: 0.70rem;
+      color: #64748b;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .drawer-item-val {
+      font-size: 0.85rem;
+      color: #0f172a;
+      font-weight: 700;
+      margin-top: 2px;
+      word-break: break-all;
+    }
+
+    /* Structured Table Row Layout */
+    .structured-ledger-table .custom-table th {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 16px;
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .structured-ledger-table .custom-table td {
+      padding: 14px 16px;
+      vertical-align: middle;
+      border-bottom: 1px solid #edf2f7;
+    }
+    .order-main-row {
+      transition: background-color 0.18s ease;
+    }
+    .order-main-row:hover {
+      background-color: #f8fafc;
+    }
+    .service-col-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .service-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+    .service-avatar.avatar-print {
+      background: #fff7ed;
+      color: #ea580c;
+      border: 1.5px solid #ffedd5;
+    }
+    .service-avatar.avatar-doc {
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1.5px solid #dcfce7;
+    }
+    .service-avatar.avatar-pan {
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1.5px solid #dbeafe;
+    }
+    .service-col-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .service-col-title {
+      font-weight: 800;
+      color: #0f172a;
+      font-size: 0.92rem;
+      line-height: 1.3;
+    }
+    .service-col-meta {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+    .order-ref-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #1e293b;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 7px;
+      border-radius: 6px;
+    }
+    .badge-cat-pill {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-cat-pill.print {
+      background: #fff7ed;
+      color: #ea580c;
+      border: 1px solid #fed7aa;
+    }
+    .badge-cat-pill.pan {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+    .badge-cat-pill.doc {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="portal-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="portal-sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="brand-logo">
+          <img src="../logo .png" alt="Instant Online Seva" class="brand-logo-img">
+          <img src="../logo-icon.png" alt="Instant Online Seva" class="brand-logo-icon-img">
+        </a>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="sidebar-category-header">Main Overview</li>
+        <li class="sidebar-item">
+          <a href="dashboard.html" class="sidebar-link">
+            <i class="fa-solid fa-house" style="color:#64748b;"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <li class="sidebar-category-header">Citizen Services</li>
+        <li class="sidebar-item active">
+          <a href="services.html" class="sidebar-link active">
+            <i class="fa-solid fa-layer-group" style="color:#0066cc;"></i>
+            <span>Services</span>
+            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.72rem; opacity:0.4;"></i>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="orders.html" class="sidebar-link">
+            <i class="fa-solid fa-clock-rotate-left" style="color:#2563eb;"></i>
+            <span>My Orders & Process</span>
+          </a>
+        </li>
+
+        <li class="sidebar-category-header">Finance & Wallet</li>
+        <li class="sidebar-item">
+          <a href="wallet.html" class="sidebar-link">
+            <i class="fa-solid fa-wallet" style="color:#7c3aed;"></i>
+            <span>Wallet Manage</span>
+            <span class="wallet-badge user-wallet-display">₹0</span>
+          </a>
+        </li>
+
+        <li class="sidebar-category-header">Account & Desk</li>
+        <li class="sidebar-item">
+          <a href="documents.html" class="sidebar-link">
+            <i class="fa-solid fa-file-pdf" style="color:#dc2626;"></i>
+            <span>My Documents</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="complaint.html" class="sidebar-link">
+            <i class="fa-solid fa-headset" style="color:#f59e0b;"></i>
+            <span>Support Helpdesk</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="profile.html" class="sidebar-link">
+            <i class="fa-solid fa-user-gear" style="color:#0284c7;"></i>
+            <span>My Account</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- User Info & Logout in sidebar bottom -->
+      <div class="sidebar-user-footer">
+        <div class="sidebar-user-info">
+          <div class="topbar-avatar user-initials-display">UP</div>
+          <div class="sidebar-user-details">
+            <div class="user-name-display">Member</div>
+            <div class="user-role-display">Active User</div>
+          </div>
+        </div>
+        <a href="#" class="btn-icon-action danger btn-logout-action" title="Logout">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="portal-main">
+      <header class="portal-topbar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div>
+            <div id="topbarBreadcrumb" style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Portal &bull; Citizen Services</div>
+            <h1 id="topbarPageTitle" style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;"><span>Citizen Services</span><span class="page-title-sub"> Catalog</span></h1>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="wallet.html" class="topbar-wallet-pill" title="Click to recharge wallet">
+            <i class="fa-solid fa-wallet"></i>
+            <span class="user-wallet-display">₹0</span>
+            <span class="pill-add-btn"><i class="fa-solid fa-plus"></i></span>
+          </a>
+
+          <a href="profile.html" class="topbar-user-badge">
+            <div class="topbar-avatar user-initials-display">UP</div>
+            <div style="display: flex; flex-direction: column;">
+              <span class="user-name-display" style="font-weight: 700; font-size: 0.84rem; line-height: 1.2;">Member</span>
+              <span class="user-role-display" style="font-size: 0.68rem; color: #64748b; line-height: 1;">User</span>
+            </div>
+          </a>
+        </div>
+      </header>
+
+      <div class="portal-content">
+
+        <!-- ============================================================
+             VIEW 1: SERVICE CATEGORIES CATALOG (DEFAULT OVERVIEW)
+             ============================================================ -->
+        <section id="viewCategoriesOverview" style="display: block;">
+          
+          <!-- Structured Hero Banner -->
+          <div class="services-hero-banner">
+            <div style="flex: 1; min-width: 280px;">
+              <div class="hero-super-badge">
+                <i class="fa-solid fa-bolt" style="color: #fd5c00;"></i> Instant Citizen Services & Smart Prints
+              </div>
+              <h2 class="hero-main-title">Citizen Services Catalog</h2>
+              <p class="hero-subtitle">
+                Order automated high-definition PVC smart cards, retrieve lost PAN numbers, and request official digital documents with instant processing.
+              </p>
+            </div>
+            
+            <div class="hero-stats-strip">
+              <div class="hero-stat-item">
+                <div class="hero-stat-icon" style="background:#eff6ff; color:#0066cc;">
+                  <i class="fa-solid fa-shapes"></i>
+                </div>
+                <div>
+                  <div class="hero-stat-val" id="statTotalCategories">3 Verticals</div>
+                  <div class="hero-stat-lbl">Active Categories</div>
+                </div>
+              </div>
+
+              <div class="hero-stat-item">
+                <div class="hero-stat-icon" style="background:#f0fdf4; color:#03a93a;">
+                  <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div>
+                  <div class="hero-stat-val" id="statTotalServices">6 Services</div>
+                  <div class="hero-stat-lbl">Automated Delivery</div>
+                </div>
+              </div>
+
+              <div class="hero-stat-item">
+                <div class="hero-stat-icon" style="background:#fff7ed; color:#ea580c;">
+                  <i class="fa-solid fa-clock"></i>
+                </div>
+                <div>
+                  <div class="hero-stat-val">2-5 Mins</div>
+                  <div class="hero-stat-lbl">Average TAT</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Structured Filter & Search Toolbar -->
+          <div class="categories-toolbar">
+            <div class="toolbar-search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="serviceSearchInput" placeholder="Search services (e.g. Aadhaar, Voter, PAN, Ayushman, Print...)" oninput="handleServiceSearch(this.value)">
+              <button type="button" id="clearSearchBtn" onclick="clearServiceSearch()" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); border: none; background: transparent; color: #94a3b8; cursor: pointer; display: none;">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="toolbar-category-tabs" id="overviewCategoryFilterTabs">
+              <button type="button" class="cat-filter-btn active" onclick="filterOverviewCategory('all', this)">
+                <i class="fa-solid fa-border-all"></i> All Categories
+              </button>
+            </div>
+          </div>
+
+          <!-- Category Cards Grid -->
+          <div id="categoriesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin-bottom: 34px;">
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px; color: #94a3b8;">
+              <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.8rem; margin-bottom: 12px; color: #0066cc;"></i>
+              <div style="font-weight: 700;">Loading Service Categories...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             VIEW 2: CATEGORY SERVICES DRILLDOWN (CLICKED CATEGORY)
+             ============================================================ -->
+        <section id="viewCategoryServices" style="display: none;">
+          <!-- Drilldown Header & Back Navigation -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <button type="button" onclick="showCategoriesOverview()" class="btn-secondary" style="font-size: 0.85rem; padding: 8px 18px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-weight: 800; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+                <i class="fa-solid fa-arrow-left"></i> All Categories
+              </button>
+              <div style="font-size: 0.86rem; color: #64748b; font-weight: 600;">
+                Category: <strong id="activeCategoryNameDisplay" style="color: #0f172a;">PVC Cards</strong>
+              </div>
+            </div>
+
+            <!-- Quick Category Pill Tabs -->
+            <div id="quickCategoryPillTabs" style="display: flex; background: #f1f5f9; padding: 4px; border-radius: 12px; gap: 4px; overflow-x: auto; max-width: 100%;"></div>
+          </div>
+
+          <!-- Active Category Banner Card -->
+          <div id="activeCategoryBanner" class="glass-card" style="margin-bottom: 26px; padding: 24px 28px; border-left: 5px solid #0066cc; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
+            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+              <div id="activeCategoryIconBox" style="width: 56px; height: 56px; border-radius: 16px; background: #eff6ff; color: #0066cc; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; border: 1.5px solid #bfdbfe; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0, 102, 204, 0.1);">
+                <i class="fa-solid fa-layer-group"></i>
+              </div>
+              <div style="flex: 1; min-width: 220px;">
+                <h2 id="activeCategoryTitle" style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin: 0 0 4px; font-family: 'Outfit', sans-serif;">Services</h2>
+                <p id="activeCategoryDescription" style="color: #64748b; font-size: 0.88rem; margin: 0; line-height: 1.5;">Available services in this category</p>
+              </div>
+              <div>
+                <span id="activeCategoryCountBadge" class="badge-status badge-processing" style="font-size: 0.82rem; padding: 6px 16px; border-radius: 20px; font-weight: 800;">
+                  0 Services
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Services Grid -->
+          <div style="margin-bottom: 34px;">
+            <div id="servicesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)); gap: 22px;">
+              <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Loading services...
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             SERVICE ORDERS LEDGER (STRUCTURED ACCORDION ORDERS SECTION)
+             ============================================================ -->
+        <div class="glass-card structured-ledger-table" style="padding: 24px 26px;">
+          <div class="ledger-header-wrapper">
+            <div class="ledger-title-group">
+              <div class="ledger-title-icon">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+              </div>
+              <div>
+                <h2 id="ledgerTitle" style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 0 0 2px; font-family: 'Outfit', sans-serif;">Service Orders & Requests Ledger</h2>
+                <small id="ledgerSubtitle" style="color: #64748b; font-size: 0.84rem;">Real-time status tracking, extracted numbers, and instant file downloads</small>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <div id="ledgerCategoryFilterTabs" style="display: flex; background: #f1f5f9; padding: 3px; border-radius: 10px; gap: 4px;">
+                <button type="button" class="cat-filter-btn active" style="padding: 5px 12px; font-size: 0.78rem;" onclick="filterLedgerTab('all', this)">All</button>
+                <button type="button" class="cat-filter-btn" style="padding: 5px 12px; font-size: 0.78rem;" onclick="filterLedgerTab('print', this)">PVC Cards</button>
+                <button type="button" class="cat-filter-btn" style="padding: 5px 12px; font-size: 0.78rem;" onclick="filterLedgerTab('pan_find', this)">PAN Find</button>
+              </div>
+
+              <button onclick="refreshCurrentLedger()" class="btn-secondary" style="font-size: 0.84rem; padding: 7px 15px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700;">
+                <i class="fa-solid fa-rotate-right"></i> Refresh
+              </button>
+            </div>
+          </div>
+          
+          <div class="custom-table-container service-orders-desktop-table" style="border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden;">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th style="width: 32%;">Service & Order</th>
+                  <th style="width: 18%;">Payment & Date</th>
+                  <th style="width: 18%;">Status & Progress</th>
+                  <th style="width: 22%;">Result / Action</th>
+                  <th style="width: 10%; text-align: center;">Details</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTbody">
+                <tr>
+                  <td colspan="5" class="loading-state-cell">
+                    <div class="loading-spinner-wrapper" style="padding: 30px; text-align: center; color: #94a3b8;">
+                      <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; color: #0066cc; margin-bottom: 8px;"></i>
+                      <div style="font-weight: 700;">Loading orders...</div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mobile Cards Container -->
+          <div id="ordersMobileContainer" class="service-orders-mobile-container" style="margin-top: 16px;"></div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Apply Service Modal -->
+  <div id="applyModal" class="modal-backdrop-custom">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 22px 26px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div id="modalCornerBadge" style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; color: #0066cc; border: 1.5px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <div>
+            <h3 id="modalServiceTitle" style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color: #0f172a; font-family: 'Outfit', sans-serif;">Apply for Service</h3>
+            <span id="modalServicePrice" style="color: #03a93a; font-weight: 800; font-size: 1rem; font-family: 'Outfit', sans-serif;">Price: ₹0</span>
+          </div>
+        </div>
+        <button type="button" onclick="closeApplyModal()" class="btn-icon-action" title="Close" style="border-radius: 50%;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="applyServiceForm">
+        <input type="hidden" id="modalServiceId">
+        <div class="modal-body-custom" style="padding: 24px 26px;">
+          <!-- Dynamic Form Inputs -->
+          <div id="dynamicFormFields"></div>
+
+          <!-- Payment Mode Selection -->
+          <div style="margin-top: 22px; border-top: 1px solid #f1f5f9; padding-top: 20px;">
+            <label class="form-label" style="font-weight: 800; font-size: 0.88rem; color: #0f172a; margin-bottom: 12px; display: block;">Select Payment Method</label>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">
+              <label style="border: 2px solid #0066cc; background: #eff6ff; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s ease;" id="labelPayWallet">
+                <input type="radio" name="payment_method" value="wallet" checked onchange="togglePaymentFields()">
+                <div>
+                  <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">Prepaid Wallet</div>
+                  <small style="color: #03a93a; font-weight: 800;" class="user-wallet-display">₹0 Balance</small>
+                </div>
+              </label>
+
+              <label style="border: 2px solid #e2e8f0; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s ease;" id="labelPayDirect">
+                <input type="radio" name="payment_method" value="direct_upi" onchange="togglePaymentFields()">
+                <div>
+                  <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">UPI QR Scan</div>
+                  <small style="color: #64748b; font-weight: 600;">Instant QR Pay</small>
+                </div>
+              </label>
+            </div>
+
+            <!-- Direct UPI Details Box -->
+            <div id="directUpiBox" style="display: none;">
+              <div class="qr-preview-box" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 16px;">
+                <img id="adminQrImage" src="" alt="Admin UPI QR" class="qr-image-display" style="width: 170px; height: 170px; border-radius: 12px; border: 1px solid #cbd5e1; margin: 0 auto 12px; display: block;">
+                <div style="font-size: 0.98rem; font-weight: 800; color: #0f172a;" id="adminUpiName">Utkal Print Portal</div>
+                <div style="font-size: 0.86rem; color: #64748b; margin-top: 6px;">
+                  Payee UPI: <strong id="adminUpiId" style="color: #0066cc; font-family: 'JetBrains Mono', monospace;">utkalprint@upi</strong>
+                </div>
+              </div>
+
+              <!-- UTR Number -->
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label class="form-label" for="orderUtr">12-Digit UTR / UPI Reference Number <span style="color: #ef4444;">*</span></label>
+                <input type="text" id="orderUtr" class="form-control" placeholder="e.g. 423987123456" style="font-family: 'JetBrains Mono', monospace;">
+              </div>
+
+              <!-- Payment Screenshot -->
+              <div class="form-group">
+                <label class="form-label" for="orderProof">Upload Payment Proof / Screenshot <span style="color: #ef4444;">*</span></label>
+                <input type="file" id="orderProof" class="form-control" accept="image/*,.pdf">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 18px 26px;">
+          <button type="button" onclick="closeApplyModal()" class="btn-outline-custom">Cancel</button>
+          <button type="submit" id="btnSubmitOrder" class="btn-rz-primary" style="width: auto; padding: 11px 24px;">
+            <i class="fa-solid fa-paper-plane"></i> Submit & Place Order
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let publicSettings = {};
+    let categoriesList = [];
+    let allServices = [];
+    let currentCategorySlug = null;
+    let currentCategoryOrders = [];
+
+    // Instant Zero-Lag Hydration from cache
+    try {
+      const cachedCats = API.cache.get('service_categories_list');
+      if (cachedCats && cachedCats.data) {
+        categoriesList = cachedCats.data;
+        renderCategoriesGrid(categoriesList);
+      }
+    } catch (e) {}
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadInitialData();
+      handleUrlParams();
+    });
+
+    // Handle browser back/forward navigation
+    window.addEventListener('popstate', () => {
+      handleUrlParams();
+    });
+
+    async function loadInitialData() {
+      try {
+        const [settings, catsRes, srvRes] = await Promise.all([
+          API.getPublicSettings(),
+          API.getServiceCategories(),
+          API.getServices()
+        ]);
+
+        publicSettings = settings || {};
+        if (publicSettings.upi_id) document.getElementById('adminUpiId').textContent = publicSettings.upi_id;
+        if (publicSettings.upi_name) document.getElementById('adminUpiName').textContent = publicSettings.upi_name;
+        if (publicSettings.qr_code) {
+          document.getElementById('adminQrImage').src = `${STORAGE_BASE_URL}/${publicSettings.qr_code}`;
+        } else {
+          document.getElementById('adminQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=' + encodeURIComponent(publicSettings.upi_id || 'utkalprint@upi');
+        }
+
+        categoriesList = (catsRes && catsRes.data) ? catsRes.data : [];
+        allServices = (srvRes && srvRes.data) ? srvRes.data : [];
+
+        // Update Stat Badges in Hero Banner
+        const catCountEl = document.getElementById('statTotalCategories');
+        const srvCountEl = document.getElementById('statTotalServices');
+        if (catCountEl) catCountEl.textContent = `${categoriesList.length} Verticals`;
+        if (srvCountEl) srvCountEl.textContent = `${allServices.length} Services`;
+
+        // Render Toolbar Filter Tabs & Cards Grid
+        renderOverviewCategoryFilterTabs(categoriesList);
+        renderCategoriesGrid(categoriesList);
+      } catch (err) {
+        console.error('Initialization error:', err);
+      }
+    }
+
+    function handleUrlParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const catParam = urlParams.get('category');
+      if (catParam) {
+        openCategoryView(catParam, false);
+      } else {
+        showCategoriesOverview(false);
+      }
+    }
+
+    // Render Quick Category Filter Tabs in View 1 Toolbar
+    function renderOverviewCategoryFilterTabs(cats) {
+      const container = document.getElementById('overviewCategoryFilterTabs');
+      if (!container) return;
+
+      let html = `
+        <button type="button" class="cat-filter-btn active" onclick="filterOverviewCategory('all', this)">
+          <i class="fa-solid fa-border-all"></i> All Categories (${cats.length})
+        </button>
+      `;
+
+      cats.forEach(c => {
+        const icon = c.icon || (c.slug === 'print' ? 'fa-solid fa-id-card' : (c.slug === 'pan_find' ? 'fa-solid fa-magnifying-glass' : 'fa-solid fa-layer-group'));
+        html += `
+          <button type="button" class="cat-filter-btn" onclick="filterOverviewCategory('${c.slug}', this)">
+            <i class="${icon}"></i> ${c.name}
+          </button>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // Filter overview categories by tab click
+    function filterOverviewCategory(slug, btnEl) {
+      document.querySelectorAll('#overviewCategoryFilterTabs .cat-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      if (slug === 'all') {
+        renderCategoriesGrid(categoriesList);
+      } else {
+        const filtered = categoriesList.filter(c => c.slug === slug);
+        renderCategoriesGrid(filtered);
+      }
+    }
+
+    // Live Search across categories and services
+    function handleServiceSearch(query) {
+      const q = (query || '').trim().toLowerCase();
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.style.display = q ? 'block' : 'none';
+
+      if (!q) {
+        renderCategoriesGrid(categoriesList);
+        return;
+      }
+
+      const matchedCats = categoriesList.filter(c => {
+        const nameMatch = (c.name || '').toLowerCase().includes(q);
+        const descMatch = (c.description || '').toLowerCase().includes(q);
+        const hasMatchingService = allServices.some(s => {
+          const matchCat = (s.category === c.slug) || (c.slug === 'print' && s.category === 'print_doc') || (c.slug === 'pan_find' && s.category === 'pan');
+          return matchCat && ((s.name || '').toLowerCase().includes(q) || (s.description || '').toLowerCase().includes(q));
+        });
+        return nameMatch || descMatch || hasMatchingService;
+      });
+
+      renderCategoriesGrid(matchedCats);
+    }
+
+    function clearServiceSearch() {
+      const inp = document.getElementById('serviceSearchInput');
+      if (inp) inp.value = '';
+      handleServiceSearch('');
+    }
+
+    // Render Structured Category Cards in View 1
+    function renderCategoriesGrid(cats) {
+      const grid = document.getElementById('categoriesGrid');
+      if (!grid) return;
+
+      if (!cats || cats.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px; background: #ffffff; border: 1.5px dashed #cbd5e1; border-radius: 18px;">
+            <i class="fa-solid fa-shapes" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 12px; display: block;"></i>
+            <div style="font-weight: 800; font-size: 1.15rem; color: #0f172a;">No Matching Categories Found</div>
+            <p style="font-size: 0.88rem; color: #64748b; margin-top: 4px; max-width: 420px; margin-left: auto; margin-right: auto;">
+              Try searching with different keywords like Aadhaar, PAN, Voter ID, or clear your search query.
+            </p>
+            <button type="button" onclick="clearServiceSearch()" class="btn-secondary" style="margin-top: 10px; font-size: 0.82rem; padding: 6px 14px;">
+              Reset Search Filter
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = cats.map(c => {
+        // Collect services in this category
+        const catServices = allServices.filter(s => {
+          if (c.slug === 'pan_find' || c.slug === 'pan') return s.category === 'pan_find' || s.category === 'pan';
+          if (c.slug === 'print') return s.category === 'print' || s.category === 'print_doc';
+          return s.category === c.slug;
+        });
+
+        const serviceCount = typeof c.services_count !== 'undefined' ? c.services_count : catServices.length;
+
+        // Thematic Visual Styles
+        let bgGradient = 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)';
+        let watermarkIcon = 'fa-solid fa-layer-group';
+        let iconBg = c.icon_bg || '#eff6ff';
+        let iconColor = c.icon_color || '#0066cc';
+        let iconClass = c.icon || 'fa-solid fa-layer-group';
+        let specFormat = 'Digital Document';
+        let defaultChips = ['Instant TAT', 'Automated Seva'];
+
+        if (c.slug === 'print') {
+          bgGradient = 'linear-gradient(135deg, #ea580c 0%, #f97316 60%, #fb923c 100%)';
+          watermarkIcon = 'fa-solid fa-id-card';
+          iconBg = '#fff7ed';
+          iconColor = '#ea580c';
+          iconClass = c.icon || 'fa-solid fa-id-card';
+          specFormat = '300 DPI Smart PVC';
+          defaultChips = ['Aadhaar PVC', 'Voter ID Smart', 'PAN Card Print', 'Ayushman Card'];
+        } else if (c.slug === 'pan_find' || c.slug === 'pan') {
+          bgGradient = 'linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #0d9488 100%)';
+          watermarkIcon = 'fa-solid fa-magnifying-glass-location';
+          iconBg = '#eff6ff';
+          iconColor = '#0066cc';
+          iconClass = c.icon || 'fa-solid fa-magnifying-glass';
+          specFormat = 'Instant PAN Number';
+          defaultChips = ['Aadhaar to PAN', 'Demographic Match', 'Instant Retrieval'];
+        } else if (c.slug === 'document') {
+          bgGradient = 'linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #8b5cf6 100%)';
+          watermarkIcon = 'fa-solid fa-file-invoice';
+          iconBg = '#f0fdf4';
+          iconColor = '#16a34a';
+          iconClass = c.icon || 'fa-solid fa-file-lines';
+          specFormat = 'Official PDF Format';
+          defaultChips = ['Digital Certificates', 'Govt Verification', 'Instant PDF'];
+        }
+
+        // Feature Chips
+        let chipsHtml = '';
+        if (catServices.length > 0) {
+          chipsHtml = catServices.slice(0, 3).map(s => `
+            <span class="svc-feature-chip">
+              <i class="fa-solid fa-check"></i> ${s.name}
+            </span>
+          `).join('');
+          if (catServices.length > 3) {
+            chipsHtml += `<span class="svc-feature-chip more-chip">+${catServices.length - 3} more</span>`;
+          }
+        } else {
+          chipsHtml = defaultChips.map(ch => `
+            <span class="svc-feature-chip">
+              <i class="fa-solid fa-bolt"></i> ${ch}
+            </span>
+          `).join('');
+        }
+
+        // Banner Image vs Vector Graphic
+        let bannerMediaHtml = '';
+        if (c.image_url) {
+          bannerMediaHtml = `
+            <img src="${c.image_url}" alt="${c.name}" onerror="this.remove();">
+          `;
+        }
+
+        return `
+          <div class="cat-card-structured" onclick="openCategoryView('${c.slug}')">
+            <!-- Top Banner (Image or Gradient with Vector Watermark) -->
+            <div class="cat-card-banner" style="background: ${bgGradient};">
+              ${bannerMediaHtml}
+              <div class="cat-banner-overlay"></div>
+              <i class="${watermarkIcon} cat-watermark-icon"></i>
+
+              <div class="cat-banner-top-bar">
+                <span class="cat-badge-status">
+                  <span class="pulse-indicator"></span> Verified Seva
+                </span>
+                <span class="cat-badge-counter">
+                  <i class="fa-solid fa-bolt" style="color: #fd5c00;"></i> ${serviceCount} Services
+                </span>
+              </div>
+            </div>
+
+            <!-- Floating Squircle Icon -->
+            <div class="cat-icon-container">
+              <div class="cat-icon-squircle" style="background: ${iconBg}; color: ${iconColor};">
+                <i class="${iconClass}"></i>
+              </div>
+              <div class="cat-turnaround-pill">
+                <i class="fa-solid fa-bolt"></i> Instant TAT
+              </div>
+            </div>
+
+            <!-- Card Body Content -->
+            <div class="cat-card-body">
+              <h3 class="cat-card-title">${c.name}</h3>
+              <p class="cat-card-desc">${c.description || 'Explore available government and digital services.'}</p>
+
+              <!-- Feature Chips -->
+              <div class="cat-chips-wrapper">
+                ${chipsHtml}
+              </div>
+
+              <!-- Micro Specifications -->
+              <div class="cat-specs-row">
+                <div class="cat-spec-item">
+                  <span class="cat-spec-label">TAT:</span>
+                  <strong class="cat-spec-val">Instant (2m)</strong>
+                </div>
+                <div class="cat-spec-divider"></div>
+                <div class="cat-spec-item">
+                  <span class="cat-spec-label">Format:</span>
+                  <strong class="cat-spec-val">${specFormat}</strong>
+                </div>
+                <div class="cat-spec-divider"></div>
+                <div class="cat-spec-item">
+                  <span class="cat-spec-label">Payment:</span>
+                  <strong class="cat-spec-val">Prepaid / UPI</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Footer Action -->
+            <div class="cat-card-footer">
+              <button type="button" class="btn-explore-category">
+                <span>Explore ${serviceCount} Services</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Switch to Category Drilldown (View 2)
+    function openCategoryView(slug, updateHistory = true) {
+      currentCategorySlug = slug;
+      if (updateHistory) {
+        history.pushState(null, '', `?category=${slug}`);
+      }
+
+      const viewOverview = document.getElementById('viewCategoriesOverview');
+      const viewServices = document.getElementById('viewCategoryServices');
+      viewOverview.style.display = 'none';
+      viewServices.style.display = 'block';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Find active category
+      const activeCat = categoriesList.find(c => c.slug === slug) || {
+        slug: slug,
+        name: slug === 'print' ? 'PVC Card Print Services' : (slug === 'pan_find' ? 'PAN Find & Recovery' : slug.replace(/_/g, ' ')),
+        description: 'Citizen smart card and portal services',
+        icon: slug === 'pan_find' ? 'fa-solid fa-magnifying-glass-location' : 'fa-solid fa-id-card',
+        icon_bg: slug === 'pan_find' ? '#eff6ff' : '#fff7ed',
+        icon_color: slug === 'pan_find' ? '#0066cc' : '#ea580c',
+      };
+
+      document.getElementById('topbarBreadcrumb').innerHTML = `Portal &bull; Services &bull; <span style="color:#0066cc;">${activeCat.name}</span>`;
+      document.getElementById('topbarPageTitle').innerHTML = `<span>${activeCat.name}</span><span class="page-title-sub"> Catalog</span>`;
+      document.getElementById('activeCategoryNameDisplay').textContent = activeCat.name;
+      document.getElementById('activeCategoryTitle').textContent = activeCat.name;
+      document.getElementById('activeCategoryDescription').textContent = activeCat.description || 'Order instantly with zero delays';
+
+      // Category icon / image in banner
+      const iconBox = document.getElementById('activeCategoryIconBox');
+      if (activeCat.image_url) {
+        iconBox.innerHTML = `<img src="${activeCat.image_url}" alt="${activeCat.name}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`;
+        iconBox.style.padding = '0';
+        iconBox.style.overflow = 'hidden';
+      } else {
+        iconBox.style.background = activeCat.icon_bg || '#eff6ff';
+        iconBox.style.color = activeCat.icon_color || '#0066cc';
+        iconBox.style.borderColor = 'rgba(0,0,0,0.08)';
+        iconBox.innerHTML = `<i class="${activeCat.icon || 'fa-solid fa-layer-group'}"></i>`;
+      }
+
+      // Quick Pill Tabs
+      renderQuickPillTabs(slug);
+
+      // Filter and render services
+      const filteredServices = allServices.filter(s => {
+        if (slug === 'pan_find' || slug === 'pan') {
+          return s.category === 'pan_find' || s.category === 'pan';
+        } else if (slug === 'print') {
+          return s.category === 'print' || s.category === 'print_doc';
+        }
+        return s.category === slug;
+      });
+
+      document.getElementById('activeCategoryCountBadge').textContent = `${filteredServices.length} Services`;
+      renderServicesGrid(filteredServices, activeCat);
+
+      // Load orders for this category
+      loadLedgerOrders(slug);
+    }
+
+    // Return to Categories Overview (View 1)
+    function showCategoriesOverview(updateHistory = true) {
+      currentCategorySlug = null;
+      if (updateHistory) {
+        history.pushState(null, '', 'services.html');
+      }
+
+      document.getElementById('viewCategoryServices').style.display = 'none';
+      document.getElementById('viewCategoriesOverview').style.display = 'block';
+
+      document.getElementById('topbarBreadcrumb').innerHTML = 'Portal &bull; Citizen Services';
+      document.getElementById('topbarPageTitle').innerHTML = '<span>Citizen Services</span><span class="page-title-sub"> Catalog</span>';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      loadLedgerOrders(null);
+    }
+
+    // Render Quick Pill Tabs to switch categories seamlessly in View 2
+    function renderQuickPillTabs(activeSlug) {
+      const container = document.getElementById('quickCategoryPillTabs');
+      if (!container) return;
+
+      container.innerHTML = categoriesList.map(c => {
+        const isActive = c.slug === activeSlug;
+        return `
+          <button type="button" onclick="openCategoryView('${c.slug}')" style="padding: 7px 16px; font-size: 0.82rem; font-weight: ${isActive ? '800' : '600'}; border-radius: 9px; border: none; background: ${isActive ? '#ffffff' : 'transparent'}; color: ${isActive ? '#0066cc' : '#64748b'}; box-shadow: ${isActive ? '0 2px 5px rgba(0,0,0,0.08)' : 'none'}; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
+            ${c.name}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function getServiceBadgeHtml(s, size = 44, fontSize = '1.35rem') {
+      const iconType = s.icon_type || (s.icon_image ? 'image' : 'icon');
+      const imgUrl = s.icon_image_url || (s.icon_image && (s.icon_image.startsWith('http') ? s.icon_image : `${STORAGE_BASE_URL}/${s.icon_image}`));
+      const bg = s.icon_bg || '#eff6ff';
+      const color = s.icon_color || '#0066cc';
+      const iconClass = s.icon || 'fa-solid fa-id-card';
+
+      if (iconType === 'image' && imgUrl) {
+        return `
+          <div style="width: ${size}px; height: ${size}px; min-width: ${size}px; border-radius: 12px; background: ${bg}; border: 1.5px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+            <img src="${imgUrl}" alt="${s.name}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${iconClass}\\' style=\\'color:${color}; font-size:${fontSize};\\'></i>';">
+          </div>
+        `;
+      }
+
+      return `
+        <div style="width: ${size}px; height: ${size}px; min-width: ${size}px; border-radius: 12px; background: ${bg}; color: ${color}; border: 1.5px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; font-size: ${fontSize}; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+          <i class="${iconClass}"></i>
+        </div>
+      `;
+    }
+
+    // Render Services Grid in View 2
+    function renderServicesGrid(services, category) {
+      const grid = document.getElementById('servicesGrid');
+      if (!grid) return;
+
+      if (!services || services.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">
+            <i class="fa-solid fa-folder-open" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 8px;"></i>
+            <div style="font-weight: 700;">No services found in this category.</div>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = services.map(s => {
+        const badgeHtml = getServiceBadgeHtml(s, 44, '1.35rem');
+        const defaultBtnText = (s.category === 'pan_find' || s.category === 'pan') ? 'Search Lost PAN' : 'Order Service';
+        const defaultBtnIcon = (s.category === 'pan_find' || s.category === 'pan') ? 'fa-solid fa-magnifying-glass' : 'fa-solid fa-paper-plane';
+        const btnText = s.btn_text || defaultBtnText;
+        const btnIcon = s.btn_icon || defaultBtnIcon;
+        const btnContent = btnIcon ? `<i class="${btnIcon}"></i> ${btnText}` : btnText;
+
+        const isPan = s.category === 'pan_find' || s.category === 'pan';
+        const btnClass = isPan ? 'btn-primary-green' : 'btn-rz-primary';
+
+        return `
+          <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between; padding: 22px; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 28px -6px rgba(15,23,42,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)';">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+                ${badgeHtml}
+                <div style="text-align: right;">
+                  <span style="font-size: 1.35rem; font-weight: 800; font-family: 'Outfit', sans-serif; color: #03a93a;">${formatINR(s.price)}</span>
+                  <div style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Service Fee</div>
+                </div>
+              </div>
+              <h3 style="font-size: 1.12rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">${s.name}</h3>
+              <p style="color: #64748b; font-size: 0.86rem; line-height: 1.5; margin-bottom: 18px;">
+                ${s.description || 'Fast, automated citizen identification and digital document fulfillment.'}
+              </p>
+            </div>
+            <button onclick="openApplyModal(${s.id})" class="${btnClass}" style="width: 100%; justify-content: center; padding: 11px; border-radius: 10px;">
+              ${btnContent}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Open Unified Apply Service Modal
+    function openApplyModal(serviceId) {
+      const service = allServices.find(s => s.id === serviceId);
+      if (!service) return;
+
+      document.getElementById('modalServiceId').value = service.id;
+      document.getElementById('modalServiceTitle').textContent = service.name;
+      document.getElementById('modalServicePrice').textContent = `Price: ${formatINR(service.price)}`;
+
+      const badgeContainer = document.getElementById('modalCornerBadge');
+      if (badgeContainer) {
+        badgeContainer.outerHTML = `<div id="modalCornerBadge">${getServiceBadgeHtml(service, 44, '1.25rem')}</div>`;
+      }
+
+      const container = document.getElementById('dynamicFormFields');
+      const hasCustomFields = Array.isArray(service.required_fields) && service.required_fields.length > 0;
+      
+      let fields = [];
+      if (hasCustomFields) {
+        fields = service.required_fields;
+      } else if (service.category === 'pan_find' || service.category === 'pan') {
+        fields = [
+          { name: 'aadhaar_number', label: '12-Digit Aadhaar Number', type: 'text', placeholder: 'XXXX-XXXX-XXXX', required: true },
+          { name: 'applicant_name', label: 'Full Name as on Aadhaar', type: 'text', placeholder: 'Enter applicant full name', required: true },
+          { name: 'father_name', label: "Father's Full Name", type: 'text', placeholder: "Enter father's name", required: false },
+          { name: 'dob', label: 'Date of Birth (DD/MM/YYYY)', type: 'text', placeholder: 'DD/MM/YYYY', required: false }
+        ];
+      } else if (service.category === 'document') {
+        fields = [
+          { name: 'applicant_name', label: 'Applicant / Holder Name', type: 'text', placeholder: 'Enter applicant full name', required: true },
+          { name: 'document_id', label: 'Document / Reference ID Number', type: 'text', placeholder: 'e.g. Application No or Certificate ID', required: true },
+          { name: 'document_file', label: 'Upload Document / Scan File', type: 'file', required: true },
+          { name: 'remarks', label: 'Special Instructions / Remarks', type: 'text', placeholder: 'Optional notes or instructions', required: false }
+        ];
+      } else {
+        fields = [
+          { name: 'card_number', label: 'Card / ID Number', type: 'text', placeholder: 'e.g. 12-digit Aadhaar / Voter / PAN ID', required: true },
+          { name: 'full_name', label: 'Card Holder Name', type: 'text', placeholder: 'Enter name as on card', required: true },
+          { name: 'document_file', label: 'Upload PDF or Image File', type: 'file', required: false }
+        ];
+      }
+
+      container.innerHTML = fields.map(f => {
+        if (f.type === 'file') {
+          return `
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">${f.label} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
+              <div class="file-dropzone" onclick="this.querySelector('input[type=file]').click()" style="border: 2px dashed #cbd5e1; border-radius: 12px; padding: 18px; text-align: center; cursor: pointer; background: #ffffff;">
+                <i class="fa-solid fa-cloud-arrow-up upload-icon" style="font-size: 1.8rem; color: #0066cc; margin-bottom: 6px; display: block;"></i>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #1e293b;">Click to browse or drop file</div>
+                <small style="color: #64748b; font-size: 0.74rem;">Supports PDF, JPG, PNG (Max 10MB)</small>
+                <input type="file" name="${f.name}" ${f.required ? 'required' : ''} accept=".pdf,image/*" style="display: none;" onchange="const f=this.files[0]; if(f){ this.previousElementSibling.textContent = 'Selected: ' + f.name; this.previousElementSibling.style.color='#03a93a'; }">
+              </div>
+            </div>
+          `;
+        }
+        return `
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label">${f.label} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
+            <input type="${f.type || 'text'}" name="${f.name}" class="form-control" placeholder="${f.placeholder || ''}" ${f.required ? 'required' : ''}>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('applyModal').classList.add('active');
+    }
+
+    function closeApplyModal() {
+      document.getElementById('applyModal').classList.remove('active');
+      document.getElementById('applyServiceForm').reset();
+      togglePaymentFields();
+    }
+
+    function togglePaymentFields() {
+      const method = document.querySelector('input[name="payment_method"]:checked').value;
+      const directBox = document.getElementById('directUpiBox');
+      const utrInput = document.getElementById('orderUtr');
+      const proofInput = document.getElementById('orderProof');
+      const walletLabel = document.getElementById('labelPayWallet');
+      const directLabel = document.getElementById('labelPayDirect');
+
+      if (method === 'direct_upi') {
+        directBox.style.display = 'block';
+        utrInput.required = true;
+        proofInput.required = true;
+        directLabel.style.borderColor = '#0066cc';
+        directLabel.style.background = '#eff6ff';
+        walletLabel.style.borderColor = '#e2e8f0';
+        walletLabel.style.background = 'transparent';
+      } else {
+        directBox.style.display = 'none';
+        utrInput.required = false;
+        proofInput.required = false;
+        walletLabel.style.borderColor = '#0066cc';
+        walletLabel.style.background = '#eff6ff';
+        directLabel.style.borderColor = '#e2e8f0';
+        directLabel.style.background = 'transparent';
+      }
+    }
+
+    // Submit Order
+    document.getElementById('applyServiceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const serviceId = document.getElementById('modalServiceId').value;
+      const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+      const btn = document.getElementById('btnSubmitOrder');
+
+      const formData = new FormData();
+      formData.append('service_id', serviceId);
+      formData.append('payment_method', paymentMethod);
+
+      if (paymentMethod === 'direct_upi') {
+        const utr = document.getElementById('orderUtr').value.trim();
+        const proof = document.getElementById('orderProof').files[0];
+        if (!utr || !proof) {
+          showToast('Please provide UTR number and payment screenshot', 'error');
+          return;
+        }
+        formData.append('utr_number', utr);
+        formData.append('payment_proof', proof);
+      }
+
+      const dynamicContainer = document.getElementById('dynamicFormFields');
+      const inputs = dynamicContainer.querySelectorAll('input, select, textarea');
+      const inputObj = {};
+
+      inputs.forEach(inp => {
+        if (inp.type === 'file') {
+          if (inp.files[0]) {
+            formData.append(`file_${inp.name}`, inp.files[0]);
+          }
+        } else {
+          inputObj[inp.name] = inp.value;
+        }
+      });
+      formData.append('input_data', JSON.stringify(inputObj));
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing Order...';
+
+      try {
+        const res = await API.createOrder(formData);
+        showToast(res.message || 'Service order placed successfully!', 'success');
+        closeApplyModal();
+        loadLedgerOrders(currentCategorySlug);
+        
+        if (paymentMethod === 'wallet') {
+          API.getProfile().then(user => {
+            document.querySelectorAll('.user-wallet-display').forEach(el => el.textContent = formatINR(user.wallet_balance || 0));
+          });
+        }
+      } catch (err) {
+        showToast(err.message || 'Failed to submit order', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit & Place Order';
+      }
+    });
+
+    // Load Orders Ledger (category-specific or all)
+    async function loadLedgerOrders(categorySlug = null) {
+      const params = categorySlug ? { category: categorySlug } : {};
+      try {
+        const res = await API.getOrders(params);
+        const orders = res.data || [];
+        renderLedgerOrders(orders, categorySlug);
+      } catch (err) {
+        console.error(err);
+        renderLedgerOrders([], categorySlug);
+      }
+    }
+
+    let cachedAllLedgerOrders = [];
+
+    function refreshCurrentLedger() {
+      loadLedgerOrders(currentCategorySlug);
+    }
+
+    function filterLedgerTab(slug, btnEl) {
+      document.querySelectorAll('#ledgerCategoryFilterTabs .cat-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      if (slug === 'all') {
+        renderLedgerOrders(cachedAllLedgerOrders, currentCategorySlug);
+      } else {
+        const filtered = cachedAllLedgerOrders.filter(o => {
+          if (slug === 'print') return o.service && (o.service.category === 'print' || o.service.category === 'print_doc');
+          if (slug === 'pan_find') return o.service && (o.service.category === 'pan_find' || o.service.category === 'pan');
+          return o.service && o.service.category === slug;
+        });
+        renderLedgerOrders(filtered, currentCategorySlug, false);
+      }
+    }
+
+    function toggleOrderDetails(drawerId, btnEl) {
+      const drawer = document.getElementById(drawerId);
+      if (!drawer) return;
+      const isOpen = drawer.classList.contains('open');
+      if (isOpen) {
+        drawer.classList.remove('open');
+        if (btnEl) btnEl.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
+      } else {
+        drawer.classList.add('open');
+        if (btnEl) btnEl.innerHTML = '<i class="fa-solid fa-chevron-up" style="color:#0066cc;"></i>';
+      }
+    }
+
+    function renderLedgerOrders(orders, categorySlug, updateCache = true) {
+      if (updateCache) cachedAllLedgerOrders = orders;
+      const tbody = document.getElementById('ordersTbody');
+      const mobileContainer = document.getElementById('ordersMobileContainer');
+      const catName = categorySlug ? (categoriesList.find(c => c.slug === categorySlug)?.name || categorySlug) : 'All Services';
+
+      document.getElementById('ledgerTitle').textContent = categorySlug ? `${catName} Requests Ledger` : 'Service Orders & Requests Ledger';
+
+      if (!orders || orders.length === 0) {
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5">
+                <div class="empty-state-box" style="text-align: center; padding: 44px 20px;">
+                  <div class="empty-state-icon" style="font-size: 2.2rem; color: #cbd5e1; margin-bottom: 10px;"><i class="fa-solid fa-folder-open"></i></div>
+                  <div class="empty-state-title" style="font-weight: 800; font-size: 1.05rem; color: #0f172a;">No Service Orders Found</div>
+                  <div class="empty-state-desc" style="font-size: 0.86rem; color: #64748b; margin-top: 4px; max-width: 420px; margin-left: auto; margin-right: auto;">
+                    You haven't placed any orders in this view yet. Select any citizen service category above to place an automated instant order!
+                  </div>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+        if (mobileContainer) {
+          mobileContainer.innerHTML = `
+            <div class="mobile-ledger-empty-state" style="text-align: center; padding: 30px 16px; background: #ffffff; border: 1.5px dashed #cbd5e1; border-radius: 14px;">
+              <div class="empty-state-icon" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-folder-open"></i></div>
+              <div class="empty-state-title" style="font-weight: 800; font-size: 1rem; color: #0f172a;">No Orders Found</div>
+              <div class="empty-state-desc" style="font-size: 0.85rem; color: #64748b; margin-top: 4px;">Select any service above to place an instant order.</div>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      // Desktop Structured Table
+      if (tbody) {
+        tbody.innerHTML = orders.map(o => {
+          const isPrintService = o.service && (o.service.category === 'print' || o.service.category === 'print_doc');
+          const isPanService = o.service && (o.service.category === 'pan_find' || o.service.category === 'pan');
+
+          let avatarClass = 'avatar-doc';
+          let avatarIcon = 'fa-solid fa-file-invoice';
+          let catBadgeClass = 'doc';
+          let catLabel = 'Document';
+
+          if (isPrintService) {
+            avatarClass = 'avatar-print';
+            avatarIcon = 'fa-solid fa-id-card';
+            catBadgeClass = 'print';
+            catLabel = 'PVC Print';
+          } else if (isPanService) {
+            avatarClass = 'avatar-pan';
+            avatarIcon = 'fa-solid fa-magnifying-glass';
+            catBadgeClass = 'pan';
+            catLabel = 'PAN Find';
+          }
+
+          let statusBadge = '';
+          if (o.order_status === 'completed') {
+            if (isPanService) {
+              statusBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-circle-check"></i> Found</span>';
+            } else if (isPrintService) {
+              statusBadge = '<span class="badge-status badge-completed" style="background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>';
+            } else {
+              statusBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-circle-check"></i> Completed</span>';
+            }
+          } else if (o.order_status === 'processing') {
+            statusBadge = '<span class="badge-status badge-processing"><i class="fa-solid fa-spinner fa-spin"></i> Processing</span>';
+          } else if (o.order_status === 'rejected') {
+            statusBadge = `<span class="badge-status badge-rejected" title="${o.rejection_reason || ''}"><i class="fa-solid fa-circle-xmark"></i> Rejected</span>`;
+          } else {
+            statusBadge = '<span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending Review</span>';
+          }
+
+          let actionResult = '-';
+          if (isPanService && o.delivery_file) {
+            actionResult = `<span style="font-family:'JetBrains Mono', monospace; font-size:0.92rem; font-weight:800; color:#028a2f; background:#f0fdf4; padding:4px 10px; border-radius:8px; border:1px solid #bbf7d0; display:inline-flex; align-items:center; gap:6px;"><i class="fa-solid fa-id-card"></i> ${o.delivery_file}</span>`;
+          } else if (isPrintService && o.order_status === 'completed') {
+            actionResult = `
+              <div style="color:#03a93a; font-weight:700; font-size:0.78rem; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:5px;">
+                <i class="fa-solid fa-store"></i> Ready at Center
+              </div>
+            `;
+          } else if (o.delivery_file) {
+            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            actionResult = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 8px; text-decoration: none;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+          } else if (o.rejection_reason) {
+            actionResult = `<span style="color:#dc2626; font-size:0.82rem; font-weight:600;">${o.rejection_reason}</span>`;
+          } else {
+            actionResult = '<span style="color:#94a3b8; font-size:0.82rem; font-weight:600;"><i class="fa-solid fa-clock" style="font-size:0.75rem;"></i> In Progress</span>';
+          }
+
+          const payMethod = o.payment_method === 'wallet'
+            ? '<i class="fa-solid fa-wallet" style="color:#03a93a;"></i> Wallet'
+            : '<i class="fa-solid fa-qrcode" style="color:#f59e0b;"></i> UPI QR';
+
+          // Parse input details
+          let inputObj = {};
+          try {
+            inputObj = typeof o.input_data === 'string' ? JSON.parse(o.input_data) : (o.input_data || {});
+          } catch(e) {}
+
+          const applicantName = inputObj.applicant_name || inputObj.full_name || inputObj.name || '-';
+          const cardNum = inputObj.aadhaar_number || inputObj.card_number || inputObj.document_id || '-';
+          const fatherName = inputObj.father_name || '-';
+          const utrNum = o.utr_number || '-';
+
+          return `
+            <tr class="order-main-row">
+              <td>
+                <div class="service-col-card">
+                  <div class="service-avatar ${avatarClass}">
+                    <i class="${avatarIcon}"></i>
+                  </div>
+                  <div class="service-col-info">
+                    <div class="service-col-title">${o.service ? o.service.name : 'Citizen Service'}</div>
+                    <div class="service-col-meta">
+                      <span class="order-ref-pill">${o.order_number}</span>
+                      <span class="badge-cat-pill ${catBadgeClass}">${catLabel}</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div style="display: flex; flex-direction: column; gap: 3px;">
+                  <strong style="font-size: 0.95rem; font-family: 'Outfit', sans-serif; color: #0f172a;">${formatINR(o.amount)}</strong>
+                  <div style="font-size: 0.76rem; color: #64748b; display: inline-flex; align-items: center; gap: 4px;">
+                    ${payMethod} &bull; ${formatDate(o.created_at)}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  ${statusBadge}
+                </div>
+              </td>
+              <td>
+                ${actionResult}
+              </td>
+              <td style="text-align: center;">
+                <button type="button" class="btn-icon-action" style="width: 32px; height: 32px; border-radius: 8px;" onclick="toggleOrderDetails('order-drawer-${o.id}', this)" title="Show/Hide Details">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Accordion Details Drawer -->
+            <tr id="order-drawer-${o.id}" class="order-accordion-row">
+              <td colspan="5" style="padding: 0; border-bottom: 1.5px solid #cbd5e1;">
+                <div class="order-details-drawer">
+                  <div>
+                    <div class="drawer-item-lbl">Applicant / Name</div>
+                    <div class="drawer-item-val">${applicantName}</div>
+                  </div>
+                  <div>
+                    <div class="drawer-item-lbl">Card / Document ID</div>
+                    <div class="drawer-item-val" style="font-family: 'JetBrains Mono', monospace;">${cardNum}</div>
+                  </div>
+                  <div>
+                    <div class="drawer-item-lbl">Father's Name / DOB</div>
+                    <div class="drawer-item-val">${fatherName}</div>
+                  </div>
+                  <div>
+                    <div class="drawer-item-lbl">Payment Mode & Ref</div>
+                    <div class="drawer-item-val">${o.payment_method === 'wallet' ? 'Prepaid Wallet' : (utrNum !== '-' ? 'UPI Ref: ' + utrNum : 'UPI Direct')}</div>
+                  </div>
+                  ${o.rejection_reason ? `
+                  <div style="grid-column: 1/-1;">
+                    <div class="drawer-item-lbl" style="color: #dc2626;">Rejection Note / Remarks</div>
+                    <div class="drawer-item-val" style="color: #b91c1c;">${o.rejection_reason}</div>
+                  </div>
+                  ` : ''}
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Mobile Cards
+      if (mobileContainer) {
+        mobileContainer.innerHTML = orders.map(o => {
+          const isPrintService = o.service && (o.service.category === 'print' || o.service.category === 'print_doc');
+          const isPanService = o.service && (o.service.category === 'pan_find' || o.service.category === 'pan');
+
+          let statusBadge = '';
+          if (o.order_status === 'completed') {
+            statusBadge = '<span class="badge-status badge-completed">Completed</span>';
+          } else if (o.order_status === 'processing') {
+            statusBadge = '<span class="badge-status badge-processing">Processing</span>';
+          } else if (o.order_status === 'rejected') {
+            statusBadge = '<span class="badge-status badge-rejected">Rejected</span>';
+          } else {
+            statusBadge = '<span class="badge-status badge-pending">Pending</span>';
+          }
+
+          let actionResult = '';
+          if (isPanService && o.delivery_file) {
+            actionResult = `<span style="font-family:'JetBrains Mono', monospace; font-size:0.85rem; font-weight:800; color:#028a2f; background:#f0fdf4; padding:3px 8px; border-radius:6px; border:1px solid #bbf7d0;"><i class="fa-solid fa-id-card"></i> ${o.delivery_file}</span>`;
+          } else if (isPrintService && o.order_status === 'completed') {
+            actionResult = '<span style="color:#03a93a; font-weight:700; font-size:0.75rem;"><i class="fa-solid fa-store"></i> Ready</span>';
+          } else if (o.delivery_file) {
+            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            actionResult = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 12px; font-size: 0.78rem;" download><i class="fa-solid fa-download"></i> File</a>`;
+          } else {
+            actionResult = '<span style="color:#94a3b8; font-size:0.78rem;">In Progress</span>';
+          }
+
+          const payMethod = o.payment_method === 'wallet'
+            ? '<i class="fa-solid fa-wallet" style="color:#03a93a;"></i> Wallet'
+            : '<i class="fa-solid fa-qrcode" style="color:#f59e0b;"></i> UPI';
+
+          return `
+            <div class="mobile-ledger-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(15,23,42,0.03);">
+              <div class="mobile-ledger-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span class="order-id-chip">${o.order_number}</span>
+                ${statusBadge}
+              </div>
+              <div class="mobile-ledger-card-body" style="margin-bottom: 12px;">
+                <div class="mobile-ledger-title" style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">${o.service ? o.service.name : 'Service'}</div>
+                <div class="mobile-ledger-meta" style="font-size: 0.78rem; color: #64748b; margin-top: 4px; display: flex; gap: 8px; align-items: center;">
+                  <span><i class="fa-regular fa-clock"></i> ${formatDate(o.created_at)}</span>
+                  <span>&bull;</span>
+                  <span>${payMethod}</span>
+                </div>
+              </div>
+              <div class="mobile-ledger-card-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
+                <div class="mobile-ledger-amount" style="font-weight: 800; font-family: 'Outfit', sans-serif; font-size: 1.05rem; color: #0f172a;">${formatINR(o.amount)}</div>
+                <div>${actionResult}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+  </script>
+</body>
+</html>

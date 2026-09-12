@@ -66,12 +66,17 @@
         </li>
 
         <li class="sidebar-item">
+          <a href="reviews.html" class="sidebar-link">
+            <i class="fa-solid fa-star" style="color:#f59e0b;"></i>
+            <span>Customer Reviews</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
           <a href="complaints.html" class="sidebar-link">
             <i class="fa-solid fa-headset" style="color:#dc2626;"></i>
             <span>Support Tickets</span>
           </a>
-        </li>
-
         <li class="sidebar-category-header">System Config</li>
         <li class="sidebar-item">
           <a href="settings.html" class="sidebar-link">
@@ -120,12 +125,33 @@
       </header>
 
       <div class="portal-content">
-        <div class="glass-card">
+        <!-- Top Tab Switcher -->
+        <div style="display: flex; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+          <div style="display: flex; background: #f1f5f9; padding: 5px; border-radius: 12px; gap: 6px;">
+            <button type="button" id="tabBtnServices" onclick="switchAdminTab('services')" style="padding: 9px 20px; font-size: 0.86rem; font-weight: 700; border-radius: 9px; border: none; background: #0066cc; color: #ffffff; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 6px rgba(0,102,204,0.25); transition: all 0.2s;">
+              <i class="fa-solid fa-list-check"></i> Services Catalog (<span id="countServicesBadge">0</span>)
+            </button>
+            <button type="button" id="tabBtnCategories" onclick="switchAdminTab('categories')" style="padding: 9px 20px; font-size: 0.86rem; font-weight: 700; border-radius: 9px; border: none; background: transparent; color: #64748b; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+              <i class="fa-solid fa-shapes"></i> Service Categories & Images (<span id="countCategoriesBadge">0</span>)
+            </button>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button type="button" id="btnAdminActionPrimary" onclick="handlePrimaryAdminAction()" class="btn-rz-primary" style="padding: 9px 20px; font-size: 0.85rem;">
+              <i class="fa-solid fa-plus"></i> New Service
+            </button>
+          </div>
+        </div>
+
+        <!-- VIEW 1: SERVICES CATALOG -->
+        <div id="viewServicesCatalog" class="glass-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(226,232,240,0.8);">
             <div>
               <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0 0 2px;">Active Service Master</h2>
               <div style="color: #64748b; font-size: 0.8rem;">Define fees deducted from customer wallets during instant application</div>
             </div>
+            <button onclick="loadServices()" class="btn-secondary" style="font-size: 0.82rem; padding: 7px 14px;">
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
           </div>
 
           <div class="custom-table-container">
@@ -151,6 +177,30 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- VIEW 2: SERVICE CATEGORIES & IMAGES -->
+        <div id="viewCategoriesCatalog" class="glass-card" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(226,232,240,0.8);">
+            <div>
+              <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0 0 2px;">Service Categories & Banner Images</h2>
+              <div style="color: #64748b; font-size: 0.8rem;">Upload category images displayed on user portal, edit titles, and organize citizen service groups</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button onclick="openCategoryModal()" class="btn-primary-green" style="font-size: 0.82rem; padding: 7px 14px; border-radius: 8px;">
+                <i class="fa-solid fa-plus"></i> New Category
+              </button>
+              <button onclick="loadCategoriesList()" class="btn-secondary" style="font-size: 0.82rem; padding: 7px 14px;">
+                <i class="fa-solid fa-rotate-right"></i> Refresh
+              </button>
+            </div>
+          </div>
+
+          <div id="categoriesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
+              <i class="fa-solid fa-spinner fa-spin"></i> Loading categories...
+            </div>
           </div>
         </div>
       </div>
@@ -409,31 +459,425 @@
     </div>
   </div>
 
+  <!-- Category Add / Edit Modal -->
+  <div id="categoryModal" class="modal-backdrop-custom">
+    <div class="modal-dialog-custom" style="max-width: 620px; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div id="catModalHeaderBadge" style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; color: #0066cc; border: 1.5px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+            <i class="fa-solid fa-shapes"></i>
+          </div>
+          <div>
+            <h3 id="categoryModalTitle" style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color: #0f172a; font-family: 'Outfit', sans-serif;">Edit Category</h3>
+            <span style="font-size: 0.82rem; color: #64748b;">Configure category name, upload banner image & style card</span>
+          </div>
+        </div>
+        <button type="button" onclick="closeCategoryModal()" class="btn-icon-action" style="border-radius: 50%;" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="categoryForm" style="display: flex; flex-direction: column; overflow: hidden; flex: 1;">
+        <input type="hidden" id="catId">
+        <input type="hidden" id="catRemoveImage" value="0">
+        <input type="hidden" id="catExistingImageUrl" value="">
+
+        <div class="modal-body-custom" style="padding: 22px 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 18px;">
+          
+          <!-- Category Details -->
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px;">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label" for="catName">Category Title <span style="color: #ef4444;">*</span></label>
+              <input type="text" id="catName" class="form-control" placeholder="e.g. PVC Card Print Services" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="catSlug">Category Slug / Key <span style="color: #ef4444;">*</span></label>
+                <input type="text" id="catSlug" class="form-control" placeholder="e.g. print" style="font-family: monospace;">
+                <small style="font-size: 0.72rem; color: #64748b;">Unique key used by services (e.g. print, pan_find)</small>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="catSortOrder">Display Order</label>
+                <input type="number" id="catSortOrder" class="form-control" value="0" min="0" step="1">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="catDesc">Category Description</label>
+              <textarea id="catDesc" class="form-control" rows="2" placeholder="Brief description displayed on the category card..."></textarea>
+            </div>
+          </div>
+
+          <!-- Category Banner Image Upload -->
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 18px;">
+            <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: 800; font-size: 0.95rem; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                  <i class="fa-solid fa-image" style="color: #0066cc;"></i> Category Banner Image
+                </div>
+                <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px;">
+                  Upload an image/banner to display on the citizen portal category card
+                </div>
+              </div>
+              <button type="button" id="btnRemoveCatImage" class="btn-danger-soft" style="display: none; padding: 4px 10px; font-size: 0.76rem;" onclick="removeCatCurrentImage()">
+                <i class="fa-solid fa-trash-can"></i> Remove Image
+              </button>
+            </div>
+
+            <div style="border: 2px dashed #cbd5e1; border-radius: 12px; background: #ffffff; padding: 18px; text-align: center; cursor: pointer; transition: all 0.2s ease;" onclick="document.getElementById('catImageFile').click()" onmouseover="this.style.borderColor='#0066cc'; this.style.background='#eff6ff';" onmouseout="this.style.borderColor='#cbd5e1'; this.style.background='#ffffff';">
+              <input type="file" id="catImageFile" accept="image/png, image/jpeg, image/svg+xml, image/webp" style="display: none;" onchange="handleCatImageFileSelected(this)">
+              
+              <div id="catImageUploadPlaceholder">
+                <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; color: #0066cc; margin-bottom: 8px;"></i>
+                <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a;">Click to browse category image</div>
+                <div style="font-size: 0.76rem; color: #64748b; margin-top: 4px;">Recommended: 600×360px JPG, PNG, WebP or SVG (Max 5MB)</div>
+              </div>
+
+              <!-- Preview of Selected/Existing Image -->
+              <div id="catImagePreviewWrapper" style="display: none; position: relative;">
+                <img id="catImagePreviewImg" src="" alt="Category Image Preview" style="max-height: 160px; width: auto; max-width: 100%; border-radius: 10px; border: 1px solid #e2e8f0; object-fit: cover; display: block; margin: 0 auto 8px;">
+                <span id="catImageSelectedFileName" style="font-size: 0.8rem; font-weight: 700; color: #03a93a;">
+                  <i class="fa-solid fa-circle-check"></i> Image Loaded
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fallback Icon & Colors (if no image or for vector styling) -->
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px;">
+            <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-palette" style="color: #0066cc;"></i> Fallback Icon & Badge Colors
+            </div>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label">FontAwesome Icon Class</label>
+              <input type="text" id="catIconClass" class="form-control" value="fa-solid fa-layer-group" placeholder="fa-solid fa-layer-group">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Background Color</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <input type="color" id="catIconBgColor" value="#eff6ff" style="width: 38px; height: 38px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; padding: 2px;" oninput="syncCatColor('bg', this.value)">
+                  <input type="text" id="catIconBg" class="form-control" value="#eff6ff" style="font-family: monospace;" oninput="syncCatColor('bg-text', this.value)">
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Icon Color</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <input type="color" id="catIconColorColor" value="#0066cc" style="width: 38px; height: 38px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; padding: 2px;" oninput="syncCatColor('color', this.value)">
+                  <input type="text" id="catIconColor" class="form-control" value="#0066cc" style="font-family: monospace;" oninput="syncCatColor('color-text', this.value)">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 16px 24px;">
+          <button type="button" onclick="closeCategoryModal()" class="btn-rz-secondary">Cancel</button>
+          <button type="submit" id="btnSaveCategory" class="btn-rz-primary">
+            <i class="fa-solid fa-check"></i> Save Category
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
     let servicesList = [];
     let distinctCategories = ['print', 'pan_find', 'document'];
     let tempImagePreviewSrc = null;
+    let categoriesList = [];
+    let currentAdminTab = 'services';
 
     document.addEventListener('DOMContentLoaded', async () => {
-      await loadCategories();
+      await loadCategoriesList();
       loadServices();
     });
 
-    async function loadCategories() {
-      try {
-        const res = await API.admin.getServiceCategories();
-        if (res && res.data && Array.isArray(res.data)) {
-          const set = new Set(['print', 'pan_find', 'document', ...res.data]);
-          distinctCategories = Array.from(set);
+    function switchAdminTab(tab) {
+      currentAdminTab = tab;
+      const tabServices = document.getElementById('tabBtnServices');
+      const tabCategories = document.getElementById('tabBtnCategories');
+      const viewServices = document.getElementById('viewServicesCatalog');
+      const viewCategories = document.getElementById('viewCategoriesCatalog');
+      const btnPrimary = document.getElementById('btnAdminActionPrimary');
+
+      if (tab === 'services') {
+        tabServices.style.background = '#0066cc';
+        tabServices.style.color = '#ffffff';
+        tabServices.style.boxShadow = '0 2px 6px rgba(0,102,204,0.25)';
+        tabCategories.style.background = 'transparent';
+        tabCategories.style.color = '#64748b';
+        tabCategories.style.boxShadow = 'none';
+
+        viewServices.style.display = 'block';
+        viewCategories.style.display = 'none';
+
+        if (btnPrimary) {
+          btnPrimary.innerHTML = '<i class="fa-solid fa-plus"></i> New Service';
+          btnPrimary.className = 'btn-rz-primary';
         }
+      } else {
+        tabCategories.style.background = '#0066cc';
+        tabCategories.style.color = '#ffffff';
+        tabCategories.style.boxShadow = '0 2px 6px rgba(0,102,204,0.25)';
+        tabServices.style.background = 'transparent';
+        tabServices.style.color = '#64748b';
+        tabServices.style.boxShadow = 'none';
+
+        viewCategories.style.display = 'block';
+        viewServices.style.display = 'none';
+
+        if (btnPrimary) {
+          btnPrimary.innerHTML = '<i class="fa-solid fa-plus"></i> New Category';
+          btnPrimary.className = 'btn-primary-green';
+        }
+
+        if (categoriesList.length === 0) {
+          loadCategoriesList();
+        }
+      }
+    }
+
+    function handlePrimaryAdminAction() {
+      if (currentAdminTab === 'services') {
+        openServiceModal();
+      } else {
+        openCategoryModal();
+      }
+    }
+
+    async function loadCategoriesList() {
+      try {
+        const res = await API.admin.getCategories();
+        categoriesList = res.data || [];
+        const countBadge = document.getElementById('countCategoriesBadge');
+        if (countBadge) countBadge.textContent = categoriesList.length;
+        renderCategoriesGrid(categoriesList);
+
+        // Update distinct categories for services dropdown
+        distinctCategories = categoriesList.map(c => c.slug);
+        populateCategoryDropdown();
       } catch (err) {
-        console.warn('Could not load categories:', err);
+        console.error('Failed to load categories:', err);
+        const grid = document.getElementById('categoriesGrid');
+        if (grid) grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 30px; color: #ef4444;">Failed to load categories. ${err.message || ''}</div>`;
+      }
+    }
+
+    async function loadCategories() {
+      await loadCategoriesList();
+    }
+
+    function renderCategoriesGrid(cats) {
+      const grid = document.getElementById('categoriesGrid');
+      if (!grid) return;
+
+      if (!cats || cats.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align:center; padding: 40px; color: #64748b;">
+            <i class="fa-solid fa-shapes" style="font-size: 2.2rem; color: #cbd5e1; margin-bottom: 10px;"></i>
+            <div style="font-weight: 700;">No Categories Found</div>
+            <p style="font-size: 0.85rem; margin-top: 4px;">Click "+ New Category" above to create your first service category.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = cats.map(c => {
+        const imgUrl = c.image_url;
+        const bg = c.icon_bg || '#eff6ff';
+        const color = c.icon_color || '#0066cc';
+        const icon = c.icon || 'fa-solid fa-layer-group';
+        const statusBadge = c.is_active
+          ? '<span class="badge-status badge-completed" style="font-size:0.75rem;"><i class="fa-solid fa-circle-check"></i> Active</span>'
+          : '<span class="badge-status badge-rejected" style="font-size:0.75rem;"><i class="fa-solid fa-circle-xmark"></i> Disabled</span>';
+
+        let imageBannerHtml = '';
+        if (imgUrl) {
+          imageBannerHtml = `
+            <div style="width: 100%; height: 140px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; overflow: hidden; position: relative;">
+              <img src="${imgUrl}" alt="${c.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\'display:flex; align-items:center; justify-content:center; height:100%; background:${bg}; color:${color}; font-size:2.5rem;\\'><i class=\\'${icon}\\'></i></div>';">
+              <span style="position: absolute; bottom: 8px; right: 8px; background: rgba(15,23,42,0.75); color: #ffffff; padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; backdrop-filter: blur(4px);">
+                <i class="fa-solid fa-image"></i> Custom Banner
+              </span>
+            </div>
+          `;
+        } else {
+          let adminGrad = 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)';
+          let adminWatermark = 'fa-solid fa-shapes';
+          if (c.slug === 'print') {
+            adminGrad = 'linear-gradient(135deg, #ea580c 0%, #f97316 60%, #fb923c 100%)';
+            adminWatermark = 'fa-solid fa-id-card';
+          } else if (c.slug === 'pan_find' || c.slug === 'pan') {
+            adminGrad = 'linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #0d9488 100%)';
+            adminWatermark = 'fa-solid fa-magnifying-glass-location';
+          } else if (c.slug === 'document') {
+            adminGrad = 'linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #8b5cf6 100%)';
+            adminWatermark = 'fa-solid fa-file-invoice';
+          }
+
+          imageBannerHtml = `
+            <div style="width: 100%; height: 140px; background: ${adminGrad}; border-bottom: 1px solid #e2e8f0; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+              <i class="${adminWatermark}" style="position: absolute; right: -10px; bottom: -15px; font-size: 6.5rem; color: rgba(255,255,255,0.15); transform: rotate(-10deg); pointer-events: none;"></i>
+              <div style="position: relative; z-index: 2; text-align: center;">
+                <div style="width: 50px; height: 50px; border-radius: 14px; background: #ffffff; color: ${color}; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                  <i class="${icon}"></i>
+                </div>
+                <span style="font-size: 0.72rem; color: #ffffff; font-weight: 700; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 6px; backdrop-filter: blur(4px);">
+                  Default Thematic Banner Active
+                </span>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e2e8f0; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)';">
+            <div>
+              ${imageBannerHtml}
+              <div style="padding: 18px 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 6px; font-weight: 700;">
+                    ${c.slug}
+                  </span>
+                  ${statusBadge}
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0 0 6px;">${c.name}</h3>
+                <p style="font-size: 0.84rem; color: #64748b; line-height: 1.45; margin: 0 0 14px; min-height: 38px;">
+                  ${c.description || 'No category description specified.'}
+                </p>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; color: #0066cc;">
+                  <i class="fa-solid fa-layer-group"></i> ${c.services_count || 0} Connected Services
+                </div>
+              </div>
+            </div>
+            
+            <div style="padding: 12px 20px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+              <button onclick="openCategoryModal(${c.id})" class="btn-secondary" style="font-size: 0.82rem; padding: 6px 14px; display: inline-flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-camera"></i> Edit & Image
+              </button>
+              <button onclick="toggleCategory(${c.id})" class="btn-icon-action" title="${c.is_active ? 'Deactivate Category' : 'Activate Category'}">
+                <i class="fa-solid ${c.is_active ? 'fa-toggle-on' : 'fa-toggle-off'}" style="font-size: 1.35rem; color: ${c.is_active ? '#03a93a' : '#94a3b8'};"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openCategoryModal(catId = null) {
+      document.getElementById('categoryForm').reset();
+      document.getElementById('catRemoveImage').value = '0';
+      document.getElementById('catImagePreviewWrapper').style.display = 'none';
+      document.getElementById('catImageUploadPlaceholder').style.display = 'block';
+      document.getElementById('btnRemoveCatImage').style.display = 'none';
+      document.getElementById('catExistingImageUrl').value = '';
+
+      if (catId) {
+        const cat = categoriesList.find(c => c.id === catId);
+        if (!cat) return;
+        document.getElementById('categoryModalTitle').textContent = 'Edit Category & Banner Image';
+        document.getElementById('catId').value = cat.id;
+        document.getElementById('catName').value = cat.name;
+        document.getElementById('catSlug').value = cat.slug;
+        document.getElementById('catSlug').readOnly = true;
+        document.getElementById('catDesc').value = cat.description || '';
+        document.getElementById('catSortOrder').value = cat.sort_order || 0;
+        document.getElementById('catIconClass').value = cat.icon || 'fa-solid fa-layer-group';
+        
+        const bg = cat.icon_bg || '#eff6ff';
+        const color = cat.icon_color || '#0066cc';
+        document.getElementById('catIconBg').value = bg;
+        if (/^#[0-9A-F]{6}$/i.test(bg)) document.getElementById('catIconBgColor').value = bg;
+        document.getElementById('catIconColor').value = color;
+        if (/^#[0-9A-F]{6}$/i.test(color)) document.getElementById('catIconColorColor').value = color;
+
+        if (cat.image_url) {
+          document.getElementById('catImagePreviewImg').src = cat.image_url;
+          document.getElementById('catImagePreviewWrapper').style.display = 'block';
+          document.getElementById('catImageUploadPlaceholder').style.display = 'none';
+          document.getElementById('btnRemoveCatImage').style.display = 'inline-flex';
+          document.getElementById('catExistingImageUrl').value = cat.image_url;
+          document.getElementById('catImageSelectedFileName').innerHTML = '<i class="fa-solid fa-circle-check"></i> Current banner image active';
+        }
+      } else {
+        document.getElementById('categoryModalTitle').textContent = 'Add Service Category';
+        document.getElementById('catId').value = '';
+        document.getElementById('catSlug').value = '';
+        document.getElementById('catSlug').readOnly = false;
+        document.getElementById('catSortOrder').value = (categoriesList.length + 1);
+        document.getElementById('catIconClass').value = 'fa-solid fa-layer-group';
+        document.getElementById('catIconBg').value = '#eff6ff';
+        document.getElementById('catIconBgColor').value = '#eff6ff';
+        document.getElementById('catIconColor').value = '#0066cc';
+        document.getElementById('catIconColorColor').value = '#0066cc';
+      }
+
+      document.getElementById('categoryModal').classList.add('active');
+    }
+
+    function closeCategoryModal() {
+      document.getElementById('categoryModal').classList.remove('active');
+      document.getElementById('categoryForm').reset();
+    }
+
+    function handleCatImageFileSelected(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById('catImagePreviewImg').src = e.target.result;
+          document.getElementById('catImagePreviewWrapper').style.display = 'block';
+          document.getElementById('catImageUploadPlaceholder').style.display = 'none';
+          document.getElementById('btnRemoveCatImage').style.display = 'inline-flex';
+          document.getElementById('catRemoveImage').value = '0';
+          document.getElementById('catImageSelectedFileName').innerHTML = `<i class="fa-solid fa-circle-check"></i> Selected: <strong>${file.name}</strong>`;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removeCatCurrentImage() {
+      document.getElementById('catImageFile').value = '';
+      document.getElementById('catImagePreviewWrapper').style.display = 'none';
+      document.getElementById('catImageUploadPlaceholder').style.display = 'block';
+      document.getElementById('btnRemoveCatImage').style.display = 'none';
+      document.getElementById('catRemoveImage').value = '1';
+      document.getElementById('catExistingImageUrl').value = '';
+    }
+
+    function syncCatColor(type, val) {
+      if (type === 'bg') document.getElementById('catIconBg').value = val;
+      if (type === 'bg-text') {
+        if (/^#[0-9A-F]{6}$/i.test(val)) document.getElementById('catIconBgColor').value = val;
+      }
+      if (type === 'color') document.getElementById('catIconColor').value = val;
+      if (type === 'color-text') {
+        if (/^#[0-9A-F]{6}$/i.test(val)) document.getElementById('catIconColorColor').value = val;
+      }
+    }
+
+    async function toggleCategory(id) {
+      try {
+        await API.admin.toggleCategory(id);
+        showToast('Category status updated', 'success');
+        loadCategoriesList();
+      } catch (err) {
+        showToast(err.message || 'Failed to update category', 'error');
       }
     }
 
     function formatCategoryName(cat) {
+      const match = categoriesList.find(c => c.slug === cat);
+      if (match && match.name) return match.name;
       if (cat === 'print') return 'Print Services (Aadhaar, Voter, PVC)';
       if (cat === 'pan_find') return 'PAN Find Services';
       if (cat === 'document') return 'Document Services';
@@ -516,6 +960,8 @@
       try {
         const res = await API.admin.getServices();
         servicesList = res.data || [];
+        const countServicesBadge = document.getElementById('countServicesBadge');
+        if (countServicesBadge) countServicesBadge.textContent = servicesList.length;
         try { localStorage.setItem('utkal_services_cache', JSON.stringify(servicesList)); } catch(e){}
         const tbody = document.getElementById('servicesTableTbody');
 
@@ -907,6 +1353,53 @@
       } finally {
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Service';
+      }
+    });
+
+    document.getElementById('categoryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('catId').value;
+      const name = document.getElementById('catName').value.trim();
+      const slug = document.getElementById('catSlug').value.trim();
+      const description = document.getElementById('catDesc').value.trim();
+      const sortOrder = document.getElementById('catSortOrder').value;
+      const icon = document.getElementById('catIconClass').value.trim();
+      const iconBg = document.getElementById('catIconBg').value.trim();
+      const iconColor = document.getElementById('catIconColor').value.trim();
+      const removeImage = document.getElementById('catRemoveImage').value;
+
+      const formData = new FormData();
+      if (id) formData.append('id', id);
+      formData.append('name', name);
+      if (slug) formData.append('slug', slug);
+      formData.append('description', description);
+      formData.append('sort_order', sortOrder);
+      formData.append('icon', icon);
+      formData.append('icon_bg', iconBg);
+      formData.append('icon_color', iconColor);
+
+      const fileInput = document.getElementById('catImageFile');
+      if (fileInput && fileInput.files[0]) {
+        formData.append('image', fileInput.files[0]);
+      }
+      if (removeImage === '1') {
+        formData.append('remove_image', '1');
+      }
+
+      const btn = document.getElementById('btnSaveCategory');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+      try {
+        const res = await API.admin.saveCategory(formData);
+        showToast(res.message || 'Category saved successfully!', 'success');
+        closeCategoryModal();
+        await loadCategoriesList();
+      } catch (err) {
+        showToast(err.message || 'Failed to save category', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Category';
       }
     });
   </script>

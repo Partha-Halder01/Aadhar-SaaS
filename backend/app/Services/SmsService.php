@@ -43,7 +43,7 @@ class SmsService
      */
     protected function sendViaApiTxt(string $phone, string $otp): array
     {
-        $authKey = $this->config['apitxt']['auth_key'] ?? 'vmjlLxnuukyZjiYOf7lg6GOcIfeWbMCVSgycJiLar-I';
+        $authKey = $this->config['apitxt']['auth_key'] ?? null;
 
         if (!$authKey) {
             Log::warning("APITXT Auth Key missing. Falling back to local logging.");
@@ -84,7 +84,8 @@ class SmsService
                 CURLOPT_URL            => $url,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT        => 12,
-                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
             ]);
             $response = curl_exec($curl);
             $err = curl_error($curl);

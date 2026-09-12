@@ -66,12 +66,17 @@
         </li>
 
         <li class="sidebar-item">
+          <a href="reviews.html" class="sidebar-link">
+            <i class="fa-solid fa-star" style="color:#f59e0b;"></i>
+            <span>Customer Reviews</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
           <a href="complaints.html" class="sidebar-link">
             <i class="fa-solid fa-headset" style="color:#dc2626;"></i>
             <span>Support Tickets</span>
           </a>
-        </li>
-
         <li class="sidebar-category-header">System Config</li>
         <li class="sidebar-item">
           <a href="settings.html" class="sidebar-link">
@@ -224,7 +229,7 @@
     async function loadUsers() {
       try {
         const res = await API.admin.getUsers();
-        userList = res.data || [];
+        userList = (res.data || []).filter(u => u.role !== 'admin');
         renderUsersTable(userList);
       } catch (err) {
         console.error(err);
@@ -234,9 +239,10 @@
     function searchUsers() {
       const q = document.getElementById('userSearchInput').value.toLowerCase();
       const filtered = userList.filter(u => {
-        return (u.name || '').toLowerCase().includes(q) || 
+        return (u.role !== 'admin') && (
+               (u.name || '').toLowerCase().includes(q) || 
                (u.email || '').toLowerCase().includes(q) || 
-               (u.phone || '').toLowerCase().includes(q);
+               (u.phone || '').toLowerCase().includes(q));
       });
       renderUsersTable(filtered);
     }
@@ -259,7 +265,7 @@
       }
 
       tbody.innerHTML = users.map(u => {
-        const initial = u.name ? u.name.charAt(0).toUpperCase() : 'U';
+        const initial = u.name ? escapeHtml(u.name.charAt(0).toUpperCase()) : 'U';
         const isAdmin = u.role === 'admin';
 
         return `
@@ -271,15 +277,15 @@
               <div class="customer-cell">
                 <div class="customer-avatar-initial" style="${isAdmin ? 'background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff;' : ''}">${initial}</div>
                 <div>
-                  <div style="font-weight: 700; color: #0f172a; font-size: 0.88rem;">${u.name}</div>
-                  <div style="font-size: 0.75rem; color: #64748b;">${u.email}</div>
+                  <div style="font-weight: 700; color: #0f172a; font-size: 0.88rem;">${escapeHtml(u.name)}</div>
+                  <div style="font-size: 0.75rem; color: #64748b;">${escapeHtml(u.email)}</div>
                 </div>
               </div>
             </td>
             <td>
               <div style="font-weight: 600; color: #334155; font-size: 0.84rem;">
                 <i class="fa-solid fa-phone" style="font-size: 0.7rem; color: #94a3b8; margin-right: 4px;"></i>
-                ${u.phone || '-'}
+                ${escapeHtml(u.phone || '-')}
               </div>
             </td>
             <td>
@@ -292,12 +298,12 @@
             </td>
             <td>
               <span class="badge-status ${u.status === 'active' ? 'badge-completed' : 'badge-rejected'}">
-                ${u.status ? u.status.toUpperCase() : 'ACTIVE'}
+                ${escapeHtml(u.status ? u.status.toUpperCase() : 'ACTIVE')}
               </span>
             </td>
             <td style="text-align: right;">
               <div style="display: inline-flex; gap: 6px;">
-                <button onclick='openBalanceModal(${u.id}, "${u.name}")' class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;" title="Adjust funds">
+                <button data-id="${u.id}" data-name="${escapeHtml(u.name)}" onclick="openBalanceModal(this.dataset.id, this.dataset.name)" class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;" title="Adjust funds">
                   <i class="fa-solid fa-wallet" style="color: #03a93a;"></i> Balance
                 </button>
                 <button onclick="toggleUserStatus(${u.id})" class="${u.status === 'active' ? 'btn-danger-soft' : 'btn-success-soft'}" style="padding: 6px 12px; font-size: 0.78rem;">
@@ -312,7 +318,7 @@
 
     function openBalanceModal(userId, name) {
       document.getElementById('adjUserId').value = userId;
-      document.getElementById('balanceModalTitle').textContent = `Adjust Balance for ${name}`;
+      document.getElementById('balanceModalTitle').textContent = `Adjust Balance for ${name || 'Customer'}`;
       document.getElementById('balanceModal').classList.add('active');
     }
 

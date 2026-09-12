@@ -30,22 +30,22 @@ class AdminWalletController extends Controller
      */
     public function process(Request $request, $id)
     {
-        $tx = WalletTransaction::findOrFail($id);
-
         $request->validate([
             'action' => 'required|in:approve,reject',
             'rejection_reason' => 'nullable|string|max:500',
         ]);
 
-        if ($tx->status !== 'pending') {
-            return response()->json([
-                'status' => 'error',
-                'message' => "This wallet request is already {$tx->status}."
-            ], 422);
-        }
+        return DB::transaction(function () use ($id, $request) {
+            $tx = WalletTransaction::lockForUpdate()->findOrFail($id);
 
-        if ($request->action === 'approve') {
-            return DB::transaction(function () use ($tx, $request) {
+            if ($tx->status !== 'pending') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "This wallet request is already {$tx->status}."
+                ], 422);
+            }
+
+            if ($request->action === 'approve') {
                 $user = User::lockForUpdate()->findOrFail($tx->user_id);
                 $user->wallet_balance += $tx->amount;
                 $user->save();
@@ -62,21 +62,21 @@ class AdminWalletController extends Controller
                     'message' => "Wallet top-up of ₹{$tx->amount} approved and credited to customer.",
                     'data' => $tx,
                 ]);
-            });
-        }
+            }
 
-        // Action === reject
-        $tx->update([
-            'status' => 'rejected',
-            'rejection_reason' => $request->rejection_reason ?: 'Payment proof could not be verified.',
-            'approved_by' => $request->user()->id,
-            'description' => "Wallet Top-up Rejected (Reason: " . ($request->rejection_reason ?: 'Unverified') . ")",
-        ]);
+            // Action === reject
+            $tx->update([
+                'status' => 'rejected',
+                'rejection_reason' => $request->rejection_reason ?: 'Payment proof could not be verified.',
+                'approved_by' => $request->user()->id,
+                'description' => "Wallet Top-up Rejected (Reason: " . ($request->rejection_reason ?: 'Unverified') . ")",
+            ]);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Wallet recharge request marked as rejected.',
-            'data' => $tx,
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Wallet recharge request marked as rejected.',
+                'data' => $tx,
+            ]);
+        });
     }
 }

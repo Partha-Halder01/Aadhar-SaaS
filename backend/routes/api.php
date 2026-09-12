@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Admin\AdminDashboardController;
 use App\Http\Controllers\Api\Admin\AdminLandingPageController;
 use App\Http\Controllers\Api\Admin\AdminOrderController;
 use App\Http\Controllers\Api\Admin\AdminReviewController;
+use App\Http\Controllers\Api\Admin\AdminServiceCategoryController;
 use App\Http\Controllers\Api\Admin\AdminServiceController;
 use App\Http\Controllers\Api\Admin\AdminSettingController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
@@ -33,15 +34,17 @@ Route::middleware('throttle:10,1')->group(function () {
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::post('/auth/login', [AuthController::class, 'login']);
     Route::post('/auth/login-otp', [AuthController::class, 'loginWithOtp']);
+    Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
 });
 
 // Public Services & Public Portal Settings
 Route::get('/services', [ServiceController::class, 'index']);
+Route::get('/service-categories', [ServiceController::class, 'categories']);
 Route::get('/services/{id}', [ServiceController::class, 'show']);
 Route::get('/settings/public', [SettingController::class, 'publicSettings']);
 Route::get('/landing-page', [LandingPageController::class, 'index']);
 Route::get('/reviews', [ReviewController::class, 'index']);
-Route::post('/reviews', [ReviewController::class, 'store']);
+Route::post('/reviews', [ReviewController::class, 'store'])->middleware('throttle:5,1');
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +62,8 @@ Route::middleware('api.auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index']);
     Route::post('/orders', [OrderController::class, 'store']);
     Route::get('/orders/{id}', [OrderController::class, 'show']);
+    Route::get('/orders/{id}/download/{type?}', [OrderController::class, 'download']);
+    Route::post('/orders/{id}/submit-document', [OrderController::class, 'submitDocument']);
 
     // Wallet
     Route::get('/wallet', [WalletController::class, 'index']);
@@ -87,6 +92,7 @@ Route::middleware(['api.auth', 'role:admin'])->prefix('admin')->group(function (
     Route::post('/orders/{id}/verify-payment', [AdminOrderController::class, 'verifyPayment']);
     Route::post('/orders/{id}/fulfill', [AdminOrderController::class, 'fulfill']);
     Route::post('/orders/{id}/mark-printed', [AdminOrderController::class, 'markPrinted']);
+    Route::post('/orders/{id}/request-document', [AdminOrderController::class, 'requestDocument']);
 
     // Manage Wallet Requests
     Route::get('/wallet-requests', [AdminWalletController::class, 'index']);
@@ -97,12 +103,17 @@ Route::middleware(['api.auth', 'role:admin'])->prefix('admin')->group(function (
     Route::post('/users/{id}/toggle-status', [AdminUserController::class, 'toggleStatus']);
     Route::post('/users/{id}/adjust-balance', [AdminUserController::class, 'adjustBalance']);
 
-    // Manage Services
+    // Manage Services & Categories
     Route::get('/services', [AdminServiceController::class, 'index']);
     Route::get('/services/categories', [AdminServiceController::class, 'categories']);
     Route::post('/services', [AdminServiceController::class, 'store']);
     Route::match(['put', 'post'], '/services/{id}', [AdminServiceController::class, 'update']);
     Route::post('/services/{id}/toggle', [AdminServiceController::class, 'toggle']);
+
+    Route::get('/service-categories', [AdminServiceCategoryController::class, 'index']);
+    Route::post('/service-categories', [AdminServiceCategoryController::class, 'store']);
+    Route::match(['put', 'post'], '/service-categories/{id}', [AdminServiceCategoryController::class, 'update']);
+    Route::post('/service-categories/{id}/toggle', [AdminServiceCategoryController::class, 'toggle']);
 
     // Manage Complaints
     Route::get('/complaints', [AdminComplaintController::class, 'index']);
@@ -121,4 +132,6 @@ Route::middleware(['api.auth', 'role:admin'])->prefix('admin')->group(function (
     Route::get('/reviews', [AdminReviewController::class, 'index']);
     Route::post('/reviews/{id}/toggle', [AdminReviewController::class, 'toggleStatus']);
     Route::delete('/reviews/{id}', [AdminReviewController::class, 'destroy']);
+    Route::post('/reviews/{id}/block-user', [AdminReviewController::class, 'blockUser']);
+    Route::post('/reviews/{id}/block-and-delete', [AdminReviewController::class, 'blockAndDelete']);
 });

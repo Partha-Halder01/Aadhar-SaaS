@@ -4,20 +4,305 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Refund & Cancellation Policy - Instant Online Seva</title>
-  <meta name="description" content="Transparent 100% Wallet Refund and Cancellation Policy of Instant Online Seva for retailers and kiosk operators.">
+  <meta name="description" content="Simple, transparent, point-to-point Refund and Cancellation Policy of Instant Online Seva portal.">
   <link rel="icon" type="image/png" href="logo-icon.png">
+  
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  
   <!-- FontAwesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
   <!-- Core CSS -->
   <link rel="stylesheet" href="css/style.css">
-</head>
-<body style="background: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif;">
 
-  <!-- Sticky Glassmorphism Navigation Bar -->
+  <style>
+    body {
+      background: #f8fafc;
+      color: #334155;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.65;
+    }
+
+    .policy-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    /* Simple & Clean Header */
+    .policy-header {
+      text-align: center;
+      margin-bottom: 36px;
+      padding-bottom: 28px;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+
+    .policy-breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 14px;
+    }
+
+    .policy-breadcrumb a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    .policy-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .policy-subtitle {
+      font-size: 1rem;
+      color: #64748b;
+      max-width: 620px;
+      margin: 0 auto 16px;
+    }
+
+    .policy-meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #eff6ff;
+      color: #0066cc;
+      border: 1px solid #bfdbfe;
+      border-radius: 9999px;
+      padding: 5px 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    /* Key Guarantees Box */
+    .guarantees-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .guarantee-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .guarantee-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .guarantee-title {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #0f172a;
+      margin-bottom: 3px;
+    }
+
+    .guarantee-desc {
+      font-size: 0.8rem;
+      color: #64748b;
+      line-height: 1.45;
+    }
+
+    /* Policy Content Card */
+    .policy-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 36px 40px;
+      box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
+    }
+
+    /* Point-to-Point Section Styling */
+    .policy-section {
+      margin-bottom: 32px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .policy-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #0066cc;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    /* Point-by-Point Bullet List */
+    .point-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .point-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #334155;
+    }
+
+    .point-item i {
+      color: #03a93a;
+      font-size: 0.85rem;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .point-item strong {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    /* Highlight Notice Box */
+    .notice-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.86rem;
+      color: #166534;
+      margin-top: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+
+    .notice-box i {
+      font-size: 1rem;
+      margin-top: 2px;
+      color: #16a34a;
+    }
+
+    .notice-box-warning {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #fd5c00;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.86rem;
+      color: #9a3412;
+      margin-top: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+
+    .notice-box-warning i {
+      font-size: 1rem;
+      margin-top: 2px;
+      color: #fd5c00;
+    }
+
+    /* Contact Table / Box */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .contact-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .contact-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .contact-val {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .contact-sub {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 640px) {
+      .policy-container {
+        padding: 24px 14px 60px;
+      }
+      .policy-card {
+        padding: 24px 18px;
+      }
+      .policy-title {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
   <nav class="navbar-custom" id="mainNavbar" style="position: sticky; top: 0; z-index: 1000;">
     <div class="navbar-inner">
       <a href="index.html" class="brand-logo">
@@ -44,260 +329,278 @@
     </div>
   </nav>
 
-  <!-- Breadcrumb & Header Hero -->
-  <header style="background: linear-gradient(135deg, #090e17 0%, #0f172a 60%, #1e293b 100%); color: #ffffff; padding: 50px 20px 60px; position: relative; overflow: hidden;">
-    <div style="position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(14,165,233,0.2) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+  <!-- Main Container -->
+  <div class="policy-container">
     
-    <div style="max-width: 1000px; margin: 0 auto; position: relative; z-index: 2;">
-      <div style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #94a3b8; margin-bottom: 16px;">
-        <a href="index.html" style="color: #cbd5e1; text-decoration: none;"><i class="fa-solid fa-house"></i> Home</a>
+    <!-- Clean Header -->
+    <header class="policy-header">
+      <div class="policy-breadcrumb">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
         <span>&bull;</span>
-        <span style="color: #38bdf8;">Legal Policies</span>
-        <span>&bull;</span>
-        <span style="color: #ffffff; font-weight: 600;">Refund Policy</span>
+        <span>Refund & Cancellation Policy</span>
+      </div>
+      <h1 class="policy-title">Refund Policy</h1>
+      <p class="policy-subtitle">
+        Zero-risk wallet protection and transparent refund rules — clearly explained point by point.
+      </p>
+      <div class="policy-meta-pill">
+        <i class="fa-solid fa-rotate-left"></i>
+        <span>Policy Revision: September 2026 &bull; 100% Automated Wallet Reversal Guarantee</span>
+      </div>
+    </header>
+
+    <!-- Top 3 Quick Highlights -->
+    <div class="guarantees-grid">
+      <div class="guarantee-card">
+        <div class="guarantee-icon" style="background:#f0fdf4; color:#16a34a;">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div>
+          <div class="guarantee-title">Failed Order? 100% Refund</div>
+          <div class="guarantee-desc">If a service fails or server times out, funds return to your wallet in seconds.</div>
+        </div>
       </div>
 
-      <span class="rz-section-tag" style="background: rgba(34,197,94,0.14); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); display: inline-flex; margin-bottom: 14px;">
-        <i class="fa-solid fa-rotate-left"></i> 100% Wallet Protection Guarantee
-      </span>
-      <h1 style="font-size: 2.3rem; font-weight: 800; font-family: 'Outfit', sans-serif; margin: 0 0 12px; letter-spacing: -0.02em;">Refund & Cancellation Policy</h1>
-      <p style="color: #94a3b8; font-size: 1rem; max-width: 720px; line-height: 1.6; margin: 0;">
-        We believe in zero-risk operations for our digital retail partners. Understand our automated wallet refund workflows and service reversal guarantees.
-      </p>
-      
-      <div style="margin-top: 20px; display: inline-flex; align-items: center; gap: 14px; font-size: 0.8rem; background: rgba(255,255,255,0.06); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-        <span><i class="fa-regular fa-calendar-check" style="color: #38bdf8;"></i> Policy Revision: September 2026</span>
-        <span>&bull;</span>
-        <span><i class="fa-solid fa-bolt" style="color: #eab308;"></i> Instant Automated Wallet Reversal</span>
+      <div class="guarantee-card">
+        <div class="guarantee-icon" style="background:#eff6ff; color:#0066cc;">
+          <i class="fa-solid fa-qrcode"></i>
+        </div>
+        <div>
+          <div class="guarantee-title">Fast QR Reconciliation</div>
+          <div class="guarantee-desc">Wallet balance credits automatically within seconds of entering the 12-digit UTR.</div>
+        </div>
+      </div>
+
+      <div class="guarantee-card">
+        <div class="guarantee-icon" style="background:#fffbeb; color:#d97706;">
+          <i class="fa-solid fa-headset"></i>
+        </div>
+        <div>
+          <div class="guarantee-title">Rapid Support Resolution</div>
+          <div class="guarantee-desc">Any stuck recharge or transaction dispute is resolved within 2 to 4 business hours.</div>
+        </div>
       </div>
     </div>
-  </header>
 
-  <!-- Main Legal Document Body -->
-  <main style="max-width: 1000px; margin: -30px auto 70px; padding: 0 20px; position: relative; z-index: 10;">
-    <div class="glass-card" style="background: #ffffff; border-radius: 20px; padding: 40px 48px; box-shadow: 0 16px 40px -10px rgba(15,23,42,0.07); border: 1px solid #e2e8f0;">
-      
-      <!-- Highlights Grid -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 36px;">
-        <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 14px; padding: 20px;">
-          <div style="font-size: 1.5rem; color: #16a34a; margin-bottom: 8px;"><i class="fa-solid fa-circle-check"></i></div>
-          <h4 style="margin: 0 0 6px; font-size: 1rem; font-weight: 700; color: #166534;">Failed Order? 100% Refund</h4>
-          <p style="margin: 0; font-size: 0.84rem; color: #15803d; line-height: 1.5;">If an order fails, upstream server rejects, or record is not found, funds automatically return to your wallet instantly.</p>
-        </div>
-
-        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 20px;">
-          <div style="font-size: 1.5rem; color: #2563eb; margin-bottom: 8px;"><i class="fa-solid fa-arrows-rotate"></i></div>
-          <h4 style="margin: 0 0 6px; font-size: 1rem; font-weight: 700; color: #1e40af;">UPI Recharge Guarantee</h4>
-          <p style="margin: 0; font-size: 0.84rem; color: #1d4ed8; line-height: 1.5;">Paid via QR code? Your balance is credited within seconds of entering the 12-digit bank UTR reference.</p>
-        </div>
-
-        <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 14px; padding: 20px;">
-          <div style="font-size: 1.5rem; color: #d97706; margin-bottom: 8px;"><i class="fa-solid fa-headset"></i></div>
-          <h4 style="margin: 0 0 6px; font-size: 1rem; font-weight: 700; color: #92400e;">24x7 Ticket Resolution</h4>
-          <p style="margin: 0; font-size: 0.84rem; color: #b45309; line-height: 1.5;">Disputed balance or stuck banking transactions are manually investigated and resolved within 2-4 business hours.</p>
-        </div>
-      </div>
-
-      <!-- Table of Contents -->
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px 24px; margin-bottom: 36px;">
-        <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0 0 12px; color: #0f172a; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-list-check" style="color: #0066cc;"></i> Table of Contents
-        </h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; font-size: 0.84rem;">
-          <a href="#sec-principle" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 1. Foundational Refund Principle</a>
-          <a href="#sec-auto-refund" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 2. Automated Wallet Reversals</a>
-          <a href="#sec-upi-recharge" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 3. QR Wallet Recharge Reconciliation</a>
-          <a href="#sec-non-refundable" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 4. Non-Refundable Deliverables</a>
-          <a href="#sec-defects" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 5. Defective Print Layout & Free Reprints</a>
-          <a href="#sec-closure" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 6. Account Closure & Balance Withdrawal</a>
-          <a href="#sec-how-to-claim" style="color: #0066cc; text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i> 7. Dispute Submission Workflow</a>
-        </div>
-      </div>
+    <!-- Main Content Card -->
+    <div class="policy-card">
 
       <!-- Section 1 -->
-      <section id="sec-principle" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          1. Foundational Refund Principle
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          At <strong>Instant Online Seva</strong>, we value the trust of our retail network. Our operational ethos is straightforward: <strong>if our platform cannot successfully fulfill the requested service, you will not be charged.</strong>
-        </p>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569;">
-          All financial transactions on our platform occur via the internal Retailer Wallet. Consequently, refunds are credited directly to your portal wallet balance for immediate reuse on subsequent orders.
-        </p>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">1</div>
+          <h2 class="section-title">Core Refund Principle (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>No Service, No Fee:</strong> If our platform cannot successfully generate your requested print file or retrieve the verified record, you are never charged.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Direct Wallet Credit:</strong> All services are billed via your internal prepaid wallet, and all refunds are credited instantly back to your portal wallet balance.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Zero Cancellation Penalty:</strong> No administrative fees, deductions, or penalty charges are ever withheld on failed orders.</div>
+          </li>
+        </ul>
       </section>
 
       <!-- Section 2 -->
-      <section id="sec-auto-refund" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          2. Automated Wallet Reversals
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          Our backend engine automatically tracks the outcome of every request. You will receive an immediate automated 100% wallet refund in the following situations:
-        </p>
-        <ul style="font-size: 0.92rem; line-height: 1.7; color: #475569; padding-left: 20px; margin-bottom: 12px;">
-          <li><strong>Data Not Found:</strong> Inquiries such as PAN Find where the government database returns no matching record for the provided Aadhaar number.</li>
-          <li><strong>Server Timeout or Upstream Error:</strong> When official verification portals experience unexpected downtime or gateway timeouts during processing.</li>
-          <li><strong>PDF Rendering Failure:</strong> If an uploaded PDF is password-locked, corrupted, or unsupported and the formatting engine cannot produce the output.</li>
-          <li><strong>Manual Order Rejection:</strong> When a manual card request is reviewed by the portal administrator and rejected due to illegible source documents.</li>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">2</div>
+          <h2 class="section-title">When You Get a 100% Automatic Refund (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Record Not Found:</strong> Inquiries (like PAN Find) where the government registry returns no matching record for the provided Aadhaar number.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Upstream Server Timeout:</strong> When official verification portals experience temporary maintenance, server downtime, or gateway failure.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>PDF Parsing Failure:</strong> If an uploaded PDF file is corrupted, password-protected with an incorrect key, or unreadable by our formatting engine.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Admin Rejection:</strong> When a manual card request is reviewed and rejected by the administrator due to illegible source scans.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Refund Speed:</strong> Automated wallet reversals occur within 1 to 5 seconds of the transaction failure and are logged in your wallet passbook.</div>
+          </li>
         </ul>
-        <div style="background: #f8fafc; border-left: 4px solid #16a34a; padding: 14px 18px; border-radius: 0 10px 10px 0; font-size: 0.88rem; color: #166534;">
-          <strong>Timeline:</strong> Automated refunds occur instantly within 1 to 5 seconds of the transaction failure and are logged transparently in your <em>Passbook / Wallet Statement</em>.
+
+        <div class="notice-box">
+          <i class="fa-solid fa-bolt"></i>
+          <div>
+            <strong>Instant Automated Reversals:</strong> You don't need to open a ticket for failed orders. The portal engine detects the error and refunds your wallet balance immediately.
+          </div>
         </div>
       </section>
 
       <!-- Section 3 -->
-      <section id="sec-upi-recharge" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          3. QR Wallet Recharge Reconciliation
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          Retailers recharge portal wallets via dynamic UPI QR codes.
-        </p>
-        <ul style="font-size: 0.92rem; line-height: 1.7; color: #475569; padding-left: 20px; margin-bottom: 12px;">
-          <li><strong>Successful UTR Verification:</strong> Once you submit the 12-digit bank UTR reference code, funds reflect in your wallet within 10–30 seconds.</li>
-          <li><strong>Bank Debited, UTR Pending:</strong> In rare cases where your bank debits your account during UPI network degradation, the transaction will settle automatically once the NPCI/bank clearance ping is received (usually within 15–30 minutes).</li>
-          <li><strong>Failed Banking Gateway:</strong> If funds are deducted by your bank but not received by our merchant collection account, the amount will be automatically returned to your original source bank account within 2–5 banking working days per RBI guidelines.</li>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">3</div>
+          <h2 class="section-title">UPI QR Wallet Recharge Reconciliation (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Instant UTR Verification:</strong> Once you make payment to the portal's UPI QR code and submit the 12-digit bank UTR reference, funds are credited within 10–30 seconds.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Bank Debited but UTR Pending:</strong> In rare cases of bank network delays, the top-up settles automatically once the banking clearance ping confirms (typically within 15–30 minutes).</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Failed Gateway Reversals:</strong> If your bank account is debited but the amount is not received by our merchant account, the banking network will auto-reverse the money back to your bank account within 2–5 business days per RBI rules.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Manual Support Escalation:</strong> If a valid recharge does not reflect within 30 minutes, submit a support ticket with the bank UTR and payment screenshot for instant manual clearance.</div>
+          </li>
         </ul>
       </section>
 
       <!-- Section 4 -->
-      <section id="sec-non-refundable" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          4. Non-Refundable Deliverables
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          Due to the digital nature of immediate PDF generation and consumable API fees, refunds cannot be issued in the following circumstances:
-        </p>
-        <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 12px; padding: 18px 22px; margin-bottom: 14px;">
-          <ul style="margin: 0; padding-left: 18px; font-size: 0.88rem; color: #881337; line-height: 1.6;">
-            <li><strong>Successful Delivery:</strong> Any service where the PDF file or PAN number was successfully generated, verified, and delivered to your dashboard for download.</li>
-            <li><strong>User Input Mistakes:</strong> If you input an incorrect Aadhaar number, wrong spelling, or erroneous demographic info, but the database returned a valid record matching that query.</li>
-            <li><strong>Change of Mind:</strong> Cancellation requests submitted after the automated engine has already executed the generation process.</li>
-          </ul>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">4</div>
+          <h2 class="section-title">Non-Refundable Circumstances (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Successful Delivery:</strong> Any service where the PDF card print file or verified PAN number was successfully generated and delivered to your dashboard for download.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>User Typo / Incorrect Input:</strong> If you input an incorrect Aadhaar number, wrong spelling, or wrong date of birth, but the query successfully executed and returned a valid result based on that input.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Cancellation After Generation:</strong> Order cancellation requests submitted after the automated engine has already generated the completed print file.</div>
+          </li>
+        </ul>
+
+        <div class="notice-box-warning">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <div>
+            <strong>Input Accuracy Check:</strong> Please double-check 12-digit Aadhaar numbers, EPIC codes, and spelling before submitting to avoid charges on incorrect customer queries.
+          </div>
         </div>
       </section>
 
       <!-- Section 5 -->
-      <section id="sec-defects" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          5. Defective Print Layout & Free Reprints
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          If the output generated by our system exhibits graphical distortion, barcode truncation, or alignment flaws attributable to our formatting engine:
-        </p>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569;">
-          You can request a <strong>Free System Re-run or Correction</strong> within 48 hours of order generation. Open a support ticket with your Order ID and our technical team will regenerate the corrected file without deducting additional points.
-        </p>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">5</div>
+          <h2 class="section-title">Defective Print Layouts & Free Reprints (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Free Regeneration:</strong> If an output PDF has graphical distortion, barcode truncation, or alignment defects caused by our formatting engine, we will regenerate it free of charge.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>48-Hour Claim Window:</strong> Submit a support ticket within 48 hours of order completion with your Order ID and a screenshot of the defect.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Zero Extra Cost:</strong> Our technical team will regenerate and re-deliver the corrected print file without debiting any additional wallet points.</div>
+          </li>
+        </ul>
       </section>
 
       <!-- Section 6 -->
-      <section id="sec-closure" style="margin-bottom: 34px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          6. Account Closure & Balance Withdrawal
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 12px;">
-          Retailers choosing to discontinue portal operations may apply for account closure. Unutilized, deposited wallet balances (excluding promotional joining bonus credits) can be refunded to the retailer's verified primary bank account via NEFT/IMPS:
-        </p>
-        <ul style="font-size: 0.92rem; line-height: 1.7; color: #475569; padding-left: 20px;">
-          <li>A standard banking processing fee of 2.5% or ₹30 (whichever is higher) may be deducted for external bank settlement.</li>
-          <li>Settlement requests are reviewed and disbursed within 5–7 banking business days after KYC verification.</li>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">6</div>
+          <h2 class="section-title">Account Closure & Balance Withdrawal (Point to Point)</h2>
+        </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Withdrawal Right:</strong> Retailers wishing to close their account may withdraw their deposited, unused wallet balance.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Direct Bank Payout:</strong> Unused deposited funds (excluding promotional joining bonus credits) are transferred to the retailer's primary verified bank account via IMPS/NEFT.</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div><strong>Standard Timeline:</strong> Balance withdrawal requests are verified and settled within 5–7 banking business days.</div>
+          </li>
         </ul>
       </section>
 
       <!-- Section 7 -->
-      <section id="sec-how-to-claim">
-        <h2 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; font-family: 'Outfit', sans-serif;">
-          7. Dispute Submission Workflow
-        </h2>
-        <p style="font-size: 0.94rem; line-height: 1.7; color: #475569; margin-bottom: 16px;">
-          Have a transaction inquiry or stuck recharge? Here is how to reach our financial operations desk:
-        </p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
-          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-            <div style="font-weight: 700; color: #0f172a; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-              <i class="fa-solid fa-headset" style="color: #0066cc;"></i> 1. Support Ticket
-            </div>
-            <p style="font-size: 0.84rem; color: #64748b; margin: 0;">Log into your dashboard, open <strong>Support Tickets</strong>, and enter the Order ID or UTR number.</p>
-          </div>
-
-          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-            <div style="font-weight: 700; color: #0f172a; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-              <i class="fa-brands fa-whatsapp" style="color: #22c55e;"></i> 2. WhatsApp Helpline
-            </div>
-            <p style="font-size: 0.84rem; color: #64748b; margin: 0;">Send transaction screenshot & registered mobile number to <strong>+91 98765 43210</strong>.</p>
-          </div>
-
-          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-            <div style="font-weight: 700; color: #0f172a; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-              <i class="fa-solid fa-envelope" style="color: #38bdf8;"></i> 3. Email Desk
-            </div>
-            <p style="font-size: 0.84rem; color: #64748b; margin: 0;">Email <strong>support@utkalprint.com</strong> with subject <em>[Refund Request - Order ID]</em>.</p>
-          </div>
+      <section class="policy-section">
+        <div class="section-head">
+          <div class="section-num">7</div>
+          <h2 class="section-title">Dispute & Refund Assistance (Point to Point)</h2>
         </div>
+        <ul class="point-list">
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div>Have a transaction inquiry or stuck recharge? Here is how to reach our financial operations desk:</div>
+          </li>
+          <li class="point-item">
+            <i class="fa-solid fa-check"></i>
+            <div>All billing inquiries are responded to and settled within 2 to 4 business hours.</div>
+          </li>
+        </ul>
 
-        <div style="text-align: center; margin-top: 10px;">
-          <a href="user/dashboard.html" class="nav-btn-cta" style="display: inline-flex; text-decoration: none;">
-            <span>Go to User Dashboard</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </a>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <div class="contact-label"><i class="fa-solid fa-envelope" style="color:#0066cc;"></i> Billing Email</div>
+            <div class="contact-val">support@utkalprint.com</div>
+            <div class="contact-sub">Response within 2-4 hours</div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-label"><i class="fa-solid fa-phone" style="color:#fd5c00;"></i> Merchant Helpline</div>
+            <div class="contact-val">+91 98765 43210</div>
+            <div class="contact-sub">Mon - Sat: 8:00 AM - 10:00 PM</div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-label"><i class="fa-brands fa-whatsapp" style="color:#16a34a;"></i> WhatsApp Support</div>
+            <div class="contact-val">+91 98765 43210</div>
+            <div class="contact-sub">Direct Live Chat</div>
+          </div>
         </div>
       </section>
 
     </div>
-  </main>
+  </div>
 
-  <!-- Global Portal Footer (Matching index.html) -->
-  <footer class="footer-modern" style="background: #090e17; color: #cbd5e1; padding: 60px 20px 30px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-    <div style="max-width: 1200px; margin: 0 auto;">
-      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; margin-bottom: 50px;">
-        <div>
-          <a href="index.html" class="brand-logo" style="margin-bottom: 16px; display: inline-block;">
-            <img src="logo .png" alt="Instant Online Seva" style="height: 38px;">
-          </a>
-          <p style="color: #94a3b8; font-size: 0.88rem; line-height: 1.6; max-width: 320px;">
-            India's foremost digital print formatting and PAN retrieval suite designed for retailers, cyber cafes, and customer service centers.
-          </p>
-        </div>
-
-        <div>
-          <h5 class="footer-col-title" style="color: #ffffff; font-size: 0.92rem; font-weight: 700; margin-bottom: 18px;">Core Solutions</h5>
-          <ul class="footer-links-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.86rem;">
-            <li><a href="login.html" style="color: #94a3b8; text-decoration: none;">Aadhaar PVC Print</a></li>
-            <li><a href="login.html" style="color: #94a3b8; text-decoration: none;">PAN Find by Aadhaar</a></li>
-            <li><a href="login.html" style="color: #94a3b8; text-decoration: none;">Voter ID (EPIC) Print</a></li>
-            <li><a href="login.html" style="color: #94a3b8; text-decoration: none;">Ayushman Card Print</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h5 class="footer-col-title" style="color: #ffffff; font-size: 0.92rem; font-weight: 700; margin-bottom: 18px;">Quick Links</h5>
-          <ul class="footer-links-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.86rem;">
-            <li><a href="index.html#services" style="color: #94a3b8; text-decoration: none;">Our Solutions</a></li>
-            <li><a href="index.html#pricing" style="color: #94a3b8; text-decoration: none;">Rates & Speeds</a></li>
-            <li><a href="index.html#how-it-works" style="color: #94a3b8; text-decoration: none;">Workflow</a></li>
-            <li><a href="login.html" style="color: #94a3b8; text-decoration: none;">User Login</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h5 class="footer-col-title" style="color: #ffffff; font-size: 0.92rem; font-weight: 700; margin-bottom: 18px;">Support Desk</h5>
-          <div style="font-size: 0.86rem; color: #94a3b8; display: flex; flex-direction: column; gap: 10px;">
-            <div><i class="fa-solid fa-phone" style="color: #fd5c00; width: 20px;"></i> +91 98765 43210</div>
-            <div><i class="fa-brands fa-whatsapp" style="color: #22c55e; width: 20px;"></i> +91 98765 43210 (Live Chat)</div>
-            <div><i class="fa-solid fa-envelope" style="color: #38bdf8; width: 20px;"></i> support@utkalprint.com</div>
-          </div>
+  <!-- Global Footer -->
+  <footer class="footer-modern" style="background: #090e17; color: #cbd5e1; padding: 50px 20px 30px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 24px; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <a href="index.html" class="brand-logo">
+          <img src="logo .png" alt="Instant Online Seva" style="height: 36px;">
+        </a>
+        <div style="display: flex; gap: 24px; font-size: 0.86rem;">
+          <a href="privacy.html" style="color: #94a3b8; text-decoration: none;">Privacy Policy</a>
+          <a href="terms.html" style="color: #94a3b8; text-decoration: none;">Terms of Service</a>
+          <a href="refund.html" style="color: #38bdf8; font-weight: 700; text-decoration: none;">Refund Policy</a>
         </div>
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; font-size: 0.82rem; color: #64748b; flex-wrap: wrap; gap: 14px;">
-        <div>&copy; 2026 Instant Online Seva. All rights reserved. Built for Indian Digital Retailers.</div>
-        <div style="display: flex; gap: 20px;">
-          <a href="privacy.html" style="color: #94a3b8; text-decoration: none;">Privacy Policy</a>
-          <a href="terms.html" style="color: #94a3b8; text-decoration: none;">Terms of Service</a>
-          <a href="refund.html" style="color: #22c55e; font-weight: 700; text-decoration: none;">Refund Policy</a>
-        </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: #64748b; flex-wrap: wrap; gap: 10px;">
+        <div>&copy; 2026 Instant Online Seva. All rights reserved. Secure PVC Print & PAN Retrieval Portal.</div>
+        <div><i class="fa-solid fa-lock" style="color: #03a93a;"></i> 256-Bit SSL Encrypted</div>
       </div>
     </div>
   </footer>

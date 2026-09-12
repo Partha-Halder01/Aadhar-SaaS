@@ -15,7 +15,7 @@ class AdminUserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::query();
+        $query = User::where('role', '!=', 'admin');
 
         if ($request->has('search') && !empty($request->search)) {
             $s = $request->search;
@@ -51,6 +51,11 @@ class AdminUserController extends Controller
         $user->status = $user->status === 'active' ? 'blocked' : 'active';
         $user->save();
 
+        if ($user->status === 'blocked') {
+            // Revoke active sessions immediately
+            $user->tokens()->delete();
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => "User account has been {$user->status}.",
@@ -63,15 +68,22 @@ class AdminUserController extends Controller
      */
     public function adjustBalance(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-
         $request->validate([
             'amount' => 'required|numeric|min:1',
             'type' => 'required|in:credit,debit',
             'description' => 'required|string|max:255',
         ]);
 
-        return DB::transaction(function () use ($user, $request) {
+        return DB::transaction(function () use ($id, $request) {
+            $user = User::lockForUpdate()->findOrFail($id);
+
+            if ($user->role === 'admin') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Admin accounts cannot be modified.'
+                ], 422);
+            }
+
             $amount = (float) $request->amount;
 
             if ($request->type === 'debit' && $user->wallet_balance < $amount) {

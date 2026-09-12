@@ -141,4 +141,36 @@ class AdminOrderController extends Controller
             'data' => $order,
         ]);
     }
+
+    /**
+     * Send an alert request to customer for missing/deficient documents
+     */
+    public function requestDocument(Request $request, $id)
+    {
+        $order = ServiceOrder::with(['user', 'service'])->findOrFail($id);
+
+        $request->validate([
+            'doc_name' => 'required|string|max:255',
+            'message' => 'required|string|max:1000',
+        ]);
+
+        $order->update([
+            'doc_request_title' => $request->doc_name,
+            'doc_request_message' => $request->message,
+            'doc_request_status' => 'pending',
+            'doc_request_requested_at' => now(),
+            // Reset previous response if any re-requested
+            'doc_response_file' => null,
+            'doc_response_notes' => null,
+            'doc_response_submitted_at' => null,
+            'order_status' => $order->order_status === 'completed' ? $order->order_status : 'processing',
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Missing document alert sent to customer successfully! Customer can now upload it directly.',
+            'data' => $order->fresh(['user', 'service']),
+        ]);
+    }
 }
+

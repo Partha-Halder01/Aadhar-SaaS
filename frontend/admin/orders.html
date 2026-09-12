@@ -10,8 +10,597 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="icon" type="image/png" href="../logo-icon.png">
   <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .preset-pill-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .preset-pill-btn:hover {
+      background: #ffedd5;
+      border-color: #fdba74;
+      color: #ea580c;
+    }
+    .badge-doc-requested {
+      background: #fffbeb !important;
+      color: #b45309 !important;
+      border: 1px solid #fde68a !important;
+    }
+    .badge-doc-submitted {
+      background: #ecfdf5 !important;
+      color: #047857 !important;
+      border: 1px solid #a7f3d0 !important;
+    }
+
+    /* Clean Structured Admin Orders Table */
+    .custom-table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+    }
+    .custom-table th {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 16px;
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .custom-table td {
+      padding: 14px 16px;
+      vertical-align: middle;
+      border-bottom: 1px solid #edf2f7;
+    }
+    .order-main-row {
+      transition: background-color 0.18s ease;
+    }
+    .order-main-row:hover {
+      background-color: #fafbfc;
+    }
+
+    /* Column 1: Order & Customer */
+    .customer-col-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .customer-avatar-initial {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0066cc 0%, #004c99 100%);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 102, 204, 0.2);
+    }
+    .customer-col-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+    .customer-name {
+      font-weight: 800;
+      color: #0f172a;
+      font-size: 0.94rem;
+      line-height: 1.3;
+    }
+    .customer-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .order-ref-pill {
+      font-family: 'JetBrains Mono', 'Outfit', monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: #1e293b;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 7px;
+      border-radius: 6px;
+    }
+    .customer-phone {
+      color: #64748b;
+      font-size: 0.75rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .order-date-text {
+      color: #94a3b8;
+      font-size: 0.72rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 1px;
+    }
+    .meta-divider {
+      color: #cbd5e1;
+      font-size: 0.75rem;
+    }
+
+    /* Column 2: Service Details */
+    .service-col-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .service-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+    .service-avatar.avatar-print {
+      background: #fff7ed;
+      color: #ea580c;
+      border: 1.5px solid #ffedd5;
+    }
+    .service-avatar.avatar-doc {
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1.5px solid #dcfce7;
+    }
+    .service-avatar.avatar-pan {
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1.5px solid #dbeafe;
+    }
+    .service-col-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .service-col-title {
+      font-weight: 800;
+      color: #0f172a;
+      font-size: 0.93rem;
+      line-height: 1.3;
+    }
+    .badge-cat-pill {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      width: fit-content;
+    }
+    .badge-cat-pill.print {
+      background: #fff7ed;
+      color: #ea580c;
+      border: 1px solid #fed7aa;
+    }
+    .badge-cat-pill.doc {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+    .badge-cat-pill.pan {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Column 3: Amount & Payment Block */
+    .payment-col-card {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+    }
+    .payment-col-amount {
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      color: #0f172a;
+      font-size: 1.02rem;
+      letter-spacing: -0.01em;
+    }
+    .payment-col-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .payment-col-pill.paid {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+    .payment-col-pill.pending {
+      background: #fffbeb;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+    .payment-col-pill.rejected {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+    .payment-utr-tag {
+      font-size: 0.7rem;
+      color: #0369a1;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* Column 4: Order Status Block */
+    .status-col-card {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+    }
+    .status-col-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+    .status-col-pill.status-completed {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1.5px solid #bbf7d0;
+    }
+    .status-col-pill.status-processing {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1.5px solid #bfdbfe;
+    }
+    .status-col-pill.status-alert {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1.5px solid #fde68a;
+    }
+    .status-col-pill.status-rejected {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1.5px solid #fecaca;
+    }
+    .status-col-pill.status-pending {
+      background: #f8fafc;
+      color: #475569;
+      border: 1.5px solid #e2e8f0;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-dot.dot-green {
+      background: #16a34a;
+    }
+    .status-dot.dot-blue {
+      background: #2563eb;
+      animation: pulseDot 1.5s infinite;
+    }
+    .status-dot.dot-amber {
+      background: #d97706;
+      animation: pulseDot 1.5s infinite;
+    }
+    .status-dot.dot-red {
+      background: #dc2626;
+    }
+    .status-dot.dot-gray {
+      background: #94a3b8;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.25); }
+    }
+    .substatus-note {
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .substatus-note.text-blue {
+      color: #1d4ed8;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+    }
+    .substatus-note.text-green {
+      color: #15803d;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+    }
+    .substatus-note.text-amber {
+      color: #b45309;
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+    }
+
+    /* Column 5: Action Button Group */
+    .action-btn-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .btn-action-details {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 32px;
+      padding: 0 12px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      color: #0f172a;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .btn-action-details:hover, .btn-action-details.active {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+    }
+    .btn-action-details.active .toggle-icon {
+      transform: rotate(180deg);
+    }
+    .toggle-icon {
+      transition: transform 0.2s ease;
+      font-size: 0.72rem;
+    }
+    .btn-action-modal {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 32px;
+      padding: 0 11px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      color: #334155;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .btn-action-modal:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: #94a3b8;
+    }
+    .btn-action-approve {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      height: 32px;
+      padding: 0 10px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      color: #15803d;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .btn-action-approve:hover {
+      background: #dcfce7;
+      color: #14532d;
+    }
+    .btn-action-reject {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      height: 32px;
+      padding: 0 10px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      color: #b91c1c;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .btn-action-reject:hover {
+      background: #fee2e2;
+      color: #7f1d1d;
+    }
+    .btn-action-print {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 32px;
+      padding: 0 11px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      color: #047857;
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .btn-action-print:hover {
+      background: #d1fae5;
+    }
+    .btn-action-deliver {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 32px;
+      padding: 0 11px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      color: #1d4ed8;
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .btn-action-deliver:hover {
+      background: #dbeafe;
+    }
+    .btn-action-reqdoc {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 32px;
+      padding: 0 11px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      color: #ea580c;
+      background: #fff7ed;
+      border: 1.5px solid #fed7aa;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .btn-action-reqdoc:hover {
+      background: #ffedd5;
+    }
+    .btn-action-download-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 28px;
+      padding: 0 10px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #0f172a;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .btn-action-download-sm:hover {
+      background: #e2e8f0;
+    }
+    .btn-action-secondary-w100 {
+      width: 100%;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      color: #334155;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .btn-action-secondary-w100:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    /* Expandable Dropdown Row Styles */
+    .order-dropdown-row td {
+      border-top: none !important;
+    }
+    .order-dropdown-content {
+      padding: 16px 20px;
+      animation: fadeInDropdown 0.22s ease-out;
+    }
+    .dropdown-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    @media (max-width: 992px) {
+      .dropdown-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+    .dropdown-section-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .dropdown-card-header {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .dropdown-card-footer {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #f1f5f9;
+    }
+    @keyframes fadeInDropdown {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 
@@ -66,12 +655,17 @@
         </li>
 
         <li class="sidebar-item">
+          <a href="reviews.html" class="sidebar-link">
+            <i class="fa-solid fa-star" style="color:#f59e0b;"></i>
+            <span>Customer Reviews</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
           <a href="complaints.html" class="sidebar-link">
             <i class="fa-solid fa-headset" style="color:#dc2626;"></i>
             <span>Support Tickets</span>
           </a>
-        </li>
-
         <li class="sidebar-category-header">System Config</li>
         <li class="sidebar-item">
           <a href="settings.html" class="sidebar-link">
@@ -185,6 +779,11 @@
               <span>Processing</span>
               <span class="tab-badge-count" id="countProcessing">0</span>
             </button>
+            <button onclick="filterOrders('doc_needed')" class="segmented-tab" id="tabDocNeeded">
+              <i class="fa-solid fa-file-circle-exclamation" style="color:#ea580c;"></i>
+              <span>Doc Action</span>
+              <span class="tab-badge-count" id="countDocNeeded" style="background:#ffedd5; color:#c2410c;">0</span>
+            </button>
             <button onclick="filterOrders('completed')" class="segmented-tab" id="tabCompleted">
               <i class="fa-solid fa-circle-check"></i>
               <span>Completed</span>
@@ -208,19 +807,16 @@
           <table class="custom-table">
             <thead>
               <tr>
-                <th>Order #</th>
-                <th>Customer Info</th>
-                <th>Service Name</th>
-                <th>Amount</th>
-                <th>Payment Method</th>
-                <th>Payment Status</th>
-                <th>Order Status</th>
-                <th style="text-align: right;">Actions</th>
+                <th style="width: 28%;">Order & Customer</th>
+                <th style="width: 24%;">Service Details</th>
+                <th style="width: 18%;">Amount & Payment</th>
+                <th style="width: 16%;">Order Status</th>
+                <th style="width: 14%; text-align: right;">Action / Details</th>
               </tr>
             </thead>
             <tbody id="adminOrdersTbody">
               <tr>
-                <td colspan="8" style="text-align:center; padding: 45px 20px; color:#94a3b8;">
+                <td colspan="5" style="text-align:center; padding: 45px 20px; color:#94a3b8;">
                   <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 1.5rem; color:#ff7a00; margin-bottom: 8px; display:block;"></i>
                   <span>Loading orders...</span>
                 </td>
@@ -310,9 +906,77 @@
     </div>
   </div>
 
+  <!-- Request Missing Document Modal -->
+  <div class="modal-backdrop-custom" id="modalRequestDoc">
+    <div class="modal-dialog-custom" style="max-width: 580px;">
+      <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 22px 26px;">
+        <div style="display:flex; align-items:center; gap: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background:#fff7ed; color:#ea580c; border: 1.5px solid #fed7aa; display:flex; align-items:center; justify-content:center; font-size:1.25rem;">
+            <i class="fa-solid fa-file-circle-question"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color:#0f172a; font-family:'Outfit', sans-serif;">Request Missing Document</h3>
+            <small style="color: #64748b;" id="reqDocSubtitle">Send alert to customer to provide required document</small>
+          </div>
+        </div>
+        <button onclick="closeModal('modalRequestDoc')" class="btn-icon-action" style="border-radius: 50%;" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="reqDocForm" onsubmit="handleRequestDocSubmit(event)">
+        <div class="modal-body-custom" style="padding: 24px 26px;">
+          <input type="hidden" id="reqDocOrderId">
+
+          <!-- Quick Presets -->
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" style="font-size:0.82rem; font-weight:700; color:#475569; margin-bottom:8px; display:block;">Quick Document Presets:</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" class="preset-pill-btn" onclick="applyDocPreset('Aadhaar Card Back Side', 'Please upload a clear scan/photo of the back side of your Aadhaar card showing full address details.')">Aadhaar Back Side</button>
+              <button type="button" class="preset-pill-btn" onclick="applyDocPreset('Clear Passport Photo', 'The uploaded photo is blurred or cut. Please upload a clear, front-facing passport size photo.')">Clear Photo</button>
+              <button type="button" class="preset-pill-btn" onclick="applyDocPreset('Voter ID Back Side', 'Please upload the back side of your Voter ID card showing address and assembly constituency details.')">Voter ID Back</button>
+              <button type="button" class="preset-pill-btn" onclick="applyDocPreset('Applicant Signature', 'Please upload a clear picture of your signature signed with blue/black ink on blank white paper.')">Signature</button>
+              <button type="button" class="preset-pill-btn" onclick="applyDocPreset('Supporting Identity Proof', 'Please upload an additional government ID proof (PAN / Driving License / Ration Card) for verification.')">Identity Proof</button>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="reqDocName">Document Name / Title <span style="color: #ef4444;">*</span></label>
+            <input type="text" id="reqDocName" class="form-control" placeholder="e.g. Aadhaar Card Back Side" required style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.92rem; box-sizing: border-box;">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reqDocMessage">Message / Instructions for Customer <span style="color: #ef4444;">*</span></label>
+            <textarea id="reqDocMessage" class="form-control" rows="3" required placeholder="Explain clearly what document is needed and why, so the customer can upload it quickly without rejection..." style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.92rem; box-sizing: border-box;"></textarea>
+            <small style="color: #64748b; font-size: 0.78rem; margin-top: 4px; display: block;">
+              <i class="fa-solid fa-circle-info"></i> The customer will see an urgent alert banner on their dashboard with this message.
+            </small>
+          </div>
+        </div>
+
+        <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 18px 26px; display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" class="btn-rz-secondary" onclick="closeModal('modalRequestDoc')">Cancel</button>
+          <button type="submit" id="btnSubmitReqDoc" class="btn-rz-primary" style="background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);">
+            <i class="fa-solid fa-paper-plane"></i> Send Alert to Customer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     let allOrders = [];
     let currentFilter = '';
 
@@ -362,6 +1026,7 @@
       const total = allOrders.length;
       const pending = allOrders.filter(o => o.order_status === 'pending' || o.payment_status === 'pending').length;
       const processing = allOrders.filter(o => o.order_status === 'processing').length;
+      const docNeeded = allOrders.filter(o => o.doc_request_status === 'pending' || o.doc_request_status === 'submitted').length;
       const completed = allOrders.filter(o => o.order_status === 'completed').length;
       const rejected = allOrders.filter(o => o.order_status === 'rejected').length;
 
@@ -373,6 +1038,7 @@
       document.getElementById('countAll').textContent = total;
       document.getElementById('countPending').textContent = pending;
       document.getElementById('countProcessing').textContent = processing;
+      if (document.getElementById('countDocNeeded')) document.getElementById('countDocNeeded').textContent = docNeeded;
       document.getElementById('countCompleted').textContent = completed;
       document.getElementById('countRejected').textContent = rejected;
     }
@@ -383,6 +1049,7 @@
       if (status === '') document.getElementById('tabAll')?.classList.add('active');
       if (status === 'pending') document.getElementById('tabPending')?.classList.add('active');
       if (status === 'processing') document.getElementById('tabProcessing')?.classList.add('active');
+      if (status === 'doc_needed') document.getElementById('tabDocNeeded')?.classList.add('active');
       if (status === 'completed') document.getElementById('tabCompleted')?.classList.add('active');
       if (status === 'rejected') document.getElementById('tabRejected')?.classList.add('active');
     }
@@ -408,6 +1075,33 @@
       renderOrdersTable();
     }
 
+    function toggleAdminOrderDropdown(orderId, event) {
+      if (event) {
+        if (event.target && event.target.closest('button:not(.btn-action-details), a, input')) {
+          return;
+        }
+        event.stopPropagation();
+      }
+      const row = document.getElementById(`orderDropdownRow-${orderId}`);
+      const btn = document.getElementById(`btnAdminDropdown-${orderId}`);
+      if (!row) return;
+
+      const isHidden = row.style.display === 'none' || !row.style.display;
+      if (isHidden) {
+        row.style.display = 'table-row';
+        if (btn) {
+          btn.classList.add('active');
+          btn.innerHTML = `<span>Hide</span> <i class="fa-solid fa-chevron-up toggle-icon" id="chevronIcon-${orderId}"></i>`;
+        }
+      } else {
+        row.style.display = 'none';
+        if (btn) {
+          btn.classList.remove('active');
+          btn.innerHTML = `<span>Details</span> <i class="fa-solid fa-chevron-down toggle-icon" id="chevronIcon-${orderId}"></i>`;
+        }
+      }
+    }
+
     function renderOrdersTable() {
       const tbody = document.getElementById('adminOrdersTbody');
       const searchQuery = (document.getElementById('searchOrderInput').value || '').trim().toLowerCase();
@@ -415,6 +1109,9 @@
       let filtered = allOrders.filter(o => {
         if (currentFilter === 'pending') {
           return o.order_status === 'pending' || o.payment_status === 'pending';
+        }
+        if (currentFilter === 'doc_needed') {
+          return o.doc_request_status === 'pending' || o.doc_request_status === 'submitted';
         }
         if (currentFilter) {
           return o.order_status === currentFilter;
@@ -435,7 +1132,7 @@
       if (filtered.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="8">
+            <td colspan="5">
               <div class="empty-state-box">
                 <div class="empty-state-icon">
                   <i class="fa-solid fa-box-open"></i>
@@ -454,103 +1151,320 @@
         const user = order.user || { name: 'Customer', phone: '-' };
         const service = order.service || { name: 'Service' };
         const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+        const isPrintService = service.category === 'print';
+        const isDocService = service.category === 'document';
+        const customerDocs = getOrderCustomerDocs(order);
 
-        // Payment status badge
-        let paymentBadge = `<span class="badge-status badge-pending">Pending</span>`;
-        if (order.payment_status === 'approved') paymentBadge = `<span class="badge-status badge-completed">Approved</span>`;
-        if (order.payment_status === 'rejected') paymentBadge = `<span class="badge-status badge-rejected">Rejected</span>`;
+        // Service Avatar & Category Badge
+        let catAvatarClass = 'avatar-pan';
+        let serviceIcon = 'fa-solid fa-magnifying-glass';
+        let catBadge = '<span class="badge-cat-pill pan"><i class="fa-solid fa-magnifying-glass"></i> PAN Find</span>';
 
-        // Order status badge
-        let orderBadge = `<span class="badge-status badge-pending">Pending</span>`;
-        if (order.order_status === 'processing') orderBadge = `<span class="badge-status badge-processing">Processing</span>`;
-        if (order.order_status === 'completed') orderBadge = `<span class="badge-status badge-completed">Delivered</span>`;
-        if (order.order_status === 'rejected') orderBadge = `<span class="badge-status badge-rejected">Rejected</span>`;
+        if (isPrintService) {
+          catAvatarClass = 'avatar-print';
+          serviceIcon = 'fa-solid fa-id-card';
+          catBadge = '<span class="badge-cat-pill print"><i class="fa-solid fa-print"></i> PVC Print</span>';
+        } else if (isDocService) {
+          catAvatarClass = 'avatar-doc';
+          serviceIcon = 'fa-solid fa-file-lines';
+          catBadge = '<span class="badge-cat-pill doc"><i class="fa-solid fa-file-lines"></i> Document</span>';
+        }
 
-        // Action buttons
+        // Payment status & method
+        const isWallet = order.payment_method === 'wallet';
+        const paymentIcon = isWallet ? 'fa-solid fa-wallet' : 'fa-solid fa-qrcode';
+        const paymentMethodText = isWallet ? 'Wallet' : 'UPI QR';
+        let paymentStatusClass = 'pending';
+        let paymentStatusText = 'Reviewing';
+        if (order.payment_status === 'approved') {
+          paymentStatusClass = 'paid';
+          paymentStatusText = 'Approved';
+        } else if (order.payment_status === 'rejected') {
+          paymentStatusClass = 'rejected';
+          paymentStatusText = 'Rejected';
+        }
+
+        // Order Status Badge with Live Dot
+        let statusPillClass = 'status-pending';
+        let dotClass = 'dot-gray';
+        let statusText = 'Pending';
+        let subStatusHtml = '';
+
+        if (order.doc_request_status === 'pending') {
+          statusPillClass = 'status-alert';
+          dotClass = 'dot-amber';
+          statusText = 'Doc Req Sent';
+          subStatusHtml = `<div class="substatus-note text-amber" style="margin-top: 3px;"><i class="fa-solid fa-clock-rotate-left"></i> Waiting User</div>`;
+        } else if (order.doc_request_status === 'submitted') {
+          subStatusHtml = `<div class="substatus-note text-blue" style="margin-top: 3px;"><i class="fa-solid fa-file-circle-check"></i> Doc Uploaded</div>`;
+        }
+
+        if (order.order_status === 'processing') {
+          statusPillClass = 'status-processing';
+          dotClass = 'dot-blue';
+          statusText = isPrintService ? 'Printing Card' : 'Processing';
+        } else if (order.order_status === 'completed') {
+          statusPillClass = 'status-completed';
+          dotClass = 'dot-green';
+          statusText = isPrintService ? 'Printed (Ready)' : 'Delivered';
+        } else if (order.order_status === 'rejected') {
+          statusPillClass = 'status-rejected';
+          dotClass = 'dot-red';
+          statusText = 'Rejected';
+        }
+
+        // Action Buttons Setup
         const isPendingPayment = order.payment_status === 'pending';
         const isProcessing = order.order_status === 'processing';
         const isDelivered = order.order_status === 'completed';
+        const canRequestDoc = order.order_status !== 'rejected';
+        const isDocPending = order.doc_request_status === 'pending';
+
+        let quickActionBtn = '';
+        if (isPendingPayment) {
+          quickActionBtn = `
+            <button onclick="verifyPaymentModal(${order.id}, 'approve')" class="btn-action-approve" title="Approve Payment">
+              <i class="fa-solid fa-check"></i> Approve
+            </button>
+          `;
+        } else if (isProcessing && isPrintService) {
+          quickActionBtn = `
+            <button onclick="markOrderPrinted(${order.id})" class="btn-action-print" title="Mark as Printed & Ready">
+              <i class="fa-solid fa-print"></i> Printed
+            </button>
+          `;
+        } else if (isProcessing && !isPrintService) {
+          quickActionBtn = `
+            <button onclick="openFulfillModal(${order.id})" class="btn-action-deliver" title="Deliver Output File">
+              <i class="fa-solid fa-upload"></i> Deliver
+            </button>
+          `;
+        } else {
+          quickActionBtn = `
+            <button onclick="openOrderDetailsModal(${order.id})" class="btn-action-modal" title="Open Details Modal">
+              <i class="fa-solid fa-eye"></i> View
+            </button>
+          `;
+        }
 
         return `
-          <tr>
+          <tr class="order-main-row" id="orderMainRow-${order.id}">
             <td>
-              <div class="order-id-chip" title="Click to view details" onclick="openOrderDetailsModal(${order.id})" style="cursor:pointer;">
-                ${order.order_number}
-              </div>
-              <div style="font-size: 0.74rem; color: #94a3b8; margin-top: 3px; font-weight: 500;">${formatDate(order.created_at)}</div>
-            </td>
-            <td>
-              <div class="customer-cell">
+              <div class="customer-col-card">
                 <div class="customer-avatar-initial">${initial}</div>
-                <div>
-                  <div style="font-weight: 700; color: #0f172a;">${user.name}</div>
-                  <div style="font-size: 0.78rem; color: #64748b;"><i class="fa-solid fa-phone" style="font-size:0.7rem;"></i> ${user.phone || '-'}</div>
+                <div class="customer-col-info">
+                  <div class="customer-name">${escapeHtml(user.name || 'Customer')}</div>
+                  <div class="customer-meta-row">
+                    <span class="order-ref-pill" title="Click to view details" onclick="openOrderDetailsModal(${order.id})" style="cursor:pointer;">
+                      #${order.order_number}
+                    </span>
+                    <span class="meta-divider">•</span>
+                    <span class="customer-phone"><i class="fa-solid fa-phone"></i> ${escapeHtml(user.phone || '-')}</span>
+                  </div>
+                  <div class="order-date-text"><i class="fa-regular fa-clock"></i> ${formatDate(order.created_at)}</div>
                 </div>
               </div>
             </td>
             <td>
-              <div style="font-weight: 600; color: #1e293b;">${service.name}</div>
-              <small style="color: #94a3b8; text-transform: uppercase; font-size: 0.72rem; font-weight:700;">${service.category || 'Print'}</small>
-            </td>
-            <td>
-              <div style="font-weight: 800; color: #0f172a; font-size: 0.95rem;">${formatINR(order.amount)}</div>
-            </td>
-            <td>
-              <div class="payment-method-tag">
-                ${order.payment_method === 'wallet' ? '<i class="fa-solid fa-wallet" style="color:#16a34a;"></i> Wallet' : '<i class="fa-solid fa-qrcode" style="color:#ff7a00;"></i> Direct UPI'}
+              <div class="service-col-card">
+                <div class="service-avatar ${catAvatarClass}">
+                  <i class="${serviceIcon}"></i>
+                </div>
+                <div class="service-col-info">
+                  <div class="service-col-title">${escapeHtml(service.name || 'Citizen Service')}</div>
+                  <div class="service-col-meta">
+                    ${catBadge}
+                  </div>
+                </div>
               </div>
-              ${order.utr_number ? `<div style="font-size:0.74rem; font-family:monospace; color:#64748b;">UTR: ${order.utr_number}</div>` : ''}
             </td>
-            <td>${paymentBadge}</td>
-            <td>${orderBadge}</td>
+            <td>
+              <div class="payment-col-card">
+                <div class="payment-col-amount">${formatINR(order.amount)}</div>
+                <div class="payment-col-pill ${paymentStatusClass}">
+                  <i class="${paymentIcon}"></i>
+                  <span>${paymentMethodText} &bull; ${paymentStatusText}</span>
+                </div>
+                ${order.utr_number ? `<div class="payment-utr-tag"><i class="fa-solid fa-receipt"></i> UTR: ${escapeHtml(order.utr_number)}</div>` : ''}
+              </div>
+            </td>
+            <td>
+              <div class="status-col-card">
+                <div class="status-col-pill ${statusPillClass}">
+                  <span class="status-dot ${dotClass}"></span>
+                  <span>${statusText}</span>
+                </div>
+                ${subStatusHtml}
+              </div>
+            </td>
             <td style="text-align: right;">
-              <div style="display: inline-flex; gap: 6px;">
-                <button onclick="openOrderDetailsModal(${order.id})" class="btn-secondary" title="View details" style="padding: 6px 10px; font-size: 0.8rem;">
-                  <i class="fa-solid fa-eye"></i> Details
+              <div class="action-btn-group">
+                ${quickActionBtn}
+                <button onclick="toggleAdminOrderDropdown(${order.id}, event)" id="btnAdminDropdown-${order.id}" class="btn-action-details" title="Expand Order Drawer">
+                  <span>Details</span> <i class="fa-solid fa-chevron-down toggle-icon" id="chevronIcon-${order.id}"></i>
                 </button>
-                
-                ${isPendingPayment ? `
-                  <button onclick="verifyPaymentModal(${order.id}, 'approve')" class="btn-success-soft" title="Approve Payment">
-                    <i class="fa-solid fa-check"></i> Approve
-                  </button>
-                  <button onclick="verifyPaymentModal(${order.id}, 'reject')" class="btn-danger-soft" title="Reject Payment">
-                    <i class="fa-solid fa-xmark"></i> Reject
-                  </button>
-                ` : ''}
+              </div>
+            </td>
+          </tr>
 
-                ${isProcessing ? (
-                  (order.service && order.service.category === 'print') ? `
-                    <button onclick="markOrderPrinted(${order.id})" class="btn-success-soft" title="Mark as Printed & Ready for Pickup" style="padding: 6px 12px; font-weight: 700; font-size: 0.8rem; background: #f0fdf4; color: #03a93a; border: 1px solid #bbf7d0;">
-                      <i class="fa-solid fa-print"></i> Printed
-                    </button>
-                  ` : `
-                    <button onclick="openFulfillModal(${order.id}, '${order.order_number}')" class="btn-blue-soft" title="Fulfill with document">
-                      <i class="fa-solid fa-upload"></i> Deliver
-                    </button>
-                  `
-                ) : ''}
-
-                ${isDelivered ? (
-                  (order.service && order.service.category === 'print') ? `
-                    <span style="font-size:0.75rem; font-weight:700; color:#03a93a; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px; display:inline-flex; align-items:center; gap:4px;">
-                      <i class="fa-solid fa-check-double"></i> Printed
-                    </span>
-                    ${order.delivery_file ? `
-                      <a href="${STORAGE_BASE_URL}/${order.delivery_file}" target="_blank" class="btn-success-soft" title="View Delivered Document">
-                        <i class="fa-solid fa-download"></i> File
-                      </a>
+          <!-- Expandable Dropdown Row -->
+          <tr id="orderDropdownRow-${order.id}" class="order-dropdown-row" style="display: none;">
+            <td colspan="5" style="padding: 0; background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+              <div class="order-dropdown-content">
+                <div class="dropdown-grid">
+                  
+                  <!-- Card 1: Customer Uploaded Documents -->
+                  <div class="dropdown-section-card">
+                    <div>
+                      <div class="dropdown-card-header">
+                        <span><i class="fa-solid fa-folder-open" style="color: #ea580c;"></i> Attached Documents (${customerDocs.length})</span>
+                        <span class="badge-cat-pill" style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0;"><i class="fa-solid fa-shield-halved"></i> Preserved</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 7px; max-height: 140px; overflow-y: auto;">
+                        ${customerDocs.length ? customerDocs.map((cd, i) => `
+                          <div style="display: flex; align-items: center; justify-content: space-between; background: ${cd.type === 'requested' ? '#f0fdf4' : '#ffffff'}; border: 1px solid ${cd.type === 'requested' ? '#bbf7d0' : '#e2e8f0'}; border-radius: 8px; padding: 7px 10px; font-size: 0.78rem;">
+                            <div style="min-width: 0; flex: 1; padding-right: 8px;">
+                              <div style="font-weight: 700; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(cd.label)}">
+                                <i class="fa-solid ${cd.type === 'requested' ? 'fa-file-circle-plus' : 'fa-file'}" style="color: ${cd.type === 'requested' ? '#16a34a' : '#0066cc'}; margin-right: 4px;"></i>
+                                ${escapeHtml(cd.label)}
+                              </div>
+                              ${cd.notes ? `<div style="font-size: 0.72rem; color: #64748b; font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">"${escapeHtml(cd.notes)}"</div>` : ''}
+                            </div>
+                            <a href="${STORAGE_BASE_URL}/${cd.file}" target="_blank" class="btn-action-download-sm" title="View Document">
+                              <i class="fa-solid fa-arrow-up-right-from-square"></i> View
+                            </a>
+                          </div>
+                        `).join('') : '<div style="font-size: 0.8rem; color: #94a3b8; padding: 8px 0;">No customer documents attached.</div>'}
+                      </div>
+                    </div>
+                    ${canRequestDoc ? `
+                      <div class="dropdown-card-footer">
+                        <button onclick="openRequestDocModal(${order.id})" class="btn-action-secondary-w100" style="background:#fff7ed; color:#ea580c; border:1px solid #fed7aa;">
+                          <i class="fa-solid fa-file-circle-question"></i> ${isDocPending ? 'Send Reminder / New Alert' : 'Request Missing Document'}
+                        </button>
+                      </div>
                     ` : ''}
-                  ` : (order.delivery_file ? `
-                    <a href="${STORAGE_BASE_URL}/${order.delivery_file}" target="_blank" class="btn-success-soft" title="View Delivered Document">
-                      <i class="fa-solid fa-download"></i> File
-                    </a>
-                  ` : '')
-                ) : ''}
+                  </div>
+
+                  <!-- Card 2: Operations & Order Actions -->
+                  <div class="dropdown-section-card">
+                    <div>
+                      <div class="dropdown-card-header">
+                        <span><i class="fa-solid fa-bolt" style="color: #ff7a00;"></i> Administrative Actions</span>
+                        <span style="font-size:0.72rem; color:#64748b; font-weight:600;">Fast Action</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 8px;">
+                        ${isPendingPayment ? `
+                          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <button onclick="verifyPaymentModal(${order.id}, 'approve')" class="btn-action-approve" style="justify-content: center; height: 34px;">
+                              <i class="fa-solid fa-check"></i> Approve
+                            </button>
+                            <button onclick="verifyPaymentModal(${order.id}, 'reject')" class="btn-action-reject" style="justify-content: center; height: 34px;">
+                              <i class="fa-solid fa-xmark"></i> Reject
+                            </button>
+                          </div>
+                        ` : ''}
+
+                        ${isProcessing ? (
+                          (order.service && order.service.category === 'print') ? `
+                            <button onclick="markOrderPrinted(${order.id})" class="btn-action-print" style="width: 100%; justify-content: center; height: 34px;">
+                              <i class="fa-solid fa-print"></i> Mark Printed & Ready for Pickup
+                            </button>
+                          ` : `
+                            <button onclick="openFulfillModal(${order.id})" class="btn-action-deliver" style="width: 100%; justify-content: center; height: 34px;">
+                              <i class="fa-solid fa-upload"></i> Upload Finished File & Fulfill
+                            </button>
+                          `
+                        ) : ''}
+
+                        ${isDelivered ? (
+                          order.delivery_file ? `
+                            <a href="${STORAGE_BASE_URL}/${order.delivery_file}" target="_blank" class="btn-action-download-sm" style="display: flex; align-items: center; justify-content: center; gap: 6px; height: 34px; text-decoration: none;">
+                              <i class="fa-solid fa-download"></i> View Delivered Result File
+                            </a>
+                          ` : `
+                            <div style="font-size: 0.78rem; color: #028a2f; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px 10px; font-weight: 700;">
+                              <i class="fa-solid fa-circle-check"></i> Completed & Printed
+                            </div>
+                          `
+                        ) : ''}
+
+                        <button onclick="openOrderDetailsModal(${order.id})" class="btn-action-secondary-w100">
+                          <i class="fa-solid fa-sliders"></i> Full Order Details & Timeline
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Card 3: Customer & Payment Reference -->
+                  <div class="dropdown-section-card">
+                    <div>
+                      <div class="dropdown-card-header">
+                        <span><i class="fa-solid fa-receipt" style="color: #03a93a;"></i> Payment & Customer</span>
+                        <span class="order-ref-pill">#${order.order_number}</span>
+                      </div>
+                      <div style="font-size: 0.8rem; color: #475569; display: flex; flex-direction: column; gap: 6px;">
+                        <div style="display: flex; justify-content: space-between;"><strong>Customer:</strong> <span style="font-weight:700; color:#0f172a;">${escapeHtml(user.name || 'Customer')}</span></div>
+                        <div style="display: flex; justify-content: space-between;"><strong>Phone:</strong> <span>${escapeHtml(user.phone || '-')}</span></div>
+                        <div style="display: flex; justify-content: space-between;"><strong>Payment Mode:</strong> <span>${order.payment_method === 'wallet' ? 'Prepaid Wallet' : 'Direct UPI'}</span></div>
+                        ${order.utr_number ? `<div style="display: flex; justify-content: space-between;"><strong>UTR Ref:</strong> <span style="font-family:monospace; font-weight:700; color:#0284c7;">${escapeHtml(order.utr_number)}</span></div>` : ''}
+                        <div style="display: flex; justify-content: space-between;"><strong>Total Amount:</strong> <span style="font-weight: 800; color: #03a93a;">${formatINR(order.amount)}</span></div>
+                      </div>
+                    </div>
+                    ${order.admin_notes ? `
+                      <div style="margin-top: 8px; padding: 6px 10px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; font-size: 0.74rem; color: #92400e;">
+                        <strong>Your Note:</strong> ${escapeHtml(order.admin_notes)}
+                      </div>
+                    ` : ''}
+                  </div>
+
+                </div>
               </div>
             </td>
           </tr>
         `;
       }).join('');
+    }
+
+    function getOrderCustomerDocs(order) {
+      if (Array.isArray(order.all_documents) && order.all_documents.length) {
+        return order.all_documents;
+      }
+      const docs = [];
+      const inputData = order.input_data || {};
+      const seen = new Set();
+      
+      for (const [k, v] of Object.entries(inputData)) {
+        if (k.startsWith('_')) continue;
+        if (typeof v === 'string' && (v.startsWith('orders/') || v.includes('.pdf') || v.includes('.jpg') || v.includes('.png') || v.includes('.jpeg'))) {
+          if (!seen.has(v)) {
+            seen.add(v);
+            const isReq = k.startsWith('additional_doc') || k.startsWith('requested_doc');
+            docs.push({
+              type: isReq ? 'requested' : 'initial',
+              key: k,
+              label: isReq ? (order.doc_request_title || 'Requested Additional Document') : k.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+              file: v,
+              notes: isReq ? order.doc_response_notes : null,
+              date: isReq ? (order.doc_response_submitted_at || order.updated_at) : order.created_at
+            });
+          }
+        }
+      }
+
+      if (order.doc_response_file && !seen.has(order.doc_response_file)) {
+        seen.add(order.doc_response_file);
+        docs.push({
+          type: 'requested',
+          key: 'doc_response_file',
+          label: order.doc_request_title || 'Requested Additional Document',
+          file: order.doc_response_file,
+          notes: order.doc_response_notes,
+          date: order.doc_response_submitted_at || order.updated_at
+        });
+      }
+
+      return docs;
     }
 
     function openOrderDetailsModal(orderId) {
@@ -562,16 +1476,115 @@
       const user = order.user || {};
       const service = order.service || {};
       const inputData = order.input_data || {};
+      const customerDocs = getOrderCustomerDocs(order);
 
+      let docAlertHtml = '';
+      if (order.doc_request_status === 'pending') {
+        docAlertHtml = `
+          <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 14px 18px; margin-bottom: 16px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:8px; color: #b45309; font-weight: 800; font-size: 0.92rem;">
+                <i class="fa-solid fa-triangle-exclamation" style="font-size:1.15rem;"></i>
+                <span>Missing Document Alert Sent (Waiting for Customer)</span>
+              </div>
+              <button type="button" onclick="closeModal('modalOrderDetails'); openRequestDocModal(${order.id})" class="preset-pill-btn" style="background:#ffedd5; color:#ea580c; border-color:#fdba74;">
+                <i class="fa-solid fa-pen-to-square"></i> Re-request / Edit
+              </button>
+            </div>
+            <div style="margin-top: 6px; font-size: 0.88rem; color: #78350f;">
+              <strong>Requested Document:</strong> ${escapeHtml(order.doc_request_title || '')}
+            </div>
+            <div style="margin-top: 4px; font-size: 0.84rem; color: #92400e; background:#fef3c7; padding:8px 12px; border-radius:8px;">
+              "${escapeHtml(order.doc_request_message || '')}"
+            </div>
+            <small style="color: #b45309; display:block; margin-top: 6px;">Requested on: ${formatDate(order.doc_request_requested_at)} &bull; Status: Waiting for user upload</small>
+          </div>
+        `;
+      } else if (order.doc_request_status === 'submitted') {
+        docAlertHtml = `
+          <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 14px 18px; margin-bottom: 16px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+              <div>
+                <div style="display:flex; align-items:center; gap:8px; color: #166534; font-weight: 800; font-size: 0.92rem;">
+                  <i class="fa-solid fa-circle-check" style="font-size:1.15rem; color:#03a93a;"></i>
+                  <span>Customer Uploaded Missing Document! (Added to order documents below)</span>
+                </div>
+                <div style="margin-top: 4px; font-size: 0.88rem; color: #15803d;">
+                  <strong>Requested File:</strong> ${escapeHtml(order.doc_request_title || '')}
+                </div>
+                ${order.doc_response_notes ? `
+                  <div style="margin-top: 4px; font-size: 0.84rem; color: #166534; background:#dcfce7; padding:6px 10px; border-radius:6px;">
+                    <strong>Customer Note:</strong> "${escapeHtml(order.doc_response_notes)}"
+                  </div>
+                ` : ''}
+                <small style="color: #15803d; display:block; margin-top: 4px;">Uploaded on: ${formatDate(order.doc_response_submitted_at)}</small>
+              </div>
+              <div>
+                <a href="${STORAGE_BASE_URL}/${order.doc_response_file}" target="_blank" class="btn-rz-primary" style="padding: 8px 16px; font-size: 0.84rem; text-decoration:none; background: linear-gradient(135deg, #03a93a 0%, #028a2f 100%);">
+                  <i class="fa-solid fa-download"></i> View Added File
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Customer Uploaded Documents Gallery (BOTH Original & Requested)
+      let docsGalleryHtml = '';
+      if (customerDocs.length > 0) {
+        docsGalleryHtml = `
+          <div style="margin: 18px 0; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 12px; flex-wrap:wrap; gap:8px;">
+              <div style="font-weight: 800; font-size: 0.95rem; color: #0f172a; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-folder-open" style="color: #ff7a00; font-size: 1.15rem;"></i>
+                <span>Customer Uploaded Documents (${customerDocs.length} Total Attached)</span>
+              </div>
+              <small style="color: #03a93a; font-weight:700;"><i class="fa-solid fa-shield-halved"></i> All initial & added files preserved</small>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+              ${customerDocs.map((cd, idx) => `
+                <div style="background: ${cd.type === 'requested' ? '#f0fdf4' : '#f8fafc'}; border: 1.5px solid ${cd.type === 'requested' ? '#bbf7d0' : '#e2e8f0'}; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px;">
+                      <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; ${cd.type === 'requested' ? 'background: #dcfce7; color: #166534; border: 1px solid #bbf7d0;' : 'background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;'}">
+                        <i class="fa-solid ${cd.type === 'requested' ? 'fa-file-circle-plus' : 'fa-file'}"></i> ${cd.type === 'requested' ? 'Additional Requested File' : `Initial Document #${idx + 1}`}
+                      </span>
+                      <small style="color: #64748b; font-size: 0.74rem;">${formatDate(cd.date)}</small>
+                    </div>
+                    <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a; margin-top: 4px;">
+                      ${escapeHtml(cd.label)}
+                    </div>
+                    ${cd.notes ? `
+                      <div style="margin-top: 6px; font-size: 0.8rem; color: #166534; background: rgba(255,255,255,0.7); padding: 5px 8px; border-radius: 6px; border-left: 3px solid #03a93a;">
+                        <strong>Customer Note:</strong> "${escapeHtml(cd.notes)}"
+                      </div>
+                    ` : ''}
+                  </div>
+                  <div style="margin-top: 12px;">
+                    <a href="${STORAGE_BASE_URL}/${cd.file}" target="_blank" class="btn-rz-primary" style="padding: 7px 14px; font-size: 0.82rem; text-decoration: none; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; background: ${cd.type === 'requested' ? 'linear-gradient(135deg, #03a93a 0%, #028a2f 100%)' : 'linear-gradient(135deg, #0066cc 0%, #004d99 100%)'};">
+                      <i class="fa-solid fa-download"></i> View / Download ${cd.type === 'requested' ? 'Added File' : 'Original File'}
+                    </a>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Other Non-File Text/Form Fields
       let inputFieldsHtml = '';
       for (const [key, value] of Object.entries(inputData)) {
-        const isFile = typeof value === 'string' && (value.startsWith('orders/') || value.includes('.pdf') || value.includes('.jpg') || value.includes('.png'));
+        if (key.startsWith('_')) continue;
+        const isFile = typeof value === 'string' && (value.startsWith('orders/') || value.includes('.pdf') || value.includes('.jpg') || value.includes('.png') || value.includes('.jpeg'));
+        if (isFile) continue; // Already listed prominently in Customer Documents Gallery above
         
         inputFieldsHtml += `
           <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px;">
-            <div style="font-size: 0.76rem; text-transform: uppercase; font-weight: 700; color: #64748b;">${key.replace(/_/g, ' ')}</div>
+            <div style="font-size: 0.76rem; text-transform: uppercase; font-weight: 700; color: #64748b;">${escapeHtml(key.replace(/_/g, ' '))}</div>
             <div style="font-size: 0.9rem; font-weight: 600; color: #0f172a; margin-top: 2px;">
-              ${isFile ? `<a href="${STORAGE_BASE_URL}/${value}" target="_blank" class="btn-blue-soft" style="padding: 3px 8px; font-size: 0.78rem;"><i class="fa-solid fa-file-arrow-down"></i> View Uploaded File</a>` : value}
+              ${escapeHtml(value)}
             </div>
           </div>
         `;
@@ -593,24 +1606,29 @@
       }
 
       document.getElementById('modalOrderBody').innerHTML = `
+        ${docAlertHtml}
+
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
           <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px;">
             <small style="color: #64748b; font-weight: 600;">Customer Details</small>
-            <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-top: 2px;">${user.name}</div>
-            <div style="font-size: 0.82rem; color: #64748b;">${user.email} | ${user.phone || '-'}</div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-top: 2px;">${escapeHtml(user.name || 'Customer')}</div>
+            <div style="font-size: 0.82rem; color: #64748b;">${escapeHtml(user.email || '')} | ${escapeHtml(user.phone || '-')}</div>
           </div>
 
           <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px;">
             <small style="color: #64748b; font-weight: 600;">Service & Price</small>
-            <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-top: 2px;">${service.name}</div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-top: 2px;">${escapeHtml(service.name || 'Service')}</div>
             <div style="font-size: 0.85rem; font-weight: 800; color: #ff7a00;">${formatINR(order.amount)} via ${order.payment_method === 'wallet' ? 'Wallet' : 'Direct UPI'}</div>
           </div>
         </div>
 
+        <!-- All Attached Customer Documents -->
+        ${docsGalleryHtml}
+
         <h4 style="font-size: 0.9rem; font-weight: 700; color: #1e293b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.04em;">
-          <i class="fa-solid fa-list-check" style="color:#ff7a00;"></i> Application Data
+          <i class="fa-solid fa-list-check" style="color:#ff7a00;"></i> Application Details
         </h4>
-        ${inputFieldsHtml || '<div style="color:#94a3b8; font-size:0.88rem;">No form fields submitted.</div>'}
+        ${inputFieldsHtml || '<div style="color:#94a3b8; font-size:0.88rem; margin-bottom:12px;">No extra text fields submitted.</div>'}
 
         ${paymentProofHtml}
 
@@ -640,9 +1658,18 @@
         ` : ''}
       `;
 
-      let footerActions = `<button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>`;
+      let footerActions = `
+        <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails'); openRequestDocModal(${order.id})" style="color: #ea580c; border-color: #fed7aa; margin-right: auto;">
+          <i class="fa-solid fa-file-circle-question"></i> ${order.doc_request_status === 'pending' ? 'Re-request Doc' : 'Request Missing Doc'}
+        </button>
+        <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
+      `;
+
       if (order.payment_status === 'pending') {
         footerActions = `
+          <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails'); openRequestDocModal(${order.id})" style="color: #ea580c; border-color: #fed7aa; margin-right: auto;">
+            <i class="fa-solid fa-file-circle-question"></i> Request Doc
+          </button>
           <button type="button" class="btn-danger-soft" onclick="closeModal('modalOrderDetails'); verifyPaymentModal(${order.id}, 'reject')">
             <i class="fa-solid fa-xmark"></i> Reject Payment
           </button>
@@ -654,6 +1681,9 @@
         const isPrintService = order.service && order.service.category === 'print';
         if (isPrintService) {
           footerActions = `
+            <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails'); openRequestDocModal(${order.id})" style="color: #ea580c; border-color: #fed7aa; margin-right: auto;">
+              <i class="fa-solid fa-file-circle-question"></i> Request Doc
+            </button>
             <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
             <button type="button" class="btn-rz-green" onclick="markOrderPrinted(${order.id})">
               <i class="fa-solid fa-print"></i> Printed (Ready for Pickup)
@@ -661,8 +1691,11 @@
           `;
         } else {
           footerActions = `
+            <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails'); openRequestDocModal(${order.id})" style="color: #ea580c; border-color: #fed7aa; margin-right: auto;">
+              <i class="fa-solid fa-file-circle-question"></i> Request Doc
+            </button>
             <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
-            <button type="button" class="btn-rz-primary" onclick="closeModal('modalOrderDetails'); openFulfillModal(${order.id}, '${order.order_number}')">
+            <button type="button" class="btn-rz-primary" onclick="closeModal('modalOrderDetails'); openFulfillModal(${order.id})">
               <i class="fa-solid fa-upload"></i> Deliver Order Document
             </button>
           `;
@@ -671,6 +1704,53 @@
 
       document.getElementById('modalOrderFooter').innerHTML = footerActions;
       openModal('modalOrderDetails');
+    }
+
+    function openRequestDocModal(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      document.getElementById('reqDocOrderId').value = order.id;
+      document.getElementById('reqDocSubtitle').textContent = `Order #${order.order_number} (${order.user ? order.user.name : 'Customer'})`;
+      
+      document.getElementById('reqDocName').value = order.doc_request_title || '';
+      document.getElementById('reqDocMessage').value = order.doc_request_message || 'Please upload the requested document as soon as possible so we can proceed with your application and avoid rejection.';
+
+      openModal('modalRequestDoc');
+    }
+
+    function applyDocPreset(name, message) {
+      document.getElementById('reqDocName').value = name;
+      document.getElementById('reqDocMessage').value = message;
+    }
+
+    async function handleRequestDocSubmit(e) {
+      e.preventDefault();
+      const orderId = document.getElementById('reqDocOrderId').value;
+      const docName = document.getElementById('reqDocName').value.trim();
+      const message = document.getElementById('reqDocMessage').value.trim();
+      const btn = document.getElementById('btnSubmitReqDoc');
+
+      if (!docName || !message) {
+        showToast('Please fill in both document title and instructions.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending Alert...';
+
+      try {
+        const res = await API.admin.requestDocument(orderId, docName, message);
+        showToast(res.message || 'Alert sent to customer successfully!', 'success');
+        closeModal('modalRequestDoc');
+        closeModal('modalOrderDetails');
+        loadOrders();
+      } catch (err) {
+        showToast(err.message || 'Failed to send request', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Alert to Customer';
+      }
     }
 
     async function markOrderPrinted(orderId) {
@@ -710,8 +1790,12 @@
     }
 
     function openFulfillModal(orderId, orderNumber) {
+      if (!orderNumber) {
+        const found = (allOrders || []).find(o => o.id == orderId);
+        orderNumber = found ? found.order_number : '';
+      }
       document.getElementById('fulfillOrderId').value = orderId;
-      document.getElementById('fulfillOrderSubtitle').textContent = `Order: ${orderNumber}`;
+      document.getElementById('fulfillOrderSubtitle').textContent = `Order: #${orderNumber}`;
       document.getElementById('deliveryFileInput').value = '';
       document.getElementById('selectedFileName').textContent = '';
       document.getElementById('adminNotesInput').value = '';

@@ -31,10 +31,37 @@ class Otp extends Model
     /**
      * Generate a new 6-digit OTP for a phone number
      */
-    public static function generate(string $phone, string $purpose = 'register', ?string $ip = null, int $expiryMinutes = 5): self
+    public static function generate(string $phone, string $purpose = 'register', ?string $ip = null, int $expiryMinutes = 5, bool $bypassRateLimits = false): self
     {
         // Clean phone (digits only)
         $cleanPhone = preg_replace('/[^0-9]/', '', $phone);
+
+        if (!$bypassRateLimits) {
+            // 1. Cooldown check: enforce 60s cooldown per phone
+            $recent = static::where('phone', $cleanPhone)
+                ->where('purpose', $purpose)
+                ->where('created_at', '>=', now()->subSeconds(60))
+                ->latest()
+                ->first();
+
+            if ($recent) {
+                $waitSeconds = max(1, (int) ceil(60 - now()->diffInSeconds($recent->created_at)));
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'phone' => ["Please wait {$waitSeconds} seconds before requesting a new OTP."],
+                ]);
+            }
+
+            // 2. Hourly rate check: max 5 OTP requests per hour per phone
+            $hourlyCount = static::where('phone', $cleanPhone)
+                ->where('created_at', '>=', now()->subHour())
+                ->count();
+
+            if ($hourlyCount >= 5) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'phone' => ['Maximum OTP requests for this mobile number exceeded for this hour. Please try again later.'],
+                ]);
+            }
+        }
 
         // Invalidate previous unverified OTPs for this phone and purpose
         static::where('phone', $cleanPhone)
@@ -76,9 +103,8 @@ class Otp extends Model
 
         if ($record->verified_at !== null) {
             return [
-                'valid' => true,
-                'message' => 'OTP already verified.',
-                'otp' => $record,
+                'valid' => false,
+                'message' => 'This OTP has already been used. Please request a new code.',
             ];
         }
 
@@ -96,9 +122,9 @@ class Otp extends Model
             ];
         }
 
-        if ($record->otp !== $cleanOtp) {
+        if (!hash_equals($record->otp, $cleanOtp)) {
             $record->increment('attempts');
-            $remaining = 5 - $record->attempts;
+            $remaining = max(0, 5 - $record->attempts);
             return [
                 'valid' => false,
                 'message' => "Invalid OTP code. {$remaining} attempts remaining.",

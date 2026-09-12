@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PersonalAccessToken;
 use App\Models\Review;
+use App\Models\User;
 use App\Services\LandingPageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -61,22 +62,33 @@ class ReviewController extends Controller
             }
         }
 
+        $authorName = strip_tags(trim($validated['author_name']));
+        if ($userId) {
+            $user = User::find($userId);
+            if ($user) {
+                if ($user->status === 'blocked') {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Your account has been deactivated/blocked. You cannot submit reviews.'
+                    ], 403);
+                }
+                $authorName = $user->name;
+            }
+        }
+
         $review = Review::create([
             'user_id' => $userId,
-            'author_name' => strip_tags(trim($validated['author_name'])),
+            'author_name' => $authorName,
             'role_or_business' => !empty($validated['role_or_business']) ? strip_tags(trim($validated['role_or_business'])) : 'Digital Retailer',
             'rating' => (int) $validated['rating'],
             'comment' => strip_tags(trim($validated['comment'])),
-            'is_approved' => true,
-            'is_featured' => true,
+            'is_approved' => false, // Requires admin moderation before public display
+            'is_featured' => false,
         ]);
-
-        // Invalidate Landing Page Cache so the new review immediately appears on landing page
-        Cache::forget(LandingPageService::CACHE_KEY);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Thank you! Your review has been published successfully.',
+            'message' => 'Thank you! Your review has been submitted and will be published after verification.',
             'data' => [
                 'id' => $review->id,
                 'author' => $review->author_name,
@@ -84,7 +96,7 @@ class ReviewController extends Controller
                 'initials' => $review->initials,
                 'stars' => $review->rating,
                 'quote' => $review->comment,
-                'created_at' => 'Just now',
+                'created_at' => 'Under Review',
             ]
         ], 201);
     }

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Reviews & Moderation - Admin Portal</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/png" href="../logo-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    .kpi-grid-reviews {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-mini-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .kpi-mini-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .review-bubble {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #1e293b;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      position: relative;
+    }
+    .review-author-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .btn-ban-quick {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-ban-quick:hover {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #dc2626;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .filter-tab-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .filter-tab-btn.active {
+      background: #ffffff;
+      color: #0066cc;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="portal-wrapper">
+    <!-- Admin Sidebar Navigation -->
+    <aside class="portal-sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="brand-logo" style="display:flex; align-items:center; gap:8px;">
+          <img src="../logo .png" alt="Instant Online Seva" class="brand-logo-img">
+          <img src="../logo-icon.png" alt="Instant Online Seva" class="brand-logo-icon-img">
+          <span class="brand-badge" style="background:#dc2626; font-size:0.65rem; padding:3px 7px;">ADMIN</span>
+        </a>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="sidebar-category-header">Overview</li>
+        <li class="sidebar-item">
+          <a href="dashboard.html" class="sidebar-link">
+            <i class="fa-solid fa-chart-pie" style="color:#0066cc;"></i>
+            <span>Executive Dashboard</span>
+          </a>
+        </li>
+
+        <li class="sidebar-category-header">Fulfillment & Ops</li>
+        <li class="sidebar-item">
+          <a href="orders.html" class="sidebar-link">
+            <i class="fa-solid fa-list-check" style="color:#0284c7;"></i>
+            <span>All Orders</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="wallet-requests.html" class="sidebar-link">
+            <i class="fa-solid fa-money-bill-transfer" style="color:#03a93a;"></i>
+            <span>Wallet Top-ups</span>
+          </a>
+        </li>
+
+        <li class="sidebar-category-header">Catalog & Accounts</li>
+        <li class="sidebar-item">
+          <a href="services.html" class="sidebar-link">
+            <i class="fa-solid fa-layer-group" style="color:#e04d00;"></i>
+            <span>Services & Rates</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="users.html" class="sidebar-link">
+            <i class="fa-solid fa-users" style="color:#7c3aed;"></i>
+            <span>Customer Accounts</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item active">
+          <a href="reviews.html" class="sidebar-link active">
+            <i class="fa-solid fa-star" style="color:#f59e0b;"></i>
+            <span>Customer Reviews</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="complaints.html" class="sidebar-link">
+            <i class="fa-solid fa-headset" style="color:#dc2626;"></i>
+            <span>Support Tickets</span>
+          </a>
+        <li class="sidebar-category-header">System Config</li>
+        <li class="sidebar-item">
+          <a href="settings.html" class="sidebar-link">
+            <i class="fa-solid fa-sliders" style="color:#64748b;"></i>
+            <span>UPI & Global Settings</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Admin Identity & Logout -->
+      <div class="sidebar-user-footer">
+        <div class="sidebar-user-info">
+          <div class="topbar-avatar user-initials-display" style="width: 34px; height: 34px; font-size: 0.75rem; background: #dc2626;">AD</div>
+          <div class="sidebar-user-details">
+            <div class="user-name-display">Administrator</div>
+            <div class="user-role-display">Root Console</div>
+          </div>
+        </div>
+        <a href="#" class="btn-icon-action danger btn-logout-action" title="Sign Out">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="portal-main">
+      <header class="portal-topbar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Console &bull; Content Moderation</div>
+            <h1 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;"><span>Customer Reviews</span><span class="page-title-sub"> & Moderation</span></h1>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="search-box-wrapper" style="width: 260px;">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="reviewSearchInput" oninput="handleSearch()" placeholder="Search reviewer, comment...">
+          </div>
+          <button onclick="loadReviews()" class="btn-secondary" style="padding: 7px 14px; font-size: 0.82rem;" title="Refresh list">
+            <i class="fa-solid fa-rotate"></i> Refresh
+          </button>
+          <button class="btn-secondary btn-logout-action" style="padding: 7px 14px; font-size: 0.82rem;">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+          </button>
+        </div>
+      </header>
+
+      <div class="portal-content">
+        <!-- Summary KPI Cards -->
+        <div class="kpi-grid-reviews">
+          <div class="kpi-mini-card">
+            <div class="kpi-mini-icon" style="background:#eff6ff; color:#0066cc;">
+              <i class="fa-solid fa-comments"></i>
+            </div>
+            <div>
+              <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Total Reviews</div>
+              <div id="kpiTotalReviews" style="font-size: 1.5rem; font-weight: 800; color: #0f172a; font-family:'Outfit',sans-serif;">0</div>
+            </div>
+          </div>
+
+          <div class="kpi-mini-card">
+            <div class="kpi-mini-icon" style="background:#f0fdf4; color:#16a34a;">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+              <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Live on Homepage</div>
+              <div id="kpiApprovedReviews" style="font-size: 1.5rem; font-weight: 800; color: #16a34a; font-family:'Outfit',sans-serif;">0</div>
+            </div>
+          </div>
+
+          <div class="kpi-mini-card">
+            <div class="kpi-mini-icon" style="background:#fef2f2; color:#dc2626;">
+              <i class="fa-solid fa-eye-slash"></i>
+            </div>
+            <div>
+              <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Hidden / Flagged</div>
+              <div id="kpiHiddenReviews" style="font-size: 1.5rem; font-weight: 800; color: #dc2626; font-family:'Outfit',sans-serif;">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid rgba(226,232,240,0.8);">
+            <div>
+              <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0 0 2px;">Review Moderation Queue</h2>
+              <div style="color: #64748b; font-size: 0.8rem;">Filter, inspect and take action against abusive or vulgar comments immediately</div>
+            </div>
+
+            <!-- Quick Filter Tabs -->
+            <div class="filter-tabs">
+              <button class="filter-tab-btn active" onclick="setFilter('all', this)">All</button>
+              <button class="filter-tab-btn" onclick="setFilter('approved', this)">Live / Visible</button>
+              <button class="filter-tab-btn" onclick="setFilter('hidden', this)">Hidden</button>
+            </div>
+          </div>
+
+          <div class="custom-table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th style="width: 110px;">ID & Date</th>
+                  <th>Customer / Reviewer Profile</th>
+                  <th style="width: 120px;">Rating</th>
+                  <th>Comment / Feedback</th>
+                  <th style="width: 110px;">Live Status</th>
+                  <th style="text-align: right; min-width: 240px;">Moderation Actions</th>
+                </tr>
+              </thead>
+              <tbody id="reviewsTableTbody">
+                <tr>
+                  <td colspan="6" class="loading-state-cell">
+                    <div class="loading-spinner-wrapper">
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                      <span>Loading customer reviews...</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let currentReviews = [];
+    let activeFilter = 'all';
+    let searchQuery = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadReviews();
+    });
+
+    function setFilter(status, btn) {
+      activeFilter = status;
+      document.querySelectorAll('.filter-tab-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      loadReviews();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('reviewSearchInput').value.trim();
+      loadReviews();
+    }
+
+    async function loadReviews() {
+      const tbody = document.getElementById('reviewsTableTbody');
+      try {
+        const params = {};
+        if (activeFilter !== 'all') params.status = activeFilter;
+        if (searchQuery) params.search = searchQuery;
+
+        const res = await API.admin.getReviews(params);
+        currentReviews = res.data?.data || [];
+
+        // Update KPI counters
+        if (res.summary) {
+          document.getElementById('kpiTotalReviews').textContent = res.summary.total || 0;
+          document.getElementById('kpiApprovedReviews').textContent = res.summary.approved || 0;
+          document.getElementById('kpiHiddenReviews').textContent = res.summary.hidden || 0;
+        }
+
+        renderReviewsTable(currentReviews);
+      } catch (err) {
+        console.error(err);
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; padding: 24px; color: #ef4444;">
+              <i class="fa-solid fa-triangle-exclamation"></i> Failed to load reviews: ${escapeHtml(err.message)}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function renderReviewsTable(reviews) {
+      const tbody = document.getElementById('reviewsTableTbody');
+      if (!reviews || reviews.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state-box">
+                <div class="empty-state-icon"><i class="fa-solid fa-comments"></i></div>
+                <div class="empty-state-title">No Reviews Found</div>
+                <div class="empty-state-text">No customer reviews match your current filters.</div>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = reviews.map(r => {
+        const user = r.user;
+        const initial = r.author_name ? r.author_name.charAt(0).toUpperCase() : 'U';
+        const isUserBlocked = user && user.status === 'blocked';
+        const stars = '★'.repeat(r.rating || 5);
+
+        return `
+          <tr>
+            <td>
+              <span class="order-id-chip">#REV-${r.id}</span>
+              <div style="font-size: 0.72rem; color: #64748b; margin-top: 4px;">
+                ${formatDate(r.created_at)}
+              </div>
+            </td>
+
+            <td>
+              <div class="review-author-box">
+                <div class="customer-avatar-initial" style="background: ${isUserBlocked ? '#dc2626' : 'linear-gradient(135deg, #0066cc, #014183)'}; color: #fff;">
+                  ${initial}
+                </div>
+                <div>
+                  <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">
+                    ${escapeHtml(r.author_name)}
+                  </div>
+                  <div style="font-size: 0.76rem; color: #64748b;">
+                    <i class="fa-solid fa-store" style="font-size: 0.7rem; color: #94a3b8; margin-right: 3px;"></i>
+                    ${escapeHtml(r.role_or_business || 'Digital Retailer')}
+                  </div>
+
+                  <!-- Linked Registered Account Info -->
+                  <div style="margin-top: 6px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                    ${user ? `
+                      <span style="font-size: 0.72rem; font-weight: 700; background: #f1f5f9; color: #334155; padding: 2px 7px; border-radius: 6px;">
+                        #UID-${user.id} &bull; ${escapeHtml(user.phone || user.email || '')}
+                      </span>
+                      <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; padding: 2px 7px; border-radius: 9999px; background: ${isUserBlocked ? 'rgba(220,38,38,0.1)' : 'rgba(3,169,58,0.1)'}; color: ${isUserBlocked ? '#dc2626' : '#03a93a'}; border: 1px solid ${isUserBlocked ? 'rgba(220,38,38,0.2)' : 'rgba(3,169,58,0.2)'};">
+                        ${isUserBlocked ? 'BLOCKED' : 'ACTIVE'}
+                      </span>
+                    ` : `
+                      <span style="font-size: 0.7rem; font-weight: 600; color: #94a3b8; font-style: italic;">
+                        Guest Reviewer
+                      </span>
+                    `}
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div style="color: #f59e0b; font-size: 1rem; letter-spacing: 1px;">${stars}</div>
+              <span style="font-size: 0.75rem; color: #64748b; font-weight: 700;">${r.rating} / 5</span>
+            </td>
+
+            <td style="max-width: 320px;">
+              <div class="review-bubble">
+                <i class="fa-solid fa-quote-left" style="color: #cbd5e1; margin-right: 4px;"></i>
+                ${escapeHtml(r.comment)}
+              </div>
+            </td>
+
+            <td>
+              <span class="badge-status ${r.is_approved ? 'badge-completed' : 'badge-rejected'}">
+                ${r.is_approved ? 'VISIBLE' : 'HIDDEN'}
+              </span>
+            </td>
+
+            <td style="text-align: right;">
+              <div style="display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
+                <!-- Toggle Visibility -->
+                <button onclick="toggleReviewStatus(${r.id})" class="btn-secondary" style="padding: 6px 10px; font-size: 0.76rem;" title="Show or Hide on landing page">
+                  ${r.is_approved ? '<i class="fa-solid fa-eye-slash"></i> Hide' : '<i class="fa-solid fa-eye" style="color:#03a93a;"></i> Show'}
+                </button>
+
+                <!-- Block / Unblock User -->
+                ${user ? `
+                  <button onclick="toggleUserBlock(${r.id}, '${isUserBlocked ? 'unblock' : 'block'}', '${escapeHtml(user.name)}')" class="${isUserBlocked ? 'btn-success-soft' : 'btn-danger-soft'}" style="padding: 6px 10px; font-size: 0.76rem;" title="${isUserBlocked ? 'Unblock user' : 'Block user from platform'}">
+                    ${isUserBlocked ? '<i class="fa-solid fa-user-check"></i> Unblock' : '<i class="fa-solid fa-user-slash"></i> Block User'}
+                  </button>
+                ` : `
+                  <button onclick="toggleUserBlock(${r.id}, 'block', '${escapeHtml(r.author_name)}')" class="btn-danger-soft" style="padding: 6px 10px; font-size: 0.76rem;" title="Search and block author account">
+                    <i class="fa-solid fa-user-slash"></i> Block Author
+                  </button>
+                `}
+
+                <!-- Delete Review Only -->
+                <button onclick="deleteReviewOnly(${r.id})" class="btn-secondary" style="padding: 6px 10px; font-size: 0.76rem; color:#ef4444;" title="Delete this review">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+
+                <!-- 1-Click Ban & Remove (For Inappropriate/Abusive Content) -->
+                <button onclick="blockAndRemoveReview(${r.id}, '${escapeHtml(r.author_name)}')" class="btn-ban-quick" title="Block this user and permanently remove the abusive review">
+                  <i class="fa-solid fa-ban"></i> Block & Remove
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function toggleReviewStatus(id) {
+      try {
+        const res = await API.admin.toggleReview(id);
+        showToast(res.message || 'Review status updated', 'success');
+        loadReviews();
+      } catch (err) {
+        showToast(err.message || 'Failed to update review status', 'error');
+      }
+    }
+
+    async function toggleUserBlock(reviewId, action, userName) {
+      const confirmMsg = action === 'block' 
+        ? `Are you sure you want to BLOCK user "${userName}" from accessing the platform?`
+        : `Unblock user "${userName}" and restore their account access?`;
+
+      if (!confirm(confirmMsg)) return;
+
+      try {
+        const res = await API.admin.blockReviewUser(reviewId, action);
+        showToast(res.message || 'User status updated successfully', 'success');
+        loadReviews();
+      } catch (err) {
+        showToast(err.message || 'Failed to update user status', 'error');
+      }
+    }
+
+    async function deleteReviewOnly(id) {
+      if (!confirm('Are you sure you want to permanently delete this review?')) return;
+
+      try {
+        const res = await API.admin.deleteReview(id);
+        showToast(res.message || 'Review deleted successfully', 'success');
+        loadReviews();
+      } catch (err) {
+        showToast(err.message || 'Failed to delete review', 'error');
+      }
+    }
+
+    async function blockAndRemoveReview(id, authorName) {
+      const confirmed = confirm(`🚨 INAPPROPRIATE CONTENT MODERATION:\n\nAre you sure you want to:\n1. BLOCK the user/author "${authorName}"\n2. Permanently REMOVE this review/comment?\n\nThis action will immediately log out the blocked user.`);
+      if (!confirmed) return;
+
+      try {
+        const res = await API.admin.blockAndDeleteReview(id);
+        showToast(res.message || 'User blocked and review removed!', 'success');
+        loadReviews();
+      } catch (err) {
+        showToast(err.message || 'Failed to process request', 'error');
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

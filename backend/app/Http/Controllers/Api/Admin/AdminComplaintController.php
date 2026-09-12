@@ -36,7 +36,7 @@ class AdminComplaintController extends Controller
         ]);
 
         $complaint->update([
-            'admin_reply' => $request->reply,
+            'admin_reply' => strip_tags(trim($request->reply)),
             'status' => $request->status,
         ]);
 

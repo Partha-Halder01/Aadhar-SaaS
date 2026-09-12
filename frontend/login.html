@@ -380,6 +380,7 @@
           <div class="form-group">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
               <label class="form-label" for="loginPassword" style="margin:0;">Secure Password</label>
+              <a href="#" id="btnOpenForgotPassword" style="color: #0066cc; font-size: 0.82rem; font-weight: 700; text-decoration: none;">Forgot Password?</a>
             </div>
             <div class="input-wrapper">
               <i class="fa-solid fa-lock icon-lead"></i>
@@ -470,7 +471,88 @@
           <span>&bull;</span>
           <span><i class="fa-solid fa-headset" style="color: #0066cc;"></i> Retailer Support</span>
         </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="modalForgotPassword" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 16px;">
+    <div style="background: #ffffff; border-radius: 20px; max-width: 440px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid #e2e8f0; overflow: hidden;">
+      <div style="padding: 20px 24px 16px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: 10px; background: #eff6ff; color: #0066cc; display: flex; align-items: center; justify-content: center; font-size: 1.05rem;">
+            <i class="fa-solid fa-key"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a; font-family: 'Outfit', sans-serif;">Reset Password</h3>
+            <p style="margin: 0; font-size: 0.78rem; color: #64748b;">Verify mobile OTP to set a new password</p>
+          </div>
+        </div>
+        <button type="button" id="btnCloseForgotModal" style="background: transparent; border: none; font-size: 1.25rem; color: #94a3b8; cursor: pointer; padding: 4px;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
+
+      <form id="forgotPasswordForm" style="padding: 22px 24px 26px;">
+        <!-- Mobile Input -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" for="forgotPhone">Registered 10-Digit Mobile Number</label>
+          <div style="display: flex; gap: 8px;">
+            <div class="input-wrapper" style="flex: 1;">
+              <i class="fa-solid fa-phone icon-lead"></i>
+              <input type="tel" id="forgotPhone" class="form-control" placeholder="10-digit mobile" maxlength="10" required>
+            </div>
+            <button type="button" id="btnSendForgotOtp" class="btn-send-otp">
+              <i class="fa-solid fa-paper-plane"></i> Send OTP
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: OTP & New Password -->
+        <div id="forgotStep2" style="display: none;">
+          <!-- Dev OTP Helper for reset -->
+          <div id="devOtpForgotBanner" class="dev-otp-helper" style="display: none; margin-bottom: 14px;" onclick="autoFillDevForgotOtp()">
+            <i class="fa-solid fa-bolt" style="color: #03a93a;"></i>
+            <span>Simulator Code: <strong id="devOtpForgotCode">------</strong> (Click to fill)</span>
+          </div>
+
+          <!-- OTP Input -->
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="forgotOtp">6-Digit Verification Code</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-shield-halved icon-lead"></i>
+              <input type="text" id="forgotOtp" class="form-control" placeholder="Enter 6-digit OTP" maxlength="6" inputmode="numeric">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px; font-size: 0.78rem; color: #64748b;">
+              <span id="forgotTimerContainer">Resend in <strong id="forgotTimerCount" style="color: #0066cc;">60</strong>s</span>
+              <button type="button" id="btnForgotResendOtp" style="display: none; background: none; border: none; color: #0066cc; font-weight: 700; cursor: pointer; padding: 0;">
+                <i class="fa-solid fa-rotate-right"></i> Resend OTP
+              </button>
+            </div>
+          </div>
+
+          <!-- New Password -->
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" for="forgotNewPassword">New Password (Min 8 characters)</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock icon-lead"></i>
+              <input type="password" id="forgotNewPassword" class="form-control" placeholder="At least 8 characters" minlength="8" required>
+              <i class="fa-solid fa-eye toggle-password" id="toggleForgotPwdBtn"></i>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label" for="forgotConfirmPassword">Confirm New Password</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-check-double icon-lead"></i>
+              <input type="password" id="forgotConfirmPassword" class="form-control" placeholder="Re-enter new password" minlength="8" required>
+            </div>
+          </div>
+
+          <button type="submit" id="btnSubmitResetPassword" class="btn-rz-primary">
+            <i class="fa-solid fa-shield-check"></i> Set New Password & Proceed
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -704,6 +786,171 @@
         btnSubmitOtpLogin.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Verify & Login';
         loginOtpBoxes.forEach(b => b.value = '');
         loginOtpBoxes[0].focus();
+      }
+    });
+
+    // --- Forgot Password Modal Logic ---
+    const modalForgotPassword = document.getElementById('modalForgotPassword');
+    const btnOpenForgotPassword = document.getElementById('btnOpenForgotPassword');
+    const btnCloseForgotModal = document.getElementById('btnCloseForgotModal');
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    const forgotPhone = document.getElementById('forgotPhone');
+    const btnSendForgotOtp = document.getElementById('btnSendForgotOtp');
+    const forgotStep2 = document.getElementById('forgotStep2');
+    const forgotOtp = document.getElementById('forgotOtp');
+    const forgotNewPassword = document.getElementById('forgotNewPassword');
+    const forgotConfirmPassword = document.getElementById('forgotConfirmPassword');
+    const btnSubmitResetPassword = document.getElementById('btnSubmitResetPassword');
+    const toggleForgotPwdBtn = document.getElementById('toggleForgotPwdBtn');
+    const devOtpForgotBanner = document.getElementById('devOtpForgotBanner');
+    const devOtpForgotCode = document.getElementById('devOtpForgotCode');
+    const forgotTimerContainer = document.getElementById('forgotTimerContainer');
+    const forgotTimerCount = document.getElementById('forgotTimerCount');
+    const btnForgotResendOtp = document.getElementById('btnForgotResendOtp');
+
+    let forgotCountdown = null;
+    let currentForgotDevOtp = null;
+
+    if (btnOpenForgotPassword) {
+      btnOpenForgotPassword.addEventListener('click', (e) => {
+        e.preventDefault();
+        modalForgotPassword.style.display = 'flex';
+        const val = loginIdentifier.value.trim();
+        if (/^[6-9]\d{9}$/.test(val)) {
+          forgotPhone.value = val;
+        }
+        forgotPhone.focus();
+      });
+    }
+
+    if (btnCloseForgotModal) {
+      btnCloseForgotModal.addEventListener('click', () => {
+        modalForgotPassword.style.display = 'none';
+      });
+    }
+
+    modalForgotPassword.addEventListener('click', (e) => {
+      if (e.target === modalForgotPassword) {
+        modalForgotPassword.style.display = 'none';
+      }
+    });
+
+    if (toggleForgotPwdBtn) {
+      toggleForgotPwdBtn.addEventListener('click', () => {
+        const type = forgotNewPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        forgotNewPassword.setAttribute('type', type);
+        forgotConfirmPassword.setAttribute('type', type);
+        toggleForgotPwdBtn.classList.toggle('fa-eye');
+        toggleForgotPwdBtn.classList.toggle('fa-eye-slash');
+      });
+    }
+
+    function startForgotTimer(sec = 60) {
+      clearInterval(forgotCountdown);
+      forgotTimerContainer.style.display = 'inline';
+      btnForgotResendOtp.style.display = 'none';
+      let remaining = sec;
+      forgotTimerCount.textContent = remaining;
+
+      forgotCountdown = setInterval(() => {
+        remaining--;
+        forgotTimerCount.textContent = remaining;
+        if (remaining <= 0) {
+          clearInterval(forgotCountdown);
+          forgotTimerContainer.style.display = 'none';
+          btnForgotResendOtp.style.display = 'inline-flex';
+        }
+      }, 1000);
+    }
+
+    function autoFillDevForgotOtp() {
+      if (currentForgotDevOtp) {
+        forgotOtp.value = currentForgotDevOtp;
+        showToast('Simulator code filled!', 'success');
+        forgotNewPassword.focus();
+      }
+    }
+
+    async function triggerSendForgotOtp() {
+      const phone = forgotPhone.value.trim();
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        showToast('Please enter a valid 10-digit mobile number', 'error');
+        return;
+      }
+
+      btnSendForgotOtp.disabled = true;
+      btnSendForgotOtp.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
+      try {
+        const res = await API.sendOtp({ phone, purpose: 'reset_password' });
+        showToast(res.message || 'OTP dispatched to your mobile!', 'success');
+        forgotStep2.style.display = 'block';
+
+        currentForgotDevOtp = res.dev_otp;
+        if (res.dev_otp) {
+          devOtpForgotCode.textContent = res.dev_otp;
+          devOtpForgotBanner.style.display = 'inline-flex';
+        } else {
+          devOtpForgotBanner.style.display = 'none';
+        }
+
+        startForgotTimer(60);
+        forgotOtp.focus();
+      } catch (err) {
+        showToast(err.message || 'Failed to dispatch reset OTP.', 'error');
+      } finally {
+        btnSendForgotOtp.disabled = false;
+        btnSendForgotOtp.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send OTP';
+      }
+    }
+
+    btnSendForgotOtp.addEventListener('click', triggerSendForgotOtp);
+    btnForgotResendOtp.addEventListener('click', triggerSendForgotOtp);
+
+    forgotPasswordForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const phone = forgotPhone.value.trim();
+      const otp = forgotOtp.value.trim();
+      const password = forgotNewPassword.value;
+      const password_confirmation = forgotConfirmPassword.value;
+
+      if (!phone || otp.length !== 6) {
+        showToast('Please enter mobile number and 6-digit OTP', 'error');
+        return;
+      }
+
+      if (password.length < 8) {
+        showToast('Password must be at least 8 characters long', 'error');
+        return;
+      }
+
+      if (password !== password_confirmation) {
+        showToast('Passwords do not match', 'error');
+        return;
+      }
+
+      btnSubmitResetPassword.disabled = true;
+      btnSubmitResetPassword.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Resetting Password...';
+
+      try {
+        const res = await API.post('/auth/reset-password', {
+          phone,
+          otp,
+          password,
+          password_confirmation
+        });
+
+        showToast(res.message || 'Password reset successfully! Please log in.', 'success');
+        modalForgotPassword.style.display = 'none';
+        loginIdentifier.value = phone;
+        loginPassword.value = '';
+        setLoginMode('password');
+        loginPassword.focus();
+      } catch (err) {
+        showToast(err.message || 'Failed to reset password. Please check OTP.', 'error');
+      } finally {
+        btnSubmitResetPassword.disabled = false;
+        btnSubmitResetPassword.innerHTML = '<i class="fa-solid fa-shield-check"></i> Set New Password & Proceed';
       }
     });
   </script>

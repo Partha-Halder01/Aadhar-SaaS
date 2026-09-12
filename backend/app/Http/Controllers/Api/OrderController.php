@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\ServiceOrder;
+use App\Models\User;
 use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
@@ -69,9 +72,34 @@ class OrderController extends Controller
         // Process input_data JSON & any dynamic file uploads
         $inputData = json_decode($request->input('input_data', '{}'), true) ?: [];
 
-        // Check for dynamic uploaded files (e.g. file_aadhaar_file)
+        // Validate all dynamic uploaded files (e.g. file_aadhaar_file)
+        $allowedMimes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+        $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf'];
+        $maxSizeBytes = 10 * 1024 * 1024; // 10MB
+
         foreach ($request->allFiles() as $key => $file) {
             if (str_starts_with($key, 'file_')) {
+                if (!$file->isValid()) {
+                    throw ValidationException::withMessages([
+                        $key => ["File upload error on field [{$key}]."]
+                    ]);
+                }
+
+                $ext = strtolower($file->getClientOriginalExtension());
+                $mime = $file->getMimeType();
+
+                if (!in_array($ext, $allowedExtensions) || !in_array($mime, $allowedMimes)) {
+                    throw ValidationException::withMessages([
+                        $key => ["Invalid file type on [{$key}]. Only PDF, JPG, and PNG citizen documents are allowed."]
+                    ]);
+                }
+
+                if ($file->getSize() > $maxSizeBytes) {
+                    throw ValidationException::withMessages([
+                        $key => ["Uploaded file [{$key}] exceeds the maximum allowed size of 10MB."]
+                    ]);
+                }
+
                 $fieldName = substr($key, 5);
                 $path = $file->store('orders/customer_inputs', 'public');
                 $inputData[$fieldName] = $path;
@@ -82,22 +110,25 @@ class OrderController extends Controller
 
         // Case 1: Payment via Wallet
         if ($request->payment_method === 'wallet') {
-            if ($user->wallet_balance < $amount) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Insufficient wallet balance. Please recharge your wallet or choose Direct UPI payment.'
-                ], 422);
-            }
-
             return DB::transaction(function () use ($user, $service, $amount, $inputData, $orderNumber) {
+                // Pessimistic lock on user balance to prevent race-condition double spending
+                $lockedUser = User::lockForUpdate()->findOrFail($user->id);
+
+                if ($lockedUser->wallet_balance < $amount) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Insufficient wallet balance. Please recharge your wallet or choose Direct UPI payment.'
+                    ], 422);
+                }
+
                 // Deduct wallet
-                $user->wallet_balance -= $amount;
-                $user->save();
+                $lockedUser->wallet_balance -= $amount;
+                $lockedUser->save();
 
                 // Create Order
                 $order = ServiceOrder::create([
                     'order_number' => $orderNumber,
-                    'user_id' => $user->id,
+                    'user_id' => $lockedUser->id,
                     'service_id' => $service->id,
                     'input_data' => $inputData,
                     'amount' => $amount,
@@ -108,10 +139,10 @@ class OrderController extends Controller
 
                 // Create Wallet Debit Ledger
                 WalletTransaction::create([
-                    'user_id' => $user->id,
+                    'user_id' => $lockedUser->id,
                     'type' => 'debit',
                     'amount' => $amount,
-                    'balance_after' => $user->wallet_balance,
+                    'balance_after' => $lockedUser->wallet_balance,
                     'description' => "Payment for Order #{$orderNumber} ({$service->name})",
                     'status' => 'approved',
                 ]);
@@ -120,12 +151,28 @@ class OrderController extends Controller
                     'status' => 'success',
                     'message' => 'Order placed successfully! Amount deducted from wallet.',
                     'data' => $order->load('service'),
-                    'wallet_balance' => $user->wallet_balance,
+                    'wallet_balance' => (float) $lockedUser->wallet_balance,
                 ], 201);
             });
         }
 
         // Case 2: Payment via Direct UPI
+        if ($request->filled('utr_number')) {
+            $cleanUtr = trim($request->utr_number);
+            $duplicateOrder = ServiceOrder::where('utr_number', $cleanUtr)
+                ->where('payment_status', '!=', 'rejected')
+                ->exists();
+            $duplicateTx = WalletTransaction::where('utr_number', $cleanUtr)
+                ->where('status', '!=', 'rejected')
+                ->exists();
+
+            if ($duplicateOrder || $duplicateTx) {
+                throw ValidationException::withMessages([
+                    'utr_number' => ['This UTR / Transaction Reference number has already been submitted or processed.']
+                ]);
+            }
+        }
+
         $proofPath = null;
         if ($request->hasFile('payment_proof')) {
             $proofPath = $request->file('payment_proof')->store('payments/orders', 'public');
@@ -140,7 +187,7 @@ class OrderController extends Controller
             'payment_method' => 'direct_upi',
             'payment_status' => 'pending',
             'order_status' => 'pending',
-            'utr_number' => $request->utr_number,
+            'utr_number' => $request->utr_number ? trim($request->utr_number) : null,
             'payment_proof_image' => $proofPath,
         ]);
 
@@ -165,4 +212,108 @@ class OrderController extends Controller
             'data' => $order,
         ]);
     }
+
+    /**
+     * Submit missing/requested document in response to admin alert
+     */
+    public function submitDocument(Request $request, $id)
+    {
+        $user = $request->user();
+        $order = ServiceOrder::with('service')
+            ->where('user_id', $user->id)
+            ->findOrFail($id);
+
+        if ($order->doc_request_status !== 'pending') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'There is no pending document request for this order.',
+            ], 422);
+        }
+
+        $request->validate([
+            'document_file' => 'required|file|mimes:jpeg,png,jpg,pdf|max:10240',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $path = $request->file('document_file')->store('orders/user_replies', 'public');
+
+        // Add to input_data so it is preserved alongside all initial documents
+        $inputData = $order->input_data ?: [];
+        $slugTitle = \Illuminate\Support\Str::slug($order->doc_request_title ?: 'additional_doc', '_');
+        $docKey = 'additional_doc_' . $slugTitle;
+        if (isset($inputData[$docKey])) {
+            $docKey .= '_' . time();
+        }
+        $inputData[$docKey] = $path;
+
+        $order->update([
+            'input_data' => $inputData,
+            'doc_response_file' => $path,
+            'doc_response_notes' => $request->notes,
+            'doc_response_submitted_at' => now(),
+            'doc_request_status' => 'submitted',
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Missing document uploaded successfully! Admin has been notified to continue processing your application.',
+            'data' => $order->fresh('service'),
+        ]);
+    }
+
+    /**
+     * Authenticated, secure document download endpoint for citizen privacy
+     */
+    public function download(Request $request, $id, $type = 'delivery')
+    {
+        $user = $request->user();
+        $order = ServiceOrder::findOrFail($id);
+
+        // Authorization check: Only order owner or admin can download
+        if ($order->user_id !== $user->id && $user->role !== 'admin') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized access to this document.'
+            ], 403);
+        }
+
+        $filePath = null;
+        $fileName = null;
+
+        if ($type === 'delivery') {
+            $filePath = $order->delivery_file;
+            $ext = pathinfo($filePath ?: '', PATHINFO_EXTENSION) ?: 'pdf';
+            $fileName = "{$order->order_number}_delivered.{$ext}";
+        } elseif ($type === 'payment') {
+            $filePath = $order->payment_proof_image;
+            $ext = pathinfo($filePath ?: '', PATHINFO_EXTENSION) ?: 'jpg';
+            $fileName = "{$order->order_number}_payment_proof.{$ext}";
+        } elseif ($type === 'doc_response') {
+            $filePath = $order->doc_response_file;
+            $ext = pathinfo($filePath ?: '', PATHINFO_EXTENSION) ?: 'jpg';
+            $fileName = "{$order->order_number}_doc_response.{$ext}";
+        } elseif (str_starts_with($type, 'input_')) {
+            $key = substr($type, 6);
+            $inputData = $order->input_data ?: [];
+            if (isset($inputData[$key])) {
+                $filePath = $inputData[$key];
+                $ext = pathinfo($filePath ?: '', PATHINFO_EXTENSION) ?: 'pdf';
+                $fileName = "{$order->order_number}_{$key}.{$ext}";
+            }
+        }
+
+        if (!$filePath || !Storage::disk('public')->exists($filePath)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Requested file was not found or has not been uploaded yet.'
+            ], 404);
+        }
+
+        if ($request->boolean('inline')) {
+            return Storage::disk('public')->response($filePath, $fileName);
+        }
+
+        return Storage::disk('public')->download($filePath, $fileName);
+    }
 }
+

@@ -56,9 +56,9 @@ class ComplaintController extends Controller
             'ticket_no' => $ticketNo,
             'user_id' => $user->id,
             'service_order_id' => $serviceOrderId,
-            'order_number' => $request->order_number,
-            'subject' => $request->subject,
-            'message' => $request->message,
+            'order_number' => $request->order_number ? strip_tags(trim($request->order_number)) : null,
+            'subject' => strip_tags(trim($request->subject)),
+            'message' => strip_tags(trim($request->message)),
             'status' => 'open',
         ]);
 

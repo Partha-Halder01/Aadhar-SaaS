@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class WalletController extends Controller
 {
@@ -39,6 +40,22 @@ class WalletController extends Controller
             'payment_proof' => 'required|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ]);
 
+        $cleanUtr = trim($request->utr_number);
+
+        // Check for duplicate UTR in wallet transactions and direct UPI orders
+        $duplicateTx = WalletTransaction::where('utr_number', $cleanUtr)
+            ->where('status', '!=', 'rejected')
+            ->exists();
+        $duplicateOrder = \App\Models\ServiceOrder::where('utr_number', $cleanUtr)
+            ->where('payment_status', '!=', 'rejected')
+            ->exists();
+
+        if ($duplicateTx || $duplicateOrder) {
+            throw ValidationException::withMessages([
+                'utr_number' => ['This UTR / Transaction Reference number has already been submitted or processed.']
+            ]);
+        }
+
         $proofPath = $request->file('payment_proof')->store('payments/wallet', 'public');
 
         $tx = WalletTransaction::create([
@@ -48,7 +65,7 @@ class WalletController extends Controller
             'balance_after' => $user->wallet_balance, // balance unchanged until approved
             'description' => 'Wallet Top-up (Pending Verification)',
             'proof_image' => $proofPath,
-            'utr_number' => $request->utr_number,
+            'utr_number' => $cleanUtr,
             'status' => 'pending',
         ]);
 

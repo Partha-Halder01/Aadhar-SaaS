@@ -233,8 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (isUserPortal && !document.querySelector('.mobile-bottom-bar')) {
     const currentPath = window.location.pathname;
     const isDashboard = currentPath.includes('dashboard.html');
-    const isPrint = currentPath.includes('print-list.html');
-    const isPan = currentPath.includes('pan-find.html');
+    const isServices = currentPath.includes('services.html') || currentPath.includes('print-list.html') || currentPath.includes('pan-find.html');
+    const isOrders = currentPath.includes('orders.html');
     const isWallet = currentPath.includes('wallet.html');
     const isProfile = currentPath.includes('profile.html');
 
@@ -245,13 +245,13 @@ document.addEventListener('DOMContentLoaded', () => {
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
       </a>
-      <a href="print-list.html" class="bottom-nav-item ${isPrint ? 'active' : ''}">
-        <i class="fa-solid fa-id-card"></i>
-        <span>Print</span>
+      <a href="services.html" class="bottom-nav-item ${isServices ? 'active' : ''}">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>Services</span>
       </a>
-      <a href="pan-find.html" class="bottom-nav-item ${isPan ? 'active' : ''}">
-        <i class="fa-solid fa-magnifying-glass-location"></i>
-        <span>PAN Find</span>
+      <a href="orders.html" class="bottom-nav-item ${isOrders ? 'active' : ''}">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Orders</span>
       </a>
       <a href="wallet.html" class="bottom-nav-item ${isWallet ? 'active' : ''}">
         <i class="fa-solid fa-wallet"></i>

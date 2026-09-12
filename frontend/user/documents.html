@@ -36,17 +36,9 @@
 
         <li class="sidebar-category-header">Citizen Services</li>
         <li class="sidebar-item">
-          <a href="print-list.html" class="sidebar-link">
-            <i class="fa-solid fa-id-card" style="color:#e04d00;"></i>
-            <span>Print List</span>
-            <i class="fa-solid fa-chevron-right" style="margin-left:auto; font-size:0.72rem; opacity:0.4;"></i>
-          </a>
-        </li>
-
-        <li class="sidebar-item">
-          <a href="pan-find.html" class="sidebar-link">
-            <i class="fa-solid fa-magnifying-glass-location" style="color:#03a93a;"></i>
-            <span>PAN Find List</span>
+          <a href="services.html" class="sidebar-link">
+            <i class="fa-solid fa-layer-group" style="color:#0066cc;"></i>
+            <span>Services</span>
           </a>
         </li>
 
@@ -148,7 +140,7 @@
               <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted);">All verified government ID prints and certificates are archived here indefinitely with high-resolution 300 DPI vector fidelity.</p>
             </div>
           </div>
-          <a href="print-list.html" class="btn-tiranga" style="padding: 9px 18px; font-size: 0.84rem; text-decoration: none;">
+          <a href="services.html" class="btn-tiranga" style="padding: 9px 18px; font-size: 0.84rem; text-decoration: none;">
             <i class="fa-solid fa-plus"></i> New Order
           </a>
         </div>
@@ -251,8 +243,8 @@
                   <div class="empty-state-icon"><i class="fa-solid fa-folder-open"></i></div>
                   <div class="empty-state-title">No Ready Documents Found</div>
                   <div class="empty-state-text">Once your print applications are processed by our automated pipeline, high-definition download links will appear here immediately.</div>
-                  <a href="print-list.html" class="btn-tiranga" style="text-decoration:none; margin-top: 14px; display: inline-flex; align-items:center; gap:8px;">
-                    <i class="fa-solid fa-plus"></i> Submit Print Order
+                  <a href="services.html" class="btn-tiranga" style="text-decoration:none; margin-top: 14px; display: inline-flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-plus"></i> Submit Service Order
                   </a>
                 </div>
               </td>
@@ -267,8 +259,8 @@
               </div>
               <div class="empty-state-title">No Ready Documents Found</div>
               <div class="empty-state-desc">Once your print applications are processed by our automated pipeline, high-definition download links will appear here immediately.</div>
-              <a href="print-list.html" class="btn-tiranga" style="text-decoration:none; margin-top: 14px; display: inline-flex; align-items:center; gap:8px; font-size: 0.84rem; padding: 8px 18px;">
-                <i class="fa-solid fa-plus"></i> Submit Print Order
+              <a href="services.html" class="btn-tiranga" style="text-decoration:none; margin-top: 14px; display: inline-flex; align-items:center; gap:8px; font-size: 0.84rem; padding: 8px 18px;">
+                <i class="fa-solid fa-plus"></i> Submit Service Order
               </a>
             </div>
           `;
@@ -285,14 +277,14 @@
           return `
             <tr>
               <td>
-                <span class="order-id-chip">${d.order_number}</span>
+                <span class="order-id-chip">${escapeHtml(d.order_number)}</span>
               </td>
               <td>
                 <div style="font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 8px;">
                   <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(253, 92, 0,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
                     <i class="fa-solid ${isPdf ? 'fa-file-pdf' : 'fa-id-card'}"></i>
                   </div>
-                  <span>${d.service ? d.service.name : 'Completed Service'}</span>
+                  <span>${escapeHtml(d.service ? d.service.name : 'Completed Service')}</span>
                 </div>
               </td>
               <td>
@@ -323,7 +315,7 @@
           return `
             <div class="mobile-ledger-card">
               <div class="mobile-ledger-card-header">
-                <span class="order-id-chip">${d.order_number}</span>
+                <span class="order-id-chip">${escapeHtml(d.order_number)}</span>
                 <span class="badge-status ${isPdf ? 'badge-processing' : 'badge-completed'}">
                   ${isPdf ? 'HD 300 DPI PDF' : 'Extracted Text / File'}
                 </span>
@@ -334,7 +326,7 @@
                     <i class="fa-solid ${isPdf ? 'fa-file-pdf' : 'fa-id-card'}"></i>
                   </div>
                   <div>
-                    <div class="mobile-ledger-title">${d.service ? d.service.name : 'Completed Service'}</div>
+                    <div class="mobile-ledger-title">${escapeHtml(d.service ? d.service.name : 'Completed Service')}</div>
                     <div class="mobile-ledger-meta" style="margin-top: 3px;">
                       <span><i class="fa-regular fa-calendar-check" style="color: #03a93a;"></i> ${formatDate(d.updated_at || d.created_at)}</span>
                       <span style="display: inline-flex; align-items: center; gap: 4px; color: #03a93a; font-weight: 600; font-size: 0.74rem;">

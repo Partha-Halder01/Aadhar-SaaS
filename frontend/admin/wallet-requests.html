@@ -66,12 +66,17 @@
         </li>
 
         <li class="sidebar-item">
+          <a href="reviews.html" class="sidebar-link">
+            <i class="fa-solid fa-star" style="color:#f59e0b;"></i>
+            <span>Customer Reviews</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
           <a href="complaints.html" class="sidebar-link">
             <i class="fa-solid fa-headset" style="color:#dc2626;"></i>
             <span>Support Tickets</span>
           </a>
-        </li>
-
         <li class="sidebar-category-header">System Config</li>
         <li class="sidebar-item">
           <a href="settings.html" class="sidebar-link">
@@ -260,7 +265,7 @@
 
       tbody.innerHTML = filtered.map(tx => {
         const user = tx.user || { name: 'Customer', phone: '-' };
-        const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+        const initial = user.name ? escapeHtml(user.name.charAt(0).toUpperCase()) : 'U';
 
         let statusBadge = `<span class="badge-status badge-pending">Pending Review</span>`;
         if (tx.status === 'approved') statusBadge = `<span class="badge-status badge-completed">Credited</span>`;
@@ -277,8 +282,8 @@
               <div class="customer-cell">
                 <div class="customer-avatar-initial">${initial}</div>
                 <div>
-                  <div style="font-weight: 700; color: #0f172a; font-size: 0.88rem;">${user.name}</div>
-                  <div style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-phone" style="font-size:0.68rem;"></i> ${user.phone || '-'}</div>
+                  <div style="font-weight: 700; color: #0f172a; font-size: 0.88rem;">${escapeHtml(user.name)}</div>
+                  <div style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-phone" style="font-size:0.68rem;"></i> ${escapeHtml(user.phone || '-')}</div>
                 </div>
               </div>
             </td>
@@ -287,8 +292,8 @@
             </td>
             <td>
               <div style="display: inline-flex; align-items: center; gap: 6px;">
-                <span class="utr-id-chip">${tx.utr_number || 'N/A'}</span>
-                ${tx.utr_number ? `<button class="btn-icon-action" onclick="copyText('${tx.utr_number}')" title="Copy UTR"><i class="fa-regular fa-copy"></i></button>` : ''}
+                <span class="utr-id-chip">${escapeHtml(tx.utr_number || 'N/A')}</span>
+                ${tx.utr_number ? `<button class="btn-icon-action" data-utr="${escapeHtml(tx.utr_number)}" onclick="copyText(this.dataset.utr)" title="Copy UTR"><i class="fa-regular fa-copy"></i></button>` : ''}
               </div>
             </td>
             <td>
@@ -305,12 +310,12 @@
                   <button onclick="openProofModal(${tx.id})" class="btn-success-soft" title="Review & Approve">
                     <i class="fa-solid fa-check"></i> Review & Credit
                   </button>
-                  <button onclick="processWallet(${tx.id}, 'reject', ${tx.amount})" class="btn-danger-soft" title="Reject Top-up">
+                  <button onclick="processWallet(${tx.id}, 'reject', ${Number(tx.amount)})" class="btn-danger-soft" title="Reject Top-up">
                     <i class="fa-solid fa-xmark"></i> Reject
                   </button>
                 </div>
               ` : `
-                <span style="font-size:0.78rem; color:#94a3b8; font-weight: 500;">${tx.rejection_reason ? 'Rejected: ' + tx.rejection_reason : 'Settled'}</span>
+                <span style="font-size:0.78rem; color:#94a3b8; font-weight: 500;">${tx.rejection_reason ? 'Rejected: ' + escapeHtml(tx.rejection_reason) : 'Settled'}</span>
               `}
             </td>
           </tr>
@@ -332,14 +337,14 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">
           <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px;">
             <small style="color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 0.74rem;">Customer Account</small>
-            <div style="font-weight: 800; font-size: 1rem; color: #0f172a; margin-top: 3px;">${user.name}</div>
-            <div style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">${user.phone || '-'} | ${user.email || '-'}</div>
+            <div style="font-weight: 800; font-size: 1rem; color: #0f172a; margin-top: 3px;">${escapeHtml(user.name)}</div>
+            <div style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">${escapeHtml(user.phone || '-')} | ${escapeHtml(user.email || '-')}</div>
           </div>
 
           <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px;">
             <small style="color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 0.74rem;">Top-up Credit Amount</small>
             <div style="font-weight: 900; font-size: 1.25rem; color: #03a93a; font-family:'JetBrains Mono', monospace; margin-top: 2px;">+${formatINR(tx.amount)}</div>
-            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">Status: <strong>${tx.status.toUpperCase()}</strong></div>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">Status: <strong>${escapeHtml(tx.status.toUpperCase())}</strong></div>
           </div>
         </div>
 
@@ -347,11 +352,11 @@
           <div>
             <small style="color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 0.74rem;">Banking UTR / Reference</small>
             <div style="font-family:'JetBrains Mono', monospace; font-weight: 800; font-size: 1rem; color: #0066cc; margin-top: 2px;">
-              ${tx.utr_number || 'N/A'}
+              ${escapeHtml(tx.utr_number || 'N/A')}
             </div>
           </div>
           ${tx.utr_number ? `
-            <button onclick="copyText('${tx.utr_number}')" class="btn-rz-secondary" style="padding: 6px 12px; font-size: 0.8rem;">
+            <button data-utr="${escapeHtml(tx.utr_number)}" onclick="copyText(this.dataset.utr)" class="btn-rz-secondary" style="padding: 6px 12px; font-size: 0.8rem;">
               <i class="fa-regular fa-copy"></i> Copy UTR
             </button>
           ` : ''}

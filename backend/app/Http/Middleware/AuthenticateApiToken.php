@@ -28,16 +28,9 @@ class AuthenticateApiToken
         $tokenHash = hash('sha256', $token);
         $cacheKey = 'auth_token_uid_' . $tokenHash;
 
-        // Cache user ID resolution for 120 seconds (primitive int avoids serialization errors)
-        $userId = Cache::remember($cacheKey, 120, function () use ($token) {
-            $accessToken = PersonalAccessToken::findToken($token);
-            if (!$accessToken || !$accessToken->tokenable_id) {
-                return null;
-            }
-            return (int) $accessToken->tokenable_id;
-        });
+        $accessToken = PersonalAccessToken::findToken($token);
 
-        if (!$userId) {
+        if (!$accessToken || !$accessToken->tokenable_id) {
             Cache::forget($cacheKey);
             return response()->json([
                 'status' => 'error',
@@ -45,7 +38,7 @@ class AuthenticateApiToken
             ], 401);
         }
 
-        $user = \App\Models\User::find($userId);
+        $user = \App\Models\User::find($accessToken->tokenable_id);
 
         if (!$user) {
             Cache::forget($cacheKey);
@@ -56,12 +49,14 @@ class AuthenticateApiToken
         }
 
         if ($user->status === 'blocked') {
+            Cache::forget($cacheKey);
             return response()->json([
                 'status' => 'error',
                 'message' => 'Your account has been deactivated.'
             ], 403);
         }
 
+        $user->withAccessToken($accessToken);
         Auth::setUser($user);
         $request->setUserResolver(fn () => $user);
 

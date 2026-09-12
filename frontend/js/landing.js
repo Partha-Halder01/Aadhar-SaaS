@@ -142,12 +142,17 @@ function hydrateLandingPage(data) {
     const h = data.hero;
     const heroBadge = document.getElementById('heroBadge');
     if (heroBadge && h.badge_text) {
-      heroBadge.innerHTML = `<span class="rz-badge-tag"><i class="fa-solid ${h.badge_icon || 'fa-bolt-lightning'}"></i> SEVA 2.0</span> <span>${escapeHtml(h.badge_text)}</span>`;
+      const badgeIcon = h.badge_icon || 'fa-bolt';
+      const badgeTag = h.badge_tag || 'FAST & AUTOMATED';
+      heroBadge.innerHTML = `<span class="rz-badge-tag"><i class="fa-solid ${badgeIcon}"></i> ${escapeHtml(badgeTag)}</span> <span>${escapeHtml(h.badge_text)}</span>`;
     }
 
     const heroTitle = document.getElementById('heroTitle');
     if (heroTitle && (h.title_highlight || h.title_rest)) {
-      heroTitle.innerHTML = `${escapeHtml(h.title_rest || 'Next-Gen')} <span class="rz-hero-gradient-text">${escapeHtml(h.title_highlight || 'Digital Document & PAN')}</span> Suite`;
+      const rest = h.title_rest || 'Automated';
+      const highlight = h.title_highlight || 'PVC Card Printing';
+      const suffix = h.title_suffix !== undefined ? h.title_suffix : '& Instant PAN Portal';
+      heroTitle.innerHTML = `${escapeHtml(rest)} <span class="rz-hero-gradient-text">${escapeHtml(highlight)}</span> ${escapeHtml(suffix)}`;
     }
 
     setText('heroSubtitle', h.subtitle);
