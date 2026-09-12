@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class WalletController extends Controller
@@ -42,32 +43,36 @@ class WalletController extends Controller
 
         $cleanUtr = trim($request->utr_number);
 
-        // Check for duplicate UTR in wallet transactions and direct UPI orders
-        $duplicateTx = WalletTransaction::where('utr_number', $cleanUtr)
-            ->where('status', '!=', 'rejected')
-            ->exists();
-        $duplicateOrder = \App\Models\ServiceOrder::where('utr_number', $cleanUtr)
-            ->where('payment_status', '!=', 'rejected')
-            ->exists();
+        $proofPath = $request->file('payment_proof')->store('payments/wallet', 'local');
 
-        if ($duplicateTx || $duplicateOrder) {
-            throw ValidationException::withMessages([
-                'utr_number' => ['This UTR / Transaction Reference number has already been submitted or processed.']
+        $tx = DB::transaction(function () use ($user, $cleanUtr, $request, $proofPath) {
+            // Pessimistic check inside transaction to prevent double-spend race conditions
+            $duplicateTx = WalletTransaction::where('utr_number', $cleanUtr)
+                ->where('status', '!=', 'rejected')
+                ->lockForUpdate()
+                ->exists();
+            $duplicateOrder = \App\Models\ServiceOrder::where('utr_number', $cleanUtr)
+                ->where('payment_status', '!=', 'rejected')
+                ->lockForUpdate()
+                ->exists();
+
+            if ($duplicateTx || $duplicateOrder) {
+                throw ValidationException::withMessages([
+                    'utr_number' => ['This UTR / Transaction Reference number has already been submitted or processed.']
+                ]);
+            }
+
+            return WalletTransaction::create([
+                'user_id' => $user->id,
+                'type' => 'credit',
+                'amount' => $request->amount,
+                'balance_after' => $user->wallet_balance, // balance unchanged until approved
+                'description' => 'Wallet Top-up (Pending Verification)',
+                'proof_image' => $proofPath,
+                'utr_number' => $cleanUtr,
+                'status' => 'pending',
             ]);
-        }
-
-        $proofPath = $request->file('payment_proof')->store('payments/wallet', 'public');
-
-        $tx = WalletTransaction::create([
-            'user_id' => $user->id,
-            'type' => 'credit',
-            'amount' => $request->amount,
-            'balance_after' => $user->wallet_balance, // balance unchanged until approved
-            'description' => 'Wallet Top-up (Pending Verification)',
-            'proof_image' => $proofPath,
-            'utr_number' => $cleanUtr,
-            'status' => 'pending',
-        ]);
+        });
 
         return response()->json([
             'status' => 'success',

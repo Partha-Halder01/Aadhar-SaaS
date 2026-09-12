@@ -208,6 +208,13 @@ class AuthController extends Controller
             ], 403);
         }
 
+        if ($user->role === 'admin') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Administrator accounts must authenticate using master password credentials.',
+            ], 403);
+        }
+
         $user->tokens()->delete();
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -331,6 +338,15 @@ class AuthController extends Controller
             $user->phone_verified_at = now();
         }
 
+        // If email is being changed, require current password verification
+        if ($validated['email'] !== $user->email) {
+            if (empty($request->current_password) || !Hash::check($request->current_password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'current_password' => ['Your current password is required to update your registered email address.']
+                ]);
+            }
+        }
+
         $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -412,6 +428,13 @@ class AuthController extends Controller
             throw ValidationException::withMessages([
                 'phone' => ['No account found for this mobile number.'],
             ]);
+        }
+
+        if ($user->role === 'admin') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Administrator passwords cannot be reset via SMS OTP. Please contact system operations.',
+            ], 403);
         }
 
         $user->update([

@@ -78,25 +78,32 @@ class SmsService
 
         $url = 'https://apitxt.com/api/sendOTP?' . http_build_query($queryParams);
 
-        $verifySsl = (bool) ($this->config['verify_ssl'] ?? false);
+        $verifySsl = (bool) ($this->config['verify_ssl'] ?? true);
+        $caBundle = storage_path('cacert.pem');
 
         try {
-            $curl = curl_init();
-            curl_setopt_array($curl, [
+            $curlOptions = [
                 CURLOPT_URL            => $url,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT        => 12,
                 CURLOPT_SSL_VERIFYPEER => $verifySsl,
                 CURLOPT_SSL_VERIFYHOST => $verifySsl ? 2 : 0,
-            ]);
+            ];
+
+            if ($verifySsl && file_exists($caBundle)) {
+                $curlOptions[CURLOPT_CAINFO] = $caBundle;
+            }
+
+            $curl = curl_init();
+            curl_setopt_array($curl, $curlOptions);
             $response = curl_exec($curl);
             $err = curl_error($curl);
             $errNo = curl_errno($curl);
             curl_close($curl);
 
-            // If SSL CA bundle verification fails (e.g. error 60 on Windows / local server), retry with fallback
-            if ($err && ($errNo === 60 || str_contains($err, 'certificate') || str_contains($err, 'issuer') || str_contains($err, 'SSL'))) {
-                Log::warning("APITXT SSL verification failed ({$err}). Retrying without SSL peer verification...");
+            // In local/testing/dev environments on Windows without OS-level CA bundle, retry gracefully if error 60 occurs
+            if ($err && ($errNo === 60 || str_contains($err, 'certificate') || str_contains($err, 'issuer')) && !app()->isProduction()) {
+                Log::warning("APITXT SSL verification failed in local environment ({$err}). Retrying without SSL peer verification for local dev testing...");
                 $curl = curl_init();
                 curl_setopt_array($curl, [
                     CURLOPT_URL            => $url,
@@ -165,6 +172,21 @@ class SmsService
     }
 
     /**
+     * Get SSL options with custom CA bundle support
+     */
+    protected function getHttpOptions(): array
+    {
+        $caBundle = storage_path('cacert.pem');
+        if (file_exists($caBundle)) {
+            return ['verify' => $caBundle];
+        }
+        if (!app()->isProduction()) {
+            return ['verify' => (bool) ($this->config['verify_ssl'] ?? false)];
+        }
+        return ['verify' => (bool) ($this->config['verify_ssl'] ?? true)];
+    }
+
+    /**
      * Fast2SMS Gateway (India)
      */
     protected function sendViaFast2Sms(string $phone, string $otp, string $message): array
@@ -180,7 +202,7 @@ class SmsService
         try {
             // Fast2SMS OTP Route
             if ($route === 'otp') {
-                $response = Http::withHeaders([
+                $response = Http::withOptions($this->getHttpOptions())->withHeaders([
                     'authorization' => $apiKey,
                 ])->post('https://www.fast2sms.com/dev/bulkV2', [
                     'variables_values' => $otp,
@@ -189,7 +211,7 @@ class SmsService
                 ]);
             } else {
                 // Quick SMS Route
-                $response = Http::withHeaders([
+                $response = Http::withOptions($this->getHttpOptions())->withHeaders([
                     'authorization' => $apiKey,
                 ])->post('https://www.fast2sms.com/dev/bulkV2', [
                     'route' => 'q',
@@ -245,7 +267,8 @@ class SmsService
         $formattedPhone = strlen($phone) === 10 ? "+91{$phone}" : (str_starts_with($phone, '+') ? $phone : "+{$phone}");
 
         try {
-            $response = Http::withBasicAuth($sid, $token)
+            $response = Http::withOptions($this->getHttpOptions())
+                ->withBasicAuth($sid, $token)
                 ->asForm()
                 ->post("https://api.twilio.com/2010-04-01/Accounts/{$sid}/Messages.json", [
                     'From' => $from,

@@ -36,11 +36,20 @@ class PersonalAccessToken extends Model
             [$id, $plainTextToken] = explode('|', $plainTextToken, 2);
             $token = static::find($id);
             if ($token && hash_equals($token->token, hash('sha256', $plainTextToken))) {
+                if ($token->expires_at && $token->expires_at->isPast()) {
+                    $token->delete();
+                    return null;
+                }
                 return $token;
             }
             return null;
         }
 
-        return static::where('token', hash('sha256', $plainTextToken))->first();
+        $token = static::where('token', hash('sha256', $plainTextToken))->first();
+        if ($token && $token->expires_at && $token->expires_at->isPast()) {
+            $token->delete();
+            return null;
+        }
+        return $token;
     }
 }

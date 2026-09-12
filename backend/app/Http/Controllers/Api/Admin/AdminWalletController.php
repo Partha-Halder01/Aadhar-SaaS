@@ -79,4 +79,38 @@ class AdminWalletController extends Controller
             ]);
         });
     }
+
+    /**
+     * Authenticated endpoint to securely view wallet transaction proof
+     */
+    public function proof(Request $request, $id)
+    {
+        $tx = WalletTransaction::findOrFail($id);
+
+        if (!$tx->proof_image) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No payment proof attached to this transaction.'
+            ], 404);
+        }
+
+        $filePath = $tx->proof_image;
+        $disk = 'local';
+        if (!\Illuminate\Support\Facades\Storage::disk('local')->exists($filePath)) {
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($filePath)) {
+                $disk = 'public';
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Proof image not found on server storage.'
+                ], 404);
+            }
+        }
+
+        $ext = pathinfo($filePath, PATHINFO_EXTENSION) ?: 'jpg';
+        $fileName = "wallet_proof_{$tx->id}.{$ext}";
+
+        return \Illuminate\Support\Facades\Storage::disk($disk)->response($filePath, $fileName);
+    }
 }
+

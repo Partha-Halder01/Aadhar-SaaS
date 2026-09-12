@@ -1330,7 +1330,7 @@
                               </div>
                               ${cd.notes ? `<div style="font-size: 0.72rem; color: #64748b; font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">"${escapeHtml(cd.notes)}"</div>` : ''}
                             </div>
-                            <a href="${STORAGE_BASE_URL}/${cd.file}" target="_blank" class="btn-action-download-sm" title="View Document">
+                            <a href="${API.getDownloadUrl(order.id, 'file', true, cd.file)}" target="_blank" class="btn-action-download-sm" title="View Document">
                               <i class="fa-solid fa-arrow-up-right-from-square"></i> View
                             </a>
                           </div>
@@ -1379,7 +1379,7 @@
 
                         ${isDelivered ? (
                           order.delivery_file ? `
-                            <a href="${STORAGE_BASE_URL}/${order.delivery_file}" target="_blank" class="btn-action-download-sm" style="display: flex; align-items: center; justify-content: center; gap: 6px; height: 34px; text-decoration: none;">
+                            <a href="${API.getDownloadUrl(order.id, 'delivery', true)}" target="_blank" class="btn-action-download-sm" style="display: flex; align-items: center; justify-content: center; gap: 6px; height: 34px; text-decoration: none;">
                               <i class="fa-solid fa-download"></i> View Delivered Result File
                             </a>
                           ` : `
@@ -1520,7 +1520,7 @@
                 <small style="color: #15803d; display:block; margin-top: 4px;">Uploaded on: ${formatDate(order.doc_response_submitted_at)}</small>
               </div>
               <div>
-                <a href="${STORAGE_BASE_URL}/${order.doc_response_file}" target="_blank" class="btn-rz-primary" style="padding: 8px 16px; font-size: 0.84rem; text-decoration:none; background: linear-gradient(135deg, #03a93a 0%, #028a2f 100%);">
+                <a href="${API.getDownloadUrl(order.id, 'doc_response', true)}" target="_blank" class="btn-rz-primary" style="padding: 8px 16px; font-size: 0.84rem; text-decoration:none; background: linear-gradient(135deg, #03a93a 0%, #028a2f 100%);">
                   <i class="fa-solid fa-download"></i> View Added File
                 </a>
               </div>
@@ -1562,7 +1562,7 @@
                     ` : ''}
                   </div>
                   <div style="margin-top: 12px;">
-                    <a href="${STORAGE_BASE_URL}/${cd.file}" target="_blank" class="btn-rz-primary" style="padding: 7px 14px; font-size: 0.82rem; text-decoration: none; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; background: ${cd.type === 'requested' ? 'linear-gradient(135deg, #03a93a 0%, #028a2f 100%)' : 'linear-gradient(135deg, #0066cc 0%, #004d99 100%)'};">
+                    <a href="${API.getDownloadUrl(order.id, 'file', true, cd.file)}" target="_blank" class="btn-rz-primary" style="padding: 7px 14px; font-size: 0.82rem; text-decoration: none; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; background: ${cd.type === 'requested' ? 'linear-gradient(135deg, #03a93a 0%, #028a2f 100%)' : 'linear-gradient(135deg, #0066cc 0%, #004d99 100%)'};">
                       <i class="fa-solid fa-download"></i> View / Download ${cd.type === 'requested' ? 'Added File' : 'Original File'}
                     </a>
                   </div>
@@ -1597,8 +1597,8 @@
             <div style="font-weight: 700; color: #9a3412; font-size: 0.85rem; margin-bottom: 6px;">
               <i class="fa-solid fa-receipt"></i> Customer Uploaded Payment Proof:
             </div>
-            <a href="${STORAGE_BASE_URL}/${order.payment_proof_image}" target="_blank">
-              <img src="${STORAGE_BASE_URL}/${order.payment_proof_image}" style="max-width: 100%; max-height: 180px; border-radius: 6px; border: 1px solid #e2e8f0;" alt="Proof">
+            <a href="${API.getDownloadUrl(order.id, 'payment', true)}" target="_blank">
+              <img src="${API.getDownloadUrl(order.id, 'payment', true)}" style="max-width: 100%; max-height: 180px; border-radius: 6px; border: 1px solid #e2e8f0;" alt="Proof">
             </a>
             ${order.utr_number ? `<div style="margin-top: 6px; font-weight: 700; font-size: 0.85rem; color: #c2410c;">UTR: ${order.utr_number}</div>` : ''}
           </div>
@@ -1650,7 +1650,7 @@
             <div style="font-weight: 700; color: #166534; font-size: 0.85rem; margin-bottom: 4px;">
               <i class="fa-solid fa-circle-check"></i> Delivered Document File:
             </div>
-            <a href="${STORAGE_BASE_URL}/${order.delivery_file}" target="_blank" class="btn-success-soft" style="display:inline-flex;">
+            <a href="${API.getDownloadUrl(order.id, 'delivery', false)}" target="_blank" class="btn-success-soft" style="display:inline-flex;">
               <i class="fa-solid fa-download"></i> Download / View Final File
             </a>
             ${order.admin_notes ? `<div style="margin-top: 6px; font-size: 0.82rem; color: #15803d;"><strong>Note:</strong> ${order.admin_notes}</div>` : ''}

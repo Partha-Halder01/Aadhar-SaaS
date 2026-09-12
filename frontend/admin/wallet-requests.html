@@ -331,7 +331,7 @@
       document.getElementById('proofCustomerName').textContent = `${user.name} • Top-up ₹${tx.amount}`;
 
       const isPending = tx.status === 'pending';
-      const proofUrl = tx.proof_image ? `${STORAGE_BASE_URL}/${tx.proof_image}` : null;
+      const proofUrl = tx.proof_image ? API.getWalletProofUrl(tx.id) : null;
 
       document.getElementById('proofModalBody').innerHTML = `
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">

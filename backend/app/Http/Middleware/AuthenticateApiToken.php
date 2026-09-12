@@ -16,7 +16,7 @@ class AuthenticateApiToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->bearerToken();
+        $token = $request->bearerToken() ?: $request->query('token');
 
         if (!$token) {
             return response()->json([
@@ -36,6 +36,21 @@ class AuthenticateApiToken
                 'status' => 'error',
                 'message' => 'Invalid or expired token.'
             ], 401);
+        }
+
+        // Enforce token expiration
+        if ($accessToken->expires_at && $accessToken->expires_at->isPast()) {
+            $accessToken->delete();
+            Cache::forget($cacheKey);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Session expired. Please log in again.'
+            ], 401);
+        }
+
+        // Periodically update last_used_at (every 5 mins to avoid high write lock contention)
+        if (!$accessToken->last_used_at || $accessToken->last_used_at->diffInMinutes(now()) >= 5) {
+            $accessToken->update(['last_used_at' => now()]);
         }
 
         $user = \App\Models\User::find($accessToken->tokenable_id);

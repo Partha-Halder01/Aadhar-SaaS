@@ -81,7 +81,7 @@ class AdminServiceCategoryController extends Controller
         $imagePath = null;
         if ($request->hasFile('image')) {
             $request->validate([
-                'image' => 'file|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+                'image' => 'file|mimes:jpeg,png,jpg,gif,webp|max:5120',
             ]);
             $imagePath = $request->file('image')->store('categories', 'public');
         } elseif ($request->filled('image') && is_string($request->input('image'))) {
@@ -127,7 +127,7 @@ class AdminServiceCategoryController extends Controller
 
         if ($request->hasFile('image')) {
             $request->validate([
-                'image' => 'file|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+                'image' => 'file|mimes:jpeg,png,jpg,gif,webp|max:5120',
             ]);
             if ($category->image && !str_starts_with($category->image, 'http')) {
                 Storage::disk('public')->delete($category->image);

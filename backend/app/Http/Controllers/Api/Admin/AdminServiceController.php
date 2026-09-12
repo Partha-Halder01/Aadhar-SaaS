@@ -63,7 +63,7 @@ class AdminServiceController extends Controller
         $iconImagePath = null;
         if ($request->hasFile('icon_image')) {
             $request->validate([
-                'icon_image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+                'icon_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             ]);
             $iconImagePath = $request->file('icon_image')->store('services/icons', 'public');
         } elseif ($request->filled('icon_image') && is_string($request->input('icon_image'))) {
@@ -130,7 +130,7 @@ class AdminServiceController extends Controller
 
         if ($request->hasFile('icon_image')) {
             $request->validate([
-                'icon_image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+                'icon_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             ]);
             if ($service->icon_image && !str_starts_with($service->icon_image, 'http')) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($service->icon_image);

@@ -19,7 +19,7 @@ trait HasApiTokens
         return $this->morphMany(PersonalAccessToken::class, 'tokenable');
     }
 
-    public function createToken(string $name, array $abilities = ['*']): object
+    public function createToken(string $name, array $abilities = ['*'], ?\DateTimeInterface $expiresAt = null): object
     {
         $plainTextToken = Str::random(40);
 
@@ -27,6 +27,7 @@ trait HasApiTokens
             'name' => $name,
             'token' => hash('sha256', $plainTextToken),
             'abilities' => $abilities,
+            'expires_at' => $expiresAt ?? now()->addDays(30),
         ]);
 
         return new class($token, $token->id . '|' . $plainTextToken) {

@@ -1843,7 +1843,7 @@
               </div>
             `;
           } else if (o.delivery_file) {
-            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
             actionResult = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 8px; text-decoration: none;" download><i class="fa-solid fa-download"></i> Get File</a>`;
           } else if (o.rejection_reason) {
             actionResult = `<span style="color:#dc2626; font-size:0.82rem; font-weight:600;">${o.rejection_reason}</span>`;
@@ -1961,7 +1961,7 @@
           } else if (isPrintService && o.order_status === 'completed') {
             actionResult = '<span style="color:#03a93a; font-weight:700; font-size:0.75rem;"><i class="fa-solid fa-store"></i> Ready</span>';
           } else if (o.delivery_file) {
-            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
             actionResult = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 12px; font-size: 0.78rem;" download><i class="fa-solid fa-download"></i> File</a>`;
           } else {
             actionResult = '<span style="color:#94a3b8; font-size:0.78rem;">In Progress</span>';

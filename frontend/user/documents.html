@@ -351,7 +351,7 @@
       if (tbody) {
         tbody.innerHTML = docs.map(d => {
           const isPdf = d.delivery_file && d.delivery_file.toLowerCase().endsWith('.pdf');
-          const fileUrl = `${STORAGE_BASE_URL}/${d.delivery_file}`;
+          const fileUrl = API.getDownloadUrl(d.id, 'delivery', false);
           
           return `
             <tr>
@@ -389,7 +389,7 @@
       if (mobileContainer) {
         mobileContainer.innerHTML = docs.map(d => {
           const isPdf = d.delivery_file && d.delivery_file.toLowerCase().endsWith('.pdf');
-          const fileUrl = `${STORAGE_BASE_URL}/${d.delivery_file}`;
+          const fileUrl = API.getDownloadUrl(d.id, 'delivery', false);
           
           return `
             <div class="mobile-ledger-card">

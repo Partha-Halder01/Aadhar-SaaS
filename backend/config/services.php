@@ -37,7 +37,7 @@ return [
 
     'sms' => [
         'driver' => env('SMS_DRIVER', 'apitxt'),
-        'verify_ssl' => env('SMS_VERIFY_SSL', false),
+        'verify_ssl' => env('SMS_VERIFY_SSL', true),
         'apitxt' => [
             'auth_key' => env('APITXT_AUTH_KEY'),
             'channel' => env('APITXT_CHANNEL', ''),

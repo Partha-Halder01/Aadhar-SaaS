@@ -633,11 +633,11 @@
                   <i class="fa-solid fa-store" style="font-size:0.95rem; color:#03a93a;"></i>
                   <span>Printed Successfully &bull; Collect from our center</span>
                 </span>
-                ${o.delivery_file ? `<a href="${STORAGE_BASE_URL}/${o.delivery_file}" target="_blank" style="font-size:0.75rem; color:#2563eb; text-decoration:underline; font-weight:600;"><i class="fa-solid fa-download"></i> View File Copy</a>` : ''}
+                ${o.delivery_file ? `<a href="${API.getDownloadUrl(o.id, 'delivery', false)}" target="_blank" style="font-size:0.75rem; color:#2563eb; text-decoration:underline; font-weight:600;"><i class="fa-solid fa-download"></i> View File Copy</a>` : ''}
               </div>
             `;
           } else if (o.delivery_file) {
-            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
             downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
           } else if (o.rejection_reason) {
             downloadAction = `<span style="color:#dc2626; font-size:0.8rem; font-weight:600;">Reason: ${o.rejection_reason}</span>`;
@@ -691,7 +691,7 @@
               </div>
             `;
           } else if (o.delivery_file) {
-            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
             downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
           } else if (o.rejection_reason) {
             downloadAction = `<span style="color:#dc2626; font-size:0.78rem; font-weight:600;">Reason: ${o.rejection_reason}</span>`;

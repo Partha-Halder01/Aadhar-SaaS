@@ -436,11 +436,11 @@
 
                 <!-- Block / Unblock User -->
                 ${user ? `
-                  <button onclick="toggleUserBlock(${r.id}, '${isUserBlocked ? 'unblock' : 'block'}', '${escapeHtml(user.name)}')" class="${isUserBlocked ? 'btn-success-soft' : 'btn-danger-soft'}" style="padding: 6px 10px; font-size: 0.76rem;" title="${isUserBlocked ? 'Unblock user' : 'Block user from platform'}">
+                  <button onclick="toggleUserBlock(${r.id}, '${isUserBlocked ? 'unblock' : 'block'}')" class="${isUserBlocked ? 'btn-success-soft' : 'btn-danger-soft'}" style="padding: 6px 10px; font-size: 0.76rem;" title="${isUserBlocked ? 'Unblock user' : 'Block user from platform'}">
                     ${isUserBlocked ? '<i class="fa-solid fa-user-check"></i> Unblock' : '<i class="fa-solid fa-user-slash"></i> Block User'}
                   </button>
                 ` : `
-                  <button onclick="toggleUserBlock(${r.id}, 'block', '${escapeHtml(r.author_name)}')" class="btn-danger-soft" style="padding: 6px 10px; font-size: 0.76rem;" title="Search and block author account">
+                  <button onclick="toggleUserBlock(${r.id}, 'block')" class="btn-danger-soft" style="padding: 6px 10px; font-size: 0.76rem;" title="Search and block author account">
                     <i class="fa-solid fa-user-slash"></i> Block Author
                   </button>
                 `}
@@ -451,7 +451,7 @@
                 </button>
 
                 <!-- 1-Click Ban & Remove (For Inappropriate/Abusive Content) -->
-                <button onclick="blockAndRemoveReview(${r.id}, '${escapeHtml(r.author_name)}')" class="btn-ban-quick" title="Block this user and permanently remove the abusive review">
+                <button onclick="blockAndRemoveReview(${r.id})" class="btn-ban-quick" title="Block this user and permanently remove the abusive review">
                   <i class="fa-solid fa-ban"></i> Block & Remove
                 </button>
               </div>
@@ -471,7 +471,9 @@
       }
     }
 
-    async function toggleUserBlock(reviewId, action, userName) {
+    async function toggleUserBlock(reviewId, action) {
+      const review = (currentReviews || []).find(item => item.id === reviewId);
+      const userName = (review && review.user && review.user.name) || (review && review.author_name) || 'this user';
       const confirmMsg = action === 'block' 
         ? `Are you sure you want to BLOCK user "${userName}" from accessing the platform?`
         : `Unblock user "${userName}" and restore their account access?`;
@@ -499,7 +501,9 @@
       }
     }
 
-    async function blockAndRemoveReview(id, authorName) {
+    async function blockAndRemoveReview(id) {
+      const review = (currentReviews || []).find(item => item.id === id);
+      const authorName = (review && ((review.user && review.user.name) || review.author_name)) || 'this user';
       const confirmed = confirm(`🚨 INAPPROPRIATE CONTENT MODERATION:\n\nAre you sure you want to:\n1. BLOCK the user/author "${authorName}"\n2. Permanently REMOVE this review/comment?\n\nThis action will immediately log out the blocked user.`);
       if (!confirmed) return;
 

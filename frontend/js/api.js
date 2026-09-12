@@ -94,6 +94,19 @@ const API = {
     this.cache.invalidate();
   },
 
+  getDownloadUrl(orderId, type = 'delivery', inline = false, file = null) {
+    const token = this.getToken();
+    let url = `${API_BASE_URL}/orders/${orderId}/download/${type}?token=${encodeURIComponent(token || '')}`;
+    if (inline) url += '&inline=1';
+    if (file) url += `&file=${encodeURIComponent(file)}`;
+    return url;
+  },
+
+  getWalletProofUrl(txId) {
+    const token = this.getToken();
+    return `${API_BASE_URL}/admin/wallet-requests/${txId}/proof?token=${encodeURIComponent(token || '')}`;
+  },
+
   async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
     const token = this.getToken();

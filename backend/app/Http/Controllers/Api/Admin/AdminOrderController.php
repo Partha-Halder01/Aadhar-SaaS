@@ -99,7 +99,7 @@ class AdminOrderController extends Controller
             'admin_notes' => 'nullable|string|max:500',
         ]);
 
-        $filePath = $request->file('delivery_file')->store('deliveries', 'public');
+        $filePath = $request->file('delivery_file')->store('deliveries', 'local');
 
         $order->update([
             'delivery_file' => $filePath,

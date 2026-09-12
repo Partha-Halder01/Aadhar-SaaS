@@ -60,14 +60,14 @@ Route::middleware('api.auth')->group(function () {
 
     // Orders
     Route::get('/orders', [OrderController::class, 'index']);
-    Route::post('/orders', [OrderController::class, 'store']);
+    Route::post('/orders', [OrderController::class, 'store'])->middleware('throttle:20,1');
     Route::get('/orders/{id}', [OrderController::class, 'show']);
     Route::get('/orders/{id}/download/{type?}', [OrderController::class, 'download']);
-    Route::post('/orders/{id}/submit-document', [OrderController::class, 'submitDocument']);
+    Route::post('/orders/{id}/submit-document', [OrderController::class, 'submitDocument'])->middleware('throttle:15,1');
 
     // Wallet
     Route::get('/wallet', [WalletController::class, 'index']);
-    Route::post('/wallet/recharge', [WalletController::class, 'recharge']);
+    Route::post('/wallet/recharge', [WalletController::class, 'recharge'])->middleware('throttle:10,1');
 
     // Documents
     Route::get('/documents', [DocumentController::class, 'index']);
@@ -96,6 +96,7 @@ Route::middleware(['api.auth', 'role:admin'])->prefix('admin')->group(function (
 
     // Manage Wallet Requests
     Route::get('/wallet-requests', [AdminWalletController::class, 'index']);
+    Route::get('/wallet-requests/{id}/proof', [AdminWalletController::class, 'proof']);
     Route::post('/wallet-requests/{id}/process', [AdminWalletController::class, 'process']);
 
     // Manage Users

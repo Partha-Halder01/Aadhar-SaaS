@@ -69,8 +69,16 @@ class OrderController extends Controller
         $service = Service::where('is_active', true)->findOrFail($request->service_id);
         $amount = $service->price;
 
-        // Process input_data JSON & any dynamic file uploads
-        $inputData = json_decode($request->input('input_data', '{}'), true) ?: [];
+        // Process input_data JSON & sanitize to prevent path injection / IDOR
+        $rawInput = json_decode($request->input('input_data', '{}'), true) ?: [];
+        $inputData = [];
+        foreach ($rawInput as $k => $v) {
+            // Reject any file path strings supplied via raw JSON
+            if (is_string($v) && (str_contains($v, '/') || str_contains($v, '\\') || str_starts_with($v, 'orders/') || str_starts_with($v, 'deliveries/') || str_starts_with($v, 'payments/'))) {
+                continue;
+            }
+            $inputData[strip_tags(trim($k))] = is_string($v) ? strip_tags(trim($v)) : $v;
+        }
 
         // Validate all dynamic uploaded files (e.g. file_aadhaar_file)
         $allowedMimes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
@@ -101,7 +109,7 @@ class OrderController extends Controller
                 }
 
                 $fieldName = substr($key, 5);
-                $path = $file->store('orders/customer_inputs', 'public');
+                $path = $file->store('orders/customer_inputs', 'local');
                 $inputData[$fieldName] = $path;
             }
         }
@@ -175,7 +183,7 @@ class OrderController extends Controller
 
         $proofPath = null;
         if ($request->hasFile('payment_proof')) {
-            $proofPath = $request->file('payment_proof')->store('payments/orders', 'public');
+            $proofPath = $request->file('payment_proof')->store('payments/orders', 'local');
         }
 
         $order = ServiceOrder::create([
@@ -235,7 +243,7 @@ class OrderController extends Controller
             'notes' => 'nullable|string|max:500',
         ]);
 
-        $path = $request->file('document_file')->store('orders/user_replies', 'public');
+        $path = $request->file('document_file')->store('orders/user_replies', 'local');
 
         // Add to input_data so it is preserved alongside all initial documents
         $inputData = $order->input_data ?: [];
@@ -280,7 +288,26 @@ class OrderController extends Controller
         $filePath = null;
         $fileName = null;
 
-        if ($type === 'delivery') {
+        if ($request->filled('file')) {
+            $reqFile = $request->query('file');
+            $allowedFiles = array_filter([
+                $order->delivery_file,
+                $order->payment_proof_image,
+                $order->doc_response_file,
+            ]);
+            if (is_array($order->input_data)) {
+                foreach ($order->input_data as $val) {
+                    if (is_string($val)) {
+                        $allowedFiles[] = $val;
+                    }
+                }
+            }
+            if (in_array($reqFile, $allowedFiles, true)) {
+                $filePath = $reqFile;
+                $ext = pathinfo($filePath, PATHINFO_EXTENSION) ?: 'pdf';
+                $fileName = "{$order->order_number}_attachment.{$ext}";
+            }
+        } elseif ($type === 'delivery') {
             $filePath = $order->delivery_file;
             $ext = pathinfo($filePath ?: '', PATHINFO_EXTENSION) ?: 'pdf';
             $fileName = "{$order->order_number}_delivered.{$ext}";
@@ -302,18 +329,30 @@ class OrderController extends Controller
             }
         }
 
-        if (!$filePath || !Storage::disk('public')->exists($filePath)) {
+        if (!$filePath) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Requested file was not found or has not been uploaded yet.'
             ], 404);
         }
 
-        if ($request->boolean('inline')) {
-            return Storage::disk('public')->response($filePath, $fileName);
+        $disk = 'local';
+        if (!Storage::disk('local')->exists($filePath)) {
+            if (Storage::disk('public')->exists($filePath)) {
+                $disk = 'public';
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Requested file was not found or has not been uploaded yet.'
+                ], 404);
+            }
         }
 
-        return Storage::disk('public')->download($filePath, $fileName);
+        if ($request->boolean('inline')) {
+            return Storage::disk($disk)->response($filePath, $fileName);
+        }
+
+        return Storage::disk($disk)->download($filePath, $fileName);
     }
 }
 

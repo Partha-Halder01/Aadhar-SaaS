@@ -727,7 +727,7 @@
               </span>
             `;
           } else if (o.delivery_file) {
-            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
             downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
           } else if (o.order_status === 'rejected') {
             downloadAction = `<span style="font-size:0.8rem; color:#dc2626; font-weight:600;">${escapeHtml(o.rejection_reason || 'Rejected')}</span>`;
@@ -781,7 +781,7 @@
           } else if (isPrintService && o.order_status === 'completed') {
             downloadAction = '<span style="font-size:0.75rem; color:#03a93a; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-store"></i> Collect from center</span>';
           } else if (o.delivery_file) {
-            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
             downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Download</a>`;
           } else if (o.order_status === 'rejected') {
             downloadAction = `<span style="font-size:0.75rem; color:#dc2626; font-weight:600;">${escapeHtml(o.rejection_reason || 'Rejected')}</span>`;

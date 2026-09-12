@@ -1348,7 +1348,7 @@
               </button>
             `;
           } else if (o.delivery_file) {
-            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
             resultAction = `<a href="${fileUrl}" target="_blank" class="btn-action-download" download title="Download Finished File"><i class="fa-solid fa-download"></i> Get File</a>`;
           }
 
@@ -1441,7 +1441,7 @@
                               <span style="font-weight: 700; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;" title="${escapeHtml(cd.label)}">
                                 <i class="fa-solid ${cd.type === 'requested' ? 'fa-file-circle-plus text-success' : 'fa-file text-primary'}"></i> ${escapeHtml(cd.label)}
                               </span>
-                              <a href="${STORAGE_BASE_URL}/${cd.file}" target="_blank" class="btn-action-track" style="height: 24px; padding: 0 8px; font-size: 0.72rem; text-decoration: none;">
+                              <a href="${API.getDownloadUrl(o.id, 'file', true, cd.file)}" target="_blank" class="btn-action-track" style="height: 24px; padding: 0 8px; font-size: 0.72rem; text-decoration: none;">
                                 <i class="fa-solid fa-download"></i> View
                               </a>
                             </div>
@@ -1511,7 +1511,7 @@
           } else if (isPrintService && o.order_status === 'completed') {
             resultAction = '<span style="font-size:0.75rem; color:#03a93a; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-store"></i> Collect at center</span>';
           } else if (o.delivery_file) {
-            const fileUrl = `${STORAGE_BASE_URL}/${o.delivery_file}`;
+            const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
             resultAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 12px; font-size: 0.75rem; border-radius: 6px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
           }
 
@@ -1685,7 +1685,7 @@
           </div>
         `;
       } else if (order.delivery_file) {
-        const fileUrl = `${STORAGE_BASE_URL}/${order.delivery_file}`;
+        const fileUrl = API.getDownloadUrl(order.id, 'delivery', false);
         pickupBannerHtml = `
           <div style="margin: 0 0 20px; padding: 18px 20px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1.5px solid #86efac; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 4px 14px rgba(3, 169, 58, 0.08);">
             <div style="display: flex; align-items: center; gap: 14px;">
@@ -1741,7 +1741,7 @@
           </div>
         `;
       } else if (order.doc_request_status === 'submitted' && order.order_status !== 'completed') {
-        const respFileUrl = order.doc_response_file ? `${STORAGE_BASE_URL}/${order.doc_response_file}` : null;
+        const respFileUrl = order.doc_response_file ? API.getDownloadUrl(order.id, 'doc_response', true) : null;
         docRequestBannerHtml = `
           <div style="margin: 0 0 20px; padding: 14px 18px; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; color: #1e40af;">
             <div style="font-weight: 800; font-size: 0.92rem; display: flex; align-items: center; gap: 7px;">
@@ -1854,7 +1854,7 @@
                     </div>
 
                     <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid ${isRequested ? '#dcfce7' : '#f1f5f9'};">
-                      <a href="${STORAGE_BASE_URL}/${cd.file}" target="_blank" class="btn-rz-primary" style="padding: 8px 14px; font-size: 0.82rem; font-weight: 700; text-decoration: none; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; border-radius: 8px; background: ${isRequested ? 'linear-gradient(135deg, #03a93a 0%, #028a2f 100%)' : 'linear-gradient(135deg, #0066cc 0%, #004d99 100%)'}; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+                      <a href="${API.getDownloadUrl(order.id, 'file', true, cd.file)}" target="_blank" class="btn-rz-primary" style="padding: 8px 14px; font-size: 0.82rem; font-weight: 700; text-decoration: none; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; border-radius: 8px; background: ${isRequested ? 'linear-gradient(135deg, #03a93a 0%, #028a2f 100%)' : 'linear-gradient(135deg, #0066cc 0%, #004d99 100%)'}; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i> Open / Download File
                       </a>
                     </div>

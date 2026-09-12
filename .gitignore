@@ -1,0 +1,15 @@
+/backend/.env
+/backend/.env.backup
+/backend/.env.production
+/backend/storage/*.key
+/backend/storage/logs/*.log
+/backend/storage/framework/cache/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/views/*
+/backend/vendor
+/backend/node_modules
+/.wrangler
+/scratch
+*.log
+.DS_Store
+Thumbs.db
