@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" type="image/png" href="../logo-icon.png">
   <link rel="stylesheet" href="../css/style.css">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <style>
     /* ============================================================
@@ -1031,20 +1032,28 @@
           <div style="margin-top: 22px; border-top: 1px solid #f1f5f9; padding-top: 20px;">
             <label class="form-label" style="font-weight: 800; font-size: 0.88rem; color: #0f172a; margin-bottom: 12px; display: block;">Select Payment Method</label>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">
-              <label style="border: 2px solid #0066cc; background: #eff6ff; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s ease;" id="labelPayWallet">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 10px; margin-bottom: 18px;">
+              <label style="border: 2px solid #0066cc; background: #eff6ff; border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s ease;" id="labelPayWallet">
                 <input type="radio" name="payment_method" value="wallet" checked onchange="togglePaymentFields()">
                 <div>
-                  <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">Prepaid Wallet</div>
+                  <div style="font-weight: 800; font-size: 0.88rem; color: #0f172a;">Prepaid Wallet</div>
                   <small style="color: #03a93a; font-weight: 800;" class="user-wallet-display">₹0 Balance</small>
                 </div>
               </label>
 
-              <label style="border: 2px solid #e2e8f0; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s ease;" id="labelPayDirect">
+              <label style="border: 2px solid #e2e8f0; border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s ease;" id="labelPayRazorpay">
+                <input type="radio" name="payment_method" value="razorpay" onchange="togglePaymentFields()">
+                <div>
+                  <div style="font-weight: 800; font-size: 0.88rem; color: #0f172a;"><i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Pay Online</div>
+                  <small style="color: #0066cc; font-weight: 700;">Cards / UPI / NetBanking</small>
+                </div>
+              </label>
+
+              <label style="border: 2px solid #e2e8f0; border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s ease;" id="labelPayDirect">
                 <input type="radio" name="payment_method" value="direct_upi" onchange="togglePaymentFields()">
                 <div>
-                  <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">UPI QR Scan</div>
-                  <small style="color: #64748b; font-weight: 600;">Instant QR Pay</small>
+                  <div style="font-weight: 800; font-size: 0.88rem; color: #0f172a;">UPI QR Scan</div>
+                  <small style="color: #64748b; font-weight: 600;">Manual UTR Pay</small>
                 </div>
               </label>
             </div>
@@ -1624,29 +1633,45 @@
     }
 
     function togglePaymentFields() {
-      const method = document.querySelector('input[name="payment_method"]:checked').value;
+      const method = document.querySelector('input[name="payment_method"]:checked')?.value || 'wallet';
       const directBox = document.getElementById('directUpiBox');
       const utrInput = document.getElementById('orderUtr');
       const proofInput = document.getElementById('orderProof');
       const walletLabel = document.getElementById('labelPayWallet');
       const directLabel = document.getElementById('labelPayDirect');
+      const razorpayLabel = document.getElementById('labelPayRazorpay');
+
+      [walletLabel, directLabel, razorpayLabel].forEach(lbl => {
+        if (lbl) {
+          lbl.style.borderColor = '#e2e8f0';
+          lbl.style.background = 'transparent';
+        }
+      });
 
       if (method === 'direct_upi') {
-        directBox.style.display = 'block';
-        utrInput.required = true;
-        proofInput.required = true;
-        directLabel.style.borderColor = '#0066cc';
-        directLabel.style.background = '#eff6ff';
-        walletLabel.style.borderColor = '#e2e8f0';
-        walletLabel.style.background = 'transparent';
+        if (directBox) directBox.style.display = 'block';
+        if (utrInput) utrInput.required = true;
+        if (proofInput) proofInput.required = true;
+        if (directLabel) {
+          directLabel.style.borderColor = '#0066cc';
+          directLabel.style.background = '#eff6ff';
+        }
+      } else if (method === 'razorpay') {
+        if (directBox) directBox.style.display = 'none';
+        if (utrInput) utrInput.required = false;
+        if (proofInput) proofInput.required = false;
+        if (razorpayLabel) {
+          razorpayLabel.style.borderColor = '#0066cc';
+          razorpayLabel.style.background = '#eff6ff';
+        }
       } else {
-        directBox.style.display = 'none';
-        utrInput.required = false;
-        proofInput.required = false;
-        walletLabel.style.borderColor = '#0066cc';
-        walletLabel.style.background = '#eff6ff';
-        directLabel.style.borderColor = '#e2e8f0';
-        directLabel.style.background = 'transparent';
+        if (directBox) directBox.style.display = 'none';
+        if (utrInput) utrInput.required = false;
+        if (proofInput) proofInput.required = false;
+        if (walletLabel) {
+          walletLabel.style.borderColor = '#0066cc';
+          walletLabel.style.background = '#eff6ff';
+        }
       }
     }
 
@@ -1692,6 +1717,55 @@
 
       try {
         const res = await API.createOrder(formData);
+
+        // If Razorpay checkout is required
+        if (res.requires_payment && res.razorpay) {
+          await API.loadRazorpayScript();
+          const rzpData = res.razorpay;
+
+          const options = {
+            key: rzpData.key_id,
+            amount: rzpData.amount,
+            currency: rzpData.currency,
+            name: rzpData.name,
+            description: rzpData.description,
+            order_id: rzpData.order_id,
+            prefill: rzpData.prefill || {},
+            theme: { color: '#0066cc' },
+            handler: async function (response) {
+              showToast('Payment completed! Verifying signature...', 'info');
+              try {
+                const verifyRes = await API.verifyRazorpayPayment({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                });
+                showToast(verifyRes.message || 'Payment verified! Order is now processing.', 'success');
+                closeApplyModal();
+                loadLedgerOrders(currentCategorySlug);
+              } catch (vErr) {
+                showToast(vErr.message || 'Payment verification failed. Webhook will process if captured.', 'error');
+                closeApplyModal();
+                loadLedgerOrders(currentCategorySlug);
+              }
+            },
+            modal: {
+              ondismiss: function () {
+                showToast('Payment window closed. Order initiated.', 'info');
+                closeApplyModal();
+                loadLedgerOrders(currentCategorySlug);
+              }
+            }
+          };
+
+          const rzp = new window.Razorpay(options);
+          rzp.on('payment.failed', function (resp) {
+            showToast(resp.error?.description || 'Payment failed', 'error');
+          });
+          rzp.open();
+          return;
+        }
+
         showToast(res.message || 'Service order placed successfully!', 'success');
         closeApplyModal();
         loadLedgerOrders(currentCategorySlug);

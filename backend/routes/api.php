@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\ComplaintController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\LandingPageController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\RazorpayPaymentController;
+use App\Http\Controllers\Api\RazorpayWebhookController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\SettingController;
@@ -46,6 +48,10 @@ Route::get('/landing-page', [LandingPageController::class, 'index']);
 Route::get('/reviews', [ReviewController::class, 'index']);
 Route::post('/reviews', [ReviewController::class, 'store'])->middleware('throttle:5,1');
 
+// Razorpay Webhook (idempotent, verified via signature)
+Route::post('/webhooks/razorpay', [RazorpayWebhookController::class, 'handle']);
+
+
 /*
 |--------------------------------------------------------------------------
 | Protected Customer Routes (api.auth)
@@ -68,6 +74,10 @@ Route::middleware('api.auth')->group(function () {
     // Wallet
     Route::get('/wallet', [WalletController::class, 'index']);
     Route::post('/wallet/recharge', [WalletController::class, 'recharge'])->middleware('throttle:10,1');
+
+    // Razorpay Online Payments & Verification
+    Route::post('/payment/razorpay/create-wallet-order', [RazorpayPaymentController::class, 'createWalletOrder'])->middleware('throttle:15,1');
+    Route::post('/payment/razorpay/verify', [RazorpayPaymentController::class, 'verifyPayment'])->middleware('throttle:30,1');
 
     // Documents
     Route::get('/documents', [DocumentController::class, 'index']);

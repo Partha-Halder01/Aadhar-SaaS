@@ -335,6 +335,44 @@ const API = {
     return await this.rechargeWallet(formData);
   },
 
+  // Razorpay Online Payments
+  async createRazorpayWalletOrder(amount) {
+    return await this.request('/payment/razorpay/create-wallet-order', {
+      method: 'POST',
+      body: { amount }
+    });
+  },
+
+  async verifyRazorpayPayment(data) {
+    const res = await this.request('/payment/razorpay/verify', {
+      method: 'POST',
+      body: data
+    });
+    this.cache.invalidate('wallet');
+    this.cache.invalidate('wallet_txs');
+    this.cache.invalidate('orders');
+    return res;
+  },
+
+  loadRazorpayScript() {
+    return new Promise((resolve, reject) => {
+      if (window.Razorpay) {
+        return resolve(true);
+      }
+      const existingScript = document.querySelector('script[src*="checkout.razorpay.com"]');
+      if (existingScript) {
+        existingScript.onload = () => resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => reject(new Error('Failed to load Razorpay payment gateway SDK.'));
+      document.body.appendChild(script);
+    });
+  },
+
   // Documents
   async getDocuments() {
     const cacheKey = 'documents_list';

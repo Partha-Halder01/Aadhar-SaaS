@@ -1172,8 +1172,16 @@
 
         // Payment status & method
         const isWallet = order.payment_method === 'wallet';
-        const paymentIcon = isWallet ? 'fa-solid fa-wallet' : 'fa-solid fa-qrcode';
-        const paymentMethodText = isWallet ? 'Wallet' : 'UPI QR';
+        const isRazorpay = order.payment_method === 'razorpay';
+        let paymentIcon = 'fa-solid fa-qrcode';
+        let paymentMethodText = 'UPI QR';
+        if (isWallet) {
+          paymentIcon = 'fa-solid fa-wallet';
+          paymentMethodText = 'Wallet';
+        } else if (isRazorpay) {
+          paymentIcon = 'fa-solid fa-bolt';
+          paymentMethodText = 'Razorpay';
+        }
         let paymentStatusClass = 'pending';
         let paymentStatusText = 'Reviewing';
         if (order.payment_status === 'approved') {
@@ -1286,6 +1294,7 @@
                   <span>${paymentMethodText} &bull; ${paymentStatusText}</span>
                 </div>
                 ${order.utr_number ? `<div class="payment-utr-tag"><i class="fa-solid fa-receipt"></i> UTR: ${escapeHtml(order.utr_number)}</div>` : ''}
+                ${order.razorpay_payment_id ? `<div class="payment-utr-tag" style="background:#eff6ff; color:#0066cc; border-color:#bfdbfe;"><i class="fa-solid fa-bolt"></i> RZP: ${escapeHtml(order.razorpay_payment_id)}</div>` : ''}
               </div>
             </td>
             <td>

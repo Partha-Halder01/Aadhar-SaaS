@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\ServiceOrder;
 use App\Models\User;
 use App\Models\WalletTransaction;
+use App\Services\RazorpayService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -15,6 +16,13 @@ use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
+    protected RazorpayService $razorpayService;
+
+    public function __construct(RazorpayService $razorpayService)
+    {
+        $this->razorpayService = $razorpayService;
+    }
+
     /**
      * List user orders with optional category/status filter
      */
@@ -61,7 +69,7 @@ class OrderController extends Controller
 
         $request->validate([
             'service_id' => 'required|exists:services,id',
-            'payment_method' => 'required|in:wallet,direct_upi',
+            'payment_method' => 'required|in:wallet,direct_upi,razorpay',
             'utr_number' => 'nullable|string|max:100',
             'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ]);
@@ -164,7 +172,68 @@ class OrderController extends Controller
             });
         }
 
-        // Case 2: Payment via Direct UPI
+        // Case 2: Payment via Razorpay
+        if ($request->payment_method === 'razorpay') {
+            if (!$this->razorpayService->isConfigured()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Online payment gateway is not configured yet. Please choose Wallet or Direct UPI.'
+                ], 503);
+            }
+
+            $order = ServiceOrder::create([
+                'order_number' => $orderNumber,
+                'user_id' => $user->id,
+                'service_id' => $service->id,
+                'input_data' => $inputData,
+                'amount' => $amount,
+                'payment_method' => 'razorpay',
+                'payment_status' => 'pending',
+                'order_status' => 'pending',
+            ]);
+
+            try {
+                $rzpOrder = $this->razorpayService->createOrder(
+                    $amount,
+                    $orderNumber,
+                    [
+                        'service_order_id' => (string) $order->id,
+                        'order_number' => $orderNumber,
+                        'type' => 'service_order',
+                    ]
+                );
+
+                $order->update(['razorpay_order_id' => $rzpOrder['id']]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Order initiated! Please complete payment.',
+                    'requires_payment' => true,
+                    'razorpay' => [
+                        'key_id' => $this->razorpayService->getKeyId(),
+                        'order_id' => $rzpOrder['id'],
+                        'amount' => $rzpOrder['amount'], // in paise
+                        'currency' => $rzpOrder['currency'],
+                        'name' => 'Utkal Print Portal',
+                        'description' => "Order #{$orderNumber} ({$service->name})",
+                        'prefill' => [
+                            'name' => $user->name,
+                            'email' => $user->email,
+                            'contact' => $user->phone ?? '',
+                        ],
+                    ],
+                    'data' => $order->load('service'),
+                ], 201);
+            } catch (\Exception $e) {
+                $order->delete();
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Failed to initialize Razorpay payment: ' . $e->getMessage()
+                ], 500);
+            }
+        }
+
+        // Case 3: Payment via Direct UPI
         if ($request->filled('utr_number')) {
             $cleanUtr = trim($request->utr_number);
             $duplicateOrder = ServiceOrder::where('utr_number', $cleanUtr)

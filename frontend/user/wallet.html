@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" type="image/png" href="../logo-icon.png">
   <link rel="stylesheet" href="../css/style.css">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
@@ -292,10 +293,13 @@
                   </button>
                 </div>
 
-                <button type="button" class="topup-proceed-cta" id="btnQuickTopupProceed" onclick="proceedQuickTopup()">
-                  <span>Proceed to Pay</span>
+                <button type="button" class="topup-proceed-cta" id="btnQuickTopupRazorpay" onclick="payWalletViaRazorpay()" style="background: linear-gradient(135deg, #0066cc 0%, #0284c7 100%);">
+                  <span><i class="fa-solid fa-bolt"></i> Pay Online</span>
                   <span class="cta-amount-pill" id="topupCtaAmountPreview">₹500</span>
                   <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button type="button" class="btn-secondary" id="btnQuickTopupManual" onclick="proceedQuickTopup()" style="padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 0.86rem; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;" title="Scan UPI QR & submit UTR">
+                  <i class="fa-solid fa-qrcode"></i> UPI QR
                 </button>
               </div>
 
@@ -435,6 +439,21 @@
 
       <form id="rechargeWalletForm">
         <div class="modal-body-custom" style="padding: 24px 26px;">
+          <!-- Instant Razorpay Option -->
+          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div>
+              <strong style="color: #0066cc; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Instant Online Payment (Razorpay)</strong>
+              <span style="font-size: 0.78rem; color: #475569;">Auto-credit in seconds via UPI, Cards, NetBanking</span>
+            </div>
+            <button type="button" onclick="payWalletViaRazorpay(document.getElementById('rechargeAmount').value)" class="btn-rz-primary" style="padding: 8px 16px; font-size: 0.84rem; width: auto; background: #0066cc;">
+              <i class="fa-solid fa-bolt"></i> Pay via Razorpay
+            </button>
+          </div>
+
+          <div style="text-align: center; margin: 12px 0 16px; font-size: 0.8rem; color: #94a3b8; font-weight: 700;">
+            <span>— OR PAY MANUALLY VIA UPI QR & SUBMIT UTR —</span>
+          </div>
+
           <!-- Step 1: QR Display -->
           <div class="qr-preview-box" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 18px;">
             <img id="modalQrImage" src="" alt="Admin UPI QR" class="qr-image-display" style="width: 170px; height: 170px; border-radius: 12px; border: 1px solid #cbd5e1; margin: 0 auto 12px; display: block;">
@@ -589,6 +608,86 @@
         input.focus();
       }
       updateTopupUI(0);
+    }
+
+    async function payWalletViaRazorpay(customAmount) {
+      const input = document.getElementById('quickTopupInput');
+      let amount = customAmount ? parseInt(customAmount, 10) : (input ? parseInt(input.value, 10) : 0);
+      if (!amount || isNaN(amount) || amount < 10) {
+        showToast('Please enter an amount of at least ₹10', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('btnQuickTopupRazorpay');
+      const originalHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span><i class="fa-solid fa-spinner fa-spin"></i> Initializing...</span>';
+      }
+
+      try {
+        await API.loadRazorpayScript();
+        const res = await API.createRazorpayWalletOrder(amount);
+
+        if (!res || !res.razorpay) {
+          throw new Error(res.message || 'Failed to initialize payment gateway.');
+        }
+
+        const rzpData = res.razorpay;
+
+        const options = {
+          key: rzpData.key_id,
+          amount: rzpData.amount,
+          currency: rzpData.currency,
+          name: rzpData.name,
+          description: rzpData.description,
+          order_id: rzpData.order_id,
+          prefill: rzpData.prefill || {},
+          theme: {
+            color: '#0066cc'
+          },
+          handler: async function (response) {
+            showToast('Payment completed! Verifying signature...', 'info');
+            try {
+              const verifyRes = await API.verifyRazorpayPayment({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              });
+
+              showToast(verifyRes.message || 'Payment verified! Wallet balance credited.', 'success');
+              if (typeof closeRechargeModal === 'function') closeRechargeModal();
+
+              if (verifyRes.wallet_balance !== undefined) {
+                document.querySelectorAll('.user-wallet-display').forEach(el => {
+                  el.textContent = formatINR(verifyRes.wallet_balance);
+                });
+              }
+              loadWalletHistory();
+            } catch (vErr) {
+              showToast(vErr.message || 'Payment verification failed. If money was debited, it will be credited via webhook.', 'error');
+            }
+          },
+          modal: {
+            ondismiss: function () {
+              showToast('Payment window closed.', 'info');
+            }
+          }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function (resp) {
+          showToast(resp.error?.description || 'Payment failed', 'error');
+        });
+        rzp.open();
+      } catch (err) {
+        showToast(err.message || 'Could not start payment', 'error');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalHtml;
+        }
+      }
     }
 
     function proceedQuickTopup() {
