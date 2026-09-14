@@ -6,11 +6,15 @@
   <title>Instant Online Seva - India's #1 Digital Print & PAN Recovery Engine</title>
   <meta name="description" content="High-definition Aadhaar PVC card formatting, instant lost PAN recovery by Aadhaar, Voter ID HD prints, and instant digital micro-services with fast UPI wallet top-ups.">
   
-  <!-- Google Fonts & FontAwesome -->
+  <!-- Preconnect and External Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Preload Critical Hero Image for instant LCP -->
+  <link rel="preload" as="image" href="hero-showcase.webp" type="image/webp" fetchpriority="high">
   
   <!-- Favicon & Master Stylesheet -->
   <link rel="icon" type="image/png" href="logo-icon.png">
@@ -34,7 +38,7 @@
         </a>
         <span class="announcement-sep">•</span>
         <span class="announcement-safe">
-          <i class="fa-solid fa-shield-halved"></i> 100% UIDAI/Govt Safe
+          <i class="fa-solid fa-shield-halved"></i> Secure Document Handling
         </span>
       </div>
     </div>
@@ -44,7 +48,10 @@
   <nav class="navbar-custom" id="mainNavbar">
     <div class="navbar-inner">
       <a href="index.html" class="brand-logo">
-        <img src="logo .png" alt="Instant Online Seva" class="brand-logo-img">
+        <picture>
+          <source srcset="logo.webp" type="image/webp">
+          <img src="logo.png" alt="Instant Online Seva" class="brand-logo-img" width="180" height="42">
+        </picture>
       </a>
 
       <ul class="nav-links">
@@ -176,7 +183,10 @@
 
         <!-- Glass Showcase Container with Service Infographic -->
         <div class="rz-showcase-glass-card rz-showcase-media-card">
-          <img src="service.png?v=3" alt="Government & Citizen Services at Digital Seva Kendra" class="rz-service-showcase-img" loading="eager">
+          <picture>
+            <source srcset="hero-showcase.webp" type="image/webp">
+            <img src="service.png" alt="Automated Smart PVC Card Printing & Instant PAN Verification Showcase" class="rz-service-showcase-img" width="1376" height="768" fetchpriority="high" loading="eager">
+          </picture>
         </div>
       </div>
 
@@ -201,14 +211,14 @@
       <!-- Bento Card 1: Large Featured Card (Aadhaar PVC) -->
       <div class="rz-bento-card rz-col-span-8 border-orange" data-category="print">
         <div class="rz-bento-badge-row">
-          <div class="rz-bento-icon orange" id="svcIconBox_0" style="background: #fff7ed; overflow: hidden; padding: 6px; display: flex; align-items: center; justify-content: center;">
-            <img src="http://127.0.0.1:8000/storage/services/icons/TJSRiv5jzQvGzWpxb7CLFxZkkH4zk0n37MoBErP5.png" alt="Aadhaar PVC" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa-solid fa-id-card\'></i>';">
+          <div class="rz-bento-icon orange" id="svcIconBox_0" style="background: #fff7ed; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-id-card"></i>
           </div>
           <span class="rz-bento-price-tag orange" id="svcBadge_0">Starting ₹20 / card</span>
         </div>
         <h3 class="rz-bento-title" id="svcTitle_0">Aadhaar HD Smart PVC Print</h3>
         <p class="rz-bento-desc" id="svcDesc_0">
-          Upload password-protected e-Aadhaar PDFs or scans. Our engine automatically crops, straightens, removes masks, sharpens photographs, and aligns dual-sided CR-80 standard PVC printable formats in crisp 300 DPI vector clarity.
+          Upload password-protected e-Aadhaar PDFs or scans. Our engine automatically crops, straightens, sharpens photographs, and aligns dual-sided CR-80 standard PVC printable formats in crisp 300 DPI vector clarity.
         </p>
         <ul class="rz-bento-features-list">
           <li><i class="fa-solid fa-circle-check"></i> Standard CR-80 PVC Dimensions (85.60 × 53.98 mm)</li>
@@ -231,10 +241,10 @@
         </div>
         <h3 class="rz-bento-title" id="svcTitle_1">Lost PAN Recovery by Aadhaar</h3>
         <p class="rz-bento-desc" id="svcDesc_1">
-          Client lost their PAN card? Enter Aadhaar number and applicant details to cross-match official NSDL/UTIITSL databases and recover verified PAN numbers in seconds.
+          Client lost their PAN card? Enter Aadhaar number and applicant details to recover verified PAN numbers in seconds.
         </p>
         <ul class="rz-bento-features-list">
-          <li><i class="fa-solid fa-circle-check"></i> 100% Accurate NSDL/UTI database match</li>
+          <li><i class="fa-solid fa-circle-check"></i> PAN details checked by our team</li>
           <li><i class="fa-solid fa-circle-check"></i> Operative & Active status confirmation</li>
         </ul>
         <a href="register.html" class="rz-bento-action-link green">
@@ -418,7 +428,7 @@
   </section>
 
   <!-- Retailer Testimonials -->
-  <section id="testimonialsSection" style="padding: 70px 20px; background: #fafafa; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+  <section id="testimonialsSection" class="rz-testimonials-section">
     <div class="rz-section-header">
       <span class="rz-section-tag" id="testimonialsTag"><i class="fa-solid fa-star"></i> Verified Feedback</span>
       <h2 class="rz-section-title" id="testimonialsTitle">Trusted By 12,000+ Cyber Cafe Owners</h2>
@@ -436,7 +446,10 @@
       <div class="testimonial-side-feature left">
         <div class="testimonial-side-card">
           <div class="side-img-wrapper">
-            <img src="image2.png" alt="CSC Cyber Cafe Operator" loading="lazy">
+            <picture>
+              <source srcset="image2.webp" type="image/webp">
+              <img src="image2.png" alt="CSC Cyber Cafe Operator" loading="lazy" width="600" height="675">
+            </picture>
             <div class="side-img-overlay">
               <span class="side-badge orange"><i class="fa-solid fa-bolt"></i> 1 - 2 Mins Turnaround</span>
             </div>
@@ -522,7 +535,10 @@
       <div class="testimonial-side-feature right">
         <div class="testimonial-side-card">
           <div class="side-img-wrapper">
-            <img src="imagere.png" alt="Satisfied Citizen Customer" loading="lazy">
+            <picture>
+              <source srcset="imagere.webp" type="image/webp">
+              <img src="imagere.png" alt="Satisfied Citizen Customer" loading="lazy" width="600" height="675">
+            </picture>
             <div class="side-img-overlay">
               <span class="side-badge green"><i class="fa-solid fa-circle-check"></i> 100% Verified Quality</span>
             </div>
@@ -592,7 +608,7 @@
           <div class="rz-faq-icon"><i class="fa-solid fa-chevron-down"></i></div>
         </button>
         <div class="rz-faq-body">
-          Absolutely. We adhere to stringent 256-bit encryption standards. Uploaded documents and processed records are stored securely in protected storage and accessible only by your verified retailer account.
+          Absolutely. All connections use HTTPS encryption. Uploaded documents are kept in private storage that is not publicly accessible, and only your account and our processing staff can open them.
         </div>
       </div>
 
@@ -629,7 +645,10 @@
         
         <div class="footer-brand">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
-            <img src="logo-white.png" alt="Instant Online Seva" class="footer-logo-img">
+            <picture>
+              <source srcset="logo-white.webp" type="image/webp">
+              <img src="logo-white.png" alt="Instant Online Seva" class="footer-logo-img" width="180" height="42">
+            </picture>
           </div>
           <p id="footerSlogan">
             India's foremost digital print formatting and PAN retrieval suite designed for retailers, cyber cafes, and customer service centers.
@@ -697,6 +716,9 @@
         </div>
       </div>
     </div>
+  <div class="footer-dev-credit" style="text-align:center;padding:16px 20px 6px;font-size:13px;color:#94a3b8;border-top:1px solid rgba(255,255,255,0.06);margin-top:4px;">
+      Developed by <a href="https://codemistry.in" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;text-decoration:none;font-weight:600;">Codemistry</a>
+    </div>
   </footer>
 
   <!-- Interactive Scripts (Toggles, Filters, Navbar elevation) -->
@@ -727,7 +749,7 @@
       const track = document.getElementById('testimonialsTrack') || document.querySelector('.testimonials-grid');
       if (!track) return;
       const card = track.querySelector('.testimonial-card-modern');
-      const step = card ? card.offsetWidth : track.offsetWidth;
+      const step = card ? (card.offsetWidth + 24) : track.offsetWidth;
       track.scrollBy({ left: direction * step, behavior: 'smooth' });
     }
 
@@ -736,7 +758,8 @@
       if (!track) return;
       const cards = track.querySelectorAll('.testimonial-card-modern');
       if (cards[index]) {
-        cards[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        const targetScroll = cards[index].offsetLeft - track.offsetLeft - 8;
+        track.scrollTo({ left: targetScroll, behavior: 'smooth' });
       }
     }
 
@@ -763,12 +786,17 @@
       const track = document.getElementById('testimonialsTrack') || document.querySelector('.testimonials-grid');
       const dotsContainer = document.getElementById('testimonialDots');
       if (!track || !dotsContainer) return;
-      const width = track.offsetWidth || 1;
-      const activeIdx = Math.round(track.scrollLeft / width);
+      const card = track.querySelector('.testimonial-card-modern');
+      const step = card ? (card.offsetWidth + 24) : (track.clientWidth || 1);
+      const activeIdx = Math.max(0, Math.min(cards_count(track) - 1, Math.round(track.scrollLeft / step)));
       const dots = dotsContainer.querySelectorAll('.testimonial-dot');
       dots.forEach((dot, idx) => {
         dot.classList.toggle('active', idx === activeIdx);
       });
+    }
+
+    function cards_count(track) {
+      return track.querySelectorAll('.testimonial-card-modern').length || 1;
     }
 
     // Testimonials Drag-to-Scroll Support
@@ -838,14 +866,21 @@
     }
 
     // Dynamic glass navbar elevation on scroll
+    let scrollTicking = false;
     window.addEventListener('scroll', () => {
-      const navbar = document.getElementById('mainNavbar');
-      if (navbar) {
-        if (window.scrollY > 20) {
-          navbar.classList.add('scrolled');
-        } else {
-          navbar.classList.remove('scrolled');
-        }
+      if (!scrollTicking) {
+        window.requestAnimationFrame(() => {
+          const navbar = document.getElementById('mainNavbar');
+          if (navbar) {
+            if (window.scrollY > 20) {
+              navbar.classList.add('scrolled');
+            } else {
+              navbar.classList.remove('scrolled');
+            }
+          }
+          scrollTicking = false;
+        });
+        scrollTicking = true;
       }
     }, { passive: true });
   </script>
@@ -928,6 +963,7 @@
     </div>
   </div>
 
+  <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/landing.js"></script>
   <script src="js/auth.js"></script>

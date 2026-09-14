@@ -198,6 +198,7 @@
     </div>
   </div>
 
+  <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
@@ -328,7 +329,7 @@
       if (!tx) return;
 
       const user = tx.user || { name: 'Customer', phone: '-', email: '-' };
-      document.getElementById('proofCustomerName').textContent = `${user.name} • Top-up ₹${tx.amount}`;
+      document.getElementById('proofCustomerName').textContent = `${escapeHtml(user.name)} • Top-up ₹${tx.amount}`;
 
       const isPending = tx.status === 'pending';
       const proofUrl = tx.proof_image ? API.getWalletProofUrl(tx.id) : null;
@@ -369,7 +370,7 @@
           ${proofUrl ? `
             <div style="background: #0f172a; border-radius: 14px; overflow: hidden; text-align: center; padding: 10px; border: 1.5px solid #e2e8f0;">
               <a href="${proofUrl}" target="_blank" title="Click to view full image">
-                <img src="${proofUrl}" alt="Payment Proof" style="max-height: 280px; max-width: 100%; border-radius: 8px; object-fit: contain; display: block; margin: 0 auto;">
+                <img data-auth-src="${proofUrl}" alt="Payment Proof" style="max-height: 280px; max-width: 100%; border-radius: 8px; object-fit: contain; display: block; margin: 0 auto;">
               </a>
               <div style="margin-top: 8px; font-size: 0.75rem; color: #94a3b8;">
                 <i class="fa-solid fa-magnifying-glass-plus"></i> Click image to inspect in full resolution

@@ -85,7 +85,9 @@ class SmsService
             $curlOptions = [
                 CURLOPT_URL            => $url,
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT        => 12,
+                CURLOPT_TIMEOUT        => 15,
+                CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                CURLOPT_HTTPHEADER     => ['Accept: application/json'],
                 CURLOPT_SSL_VERIFYPEER => $verifySsl,
                 CURLOPT_SSL_VERIFYHOST => $verifySsl ? 2 : 0,
             ];
@@ -98,31 +100,17 @@ class SmsService
             curl_setopt_array($curl, $curlOptions);
             $response = curl_exec($curl);
             $err = curl_error($curl);
-            $errNo = curl_errno($curl);
             curl_close($curl);
 
-            // In local/testing/dev environments on Windows without OS-level CA bundle, retry gracefully if error 60 occurs
-            if ($err && ($errNo === 60 || str_contains($err, 'certificate') || str_contains($err, 'issuer')) && !app()->isProduction()) {
-                Log::warning("APITXT SSL verification failed in local environment ({$err}). Retrying without SSL peer verification for local dev testing...");
-                $curl = curl_init();
-                curl_setopt_array($curl, [
-                    CURLOPT_URL            => $url,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_TIMEOUT        => 12,
-                    CURLOPT_SSL_VERIFYPEER => false,
-                    CURLOPT_SSL_VERIFYHOST => 0,
-                ]);
-                $response = curl_exec($curl);
-                $err = curl_error($curl);
-                curl_close($curl);
-            }
+            // No insecure retry: the auth key travels in this URL. Certificate errors on Windows are
+            // fixed by keeping a CA bundle at storage/cacert.pem.
 
             if ($err) {
                 Log::error("APITXT cURL Error: {$err}");
                 return [
                     'success' => false,
                     'driver'  => 'apitxt',
-                    'message' => "SMS gateway connection failed: {$err}",
+                    'message' => 'SMS gateway connection failed. Please try again.',
                 ];
             }
 
@@ -179,9 +167,6 @@ class SmsService
         $caBundle = storage_path('cacert.pem');
         if (file_exists($caBundle)) {
             return ['verify' => $caBundle];
-        }
-        if (!app()->isProduction()) {
-            return ['verify' => (bool) ($this->config['verify_ssl'] ?? false)];
         }
         return ['verify' => (bool) ($this->config['verify_ssl'] ?? true)];
     }

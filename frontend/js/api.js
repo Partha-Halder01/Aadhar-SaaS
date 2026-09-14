@@ -3,8 +3,16 @@
  * Features: Zero-Lag In-Memory & Storage Cache, Stale-While-Revalidate (SWR), Instant Response
  */
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
-const STORAGE_BASE_URL = 'http://127.0.0.1:8000/storage';
+// Backend origin. Local dev auto-detects; any other host uses window.APP_CONFIG.apiOrigin,
+// which is set by js/config.js (swap that one file per environment).
+const LOCAL_HOSTS = ['localhost', '127.0.0.1', ''];
+// When Laravel itself serves the page (port 8000) stay same-origin, which the Content-Security-Policy requires.
+const BACKEND_ORIGIN = LOCAL_HOSTS.includes(window.location.hostname)
+  ? (window.location.port === '8000' ? window.location.origin : 'http://127.0.0.1:8000')
+  : ((window.APP_CONFIG && window.APP_CONFIG.apiOrigin) || window.location.origin);
+
+const API_BASE_URL = BACKEND_ORIGIN + '/api';
+const STORAGE_BASE_URL = BACKEND_ORIGIN + '/storage';
 
 function getAppPath(path) {
   const isFrontendDir = window.location.pathname.includes('/frontend/');
@@ -38,7 +46,7 @@ const API = {
           }
           sessionStorage.removeItem(`utkal_cache_${key}`);
         }
-      } catch (e) {}
+      } catch (e) { }
 
       return null;
     },
@@ -51,7 +59,7 @@ const API = {
       memoryCache.set(key, item);
       try {
         sessionStorage.setItem(`utkal_cache_${key}`, JSON.stringify(item));
-      } catch (e) {}
+      } catch (e) { }
     },
 
     invalidate(pattern) {
@@ -67,7 +75,7 @@ const API = {
             sessionStorage.removeItem(k);
           }
         }
-      } catch (e) {}
+      } catch (e) { }
     }
   },
 
@@ -94,17 +102,32 @@ const API = {
     this.cache.invalidate();
   },
 
+  // File URLs carry no credentials. Clicks on them (and <img data-auth-src>) are resolved
+  // to a 5-minute signed link fetched with the Authorization header - see bottom of this file.
   getDownloadUrl(orderId, type = 'delivery', inline = false, file = null) {
-    const token = this.getToken();
-    let url = `${API_BASE_URL}/orders/${orderId}/download/${type}?token=${encodeURIComponent(token || '')}`;
-    if (inline) url += '&inline=1';
-    if (file) url += `&file=${encodeURIComponent(file)}`;
-    return url;
+    const params = new URLSearchParams();
+    if (inline) params.set('inline', '1');
+    if (file) params.set('file', file);
+    const qs = params.toString();
+    return `${API_BASE_URL}/orders/${orderId}/download/${type}${qs ? '?' + qs : ''}`;
   },
 
   getWalletProofUrl(txId) {
-    const token = this.getToken();
-    return `${API_BASE_URL}/admin/wallet-requests/${txId}/proof?token=${encodeURIComponent(token || '')}`;
+    return `${API_BASE_URL}/admin/wallet-requests/${txId}/proof`;
+  },
+
+  isProtectedFileUrl(url) {
+    return typeof url === 'string' && url.startsWith(API_BASE_URL + '/') &&
+      (/^\/orders\/\d+\/download\//.test(url.slice(API_BASE_URL.length)) ||
+       /^\/admin\/wallet-requests\/\d+\/proof(\?|$)/.test(url.slice(API_BASE_URL.length)));
+  },
+
+  async resolveFileUrl(url) {
+    const endpoint = url.slice(API_BASE_URL.length)
+      .replace(/^(\/orders\/\d+)\/download\//, '$1/download-link/')
+      .replace(/^(\/admin\/wallet-requests\/\d+)\/proof/, '$1/proof-link');
+    const res = await this.request(endpoint);
+    return BACKEND_ORIGIN + res.url;
   },
 
   async request(endpoint, options = {}) {
@@ -209,7 +232,7 @@ const API = {
     const isAdmin = window.location.pathname.includes('/admin/');
     try {
       await this.request('/auth/logout', { method: 'POST' });
-    } catch (e) {}
+    } catch (e) { }
     this.clearAuth();
     window.location.href = getAppPath(isAdmin ? 'admin.html' : 'login.html');
   },
@@ -651,9 +674,9 @@ function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = `toast-msg toast-${type}`;
-  
+
   const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-triangle-exclamation' : 'fa-info-circle');
-  toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+  toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${escapeHtml(message)}</span>`;
 
   container.appendChild(toast);
 
@@ -686,4 +709,44 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
+
+// Utility: Restrict values placed in class/style attributes or inline handlers (icon classes, colours)
+function safeToken(str) {
+  return String(str || '').replace(/[^\w\s#%.,()-]/g, '');
+}
+
+// Protected files (order documents, payment proofs) open through short-lived signed links
+document.addEventListener('click', (e) => {
+  const link = e.target.closest ? e.target.closest('a[href]') : null;
+  if (!link || !API.isProtectedFileUrl(link.href)) return;
+  e.preventDefault();
+
+  const opensInTab = !link.hasAttribute('download') && /[?&]inline=1/.test(link.href);
+  const win = opensInTab ? window.open('about:blank', '_blank') : null;
+
+  API.resolveFileUrl(link.href)
+    .then(signedUrl => {
+      if (win) win.location.href = signedUrl;
+      else window.location.href = signedUrl;
+    })
+    .catch(err => {
+      if (win) win.close();
+      showToast(err.message || 'Unable to open this file.', 'error');
+    });
+});
+
+function hydrateProtectedImages(root = document) {
+  root.querySelectorAll('img[data-auth-src]').forEach(img => {
+    const src = img.getAttribute('data-auth-src');
+    img.removeAttribute('data-auth-src');
+    API.resolveFileUrl(src)
+      .then(signedUrl => { img.src = signedUrl; })
+      .catch(() => { img.alt = 'Preview unavailable'; });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  hydrateProtectedImages();
+  new MutationObserver(() => hydrateProtectedImages()).observe(document.body, { childList: true, subtree: true });
+});
 

@@ -52,37 +52,43 @@ try {
   }
 } catch (e) {}
 
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    // 1. Fetch live landing page data
-    const res = await API.request('/landing-page?t=' + Date.now(), { useCache: false });
-    const data = res && res.data ? res.data : null;
-
-    // 2. Fetch catalog services to guarantee 100% real-time icon/image synchronization
-    let catalog = null;
+document.addEventListener('DOMContentLoaded', () => {
+  const fetchFreshData = async () => {
     try {
-      const catRes = await API.request('/services');
-      if (catRes && Array.isArray(catRes.data)) {
-        catalog = catRes.data;
+      const [landingRes, catRes] = await Promise.all([
+        API.request('/landing-page').catch(() => null),
+        API.request('/services').catch(() => null)
+      ]);
+
+      const data = landingRes && landingRes.data ? landingRes.data : null;
+      let catalog = catRes && Array.isArray(catRes.data) ? catRes.data : null;
+
+      if (catalog) {
         try { localStorage.setItem('utkal_services_cache', JSON.stringify(catalog)); } catch(e){}
+      } else {
+        try { catalog = JSON.parse(localStorage.getItem('utkal_services_cache') || '[]'); } catch(e){}
       }
-    } catch(e) {}
 
-    if (!catalog) {
-      try { catalog = JSON.parse(localStorage.getItem('utkal_services_cache') || '[]'); } catch(e){}
-    }
-
-    if (data) {
-      if (catalog && data.services) {
-        enrichServicesWithCatalog(data.services, catalog);
+      if (data) {
+        if (catalog && data.services) {
+          enrichServicesWithCatalog(data.services, catalog);
+        }
+        const newStr = JSON.stringify(data);
+        const oldStr = localStorage.getItem('utkal_landing_data');
+        if (newStr !== oldStr) {
+          try { localStorage.setItem('utkal_landing_data', newStr); } catch (e) {}
+          hydrateLandingPage(data);
+        }
       }
-      try {
-        localStorage.setItem('utkal_landing_data', JSON.stringify(data));
-      } catch (e) {}
-      hydrateLandingPage(data);
+    } catch (err) {
+      console.warn('Using default fallback landing page content:', err.message);
     }
-  } catch (err) {
-    console.warn('Using default fallback landing page content:', err.message);
+  };
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(fetchFreshData, { timeout: 1500 });
+  } else {
+    setTimeout(fetchFreshData, 50);
   }
 });
 
@@ -175,7 +181,7 @@ function hydrateLandingPage(data) {
     if (trustRow && Array.isArray(h.trust_items) && h.trust_items.length > 0) {
       trustRow.innerHTML = h.trust_items.map(item => `
         <div class="rz-trust-item">
-          <i class="fa-solid ${item.icon || 'fa-circle-check'}"></i>
+          <i class="fa-solid ${safeToken(item.icon || 'fa-circle-check')}"></i>
           <span>${escapeHtml(item.text)}</span>
         </div>
       `).join('');
@@ -232,10 +238,11 @@ function hydrateLandingPage(data) {
         let iconBoxHtml = '';
         if (iconType === 'image' && imgUrl) {
           const bgStyle = iconBg ? `background: ${iconBg};` : '';
-          const iconClean = icon.replace(/^fa-solid\s+/, '').replace(/^fa-\w+\s+/, '');
+          let pureIcon = (icon || 'id-card').replace(/^fa-(solid|regular|brands)\s+/, '').replace(/^fa-/, '');
+          const fallbackIconClass = `fa-solid fa-${pureIcon || 'id-card'}`;
           iconBoxHtml = `
             <div class="rz-bento-icon ${color}" id="svcIconBox_${idx}" style="${bgStyle} overflow: hidden; padding: 6px; display: flex; align-items: center; justify-content: center;">
-              <img src="${imgUrl}" alt="${escapeAttr(svc.title)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'fa-solid ${escapeAttr(iconClean)}\\'></i>';">
+              <img src="${escapeHtml(imgUrl)}" alt="${escapeAttr(svc.title)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${escapeAttr(fallbackIconClass)}\\'></i>';">
             </div>
           `;
         } else {
@@ -244,7 +251,11 @@ function hydrateLandingPage(data) {
             iconColor ? `color: ${iconColor};` : ''
           ].filter(Boolean).join(' ');
           const styleAttr = customStyle ? `style="${customStyle}"` : '';
-          const iconClean = icon.startsWith('fa-') ? icon : `fa-solid ${icon}`;
+          let iconClean = (icon || 'fa-id-card').trim();
+          if (!iconClean.startsWith('fa-solid ') && !iconClean.startsWith('fa-regular ') && !iconClean.startsWith('fa-brands ')) {
+            const pure = iconClean.replace(/^fa-(solid|regular|brands)\s+/, '').replace(/^fa-/, '');
+            iconClean = `fa-solid fa-${pure}`;
+          }
           iconBoxHtml = `
             <div class="rz-bento-icon ${color}" id="svcIconBox_${idx}" ${styleAttr}>
               <i class="${escapeAttr(iconClean)}"></i>
@@ -428,7 +439,7 @@ function hydrateLandingPage(data) {
 
     if (ft.phone) setHref('footerPhoneLink', `tel:${ft.phone.replace(/[^0-9+]/g, '')}`);
     if (ft.whatsapp) setHref('footerWhatsappLink', `https://wa.me/${ft.whatsapp.replace(/[^0-9]/g, '')}`);
-    if (ft.email) setHref('footerEmailLink', `mailto:${ft.email}`);
+    if (ft.email) setHref('footerEmailLink', `mailto:${escapeHtml(ft.email)}`);
 
     if (ft.facebook_link) setHref('footerSocialFacebook', ft.facebook_link);
     if (ft.twitter_link) setHref('footerSocialTwitter', ft.twitter_link);
@@ -687,7 +698,7 @@ function prependReviewToCarousel(rev) {
 
   const starsHtml = Array.from({ length: rev.stars || 5 }).map(() => '<i class="fa-solid fa-star"></i>').join('');
   const cardHtml = `
-    <div class="testimonial-card-modern" style="border: 2px solid #0066cc; box-shadow: 0 10px 30px rgba(0,102,204,0.12);">
+    <div class="testimonial-card-modern" style="border: 2px solid #0066cc; box-shadow: 0 2px 4px rgba(0,102,204,0.04), 0 10px 24px -4px rgba(0,102,204,0.14), 0 24px 44px -8px rgba(0,102,204,0.08);">
       <div>
         <div class="testimonial-stars">
           ${starsHtml}

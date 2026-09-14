@@ -23,7 +23,21 @@ class SecurityHeaders
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
         $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-        $response->headers->set('Content-Security-Policy', "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; img-src 'self' https: data: blob: http:;");
+        $response->headers->set('Content-Security-Policy', implode('; ', [
+            "default-src 'self'",
+            // 'unsafe-inline' is still required by the inline <script> blocks and onclick= handlers in the HTML pages
+            "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com",
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
+            "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com",
+            // http: kept for images only: behind the HTTPS tunnel Laravel may still build http:// storage URLs
+            "img-src 'self' data: blob: https: http:",
+            "connect-src 'self' https://*.razorpay.com",
+            "frame-src https://*.razorpay.com",
+            "object-src 'none'",
+            "base-uri 'self'",
+            "form-action 'self'",
+            "frame-ancestors 'self'",
+        ]));
 
         return $response;
     }

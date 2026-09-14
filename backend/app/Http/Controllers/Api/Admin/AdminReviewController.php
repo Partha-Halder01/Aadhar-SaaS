@@ -39,7 +39,7 @@ class AdminReviewController extends Controller
             });
         }
 
-        $perPage = (int) $request->get('per_page', 50);
+        $perPage = min(max((int) $request->get('per_page', 50), 1), 100);
         $reviews = $query->paginate($perPage);
 
         return response()->json([

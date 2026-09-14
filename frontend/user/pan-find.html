@@ -359,6 +359,7 @@
     </div>
   </div>
 
+  <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
@@ -428,7 +429,7 @@
       if (iconType === 'image' && imgUrl) {
         return `
           <div style="width: ${size}px; height: ${size}px; min-width: ${size}px; border-radius: 12px; background: ${bg}; border: 1.5px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
-            <img src="${imgUrl}" alt="${s.name}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${iconClass}\\' style=\\'color:${color}; font-size:${fontSize};\\'></i>';">
+            <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(s.name)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${safeToken(iconClass)}\\' style=\\'color:${safeToken(color)}; font-size:${safeToken(fontSize)};\\'></i>';">
           </div>
         `;
       }
@@ -463,8 +464,8 @@
                   <div style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Search Fee</div>
                 </div>
               </div>
-              <h3 style="font-size: 1.12rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">${s.name}</h3>
-              <p style="color: #64748b; font-size: 0.86rem; line-height: 1.5; margin-bottom: 18px;">${s.description || 'Fast PAN card retrieval using authorized demographic matching.'}</p>
+              <h3 style="font-size: 1.12rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">${escapeHtml(s.name)}</h3>
+              <p style="color: #64748b; font-size: 0.86rem; line-height: 1.5; margin-bottom: 18px;">${escapeHtml(s.description || 'Fast PAN card retrieval using authorized demographic matching.')}</p>
             </div>
             <button onclick="openApplyModal(${s.id})" class="btn-primary-green" style="width: 100%; justify-content: center; padding: 11px; border-radius: 10px;">
               ${btnContent}
@@ -527,7 +528,7 @@
           } else if (o.order_status === 'processing') {
             statusBadge = '<span class="badge-status badge-processing">Searching</span>';
           } else if (o.order_status === 'rejected') {
-            statusBadge = `<span class="badge-status badge-rejected" title="${o.rejection_reason || ''}">Not Found / Rejected</span>`;
+            statusBadge = `<span class="badge-status badge-rejected" title="${escapeHtml(o.rejection_reason || '')}">Not Found / Rejected</span>`;
           } else {
             statusBadge = '<span class="badge-status badge-pending">Queued</span>';
           }
@@ -536,15 +537,15 @@
           if (o.delivery_file) {
             panResult = `<span style="font-family:'JetBrains Mono', monospace; font-size:0.95rem; font-weight:800; color:#028a2f; background:#f0fdf4; padding:4px 10px; border-radius:8px; border:1px solid #bbf7d0; display:inline-flex; align-items:center; gap:6px;"><i class="fa-solid fa-id-card"></i> ${o.delivery_file}</span>`;
           } else if (o.rejection_reason) {
-            panResult = `<span style="color:#dc2626; font-size:0.82rem; font-weight:600;">${o.rejection_reason}</span>`;
+            panResult = `<span style="color:#dc2626; font-size:0.82rem; font-weight:600;">${escapeHtml(o.rejection_reason)}</span>`;
           } else {
             panResult = '<span style="color:#94a3b8; font-size:0.82rem; font-weight:600;"><i class="fa-solid fa-clock" style="font-size:0.75rem;"></i> Processing...</span>';
           }
 
           return `
             <tr>
-              <td><span class="order-id-chip">${o.order_number}</span></td>
-              <td><strong style="color:#0f172a;">${o.service ? o.service.name : 'PAN Recovery'}</strong></td>
+              <td><span class="order-id-chip">${escapeHtml(o.order_number)}</span></td>
+              <td><strong style="color:#0f172a;">${escapeHtml(o.service ? o.service.name : 'PAN Recovery')}</strong></td>
               <td style="color:#64748b; font-size:0.85rem;">${formatDate(o.created_at)}</td>
               <td style="font-weight: 800; font-family:'Outfit',sans-serif; color:#0f172a;">${formatINR(o.amount)}</td>
               <td>
@@ -568,7 +569,7 @@
           } else if (o.order_status === 'processing') {
             statusBadge = '<span class="badge-status badge-processing">Searching</span>';
           } else if (o.order_status === 'rejected') {
-            statusBadge = `<span class="badge-status badge-rejected" title="${o.rejection_reason || ''}">Not Found / Rejected</span>`;
+            statusBadge = `<span class="badge-status badge-rejected" title="${escapeHtml(o.rejection_reason || '')}">Not Found / Rejected</span>`;
           } else {
             statusBadge = '<span class="badge-status badge-pending">Queued</span>';
           }
@@ -577,7 +578,7 @@
           if (o.delivery_file) {
             panResult = `<span class="pan-number-chip"><i class="fa-solid fa-id-card"></i> ${o.delivery_file}</span>`;
           } else if (o.rejection_reason) {
-            panResult = `<span style="color:#dc2626; font-size:0.78rem; font-weight:600;">Reason: ${o.rejection_reason}</span>`;
+            panResult = `<span style="color:#dc2626; font-size:0.78rem; font-weight:600;">Reason: ${escapeHtml(o.rejection_reason)}</span>`;
           } else {
             panResult = '<span style="color:#94a3b8; font-size:0.8rem; font-weight:600; display:inline-flex; align-items:center; gap:5px;"><i class="fa-solid fa-clock" style="font-size:0.75rem;"></i> Searching...</span>';
           }
@@ -589,11 +590,11 @@
           return `
             <div class="mobile-ledger-card">
               <div class="mobile-ledger-card-header">
-                <span class="order-id-chip">${o.order_number}</span>
+                <span class="order-id-chip">${escapeHtml(o.order_number)}</span>
                 ${statusBadge}
               </div>
               <div class="mobile-ledger-card-body">
-                <div class="mobile-ledger-title">${o.service ? o.service.name : 'PAN Recovery'}</div>
+                <div class="mobile-ledger-title">${escapeHtml(o.service ? o.service.name : 'PAN Recovery')}</div>
                 <div class="mobile-ledger-meta">
                   <span><i class="fa-regular fa-clock"></i> ${formatDate(o.created_at)}</span>
                   <span>&bull;</span>
@@ -634,8 +635,8 @@
 
       container.innerHTML = fields.map(f => `
         <div class="form-group" style="margin-bottom:16px;">
-          <label class="form-label">${f.label} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
-          <input type="${f.type || 'text'}" name="${f.name}" class="form-control" placeholder="${f.placeholder || ''}" ${f.required ? 'required' : ''}>
+          <label class="form-label">${escapeHtml(f.label)} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
+          <input type="${f.type || 'text'}" name="${escapeHtml(f.name)}" class="form-control" placeholder="${escapeHtml(f.placeholder || '')}" ${f.required ? 'required' : ''}>
         </div>
       `).join('');
 
@@ -703,7 +704,7 @@
       inputs.forEach(inp => {
         if (inp.type === 'file') {
           if (inp.files[0]) {
-            formData.append(`file_${inp.name}`, inp.files[0]);
+            formData.append(`file_${escapeHtml(inp.name)}`, inp.files[0]);
           }
         } else {
           inputObj[inp.name] = inp.value;

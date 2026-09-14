@@ -325,6 +325,31 @@
         gap: 6px;
       }
     }
+
+    .btn-redirect-nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 11px 16px;
+      background: #ffffff;
+      border: 1.5px solid #0066cc;
+      color: #0066cc;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.22s ease;
+      box-shadow: 0 2px 6px rgba(0, 102, 204, 0.08);
+      box-sizing: border-box;
+    }
+    .btn-redirect-nav:hover {
+      background: #0066cc;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 102, 204, 0.25);
+    }
   </style>
 </head>
 <body>
@@ -395,15 +420,29 @@
             </div>
           </div>
 
+          <!-- Single Terms & Privacy Agreement Checkbox -->
+          <div class="auth-agreement-group" style="margin-top: 16px; margin-bottom: 12px;">
+            <label class="custom-checkbox-label" for="regAgreeTerms" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.84rem; color: #475569; line-height: 1.45;">
+              <input type="checkbox" id="regAgreeTerms" class="custom-checkbox-input" required checked style="margin-top: 3px; accent-color: #0066cc; width: 17px; height: 17px; cursor: pointer;">
+              <span class="custom-checkbox-text">
+                I agree to the <a href="terms.html" target="_blank" style="color: #0066cc; font-weight: 700; text-decoration: underline;">Terms of Service</a> &amp; <a href="privacy.html" target="_blank" style="color: #0066cc; font-weight: 700; text-decoration: underline;">Privacy Policy</a>.
+              </span>
+            </label>
+          </div>
+
           <!-- Submit Button -->
-          <button type="submit" id="btnSubmit" class="btn-rz-primary" style="margin-top: 10px;">
+          <button type="submit" id="btnSubmit" class="btn-rz-primary" style="margin-top: 6px;">
             <i class="fa-solid fa-paper-plane"></i> Send OTP & Verify Mobile
           </button>
         </form>
 
-        <div style="text-align: center; margin-top: 22px; font-size: 0.88rem; color: #64748b;">
-          Already registered? 
-          <a href="login.html" style="color: #0066cc; font-weight: 800; text-decoration: none;">Login to portal</a>
+        <!-- Redirect to Login -->
+        <div class="auth-redirect-box" style="margin-top: 20px; padding: 14px 16px; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 14px; text-align: center;">
+          <p style="margin: 0 0 10px; font-size: 0.88rem; color: #475569; font-weight: 600;">Already have an active account?</p>
+          <a href="login.html" class="btn-redirect-nav">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to Login</span>
+          </a>
         </div>
 
         <!-- Trust Badges -->
@@ -471,6 +510,7 @@
     </div>
   </div>
 
+  <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script>
@@ -601,6 +641,12 @@
 
       if (!/^[6-9]\d{9}$/.test(phone)) {
         showToast('Please enter a valid 10-digit Indian mobile number (starts with 6-9)', 'error');
+        return;
+      }
+
+      const agreeTerms = document.getElementById('regAgreeTerms');
+      if (!agreeTerms || !agreeTerms.checked) {
+        showToast('Please check and agree to the Terms of Service & Privacy Policy to proceed.', 'error');
         return;
       }
 

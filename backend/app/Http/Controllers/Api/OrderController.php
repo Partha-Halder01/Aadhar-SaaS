@@ -10,7 +10,9 @@ use App\Models\WalletTransaction;
 use App\Services\RazorpayService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -49,7 +51,7 @@ class OrderController extends Controller
             $query->where('order_status', $request->status);
         }
 
-        $limit = $request->input('limit', 50);
+        $limit = min(max((int) $request->input('limit', 50), 1), 100);
         $orders = $query->orderBy('id', 'desc')->paginate($limit);
 
         return response()->json([
@@ -70,7 +72,7 @@ class OrderController extends Controller
         $request->validate([
             'service_id' => 'required|exists:services,id',
             'payment_method' => 'required|in:wallet,direct_upi,razorpay',
-            'utr_number' => 'nullable|string|max:100',
+            'utr_number' => ['nullable', 'string', 'regex:/^[A-Za-z0-9]{6,30}$/'],
             'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ]);
 
@@ -226,9 +228,10 @@ class OrderController extends Controller
                 ], 201);
             } catch (\Exception $e) {
                 $order->delete();
+                Log::error('Razorpay service order creation failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Failed to initialize Razorpay payment: ' . $e->getMessage()
+                    'message' => 'Failed to initialize online payment. Please try again.'
                 ], 500);
             }
         }
@@ -326,7 +329,7 @@ class OrderController extends Controller
         $order->update([
             'input_data' => $inputData,
             'doc_response_file' => $path,
-            'doc_response_notes' => $request->notes,
+            'doc_response_notes' => $request->notes ? strip_tags(trim($request->notes)) : null,
             'doc_response_submitted_at' => now(),
             'doc_request_status' => 'submitted',
         ]);
@@ -343,17 +346,61 @@ class OrderController extends Controller
      */
     public function download(Request $request, $id, $type = 'delivery')
     {
-        $user = $request->user();
         $order = ServiceOrder::findOrFail($id);
-
-        // Authorization check: Only order owner or admin can download
-        if ($order->user_id !== $user->id && $user->role !== 'admin') {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized access to this document.'
-            ], 403);
+        if (!$this->canAccessOrder($request->user(), $order)) {
+            return $this->unauthorizedDocument();
         }
 
+        return $this->serveOrderFile($request, $order, $type);
+    }
+
+    /**
+     * Issue a 5-minute signed link so documents open in a new tab without the login token in the URL
+     */
+    public function downloadLink(Request $request, $id, $type = 'delivery')
+    {
+        $order = ServiceOrder::findOrFail($id);
+        if (!$this->canAccessOrder($request->user(), $order)) {
+            return $this->unauthorizedDocument();
+        }
+
+        $params = ['id' => $order->id, 'type' => $type];
+        if ($request->filled('file')) {
+            $params['file'] = (string) $request->query('file');
+        }
+        if ($request->boolean('inline')) {
+            $params['inline'] = 1;
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'url' => URL::temporarySignedRoute('files.order', now()->addMinutes(5), $params, false),
+        ]);
+    }
+
+    /**
+     * Serve a document from a signed link (the signature proves an authorized user requested it)
+     */
+    public function signedDownload(Request $request, $id, $type = 'delivery')
+    {
+        return $this->serveOrderFile($request, ServiceOrder::findOrFail($id), $type);
+    }
+
+    protected function canAccessOrder(User $user, ServiceOrder $order): bool
+    {
+        return $order->user_id === $user->id || $user->role === 'admin';
+    }
+
+    protected function unauthorizedDocument()
+    {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Unauthorized access to this document.'
+        ], 403);
+    }
+
+    protected function serveOrderFile(Request $request, ServiceOrder $order, $type)
+    {
         $filePath = null;
         $fileName = null;
 

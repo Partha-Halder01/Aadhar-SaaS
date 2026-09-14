@@ -208,7 +208,7 @@ class LandingPageService
                 'text' => 'Instant Aadhaar HD PVC Formatting & UPI Fast Approvals under 2 mins!',
                 'helpline_text' => 'Helpline: +91 98765 43210',
                 'helpline_link' => 'tel:+919876543210',
-                'safe_text' => '100% UIDAI/Govt Safe',
+                'safe_text' => 'Secure Document Handling',
             ],
             'hero' => [
                 'badge_icon' => 'fa-bolt',
@@ -255,7 +255,7 @@ class LandingPageService
                         'title' => 'Aadhaar HD Smart PVC Print',
                         'badge' => 'Starting ₹20 / card',
                         'price' => '₹20',
-                        'desc' => 'Upload password-protected e-Aadhaar PDFs or scans. Our engine automatically crops, straightens, removes masks, sharpens photographs, and aligns dual-sided CR-80 standard PVC printable formats in crisp 300 DPI vector clarity.',
+                        'desc' => 'Upload password-protected e-Aadhaar PDFs or scans. Our engine automatically crops, straightens, sharpens photographs, and aligns dual-sided CR-80 standard PVC printable formats in crisp 300 DPI vector clarity.',
                         'features' => [
                             'Standard CR-80 PVC Dimensions (85.60 × 53.98 mm)',
                             'Auto photo contrast correction & QR code enhancement',
@@ -272,9 +272,9 @@ class LandingPageService
                         'title' => 'Lost PAN Recovery by Aadhaar',
                         'badge' => 'Starting ₹30 / search',
                         'price' => '₹30',
-                        'desc' => 'Client lost their PAN card? Enter Aadhaar number and applicant details to cross-match official NSDL/UTIITSL databases and recover verified PAN numbers in seconds.',
+                        'desc' => 'Client lost their PAN card? Enter Aadhaar number and applicant details to recover verified PAN numbers in seconds.',
                         'features' => [
-                            '100% Accurate NSDL/UTI database match',
+                            'PAN details checked by our team',
                             'Operative & Active status confirmation'
                         ],
                         'action_text' => 'Find Lost PAN',
@@ -374,7 +374,7 @@ class LandingPageService
                         'price' => '₹ 30.00',
                         'speed' => '< 30 secs',
                         'format' => 'Verified Number & Status',
-                        'desc' => 'Official NSDL / UTIITSL cross-match'
+                        'desc' => 'Checked manually by our team'
                     ],
                     [
                         'title' => 'Voter ID (e-EPIC) HD Print',
@@ -450,7 +450,7 @@ class LandingPageService
                     ],
                     [
                         'question' => 'Is customer data safe, secure, and confidential?',
-                        'answer' => 'Absolutely. We adhere to stringent 256-bit encryption standards. Uploaded documents and processed records are stored securely in protected storage and accessible only by your verified retailer account.'
+                        'answer' => 'Absolutely. All connections use HTTPS encryption. Uploaded documents are kept in private storage that is not publicly accessible, and only your account and our processing staff can open them.'
                     ]
                 ]
             ],

@@ -32,7 +32,7 @@ class AdminLandingPageController extends Controller
      */
     public function update(Request $request): JsonResponse
     {
-        $data = $request->all();
+        $data = $this->sanitizeLinks($request->all());
         $saved = $this->service->saveConfig($data);
 
         return response()->json([
@@ -40,6 +40,23 @@ class AdminLandingPageController extends Controller
             'message' => 'Landing page content updated successfully.',
             'data' => $saved,
         ]);
+    }
+
+    /**
+     * Replace unsafe values (e.g. javascript:) in any *_link / *_url field of the CMS payload
+     */
+    private function sanitizeLinks(array $data): array
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->sanitizeLinks($value);
+            } elseif (is_string($key) && is_string($value) && preg_match('/(_link|_url)$/', $key)) {
+                $value = trim($value);
+                $data[$key] = preg_match('~^(https?://|tel:|mailto:|#|/(?!/)|[A-Za-z0-9_./-]+\.html(\#.*)?$)~i', $value) ? $value : '#';
+            }
+        }
+
+        return $data;
     }
 
     /**

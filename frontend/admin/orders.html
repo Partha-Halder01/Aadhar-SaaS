@@ -964,6 +964,7 @@
     </div>
   </div>
 
+  <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
@@ -1264,7 +1265,7 @@
                   <div class="customer-name">${escapeHtml(user.name || 'Customer')}</div>
                   <div class="customer-meta-row">
                     <span class="order-ref-pill" title="Click to view details" onclick="openOrderDetailsModal(${order.id})" style="cursor:pointer;">
-                      #${order.order_number}
+                      #${escapeHtml(order.order_number)}
                     </span>
                     <span class="meta-divider">•</span>
                     <span class="customer-phone"><i class="fa-solid fa-phone"></i> ${escapeHtml(user.phone || '-')}</span>
@@ -1339,7 +1340,7 @@
                               </div>
                               ${cd.notes ? `<div style="font-size: 0.72rem; color: #64748b; font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">"${escapeHtml(cd.notes)}"</div>` : ''}
                             </div>
-                            <a href="${API.getDownloadUrl(order.id, 'file', true, cd.file)}" target="_blank" class="btn-action-download-sm" title="View Document">
+                            <a href="${escapeHtml(API.getDownloadUrl(order.id, 'file', true, cd.file))}" target="_blank" class="btn-action-download-sm" title="View Document">
                               <i class="fa-solid fa-arrow-up-right-from-square"></i> View
                             </a>
                           </div>
@@ -1410,7 +1411,7 @@
                     <div>
                       <div class="dropdown-card-header">
                         <span><i class="fa-solid fa-receipt" style="color: #03a93a;"></i> Payment & Customer</span>
-                        <span class="order-ref-pill">#${order.order_number}</span>
+                        <span class="order-ref-pill">#${escapeHtml(order.order_number)}</span>
                       </div>
                       <div style="font-size: 0.8rem; color: #475569; display: flex; flex-direction: column; gap: 6px;">
                         <div style="display: flex; justify-content: space-between;"><strong>Customer:</strong> <span style="font-weight:700; color:#0f172a;">${escapeHtml(user.name || 'Customer')}</span></div>
@@ -1571,7 +1572,7 @@
                     ` : ''}
                   </div>
                   <div style="margin-top: 12px;">
-                    <a href="${API.getDownloadUrl(order.id, 'file', true, cd.file)}" target="_blank" class="btn-rz-primary" style="padding: 7px 14px; font-size: 0.82rem; text-decoration: none; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; background: ${cd.type === 'requested' ? 'linear-gradient(135deg, #03a93a 0%, #028a2f 100%)' : 'linear-gradient(135deg, #0066cc 0%, #004d99 100%)'};">
+                    <a href="${escapeHtml(API.getDownloadUrl(order.id, 'file', true, cd.file))}" target="_blank" class="btn-rz-primary" style="padding: 7px 14px; font-size: 0.82rem; text-decoration: none; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; background: ${cd.type === 'requested' ? 'linear-gradient(135deg, #03a93a 0%, #028a2f 100%)' : 'linear-gradient(135deg, #0066cc 0%, #004d99 100%)'};">
                       <i class="fa-solid fa-download"></i> View / Download ${cd.type === 'requested' ? 'Added File' : 'Original File'}
                     </a>
                   </div>
@@ -1607,9 +1608,9 @@
               <i class="fa-solid fa-receipt"></i> Customer Uploaded Payment Proof:
             </div>
             <a href="${API.getDownloadUrl(order.id, 'payment', true)}" target="_blank">
-              <img src="${API.getDownloadUrl(order.id, 'payment', true)}" style="max-width: 100%; max-height: 180px; border-radius: 6px; border: 1px solid #e2e8f0;" alt="Proof">
+              <img data-auth-src="${API.getDownloadUrl(order.id, 'payment', true)}" style="max-width: 100%; max-height: 180px; border-radius: 6px; border: 1px solid #e2e8f0;" alt="Proof">
             </a>
-            ${order.utr_number ? `<div style="margin-top: 6px; font-weight: 700; font-size: 0.85rem; color: #c2410c;">UTR: ${order.utr_number}</div>` : ''}
+            ${order.utr_number ? `<div style="margin-top: 6px; font-weight: 700; font-size: 0.85rem; color: #c2410c;">UTR: ${escapeHtml(order.utr_number)}</div>` : ''}
           </div>
         `;
       }
@@ -1650,7 +1651,7 @@
             <div style="font-size: 0.84rem; color: #15803d; margin-top: 4px;">
               Customer can collect physical PVC card from your center.
             </div>
-            ${order.admin_notes ? `<div style="margin-top: 6px; font-size: 0.82rem; color: #166534;"><strong>Note:</strong> ${order.admin_notes}</div>` : ''}
+            ${order.admin_notes ? `<div style="margin-top: 6px; font-size: 0.82rem; color: #166534;"><strong>Note:</strong> ${escapeHtml(order.admin_notes)}</div>` : ''}
           </div>
         ` : ''}
 
@@ -1662,7 +1663,7 @@
             <a href="${API.getDownloadUrl(order.id, 'delivery', false)}" target="_blank" class="btn-success-soft" style="display:inline-flex;">
               <i class="fa-solid fa-download"></i> Download / View Final File
             </a>
-            ${order.admin_notes ? `<div style="margin-top: 6px; font-size: 0.82rem; color: #15803d;"><strong>Note:</strong> ${order.admin_notes}</div>` : ''}
+            ${order.admin_notes ? `<div style="margin-top: 6px; font-size: 0.82rem; color: #15803d;"><strong>Note:</strong> ${escapeHtml(order.admin_notes)}</div>` : ''}
           </div>
         ` : ''}
       `;
@@ -1720,7 +1721,7 @@
       if (!order) return;
 
       document.getElementById('reqDocOrderId').value = order.id;
-      document.getElementById('reqDocSubtitle').textContent = `Order #${order.order_number} (${order.user ? order.user.name : 'Customer'})`;
+      document.getElementById('reqDocSubtitle').textContent = `Order #${escapeHtml(order.order_number)} (${escapeHtml(order.user ? order.user.name : 'Customer')})`;
       
       document.getElementById('reqDocName').value = order.doc_request_title || '';
       document.getElementById('reqDocMessage').value = order.doc_request_message || 'Please upload the requested document as soon as possible so we can proceed with your application and avoid rejection.';
@@ -1766,7 +1767,7 @@
       const order = allOrders.find(o => o.id === orderId);
       if (!order) return;
 
-      if (!confirm(`Are you sure you want to mark Order #${order.order_number} as Printed?\n\nThe customer will see: "Printed Successfully - Collect from our center".`)) {
+      if (!confirm(`Are you sure you want to mark Order #${escapeHtml(order.order_number)} as Printed?\n\nThe customer will see: "Printed Successfully - Collect from our center".`)) {
         return;
       }
 
@@ -1813,7 +1814,7 @@
 
     function handleFileSelected(input) {
       if (input.files && input.files[0]) {
-        document.getElementById('selectedFileName').textContent = `Selected: ${input.files[0].name} (${(input.files[0].size / 1024).toFixed(1)} KB)`;
+        document.getElementById('selectedFileName').textContent = `Selected: ${escapeHtml(input.files[0].name)} (${(input.files[0].size / 1024).toFixed(1)} KB)`;
       }
     }
 

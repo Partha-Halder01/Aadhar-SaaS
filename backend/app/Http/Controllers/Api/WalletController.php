@@ -36,16 +36,14 @@ class WalletController extends Controller
         $user = $request->user();
 
         $request->validate([
-            'amount' => 'required|numeric|min:10',
-            'utr_number' => 'required|string|max:100',
+            'amount' => 'required|numeric|min:10|max:50000',
+            'utr_number' => ['required', 'string', 'regex:/^[A-Za-z0-9]{6,30}$/'],
             'payment_proof' => 'required|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ]);
 
         $cleanUtr = trim($request->utr_number);
 
-        $proofPath = $request->file('payment_proof')->store('payments/wallet', 'local');
-
-        $tx = DB::transaction(function () use ($user, $cleanUtr, $request, $proofPath) {
+        $tx = DB::transaction(function () use ($user, $cleanUtr, $request) {
             // Pessimistic check inside transaction to prevent double-spend race conditions
             $duplicateTx = WalletTransaction::where('utr_number', $cleanUtr)
                 ->where('status', '!=', 'rejected')
@@ -61,6 +59,8 @@ class WalletController extends Controller
                     'utr_number' => ['This UTR / Transaction Reference number has already been submitted or processed.']
                 ]);
             }
+
+            $proofPath = $request->file('payment_proof')->store('payments/wallet', 'local');
 
             return WalletTransaction::create([
                 'user_id' => $user->id,

@@ -125,27 +125,42 @@ class RazorpayWebhookController extends Controller
 
         // 1. Check if it matches a Wallet Top-up
         $walletTx = WalletTransaction::where('razorpay_order_id', $orderId)->first();
-        if ($walletTx && $walletTx->status !== 'approved') {
-            $lockedUser = User::lockForUpdate()->findOrFail($walletTx->user_id);
-            $lockedUser->wallet_balance += $walletTx->amount;
-            $lockedUser->save();
+        if ($walletTx) {
+            if (isset($payment['amount']) && (int) $payment['amount'] !== (int) round($walletTx->amount * 100)) {
+                Log::warning('Razorpay webhook amount mismatch for wallet top-up', ['razorpay_order_id' => $orderId]);
+                return;
+            }
 
-            $walletTx->update([
-                'status' => 'approved',
-                'balance_after' => $lockedUser->wallet_balance,
-                'razorpay_payment_id' => $paymentId,
-            ]);
+            // Atomic claim so a concurrent /payment/razorpay/verify call cannot credit the same top-up twice
+            $claimed = WalletTransaction::where('id', $walletTx->id)
+                ->whereIn('status', ['pending', 'rejected'])
+                ->update([
+                    'status' => 'approved',
+                    'razorpay_payment_id' => $paymentId,
+                ]);
+
+            if ($claimed === 1) {
+                $lockedUser = User::lockForUpdate()->findOrFail($walletTx->user_id);
+                $lockedUser->wallet_balance += $walletTx->amount;
+                $lockedUser->save();
+
+                WalletTransaction::where('id', $walletTx->id)
+                    ->update(['balance_after' => $lockedUser->wallet_balance]);
+            }
             return;
         }
 
         // 2. Check if it matches a Service Order
         $serviceOrder = ServiceOrder::where('razorpay_order_id', $orderId)->first();
-        if ($serviceOrder && $serviceOrder->payment_status !== 'approved') {
-            $serviceOrder->update([
-                'payment_status' => 'approved',
-                'order_status' => 'processing',
-                'razorpay_payment_id' => $paymentId,
-            ]);
+        if ($serviceOrder) {
+            ServiceOrder::where('id', $serviceOrder->id)
+                ->whereIn('payment_status', ['pending', 'rejected'])
+                ->update([
+                    'payment_status' => 'approved',
+                    'order_status' => 'processing',
+                    'rejection_reason' => null,
+                    'razorpay_payment_id' => $paymentId,
+                ]);
         }
     }
 

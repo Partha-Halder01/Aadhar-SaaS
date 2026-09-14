@@ -11,6 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            // SQLite (used by the test suite) has no MODIFY COLUMN
+            Schema::table('services', function (Blueprint $table) {
+                $table->string('category', 100)->default('print')->change();
+            });
+            return;
+        }
+
         DB::statement("ALTER TABLE services MODIFY COLUMN category VARCHAR(100) NOT NULL DEFAULT 'print'");
     }
 

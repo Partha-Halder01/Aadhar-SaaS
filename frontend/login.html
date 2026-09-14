@@ -423,7 +423,29 @@
       }
       .otp-boxes-container {
         gap: 6px;
-      }
+    .btn-redirect-nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 11px 16px;
+      background: #ffffff;
+      border: 1.5px solid #0066cc;
+      color: #0066cc;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.22s ease;
+      box-shadow: 0 2px 6px rgba(0, 102, 204, 0.08);
+      box-sizing: border-box;
+    }
+    .btn-redirect-nav:hover {
+      background: #0066cc;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 102, 204, 0.25);
     }
   </style>
 </head>
@@ -487,28 +509,7 @@
             </a>
           </div>
 
-          <!-- Privacy & Consent Agreement Checkboxes -->
-          <div class="auth-agreement-group" id="pwdAgreementGroup">
-            <label class="custom-checkbox-label" for="loginAgreeTerms">
-              <input type="checkbox" id="loginAgreeTerms" class="custom-checkbox-input" required checked>
-              <span class="custom-checkbox-box">
-                <i class="fa-solid fa-check"></i>
-              </span>
-              <span class="custom-checkbox-text">
-                I have read and agree to the <a href="terms.html" target="_blank" class="agreement-link">Terms of Service</a> &amp; <a href="privacy.html" target="_blank" class="agreement-link">Privacy Policy</a>.
-              </span>
-            </label>
 
-            <label class="custom-checkbox-label" for="loginAgreeConsent">
-              <input type="checkbox" id="loginAgreeConsent" class="custom-checkbox-input" required checked>
-              <span class="custom-checkbox-box">
-                <i class="fa-solid fa-check"></i>
-              </span>
-              <span class="custom-checkbox-text">
-                I confirm that all citizen documents (Aadhaar/PAN) will only be processed with valid customer consent under DPDP privacy standards.
-              </span>
-            </label>
-          </div>
 
           <!-- Submit Button -->
           <button type="submit" id="btnSubmitPassword" class="btn-rz-primary">
@@ -550,32 +551,11 @@
               <input type="text" maxlength="1" class="otp-box login-otp-box" data-index="5" inputmode="numeric">
             </div>
 
-            <div style="text-align: center; margin-bottom: 16px; font-size: 0.84rem; color: #64748b;">
+            <div style="text-align: center; margin: 14px 0; font-size: 0.84rem; color: #64748b;">
               <span id="loginTimerContainer">Resend code in <strong id="loginTimerCount" style="color: #0066cc;">60</strong>s</span>
               <button type="button" id="btnLoginResendOtp" style="display: none; background: none; border: none; color: #0066cc; font-weight: 700; cursor: pointer;">
                 <i class="fa-solid fa-rotate-right"></i> Resend OTP SMS
               </button>
-            <!-- Privacy & Consent Agreement Checkboxes -->
-            <div class="auth-agreement-group" id="otpAgreementGroup">
-              <label class="custom-checkbox-label" for="otpAgreeTerms">
-                <input type="checkbox" id="otpAgreeTerms" class="custom-checkbox-input" required checked>
-                <span class="custom-checkbox-box">
-                  <i class="fa-solid fa-check"></i>
-                </span>
-                <span class="custom-checkbox-text">
-                  I have read and agree to the <a href="terms.html" target="_blank" class="agreement-link">Terms of Service</a> &amp; <a href="privacy.html" target="_blank" class="agreement-link">Privacy Policy</a>.
-                </span>
-              </label>
-
-              <label class="custom-checkbox-label" for="otpAgreeConsent">
-                <input type="checkbox" id="otpAgreeConsent" class="custom-checkbox-input" required checked>
-                <span class="custom-checkbox-box">
-                  <i class="fa-solid fa-check"></i>
-                </span>
-                <span class="custom-checkbox-text">
-                  I confirm that all citizen documents (Aadhaar/PAN) will only be processed with valid customer consent under DPDP privacy standards.
-                </span>
-              </label>
             </div>
 
             <button type="submit" id="btnSubmitOtpLogin" class="btn-rz-primary">
@@ -592,10 +572,13 @@
         </form>
 
 
-        <!-- Registration Link -->
-        <div style="text-align: center; margin-top: 22px; font-size: 0.88rem; color: #64748b;">
-          New Retailer or Cyber Cafe? 
-          <a href="register.html" style="color: #0066cc; font-weight: 800; text-decoration: none;">Create Free Account</a>
+        <!-- Redirect to Create Account -->
+        <div class="auth-redirect-box" style="margin-top: 20px; padding: 14px 16px; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 14px; text-align: center;">
+          <p style="margin: 0 0 10px; font-size: 0.88rem; color: #475569; font-weight: 600;">Don't have an account yet?</p>
+          <a href="register.html" class="btn-redirect-nav">
+            <span>Create Free Account</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
         </div>
 
         <!-- Trust Badges -->
@@ -691,6 +674,7 @@
     </div>
   </div>
 
+  <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script>
@@ -774,20 +758,6 @@
       const identifier = loginIdentifier.value.trim();
       const password = loginPassword.value;
 
-      // Validate Privacy & Consent Agreements
-      const agreeTerms = document.getElementById('loginAgreeTerms');
-      const agreeConsent = document.getElementById('loginAgreeConsent');
-      const pwdGroup = document.getElementById('pwdAgreementGroup');
-
-      if (!agreeTerms || !agreeConsent || !agreeTerms.checked || !agreeConsent.checked) {
-        if (pwdGroup) {
-          pwdGroup.classList.remove('highlight-error');
-          void pwdGroup.offsetWidth;
-          pwdGroup.classList.add('highlight-error');
-        }
-        showToast('Please check and accept the Privacy Policy & Citizen Consent agreements to continue.', 'error');
-        return;
-      }
 
       if (!identifier || !password) {
         showToast('Please enter your credentials', 'error');
@@ -916,20 +886,6 @@
       let otp = '';
       loginOtpBoxes.forEach(b => otp += b.value.trim());
 
-      // Validate Privacy & Consent Agreements
-      const agreeTerms = document.getElementById('otpAgreeTerms');
-      const agreeConsent = document.getElementById('otpAgreeConsent');
-      const otpGroup = document.getElementById('otpAgreementGroup');
-
-      if (!agreeTerms || !agreeConsent || !agreeTerms.checked || !agreeConsent.checked) {
-        if (otpGroup) {
-          otpGroup.classList.remove('highlight-error');
-          void otpGroup.offsetWidth;
-          otpGroup.classList.add('highlight-error');
-        }
-        showToast('Please check and accept the Privacy Policy & Citizen Consent agreements to continue.', 'error');
-        return;
-      }
 
       if (otp.length !== 6) {
         showToast('Please enter all 6 digits of the OTP', 'error');
@@ -954,37 +910,6 @@
       }
     });
 
-    // Synchronize Agreement Checkboxes between Password and OTP Login Modes
-    const pTerms = document.getElementById('loginAgreeTerms');
-    const pConsent = document.getElementById('loginAgreeConsent');
-    const oTerms = document.getElementById('otpAgreeTerms');
-    const oConsent = document.getElementById('otpAgreeConsent');
-
-    if (pTerms && oTerms) {
-      pTerms.addEventListener('change', () => {
-        oTerms.checked = pTerms.checked;
-        document.getElementById('pwdAgreementGroup')?.classList.remove('highlight-error');
-        document.getElementById('otpAgreementGroup')?.classList.remove('highlight-error');
-      });
-      oTerms.addEventListener('change', () => {
-        pTerms.checked = oTerms.checked;
-        document.getElementById('pwdAgreementGroup')?.classList.remove('highlight-error');
-        document.getElementById('otpAgreementGroup')?.classList.remove('highlight-error');
-      });
-    }
-
-    if (pConsent && oConsent) {
-      pConsent.addEventListener('change', () => {
-        oConsent.checked = pConsent.checked;
-        document.getElementById('pwdAgreementGroup')?.classList.remove('highlight-error');
-        document.getElementById('otpAgreementGroup')?.classList.remove('highlight-error');
-      });
-      oConsent.addEventListener('change', () => {
-        pConsent.checked = oConsent.checked;
-        document.getElementById('pwdAgreementGroup')?.classList.remove('highlight-error');
-        document.getElementById('otpAgreementGroup')?.classList.remove('highlight-error');
-      });
-    }
 
     // --- Forgot Password Modal Logic ---
     const modalForgotPassword = document.getElementById('modalForgotPassword');

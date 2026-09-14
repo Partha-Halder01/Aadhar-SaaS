@@ -502,6 +502,7 @@
     </div>
   </div>
 
+  <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
@@ -782,7 +783,7 @@
           } else if (t.status === 'pending') {
             statusBadge = '<span class="badge-status badge-pending">Pending Review</span>';
           } else if (t.status === 'rejected') {
-            statusBadge = `<span class="badge-status badge-rejected" title="${t.rejection_reason || ''}">Rejected</span>`;
+            statusBadge = `<span class="badge-status badge-rejected" title="${escapeHtml(t.rejection_reason || '')}">Rejected</span>`;
           } else {
             statusBadge = `<span class="badge-status badge-processing">${t.status}</span>`;
           }
@@ -792,8 +793,8 @@
               <td style="color:#64748b; font-size:0.85rem;">${formatDate(t.created_at)}</td>
               <td>${typeBadge}</td>
               <td>
-                <div style="font-weight:600; color:#0f172a;">${t.description || 'Wallet Transaction'}</div>
-                ${t.utr_number ? `<div style="margin-top:2px;"><span class="utr-id-chip">UTR: ${t.utr_number}</span></div>` : ''}
+                <div style="font-weight:600; color:#0f172a;">${escapeHtml(t.description || 'Wallet Transaction')}</div>
+                ${t.utr_number ? `<div style="margin-top:2px;"><span class="utr-id-chip">UTR: ${escapeHtml(t.utr_number)}</span></div>` : ''}
               </td>
               <td>${amountDisplay}</td>
               <td>${statusBadge}</td>
@@ -816,7 +817,7 @@
           } else if (t.status === 'pending') {
             statusBadge = '<span class="badge-status badge-pending">Pending Review</span>';
           } else if (t.status === 'rejected') {
-            statusBadge = `<span class="badge-status badge-rejected" title="${t.rejection_reason || ''}">Rejected</span>`;
+            statusBadge = `<span class="badge-status badge-rejected" title="${escapeHtml(t.rejection_reason || '')}">Rejected</span>`;
           } else {
             statusBadge = `<span class="badge-status badge-processing">${t.status}</span>`;
           }
@@ -831,10 +832,10 @@
                 ${statusBadge}
               </div>
               <div class="mobile-tx-card-body">
-                <div class="mobile-tx-desc">${t.description || 'Wallet Transaction'}</div>
+                <div class="mobile-tx-desc">${escapeHtml(t.description || 'Wallet Transaction')}</div>
                 <div class="mobile-tx-meta">
                   <span><i class="fa-regular fa-clock"></i> ${formatDate(t.created_at)}</span>
-                  ${t.utr_number ? `<span>&bull;</span> <span class="utr-id-chip" style="font-size:0.75rem; padding:2px 7px;">UTR: ${t.utr_number}</span>` : ''}
+                  ${t.utr_number ? `<span>&bull;</span> <span class="utr-id-chip" style="font-size:0.75rem; padding:2px 7px;">UTR: ${escapeHtml(t.utr_number)}</span>` : ''}
                 </div>
               </div>
               <div class="mobile-tx-card-footer">

@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -53,12 +55,15 @@ class AuthController extends Controller
                     'phone' => ['An account with this mobile number already exists. Please log in.'],
                 ]);
             }
-        } elseif ($purpose === 'login' || $purpose === 'reset_password') {
-            if (!User::where('phone', $phone)->exists()) {
-                throw ValidationException::withMessages([
-                    'phone' => ['No account found associated with this mobile number.'],
-                ]);
-            }
+        } elseif (!User::where('phone', $phone)->exists()) {
+            // Same response as a real send, so this endpoint cannot be used to discover registered numbers
+            return response()->json([
+                'status' => 'success',
+                'message' => 'If this mobile number is registered, an OTP has been sent.',
+                'phone' => $phone,
+                'expires_in' => 300,
+                'dev_otp' => null,
+            ]);
         }
 
         // Generate OTP
@@ -84,7 +89,9 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => $result['message'] ?? 'OTP has been dispatched to your mobile number.',
+            'message' => $purpose === 'register'
+                ? ($result['message'] ?? 'OTP has been dispatched to your mobile number.')
+                : 'If this mobile number is registered, an OTP has been sent.',
             'phone' => $phone,
             'expires_in' => 300,
             'dev_otp' => $devOtp,
@@ -130,10 +137,10 @@ class AuthController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:100', 'regex:/^[\pL\pM\s.\'-]+$/u'],
             'email' => 'required|string|email|max:255|unique:users',
             'phone' => ['required', 'string', 'max:20', 'unique:users', 'regex:/^[6-9]\d{9}$/'],
-            'password' => 'required|string|min:8|confirmed',
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->letters()->numbers()],
             'otp' => 'required|string|digits:6',
         ], [
             'phone.regex' => 'Please provide a valid 10-digit Indian mobile number.',
@@ -150,7 +157,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $user = User::create([
+        $user = (new User)->forceFill([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $cleanPhone,
@@ -160,6 +167,7 @@ class AuthController extends Controller
             'wallet_balance' => 0.00,
             'status' => 'active',
         ]);
+        $user->save();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -239,6 +247,15 @@ class AuthController extends Controller
         $identifier = trim($request->input('identifier'));
         $cleanPhone = $this->normalizePhone($identifier);
 
+        // Per-account lockout (the route throttle is per IP only): 5 failures locks the account for 15 minutes
+        $lockKey = 'login-fail:' . hash('sha256', strlen((string) $cleanPhone) === 10 ? $cleanPhone : strtolower($identifier));
+        if (RateLimiter::tooManyAttempts($lockKey, 5)) {
+            $minutes = (int) ceil(RateLimiter::availableIn($lockKey) / 60);
+            throw ValidationException::withMessages([
+                'identifier' => ["Too many failed login attempts. Please try again in {$minutes} minute(s)."],
+            ]);
+        }
+
         $user = User::where('email', $identifier)
             ->orWhere('phone', $identifier)
             ->when($cleanPhone, function ($query, $p) {
@@ -247,6 +264,7 @@ class AuthController extends Controller
             ->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
+            RateLimiter::hit($lockKey, 900);
             throw ValidationException::withMessages([
                 'identifier' => ['Invalid login credentials.'],
             ]);
@@ -259,9 +277,11 @@ class AuthController extends Controller
             ], 403);
         }
 
-        // Clean old tokens and create fresh
+        RateLimiter::clear($lockKey);
+
+        // Clean old tokens and create fresh (admin sessions expire after 12 hours)
         $user->tokens()->delete();
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token', ['*'], $user->role === 'admin' ? now()->addHours(12) : null)->plainTextToken;
 
         return response()->json([
             'status' => 'success',
@@ -311,7 +331,7 @@ class AuthController extends Controller
         $user = $request->user();
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:100', 'regex:/^[\pL\pM\s.\'-]+$/u'],
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'phone' => ['required', 'string', 'max:20', 'regex:/^[6-9]\d{9}$/', 'unique:users,phone,' . $user->id],
             'otp' => 'nullable|string|digits:6',
@@ -369,7 +389,7 @@ class AuthController extends Controller
 
         $request->validate([
             'current_password' => 'required|string',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->letters()->numbers()],
         ], [
             'password.min' => 'New password must be at least 8 characters long.',
         ]);
@@ -408,7 +428,7 @@ class AuthController extends Controller
         $request->validate([
             'phone' => ['required', 'string', 'regex:/^[6-9]\d{9}$/'],
             'otp' => ['required', 'string', 'digits:6'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->letters()->numbers()],
         ], [
             'phone.regex' => 'Please provide a valid 10-digit Indian mobile number.',
             'password.min' => 'Password must be at least 8 characters long.',

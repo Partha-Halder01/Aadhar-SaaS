@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 
 class AdminWalletController extends Controller
 {
@@ -85,8 +86,29 @@ class AdminWalletController extends Controller
      */
     public function proof(Request $request, $id)
     {
+        return $this->serveProof(WalletTransaction::findOrFail($id));
+    }
+
+    /**
+     * Issue a 5-minute signed link to a proof image (keeps the admin token out of URLs)
+     */
+    public function proofLink($id)
+    {
         $tx = WalletTransaction::findOrFail($id);
 
+        return response()->json([
+            'status' => 'success',
+            'url' => URL::temporarySignedRoute('files.wallet-proof', now()->addMinutes(5), ['id' => $tx->id], false),
+        ]);
+    }
+
+    public function signedProof($id)
+    {
+        return $this->serveProof(WalletTransaction::findOrFail($id));
+    }
+
+    protected function serveProof(WalletTransaction $tx)
+    {
         if (!$tx->proof_image) {
             return response()->json([
                 'status' => 'error',

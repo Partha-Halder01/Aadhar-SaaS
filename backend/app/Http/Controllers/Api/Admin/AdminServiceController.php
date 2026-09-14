@@ -21,6 +21,11 @@ class AdminServiceController extends Controller
         Cache::forget('landing_page_config');
     }
 
+    private function isSafeImageUrl($value): bool
+    {
+        return is_string($value) && str_starts_with(strtolower($value), 'https://') && filter_var($value, FILTER_VALIDATE_URL) !== false;
+    }
+
     /**
      * List all services (active and inactive)
      */
@@ -66,7 +71,7 @@ class AdminServiceController extends Controller
                 'icon_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             ]);
             $iconImagePath = $request->file('icon_image')->store('services/icons', 'public');
-        } elseif ($request->filled('icon_image') && is_string($request->input('icon_image'))) {
+        } elseif ($this->isSafeImageUrl($request->input('icon_image'))) {
             $iconImagePath = $request->input('icon_image');
         }
 
@@ -141,7 +146,7 @@ class AdminServiceController extends Controller
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($service->icon_image);
             }
             $validated['icon_image'] = null;
-        } elseif ($request->has('icon_image') && is_string($request->input('icon_image')) && !empty($request->input('icon_image'))) {
+        } elseif ($this->isSafeImageUrl($request->input('icon_image'))) {
             $validated['icon_image'] = $request->input('icon_image');
         }
 

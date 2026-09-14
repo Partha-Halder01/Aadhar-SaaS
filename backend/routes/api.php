@@ -51,6 +51,12 @@ Route::post('/reviews', [ReviewController::class, 'store'])->middleware('throttl
 // Razorpay Webhook (idempotent, verified via signature)
 Route::post('/webhooks/razorpay', [RazorpayWebhookController::class, 'handle']);
 
+// Short-lived signed file links, issued by the authenticated *-link endpoints below
+Route::middleware(['signed:relative', 'throttle:60,1'])->group(function () {
+    Route::get('/files/orders/{id}/{type?}', [OrderController::class, 'signedDownload'])->name('files.order');
+    Route::get('/files/wallet-proofs/{id}', [AdminWalletController::class, 'signedProof'])->name('files.wallet-proof');
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +75,7 @@ Route::middleware('api.auth')->group(function () {
     Route::post('/orders', [OrderController::class, 'store'])->middleware('throttle:20,1');
     Route::get('/orders/{id}', [OrderController::class, 'show']);
     Route::get('/orders/{id}/download/{type?}', [OrderController::class, 'download']);
+    Route::get('/orders/{id}/download-link/{type?}', [OrderController::class, 'downloadLink']);
     Route::post('/orders/{id}/submit-document', [OrderController::class, 'submitDocument'])->middleware('throttle:15,1');
 
     // Wallet
@@ -84,7 +91,7 @@ Route::middleware('api.auth')->group(function () {
 
     // Complaints / Support Tickets
     Route::get('/complaints', [ComplaintController::class, 'index']);
-    Route::post('/complaints', [ComplaintController::class, 'store']);
+    Route::post('/complaints', [ComplaintController::class, 'store'])->middleware('throttle:10,1');
 });
 
 /*
@@ -107,6 +114,7 @@ Route::middleware(['api.auth', 'role:admin'])->prefix('admin')->group(function (
     // Manage Wallet Requests
     Route::get('/wallet-requests', [AdminWalletController::class, 'index']);
     Route::get('/wallet-requests/{id}/proof', [AdminWalletController::class, 'proof']);
+    Route::get('/wallet-requests/{id}/proof-link', [AdminWalletController::class, 'proofLink']);
     Route::post('/wallet-requests/{id}/process', [AdminWalletController::class, 'process']);
 
     // Manage Users

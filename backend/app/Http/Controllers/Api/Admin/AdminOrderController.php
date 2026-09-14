@@ -23,7 +23,7 @@ class AdminOrderController extends Controller
             $query->where('payment_status', $request->payment_status);
         }
 
-        $limit = $request->input('limit', 100);
+        $limit = min(max((int) $request->input('limit', 100), 1), 200);
         $orders = $query->orderBy('id', 'desc')->paginate($limit);
 
         return response()->json([

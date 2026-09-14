@@ -17,9 +17,7 @@ class User extends Authenticatable
         'phone',
         'phone_verified_at',
         'password',
-        'role',
-        'wallet_balance',
-        'status',
+        // role, wallet_balance and status are deliberately not mass assignable; set them with forceFill()
     ];
 
     protected $hidden = [

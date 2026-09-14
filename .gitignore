@@ -9,6 +9,7 @@
 /backend/vendor
 /backend/node_modules
 /.wrangler
+**/.wrangler
 /scratch
 *.log
 .DS_Store

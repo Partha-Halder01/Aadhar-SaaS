@@ -215,7 +215,7 @@
               <i class="fa-solid fa-shield-halved"></i>
             </div>
             <div>
-              <h4 style="margin: 0 0 3px; font-weight: 800; color: var(--text-dark); font-size: 0.98rem;">256-Bit Encrypted Document Locker</h4>
+              <h4 style="margin: 0 0 3px; font-weight: 800; color: var(--text-dark); font-size: 0.98rem;">Private Access Onlyument Locker</h4>
               <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted);">All verified government ID prints and certificates are archived here indefinitely with high-resolution 300 DPI vector fidelity.</p>
             </div>
           </div>
@@ -275,6 +275,7 @@
     </main>
   </div>
 
+  <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
@@ -376,7 +377,7 @@
                 </span>
               </td>
               <td style="text-align: right;">
-                <a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 7px 18px; font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 7px;" download>
+                <a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 7px 18px; font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 7px;" download>
                   <i class="fa-solid fa-cloud-arrow-down"></i> ${isPdf ? 'Download PDF' : 'Download File'}
                 </a>
               </td>
@@ -416,7 +417,7 @@
                 </div>
               </div>
               <div class="mobile-ledger-card-footer" style="padding-top: 10px;">
-                <a href="${fileUrl}" target="_blank" class="btn-tiranga" style="width: 100%; justify-content: center; padding: 9px 16px; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-sizing: border-box;" download>
+                <a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="width: 100%; justify-content: center; padding: 9px 16px; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-sizing: border-box;" download>
                   <i class="fa-solid fa-cloud-arrow-down"></i> ${isPdf ? 'Download PDF' : 'Download File'}
                 </a>
               </div>

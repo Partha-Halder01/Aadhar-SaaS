@@ -89,7 +89,7 @@ class RazorpayPaymentController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage() ?: 'Unable to initialize Razorpay checkout. Please try again.'
+                'message' => 'Unable to initialize Razorpay checkout. Please try again.'
             ], 500);
         }
     }
@@ -133,31 +133,40 @@ class RazorpayPaymentController extends Controller
             ->first();
 
         if ($walletTx) {
-            // Idempotency check: Already approved
-            if ($walletTx->status === 'approved') {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Payment already verified and credited.',
-                    'wallet_balance' => (float) $user->fresh()->wallet_balance,
-                    'transaction' => $walletTx,
-                ]);
-            }
-
-            // Atomic credit with pessimistic locking
+            // Atomic claim: only the request that flips the row to approved may credit the wallet,
+            // so parallel verify calls or a concurrent webhook can never credit the same top-up twice.
+            // 'rejected' stays claimable because Razorpay reports failed attempts before a successful retry.
             $updatedUser = DB::transaction(function () use ($walletTx, $paymentId, $signature) {
+                $claimed = WalletTransaction::where('id', $walletTx->id)
+                    ->whereIn('status', ['pending', 'rejected'])
+                    ->update([
+                        'status' => 'approved',
+                        'razorpay_payment_id' => $paymentId,
+                        'razorpay_signature' => $signature,
+                    ]);
+
+                if ($claimed === 0) {
+                    return null;
+                }
+
                 $lockedUser = User::lockForUpdate()->findOrFail($walletTx->user_id);
                 $lockedUser->wallet_balance += $walletTx->amount;
                 $lockedUser->save();
 
-                $walletTx->update([
-                    'status' => 'approved',
-                    'balance_after' => $lockedUser->wallet_balance,
-                    'razorpay_payment_id' => $paymentId,
-                    'razorpay_signature' => $signature,
-                ]);
+                WalletTransaction::where('id', $walletTx->id)
+                    ->update(['balance_after' => $lockedUser->wallet_balance]);
 
                 return $lockedUser;
             });
+
+            if (!$updatedUser) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Payment already verified and credited.',
+                    'wallet_balance' => (float) $user->fresh()->wallet_balance,
+                    'transaction' => $walletTx->fresh(),
+                ]);
+            }
 
             return response()->json([
                 'status' => 'success',
@@ -173,21 +182,24 @@ class RazorpayPaymentController extends Controller
             ->first();
 
         if ($serviceOrder) {
-            // Idempotency check: Already approved
-            if ($serviceOrder->payment_status === 'approved') {
+            // Atomic claim (same reasoning as wallet top-ups above)
+            $claimed = ServiceOrder::where('id', $serviceOrder->id)
+                ->whereIn('payment_status', ['pending', 'rejected'])
+                ->update([
+                    'payment_status' => 'approved',
+                    'order_status' => 'processing',
+                    'rejection_reason' => null,
+                    'razorpay_payment_id' => $paymentId,
+                    'razorpay_signature' => $signature,
+                ]);
+
+            if ($claimed === 0) {
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Order payment already verified and processing.',
-                    'order' => $serviceOrder->load('service'),
+                    'order' => $serviceOrder->fresh('service'),
                 ]);
             }
-
-            $serviceOrder->update([
-                'payment_status' => 'approved',
-                'order_status' => 'processing',
-                'razorpay_payment_id' => $paymentId,
-                'razorpay_signature' => $signature,
-            ]);
 
             return response()->json([
                 'status' => 'success',

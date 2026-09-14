@@ -456,7 +456,7 @@
                 </div>
                 <div class="cms-form-group">
                   <label>Safety & Trust Tag</label>
-                  <input type="text" id="announcement_safe_text" placeholder="100% UIDAI/Govt Safe">
+                  <input type="text" id="announcement_safe_text" placeholder="Secure Document Handling">
                 </div>
               </div>
             </div>
@@ -535,7 +535,7 @@
                 </div>
                 <div class="cms-form-group">
                   <label>Trust Badge 3 Text</label>
-                  <input type="text" id="hero_trust_2_text" placeholder="256-Bit Bank Grade Safe">
+                  <input type="text" id="hero_trust_2_text" placeholder="HTTPS Secured">
                 </div>
               </div>
             </div>
@@ -1008,6 +1008,7 @@
     </main>
   </div>
 
+  <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
@@ -1650,7 +1651,7 @@
           </table>
         `;
       } catch (err) {
-        container.innerHTML = `<div style="color:#ef4444; padding:12px;">Error: ${err.message}</div>`;
+        container.innerHTML = `<div style="color:#ef4444; padding:12px;">Error: ${escapeHtml(err.message)}</div>`;
       }
     }
 

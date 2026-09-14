@@ -587,6 +587,7 @@
     </div>
   </div>
 
+  <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
@@ -668,7 +669,7 @@
       } catch (err) {
         console.error('Failed to load categories:', err);
         const grid = document.getElementById('categoriesGrid');
-        if (grid) grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 30px; color: #ef4444;">Failed to load categories. ${err.message || ''}</div>`;
+        if (grid) grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 30px; color: #ef4444;">Failed to load categories. ${escapeHtml(err.message || '')}</div>`;
       }
     }
 
@@ -704,7 +705,7 @@
         if (imgUrl) {
           imageBannerHtml = `
             <div style="width: 100%; height: 140px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; overflow: hidden; position: relative;">
-              <img src="${imgUrl}" alt="${c.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\'display:flex; align-items:center; justify-content:center; height:100%; background:${bg}; color:${color}; font-size:2.5rem;\\'><i class=\\'${icon}\\'></i></div>';">
+              <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(c.name)}" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\'display:flex; align-items:center; justify-content:center; height:100%; background:${safeToken(bg)}; color:${safeToken(color)}; font-size:2.5rem;\\'><i class=\\'${safeToken(icon)}\\'></i></div>';">
               <span style="position: absolute; bottom: 8px; right: 8px; background: rgba(15,23,42,0.75); color: #ffffff; padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; backdrop-filter: blur(4px);">
                 <i class="fa-solid fa-image"></i> Custom Banner
               </span>
@@ -746,13 +747,13 @@
               <div style="padding: 18px 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                   <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 6px; font-weight: 700;">
-                    ${c.slug}
+                    ${safeToken(c.slug)}
                   </span>
                   ${statusBadge}
                 </div>
-                <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0 0 6px;">${c.name}</h3>
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0 0 6px;">${escapeHtml(c.name)}</h3>
                 <p style="font-size: 0.84rem; color: #64748b; line-height: 1.45; margin: 0 0 14px; min-height: 38px;">
-                  ${c.description || 'No category description specified.'}
+                  ${escapeHtml(c.description || 'No category description specified.')}
                 </p>
                 <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; color: #0066cc;">
                   <i class="fa-solid fa-layer-group"></i> ${c.services_count || 0} Connected Services
@@ -839,7 +840,7 @@
           document.getElementById('catImageUploadPlaceholder').style.display = 'none';
           document.getElementById('btnRemoveCatImage').style.display = 'inline-flex';
           document.getElementById('catRemoveImage').value = '0';
-          document.getElementById('catImageSelectedFileName').innerHTML = `<i class="fa-solid fa-circle-check"></i> Selected: <strong>${file.name}</strong>`;
+          document.getElementById('catImageSelectedFileName').innerHTML = `<i class="fa-solid fa-circle-check"></i> Selected: <strong>${escapeHtml(file.name)}</strong>`;
         };
         reader.readAsDataURL(file);
       }
@@ -987,14 +988,14 @@
           let badgeHtml = '';
           if (iconType === 'image' && imgUrl) {
             badgeHtml = `
-              <div style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px; background: ${s.icon_bg || '#f8fafc'}; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <img src="${imgUrl}" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+              <div style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px; background: ${safeToken(s.icon_bg || '#f8fafc')}; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <img src="${escapeHtml(imgUrl)}" alt="" style="width: 100%; height: 100%; object-fit: contain;">
               </div>
             `;
           } else {
             badgeHtml = `
-              <div style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px; background: ${s.icon_bg || '#eff6ff'}; color: ${s.icon_color || '#0066cc'}; border: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <i class="${s.icon || 'fa-solid fa-id-card'}"></i>
+              <div style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px; background: ${safeToken(s.icon_bg || '#eff6ff')}; color: ${safeToken(s.icon_color || '#0066cc')}; border: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <i class="${safeToken(s.icon || 'fa-solid fa-id-card')}"></i>
               </div>
             `;
           }
@@ -1005,17 +1006,17 @@
                 <div style="display: flex; align-items: center; gap: 12px;">
                   ${badgeHtml}
                   <div>
-                    <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">${s.name}</div>
+                    <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">${escapeHtml(s.name)}</div>
                     <div style="font-size: 0.74rem; color: #64748b; font-family:'JetBrains Mono', monospace;">ID: SVC-${s.id}</div>
                   </div>
                 </div>
               </td>
               <td>
                 <span class="badge-status" style="font-size: 0.74rem; font-weight: 700; background: #f8fafc; color: #334155; border: 1px solid #e2e8f0; text-transform: capitalize; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px;">
-                  <i class="fa-solid fa-tag" style="font-size: 0.68rem; color: #0066cc;"></i> ${(s.category || 'print').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                  <i class="fa-solid fa-tag" style="font-size: 0.68rem; color: #0066cc;"></i> ${escapeHtml((s.category || 'print').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()))}
                 </span>
               </td>
-              <td style="color: #64748b; font-size: 0.82rem; max-width: 260px; line-height: 1.4;">${s.description || 'Standard government card processing'}</td>
+              <td style="color: #64748b; font-size: 0.82rem; max-width: 260px; line-height: 1.4;">${escapeHtml(s.description || 'Standard government card processing')}</td>
               <td>
                 <span style="font-weight: 800; color: #03a93a; font-size: 1.02rem; font-family: 'JetBrains Mono', monospace;">${formatINR(s.price)}</span>
               </td>

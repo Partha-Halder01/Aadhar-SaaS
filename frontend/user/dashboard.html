@@ -390,6 +390,7 @@
     </main>
   </div>
 
+  <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
@@ -433,13 +434,13 @@
         const imgUrl = printSrv.icon_image_url || (printSrv.icon_image && (printSrv.icon_image.startsWith('http') ? printSrv.icon_image : `${STORAGE_BASE_URL}/${printSrv.icon_image}`));
         
         if (iconType === 'image' && imgUrl) {
-          badgePrint.innerHTML = `<img src="${imgUrl}" alt="${printSrv.name}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${printSrv.icon || 'fa-solid fa-id-card'}\\'></i>';">`;
+          badgePrint.innerHTML = `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(printSrv.name)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${safeToken(printSrv.icon || 'fa-solid fa-id-card')}\\'></i>';">`;
           badgePrint.style.background = printSrv.icon_bg || '#ffedd5';
           badgePrint.style.padding = '5px';
           badgePrint.style.border = '1.5px solid rgba(0,0,0,0.06)';
           badgePrint.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
         } else {
-          badgePrint.innerHTML = `<i class="${printSrv.icon || 'fa-solid fa-id-card'}"></i>`;
+          badgePrint.innerHTML = `<i class="${safeToken(printSrv.icon || 'fa-solid fa-id-card')}"></i>`;
           if (printSrv.icon_bg) badgePrint.style.background = printSrv.icon_bg;
           if (printSrv.icon_color) badgePrint.style.color = printSrv.icon_color;
         }
@@ -454,13 +455,13 @@
         const imgUrl = panSrv.icon_image_url || (panSrv.icon_image && (panSrv.icon_image.startsWith('http') ? panSrv.icon_image : `${STORAGE_BASE_URL}/${panSrv.icon_image}`));
         
         if (iconType === 'image' && imgUrl) {
-          badgePan.innerHTML = `<img src="${imgUrl}" alt="${panSrv.name}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${panSrv.icon || 'fa-solid fa-magnifying-glass-location'}\\'></i>';">`;
+          badgePan.innerHTML = `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(panSrv.name)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${safeToken(panSrv.icon || 'fa-solid fa-magnifying-glass-location')}\\'></i>';">`;
           badgePan.style.background = panSrv.icon_bg || '#f0fdf4';
           badgePan.style.padding = '5px';
           badgePan.style.border = '1.5px solid rgba(0,0,0,0.06)';
           badgePan.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
         } else {
-          badgePan.innerHTML = `<i class="${panSrv.icon || 'fa-solid fa-magnifying-glass-location'}"></i>`;
+          badgePan.innerHTML = `<i class="${safeToken(panSrv.icon || 'fa-solid fa-magnifying-glass-location')}"></i>`;
           if (panSrv.icon_bg) badgePan.style.background = panSrv.icon_bg;
           if (panSrv.icon_color) badgePan.style.color = panSrv.icon_color;
         }
@@ -475,13 +476,13 @@
         const imgUrl = docSrv.icon_image_url || (docSrv.icon_image && (docSrv.icon_image.startsWith('http') ? docSrv.icon_image : `${STORAGE_BASE_URL}/${docSrv.icon_image}`));
         
         if (iconType === 'image' && imgUrl) {
-          badgeDoc.innerHTML = `<img src="${imgUrl}" alt="${docSrv.name}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${docSrv.icon || 'fa-solid fa-file-arrow-down'}\\'></i>';">`;
+          badgeDoc.innerHTML = `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(docSrv.name)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${safeToken(docSrv.icon || 'fa-solid fa-file-arrow-down')}\\'></i>';">`;
           badgeDoc.style.background = docSrv.icon_bg || '#f0f9ff';
           badgeDoc.style.padding = '5px';
           badgeDoc.style.border = '1.5px solid rgba(0,0,0,0.06)';
           badgeDoc.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
         } else if (docSrv.icon) {
-          badgeDoc.innerHTML = `<i class="${docSrv.icon}"></i>`;
+          badgeDoc.innerHTML = `<i class="${safeToken(docSrv.icon)}"></i>`;
           if (docSrv.icon_bg) badgeDoc.style.background = docSrv.icon_bg;
           if (docSrv.icon_color) badgeDoc.style.color = docSrv.icon_color;
         }
@@ -579,7 +580,7 @@
               <div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                   <span style="background: #b45309; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; letter-spacing: 0.04em; text-transform: uppercase;">Action Required</span>
-                  <span style="font-weight: 800; color: #0f172a; font-size: 1.02rem;">Order #${o.order_number} (${o.service ? o.service.name : 'Service'})</span>
+                  <span style="font-weight: 800; color: #0f172a; font-size: 1.02rem;">Order #${escapeHtml(o.order_number)} (${escapeHtml(o.service ? o.service.name : 'Service')})</span>
                 </div>
                 <div style="margin-top: 6px; font-weight: 700; color: #78350f; font-size: 0.94rem;">
                   Admin Requested: <span style="color: #ea580c; text-decoration: underline;">${escapeHtml(o.doc_request_title || 'Missing Document')}</span>
@@ -613,7 +614,7 @@
       if (!order) return;
 
       document.getElementById('submitDocOrderId').value = order.id;
-      document.getElementById('submitDocModalSubtitle').textContent = `Order #${order.order_number} (${order.service ? order.service.name : 'Service'})`;
+      document.getElementById('submitDocModalSubtitle').textContent = `Order #${escapeHtml(order.order_number)} (${escapeHtml(order.service ? order.service.name : 'Service')})`;
       document.getElementById('submitDocRequiredTitle').textContent = order.doc_request_title || 'Missing Document';
       document.getElementById('submitDocAdminMsg').textContent = order.doc_request_message || 'Please upload the missing document to avoid rejection.';
       document.getElementById('missingDocFileInput').value = '';
@@ -626,7 +627,7 @@
     function handleMissingFileSelected(input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
-        document.getElementById('selectedMissingFileName').textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+        document.getElementById('selectedMissingFileName').textContent = `Selected: ${escapeHtml(file.name)} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
       }
     }
 
@@ -712,7 +713,7 @@
           } else if (o.order_status === 'processing') {
             statusBadge = '<span class="badge-status badge-processing">Processing</span>';
           } else if (o.order_status === 'rejected') {
-            statusBadge = `<span class="badge-status badge-rejected" title="${o.rejection_reason || ''}">Rejected</span>`;
+            statusBadge = `<span class="badge-status badge-rejected" title="${escapeHtml(o.rejection_reason || '')}">Rejected</span>`;
           } else {
             statusBadge = '<span class="badge-status badge-pending">Pending Review</span>';
           }
@@ -728,7 +729,7 @@
             `;
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+            downloadAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
           } else if (o.order_status === 'rejected') {
             downloadAction = `<span style="font-size:0.8rem; color:#dc2626; font-weight:600;">${escapeHtml(o.rejection_reason || 'Rejected')}</span>`;
           } else {
@@ -782,7 +783,7 @@
             downloadAction = '<span style="font-size:0.75rem; color:#03a93a; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-store"></i> Collect from center</span>';
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            downloadAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Download</a>`;
+            downloadAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Download</a>`;
           } else if (o.order_status === 'rejected') {
             downloadAction = `<span style="font-size:0.75rem; color:#dc2626; font-weight:600;">${escapeHtml(o.rejection_reason || 'Rejected')}</span>`;
           } else {
@@ -792,11 +793,11 @@
           return `
             <div class="mobile-order-card">
               <div class="mobile-order-card-header">
-                <span class="order-id-chip">${o.order_number}</span>
+                <span class="order-id-chip">${escapeHtml(o.order_number)}</span>
                 ${statusBadge}
               </div>
               <div class="mobile-order-card-body">
-                <div class="mobile-order-service-name">${o.service ? o.service.name : 'Citizen Service'}</div>
+                <div class="mobile-order-service-name">${escapeHtml(o.service ? o.service.name : 'Citizen Service')}</div>
                 <div class="mobile-order-meta">
                   <span><i class="fa-regular fa-clock" style="font-size:0.72rem;"></i> ${formatDate(o.created_at)}</span>
                   <span>&bull;</span>

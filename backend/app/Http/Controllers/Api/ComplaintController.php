@@ -36,7 +36,7 @@ class ComplaintController extends Controller
 
         $request->validate([
             'subject' => 'required|string|max:255',
-            'message' => 'required|string',
+            'message' => 'required|string|max:2000',
             'order_number' => 'nullable|string|max:100',
         ]);
 

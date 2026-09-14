@@ -3,7 +3,6 @@
    Designed for Indian Digital Retailers, CSC Centers & Cyber Cafes
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
 
 :root {
   /* Brand Identity - Derived from Instant Online Seva Logo */
@@ -1672,42 +1671,80 @@ button:disabled::before,
   border-bottom: none;
 }
 
+/* Testimonials Section Wrapper & Ambient Blend */
+#testimonialsSection,
+.rz-testimonials-section {
+  padding: 84px 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
+}
+
+#testimonialsSection::before,
+.rz-testimonials-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1200px;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.85) 0%, rgba(248, 250, 252, 0) 75%);
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* Testimonials 3-Column Hero Row (Desktop Balanced) */
 .testimonials-hero-row {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
-  gap: 32px;
-  max-width: 1320px;
+  gap: 28px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 0 16px;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
 .testimonial-side-feature {
   flex: 0 0 280px;
-  max-width: 290px;
+  width: 280px;
+  max-width: 280px;
+  display: flex;
 }
 
 .testimonial-side-card {
+  width: 100%;
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s ease;
+  box-shadow: 
+    0 1px 3px rgba(15, 23, 42, 0.03),
+    0 6px 16px -2px rgba(15, 23, 42, 0.04),
+    0 14px 28px -4px rgba(15, 23, 42, 0.03);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
 }
 
 .testimonial-side-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px rgba(0, 102, 204, 0.10);
+  transform: translateY(-3px);
+  box-shadow: 
+    0 4px 8px -2px rgba(15, 23, 42, 0.04),
+    0 12px 28px -4px rgba(0, 102, 204, 0.08),
+    0 22px 38px -6px rgba(15, 23, 42, 0.04);
   border-color: #cbd5e1;
 }
 
 .side-img-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: 200px;
   overflow: hidden;
   background: #f8fafc;
 }
@@ -1716,7 +1753,7 @@ button:disabled::before,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center 20%;
   transition: transform 0.4s ease;
   display: block;
 }
@@ -1746,41 +1783,48 @@ button:disabled::before,
 }
 
 .side-badge.orange {
-  background: rgba(255, 247, 237, 0.92);
+  background: rgba(255, 247, 237, 0.95);
   color: #c2410c;
   border: 1px solid #fdba74;
 }
 
 .side-badge.green {
-  background: rgba(240, 253, 244, 0.92);
+  background: rgba(240, 253, 244, 0.95);
   color: #15803d;
   border: 1px solid #86efac;
 }
 
 .side-card-footer {
-  padding: 14px 16px;
+  padding: 16px 18px 18px;
   background: #ffffff;
   border-top: 1px solid #f1f5f9;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .side-card-footer h6 {
   margin: 0 0 4px 0;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: #0b1120;
 }
 
 .side-card-footer p {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   color: #64748b;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .testimonial-center-carousel {
   flex: 1;
-  max-width: 620px;
+  max-width: 600px;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Testimonials Single-Card Focused Carousel */
@@ -1788,7 +1832,7 @@ button:disabled::before,
   position: relative;
   max-width: 100%;
   margin: 0 auto;
-  padding: 0 54px;
+  padding: 0 46px;
   box-sizing: border-box;
 }
 
@@ -1801,12 +1845,12 @@ button:disabled::before,
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  gap: 0;
-  padding: 8px 0 10px;
-  margin: 0 auto;
+  gap: 24px;
+  padding: 16px 8px 26px;
+  margin: -16px -8px -16px;
+  scroll-padding: 0 8px;
   scrollbar-width: none;
   cursor: grab;
-  border-radius: 20px;
 }
 
 .testimonials-grid::-webkit-scrollbar {
@@ -1826,33 +1870,42 @@ button:disabled::before,
   scroll-snap-align: center;
   scroll-snap-stop: always;
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: 1px solid #e2e8f0;
   border-radius: 20px;
-  padding: 34px 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  padding: 32px 30px;
+  box-shadow: 
+    0 1px 3px rgba(15, 23, 42, 0.03),
+    0 6px 16px -2px rgba(15, 23, 42, 0.04),
+    0 14px 28px -4px rgba(15, 23, 42, 0.03);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
   box-sizing: border-box;
-  min-height: 220px;
+  min-height: 280px;
 }
 
 .testimonial-card-modern:hover {
-  border-color: #fdba74;
-  box-shadow: 0 14px 34px rgba(249, 115, 22, 0.09);
+  border-color: #cbd5e1;
+  box-shadow: 
+    0 4px 8px -2px rgba(15, 23, 42, 0.04),
+    0 12px 28px -4px rgba(0, 102, 204, 0.08),
+    0 22px 38px -6px rgba(15, 23, 42, 0.04);
+  transform: translateY(-3px);
 }
 
 .testimonial-nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #ffffff;
   border: 1.5px solid #e2e8f0;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    0 2px 4px rgba(15, 23, 42, 0.04),
+    0 6px 16px rgba(15, 23, 42, 0.06);
   color: #0f172a;
   display: flex;
   align-items: center;
@@ -1860,7 +1913,7 @@ button:disabled::before,
   cursor: pointer;
   z-index: 10;
   transition: all 0.2s ease;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 
 .testimonial-nav-btn:hover {
@@ -1885,7 +1938,7 @@ button:disabled::before,
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin-top: 18px;
+  margin-top: 14px;
 }
 
 .testimonial-dot {
@@ -7889,12 +7942,26 @@ input:checked + .toggle-slider:before {
 .rz-bento-icon {
   width: 58px;
   height: 58px;
+  min-width: 58px;
+  min-height: 58px;
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
+}
+
+.rz-bento-icon i {
+  font-family: "Font Awesome 6 Free", "FontAwesome" !important;
+  font-weight: 900 !important;
+  font-style: normal;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-size: 1.6rem;
 }
 
 .rz-bento-icon img {
@@ -8657,7 +8724,8 @@ input:checked + .toggle-slider:before {
   }
   .testimonials-grid {
     gap: 0;
-    padding: 6px 0 10px;
+    padding: 14px 0 28px;
+    margin: -14px 0 -12px;
     scroll-padding: 0;
   }
   .testimonial-card-modern {
@@ -8669,6 +8737,10 @@ input:checked + .toggle-slider:before {
     padding: 22px 18px;
     border-radius: 16px;
     min-height: auto;
+    box-shadow: 
+      0 1px 3px rgba(15, 23, 42, 0.03),
+      0 6px 16px -2px rgba(15, 23, 42, 0.05),
+      0 16px 30px -6px rgba(15, 23, 42, 0.04);
   }
   .testimonial-quote {
     font-size: 0.88rem;

@@ -74,14 +74,20 @@ class Otp extends Model
 
         $code = (string) random_int(100000, 999999);
 
-        return static::create([
+        $record = static::create([
             'phone' => $cleanPhone,
-            'otp' => $code,
+            'otp' => hash('sha256', $code),
             'purpose' => $purpose,
             'expires_at' => now()->addMinutes($expiryMinutes),
             'ip_address' => $ip,
             'attempts' => 0,
         ]);
+
+        // Only the hash is stored; expose the plain code on this instance so it can be sent by SMS
+        $record->otp = $code;
+        $record->syncOriginalAttribute('otp');
+
+        return $record;
     }
 
     /**
@@ -125,7 +131,7 @@ class Otp extends Model
             ];
         }
 
-        if (!hash_equals($record->otp, $cleanOtp)) {
+        if (!hash_equals($record->otp, hash('sha256', $cleanOtp))) {
             $record->increment('attempts');
             $remaining = max(0, 5 - $record->attempts);
             return [

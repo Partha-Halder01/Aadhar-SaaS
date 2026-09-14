@@ -1179,8 +1179,8 @@
       cats.forEach(c => {
         const icon = c.icon || (c.slug === 'print' ? 'fa-solid fa-id-card' : (c.slug === 'pan_find' ? 'fa-solid fa-magnifying-glass' : 'fa-solid fa-layer-group'));
         html += `
-          <button type="button" class="cat-filter-btn" onclick="filterOverviewCategory('${c.slug}', this)">
-            <i class="${icon}"></i> ${c.name}
+          <button type="button" class="cat-filter-btn" onclick="filterOverviewCategory('${safeToken(c.slug)}', this)">
+            <i class="${icon}"></i> ${escapeHtml(c.name)}
           </button>
         `;
       });
@@ -1302,7 +1302,7 @@
         if (catServices.length > 0) {
           chipsHtml = catServices.slice(0, 3).map(s => `
             <span class="svc-feature-chip">
-              <i class="fa-solid fa-check"></i> ${s.name}
+              <i class="fa-solid fa-check"></i> ${escapeHtml(s.name)}
             </span>
           `).join('');
           if (catServices.length > 3) {
@@ -1320,12 +1320,12 @@
         let bannerMediaHtml = '';
         if (c.image_url) {
           bannerMediaHtml = `
-            <img src="${c.image_url}" alt="${c.name}" onerror="this.remove();">
+            <img src="${escapeHtml(c.image_url)}" alt="${escapeHtml(c.name)}" onerror="this.remove();">
           `;
         }
 
         return `
-          <div class="cat-card-structured" onclick="openCategoryView('${c.slug}')">
+          <div class="cat-card-structured" onclick="openCategoryView('${safeToken(c.slug)}')">
             <!-- Top Banner (Image or Gradient with Vector Watermark) -->
             <div class="cat-card-banner" style="background: ${bgGradient};">
               ${bannerMediaHtml}
@@ -1354,8 +1354,8 @@
 
             <!-- Card Body Content -->
             <div class="cat-card-body">
-              <h3 class="cat-card-title">${c.name}</h3>
-              <p class="cat-card-desc">${c.description || 'Explore available government and digital services.'}</p>
+              <h3 class="cat-card-title">${escapeHtml(c.name)}</h3>
+              <p class="cat-card-desc">${escapeHtml(c.description || 'Explore available government and digital services.')}</p>
 
               <!-- Feature Chips -->
               <div class="cat-chips-wrapper">
@@ -1417,8 +1417,8 @@
         icon_color: slug === 'pan_find' ? '#0066cc' : '#ea580c',
       };
 
-      document.getElementById('topbarBreadcrumb').innerHTML = `Portal &bull; Services &bull; <span style="color:#0066cc;">${activeCat.name}</span>`;
-      document.getElementById('topbarPageTitle').innerHTML = `<span>${activeCat.name}</span><span class="page-title-sub"> Catalog</span>`;
+      document.getElementById('topbarBreadcrumb').innerHTML = `Portal &bull; Services &bull; <span style="color:#0066cc;">${escapeHtml(activeCat.name)}</span>`;
+      document.getElementById('topbarPageTitle').innerHTML = `<span>${escapeHtml(activeCat.name)}</span><span class="page-title-sub"> Catalog</span>`;
       document.getElementById('activeCategoryNameDisplay').textContent = activeCat.name;
       document.getElementById('activeCategoryTitle').textContent = activeCat.name;
       document.getElementById('activeCategoryDescription').textContent = activeCat.description || 'Order instantly with zero delays';
@@ -1426,14 +1426,14 @@
       // Category icon / image in banner
       const iconBox = document.getElementById('activeCategoryIconBox');
       if (activeCat.image_url) {
-        iconBox.innerHTML = `<img src="${activeCat.image_url}" alt="${activeCat.name}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`;
+        iconBox.innerHTML = `<img src="${escapeHtml(activeCat.image_url)}" alt="${escapeHtml(activeCat.name)}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`;
         iconBox.style.padding = '0';
         iconBox.style.overflow = 'hidden';
       } else {
         iconBox.style.background = activeCat.icon_bg || '#eff6ff';
         iconBox.style.color = activeCat.icon_color || '#0066cc';
         iconBox.style.borderColor = 'rgba(0,0,0,0.08)';
-        iconBox.innerHTML = `<i class="${activeCat.icon || 'fa-solid fa-layer-group'}"></i>`;
+        iconBox.innerHTML = `<i class="${safeToken(activeCat.icon || 'fa-solid fa-layer-group')}"></i>`;
       }
 
       // Quick Pill Tabs
@@ -1481,8 +1481,8 @@
       container.innerHTML = categoriesList.map(c => {
         const isActive = c.slug === activeSlug;
         return `
-          <button type="button" onclick="openCategoryView('${c.slug}')" style="padding: 7px 16px; font-size: 0.82rem; font-weight: ${isActive ? '800' : '600'}; border-radius: 9px; border: none; background: ${isActive ? '#ffffff' : 'transparent'}; color: ${isActive ? '#0066cc' : '#64748b'}; box-shadow: ${isActive ? '0 2px 5px rgba(0,0,0,0.08)' : 'none'}; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-            ${c.name}
+          <button type="button" onclick="openCategoryView('${safeToken(c.slug)}')" style="padding: 7px 16px; font-size: 0.82rem; font-weight: ${isActive ? '800' : '600'}; border-radius: 9px; border: none; background: ${isActive ? '#ffffff' : 'transparent'}; color: ${isActive ? '#0066cc' : '#64748b'}; box-shadow: ${isActive ? '0 2px 5px rgba(0,0,0,0.08)' : 'none'}; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
+            ${escapeHtml(c.name)}
           </button>
         `;
       }).join('');
@@ -1498,7 +1498,7 @@
       if (iconType === 'image' && imgUrl) {
         return `
           <div style="width: ${size}px; height: ${size}px; min-width: ${size}px; border-radius: 12px; background: ${bg}; border: 1.5px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
-            <img src="${imgUrl}" alt="${s.name}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${iconClass}\\' style=\\'color:${color}; font-size:${fontSize};\\'></i>';">
+            <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(s.name)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${safeToken(iconClass)}\\' style=\\'color:${safeToken(color)}; font-size:${safeToken(fontSize)};\\'></i>';">
           </div>
         `;
       }
@@ -1546,9 +1546,9 @@
                   <div style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Service Fee</div>
                 </div>
               </div>
-              <h3 style="font-size: 1.12rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">${s.name}</h3>
+              <h3 style="font-size: 1.12rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">${escapeHtml(s.name)}</h3>
               <p style="color: #64748b; font-size: 0.86rem; line-height: 1.5; margin-bottom: 18px;">
-                ${s.description || 'Fast, automated citizen identification and digital document fulfillment.'}
+                ${escapeHtml(s.description || 'Fast, automated citizen identification and digital document fulfillment.')}
               </p>
             </div>
             <button onclick="openApplyModal(${s.id})" class="${btnClass}" style="width: 100%; justify-content: center; padding: 11px; border-radius: 10px;">
@@ -1605,20 +1605,20 @@
         if (f.type === 'file') {
           return `
             <div class="form-group" style="margin-bottom: 16px;">
-              <label class="form-label">${f.label} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
+              <label class="form-label">${escapeHtml(f.label)} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
               <div class="file-dropzone" onclick="this.querySelector('input[type=file]').click()" style="border: 2px dashed #cbd5e1; border-radius: 12px; padding: 18px; text-align: center; cursor: pointer; background: #ffffff;">
                 <i class="fa-solid fa-cloud-arrow-up upload-icon" style="font-size: 1.8rem; color: #0066cc; margin-bottom: 6px; display: block;"></i>
                 <div style="font-size: 0.88rem; font-weight: 700; color: #1e293b;">Click to browse or drop file</div>
                 <small style="color: #64748b; font-size: 0.74rem;">Supports PDF, JPG, PNG (Max 10MB)</small>
-                <input type="file" name="${f.name}" ${f.required ? 'required' : ''} accept=".pdf,image/*" style="display: none;" onchange="const f=this.files[0]; if(f){ this.previousElementSibling.textContent = 'Selected: ' + f.name; this.previousElementSibling.style.color='#03a93a'; }">
+                <input type="file" name="${escapeHtml(f.name)}" ${f.required ? 'required' : ''} accept=".pdf,image/*" style="display: none;" onchange="const f=this.files[0]; if(f){ this.previousElementSibling.textContent = 'Selected: ' + f.name; this.previousElementSibling.style.color='#03a93a'; }">
               </div>
             </div>
           `;
         }
         return `
           <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label">${f.label} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
-            <input type="${f.type || 'text'}" name="${f.name}" class="form-control" placeholder="${f.placeholder || ''}" ${f.required ? 'required' : ''}>
+            <label class="form-label">${escapeHtml(f.label)} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
+            <input type="${f.type || 'text'}" name="${escapeHtml(f.name)}" class="form-control" placeholder="${escapeHtml(f.placeholder || '')}" ${f.required ? 'required' : ''}>
           </div>
         `;
       }).join('');
@@ -1704,7 +1704,7 @@
       inputs.forEach(inp => {
         if (inp.type === 'file') {
           if (inp.files[0]) {
-            formData.append(`file_${inp.name}`, inp.files[0]);
+            formData.append(`file_${escapeHtml(inp.name)}`, inp.files[0]);
           }
         } else {
           inputObj[inp.name] = inp.value;
@@ -1902,7 +1902,7 @@
           } else if (o.order_status === 'processing') {
             statusBadge = '<span class="badge-status badge-processing"><i class="fa-solid fa-spinner fa-spin"></i> Processing</span>';
           } else if (o.order_status === 'rejected') {
-            statusBadge = `<span class="badge-status badge-rejected" title="${o.rejection_reason || ''}"><i class="fa-solid fa-circle-xmark"></i> Rejected</span>`;
+            statusBadge = `<span class="badge-status badge-rejected" title="${escapeHtml(o.rejection_reason || '')}"><i class="fa-solid fa-circle-xmark"></i> Rejected</span>`;
           } else {
             statusBadge = '<span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending Review</span>';
           }
@@ -1918,9 +1918,9 @@
             `;
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            actionResult = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 8px; text-decoration: none;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+            actionResult = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 8px; text-decoration: none;" download><i class="fa-solid fa-download"></i> Get File</a>`;
           } else if (o.rejection_reason) {
-            actionResult = `<span style="color:#dc2626; font-size:0.82rem; font-weight:600;">${o.rejection_reason}</span>`;
+            actionResult = `<span style="color:#dc2626; font-size:0.82rem; font-weight:600;">${escapeHtml(o.rejection_reason)}</span>`;
           } else {
             actionResult = '<span style="color:#94a3b8; font-size:0.82rem; font-weight:600;"><i class="fa-solid fa-clock" style="font-size:0.75rem;"></i> In Progress</span>';
           }
@@ -1948,9 +1948,9 @@
                     <i class="${avatarIcon}"></i>
                   </div>
                   <div class="service-col-info">
-                    <div class="service-col-title">${o.service ? o.service.name : 'Citizen Service'}</div>
+                    <div class="service-col-title">${escapeHtml(o.service ? o.service.name : 'Citizen Service')}</div>
                     <div class="service-col-meta">
-                      <span class="order-ref-pill">${o.order_number}</span>
+                      <span class="order-ref-pill">${escapeHtml(o.order_number)}</span>
                       <span class="badge-cat-pill ${catBadgeClass}">${catLabel}</span>
                     </div>
                   </div>
@@ -2002,7 +2002,7 @@
                   ${o.rejection_reason ? `
                   <div style="grid-column: 1/-1;">
                     <div class="drawer-item-lbl" style="color: #dc2626;">Rejection Note / Remarks</div>
-                    <div class="drawer-item-val" style="color: #b91c1c;">${o.rejection_reason}</div>
+                    <div class="drawer-item-val" style="color: #b91c1c;">${escapeHtml(o.rejection_reason)}</div>
                   </div>
                   ` : ''}
                 </div>
@@ -2036,7 +2036,7 @@
             actionResult = '<span style="color:#03a93a; font-weight:700; font-size:0.75rem;"><i class="fa-solid fa-store"></i> Ready</span>';
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            actionResult = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 12px; font-size: 0.78rem;" download><i class="fa-solid fa-download"></i> File</a>`;
+            actionResult = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 5px 12px; font-size: 0.78rem;" download><i class="fa-solid fa-download"></i> File</a>`;
           } else {
             actionResult = '<span style="color:#94a3b8; font-size:0.78rem;">In Progress</span>';
           }
@@ -2048,11 +2048,11 @@
           return `
             <div class="mobile-ledger-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(15,23,42,0.03);">
               <div class="mobile-ledger-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <span class="order-id-chip">${o.order_number}</span>
+                <span class="order-id-chip">${escapeHtml(o.order_number)}</span>
                 ${statusBadge}
               </div>
               <div class="mobile-ledger-card-body" style="margin-bottom: 12px;">
-                <div class="mobile-ledger-title" style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">${o.service ? o.service.name : 'Service'}</div>
+                <div class="mobile-ledger-title" style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">${escapeHtml(o.service ? o.service.name : 'Service')}</div>
                 <div class="mobile-ledger-meta" style="font-size: 0.78rem; color: #64748b; margin-top: 4px; display: flex; gap: 8px; align-items: center;">
                   <span><i class="fa-regular fa-clock"></i> ${formatDate(o.created_at)}</span>
                   <span>&bull;</span>

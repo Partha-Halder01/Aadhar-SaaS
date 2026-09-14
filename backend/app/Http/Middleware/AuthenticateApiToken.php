@@ -16,7 +16,8 @@ class AuthenticateApiToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->bearerToken() ?: $request->query('token');
+        // Header only: tokens in URLs leak through logs, history and Referer headers
+        $token = $request->bearerToken();
 
         if (!$token) {
             return response()->json([

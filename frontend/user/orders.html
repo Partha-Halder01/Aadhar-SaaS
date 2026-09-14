@@ -982,6 +982,7 @@
     </div>
   </div>
 
+  <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
@@ -1349,7 +1350,7 @@
             `;
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            resultAction = `<a href="${fileUrl}" target="_blank" class="btn-action-download" download title="Download Finished File"><i class="fa-solid fa-download"></i> Get File</a>`;
+            resultAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-action-download" download title="Download Finished File"><i class="fa-solid fa-download"></i> Get File</a>`;
           }
 
           return `
@@ -1362,7 +1363,7 @@
                   <div class="service-col-info">
                     <div class="service-col-title">${escapeHtml(o.service ? o.service.name : 'Citizen Service')}</div>
                     <div class="service-col-meta">
-                      <span class="order-ref-pill">#${o.order_number}</span>
+                      <span class="order-ref-pill">#${escapeHtml(o.order_number)}</span>
                       <span class="meta-divider">•</span>
                       ${catBadge}
                       <span class="meta-divider">•</span>
@@ -1441,7 +1442,7 @@
                               <span style="font-weight: 700; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;" title="${escapeHtml(cd.label)}">
                                 <i class="fa-solid ${cd.type === 'requested' ? 'fa-file-circle-plus text-success' : 'fa-file text-primary'}"></i> ${escapeHtml(cd.label)}
                               </span>
-                              <a href="${API.getDownloadUrl(o.id, 'file', true, cd.file)}" target="_blank" class="btn-action-track" style="height: 24px; padding: 0 8px; font-size: 0.72rem; text-decoration: none;">
+                              <a href="${escapeHtml(API.getDownloadUrl(o.id, 'file', true, cd.file))}" target="_blank" class="btn-action-track" style="height: 24px; padding: 0 8px; font-size: 0.72rem; text-decoration: none;">
                                 <i class="fa-solid fa-download"></i> View
                               </a>
                             </div>
@@ -1462,7 +1463,7 @@
                       <div>
                         <div class="dropdown-card-header">
                           <span><i class="fa-solid fa-receipt" style="color: #03a93a;"></i> Billing & Order Info</span>
-                          <span class="order-ref-pill">#${o.order_number}</span>
+                          <span class="order-ref-pill">#${escapeHtml(o.order_number)}</span>
                         </div>
                         <div style="font-size: 0.8rem; color: #475569; display: flex; flex-direction: column; gap: 6px;">
                           <div style="display: flex; justify-content: space-between;"><strong>Applied Date:</strong> <span>${formatDate(o.created_at)}</span></div>
@@ -1512,17 +1513,17 @@
             resultAction = '<span style="font-size:0.75rem; color:#03a93a; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-store"></i> Collect at center</span>';
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            resultAction = `<a href="${fileUrl}" target="_blank" class="btn-tiranga" style="padding: 5px 12px; font-size: 0.75rem; border-radius: 6px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+            resultAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 5px 12px; font-size: 0.75rem; border-radius: 6px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
           }
 
           return `
             <div class="mobile-ledger-card" style="${o.doc_request_status === 'pending' ? 'border: 1.5px solid #fde68a; background: #fffdfa;' : ''}">
               <div class="mobile-ledger-card-header">
-                <span class="order-id-chip">${o.order_number}</span>
+                <span class="order-id-chip">${escapeHtml(o.order_number)}</span>
                 ${statusBadge}
               </div>
               <div class="mobile-ledger-card-body">
-                <div class="mobile-ledger-title">${o.service ? o.service.name : 'Citizen Service'}</div>
+                <div class="mobile-ledger-title">${escapeHtml(o.service ? o.service.name : 'Citizen Service')}</div>
                 ${o.doc_request_status === 'pending' ? `<div style="font-size: 0.78rem; font-weight: 700; color: #b45309; margin-top: 3px;"><i class="fa-solid fa-triangle-exclamation"></i> Missing: ${escapeHtml(o.doc_request_title || 'Document')}</div>` : ''}
                 <div class="mobile-ledger-meta">
                   <span><i class="fa-regular fa-clock"></i> ${formatDate(o.created_at)}</span>
@@ -1678,7 +1679,7 @@
                   <span style="font-size: 0.7rem; background: #03a93a; color: #ffffff; padding: 2px 8px; border-radius: 20px; font-weight: 700;">FINISHED</span>
                 </div>
                 <p style="margin: 5px 0 0; font-size: 0.86rem; color: #166534; line-height: 1.5;">
-                  Your smart PVC card print is finished and safely packed. Please visit our center with Order Number <strong>(${order.order_number})</strong> to collect your physical card!
+                  Your smart PVC card print is finished and safely packed. Please visit our center with Order Number <strong>(${escapeHtml(order.order_number)})</strong> to collect your physical card!
                 </p>
               </div>
             </div>
@@ -1697,7 +1698,7 @@
                 <div style="font-size: 0.84rem; color: #166534; margin-top: 2px;">High-definition printable file prepared by our center</div>
               </div>
             </div>
-            <a href="${fileUrl}" target="_blank" class="btn-rz-green" style="padding: 9px 20px; font-size: 0.86rem; font-weight: 700; text-decoration: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;" download>
+            <a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-rz-green" style="padding: 9px 20px; font-size: 0.86rem; font-weight: 700; text-decoration: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;" download>
               <i class="fa-solid fa-download"></i> Download File
             </a>
           </div>
@@ -1854,7 +1855,7 @@
                     </div>
 
                     <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid ${isRequested ? '#dcfce7' : '#f1f5f9'};">
-                      <a href="${API.getDownloadUrl(order.id, 'file', true, cd.file)}" target="_blank" class="btn-rz-primary" style="padding: 8px 14px; font-size: 0.82rem; font-weight: 700; text-decoration: none; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; border-radius: 8px; background: ${isRequested ? 'linear-gradient(135deg, #03a93a 0%, #028a2f 100%)' : 'linear-gradient(135deg, #0066cc 0%, #004d99 100%)'}; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+                      <a href="${escapeHtml(API.getDownloadUrl(order.id, 'file', true, cd.file))}" target="_blank" class="btn-rz-primary" style="padding: 8px 14px; font-size: 0.82rem; font-weight: 700; text-decoration: none; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; border-radius: 8px; background: ${isRequested ? 'linear-gradient(135deg, #03a93a 0%, #028a2f 100%)' : 'linear-gradient(135deg, #0066cc 0%, #004d99 100%)'}; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i> Open / Download File
                       </a>
                     </div>
@@ -1946,7 +1947,7 @@
       if (!order) return;
 
       document.getElementById('submitDocOrderId').value = order.id;
-      document.getElementById('submitDocModalSubtitle').textContent = `Order #${order.order_number} (${order.service ? order.service.name : 'Service'})`;
+      document.getElementById('submitDocModalSubtitle').textContent = `Order #${escapeHtml(order.order_number)} (${escapeHtml(order.service ? order.service.name : 'Service')})`;
       document.getElementById('submitDocRequiredTitle').textContent = order.doc_request_title || 'Missing Document';
       document.getElementById('submitDocAdminMsg').textContent = order.doc_request_message || 'Please upload the missing document to avoid rejection.';
       document.getElementById('missingDocFileInput').value = '';
@@ -1959,7 +1960,7 @@
     function handleMissingFileSelected(input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
-        document.getElementById('selectedMissingFileName').textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+        document.getElementById('selectedMissingFileName').textContent = `Selected: ${escapeHtml(file.name)} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
       }
     }
 

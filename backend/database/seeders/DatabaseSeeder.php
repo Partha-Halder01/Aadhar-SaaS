@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Models\WalletTransaction;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,31 +17,40 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Create Super Admin User
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@utkalprint.com'],
-            [
+        // 1. Create Super Admin User (password from ADMIN_INITIAL_PASSWORD, otherwise random and printed once)
+        $admin = User::where('email', 'admin@utkalprint.com')->first();
+        if (!$admin) {
+            $adminPassword = env('ADMIN_INITIAL_PASSWORD') ?: Str::password(16);
+            $admin = (new User)->forceFill([
                 'name' => 'Utkal Super Admin',
+                'email' => 'admin@utkalprint.com',
                 'phone' => '9876543210',
-                'password' => Hash::make('Admin@123'),
+                'password' => Hash::make($adminPassword),
                 'role' => 'admin',
-                'wallet_balance' => 999999.00,
+                'wallet_balance' => 0,
                 'status' => 'active',
-            ]
-        );
+            ]);
+            $admin->save();
 
-        // 2. Create Demo Customer (with ₹105 balance matching screenshot)
-        $user = User::firstOrCreate(
-            ['email' => 'demo@utkalprint.com'],
-            [
+            if (!env('ADMIN_INITIAL_PASSWORD')) {
+                $this->command?->warn("Admin password for admin@utkalprint.com: {$adminPassword} (change it after first login)");
+            }
+        }
+
+        // 2. Create Demo Customer (with ₹105 balance matching screenshot); known password outside production only
+        $user = User::where('email', 'demo@utkalprint.com')->first();
+        if (!$user) {
+            $user = (new User)->forceFill([
                 'name' => 'Aritra Mondal',
+                'email' => 'demo@utkalprint.com',
                 'phone' => '9123456789',
-                'password' => Hash::make('User@123'),
+                'password' => Hash::make(app()->isProduction() ? Str::password(16) : 'User@123'),
                 'role' => 'user',
                 'wallet_balance' => 105.00,
                 'status' => 'active',
-            ]
-        );
+            ]);
+            $user->save();
+        }
 
         // Initial demo wallet transaction record
         WalletTransaction::firstOrCreate(

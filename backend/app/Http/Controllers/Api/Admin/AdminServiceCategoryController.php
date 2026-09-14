@@ -84,7 +84,7 @@ class AdminServiceCategoryController extends Controller
                 'image' => 'file|mimes:jpeg,png,jpg,gif,webp|max:5120',
             ]);
             $imagePath = $request->file('image')->store('categories', 'public');
-        } elseif ($request->filled('image') && is_string($request->input('image'))) {
+        } elseif (is_string($request->input('image')) && str_starts_with(strtolower($request->input('image')), 'https://') && filter_var($request->input('image'), FILTER_VALIDATE_URL)) {
             $imagePath = $request->input('image');
         }
 
