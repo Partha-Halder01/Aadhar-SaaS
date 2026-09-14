@@ -529,6 +529,8 @@
     let pendingRegistration = null;
     let countdownInterval = null;
     let currentDevOtp = null;
+    let otpAlreadySentFor = null;
+    let otpSentAt = 0;
 
     // Handle 6-digit box focus and input flow
     otpBoxes.forEach((box, idx) => {
@@ -655,13 +657,37 @@
         return;
       }
 
+      if (!/^[\p{L}\p{M}\s.'-]+$/u.test(name)) {
+        showToast('Name can only contain letters, spaces, dots, hyphens and apostrophes.', 'error');
+        return;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        showToast('Please enter a valid email address.', 'error');
+        return;
+      }
+
+      if (password.length < 8 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+        showToast('Password must be at least 8 characters and include at least one letter and one number.', 'error');
+        return;
+      }
+
       pendingRegistration = { name, email, phone, password, password_confirmation };
+
+      // A previously sent OTP for this same number is still valid - reuse it instead of
+      // burning another SMS and hitting the 60 second resend cooldown.
+      if (otpAlreadySentFor === phone && (Date.now() - otpSentAt) < 270000) {
+        openOtpModal(phone, null);
+        return;
+      }
 
       btnSubmit.disabled = true;
       btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending SMS OTP...';
 
       try {
         const res = await API.sendOtp({ phone, purpose: 'register' });
+        otpAlreadySentFor = phone;
+        otpSentAt = Date.now();
         showToast(res.message || 'OTP sent successfully to your mobile.', 'success');
         openOtpModal(phone, res.dev_otp);
       } catch (err) {
@@ -721,11 +747,21 @@
           window.location.href = getAppPath('user/dashboard.html');
         }, 600);
       } catch (err) {
-        showToast(err.message || 'OTP verification failed. Please try again.', 'error');
+        const msg = err.message || 'OTP verification failed. Please try again.';
+        showToast(msg, 'error');
         btnVerifyOtp.disabled = false;
         btnVerifyOtp.innerHTML = '<i class="fa-solid fa-circle-check"></i> Verify & Complete Registration';
-        otpBoxes.forEach(b => b.value = '');
-        otpBoxes[0].focus();
+
+        // Only an OTP problem should keep the user in this modal. Anything else (email already
+        // taken, weak password, invalid name) is a form problem they cannot fix from here, so
+        // send them back to the form. The OTP stays valid, so re-submitting will not resend SMS.
+        if (/otp|code/i.test(msg)) {
+          otpBoxes.forEach(b => b.value = '');
+          otpBoxes[0].focus();
+        } else {
+          closeOtpModal();
+          showToast('Fix the detail above, then press Send OTP & Verify Mobile again.', 'error');
+        }
       }
     }
   </script>
