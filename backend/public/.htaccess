@@ -5,6 +5,11 @@
 
     DirectoryIndex index.html index.php
 
+    # mod_dir would 301 /admin to /admin/ (the directory) before the clean-URL
+    # rewrite below can serve admin.html. Indexes are off, so turning the
+    # automatic trailing-slash redirect off is safe here.
+    DirectorySlash Off
+
     RewriteEngine On
 
     # Handle Authorization Header
