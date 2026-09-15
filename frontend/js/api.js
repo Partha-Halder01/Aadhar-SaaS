@@ -18,7 +18,7 @@ const STORAGE_BASE_URL = BACKEND_ORIGIN + '/storage';
 // location so every "is this page X.html" check below keeps working on both
 // /login and /login.html.
 function currentPagePath() {
-  const p = currentPagePath();
+  const p = window.location.pathname;
   if (/\.[a-z0-9]+$/i.test(p)) return p;
   if (p === '/' || p.endsWith('/')) return p + 'index.html';
   return p + '.html';
