@@ -7,10 +7,8 @@ use App\Models\Service;
 use App\Models\ServiceOrder;
 use App\Models\User;
 use App\Models\WalletTransaction;
-use App\Services\RazorpayService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
@@ -18,13 +16,6 @@ use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
-    protected RazorpayService $razorpayService;
-
-    public function __construct(RazorpayService $razorpayService)
-    {
-        $this->razorpayService = $razorpayService;
-    }
-
     /**
      * List user orders with optional category/status filter
      */
@@ -63,17 +54,18 @@ class OrderController extends Controller
     }
 
     /**
-     * Create new service order (Wallet or Direct UPI)
+     * Create new service order, paid from the user's wallet balance
      */
     public function store(Request $request)
     {
         $user = $request->user();
 
+        // Services are paid only from the prepaid wallet; money enters the wallet via Razorpay top-ups
         $request->validate([
             'service_id' => 'required|exists:services,id',
-            'payment_method' => 'required|in:wallet,direct_upi,razorpay',
-            'utr_number' => ['nullable', 'string', 'regex:/^[A-Za-z0-9]{6,30}$/'],
-            'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
+            'payment_method' => 'sometimes|in:wallet',
+        ], [
+            'payment_method.in' => 'Services can only be paid from your wallet balance. Please add money to your wallet first.',
         ]);
 
         $service = Service::where('is_active', true)->findOrFail($request->service_id);
@@ -83,199 +75,99 @@ class OrderController extends Controller
         $rawInput = json_decode($request->input('input_data', '{}'), true) ?: [];
         $inputData = [];
         foreach ($rawInput as $k => $v) {
-            // Reject any file path strings supplied via raw JSON
-            if (is_string($v) && (str_contains($v, '/') || str_contains($v, '\\') || str_starts_with($v, 'orders/') || str_starts_with($v, 'deliveries/') || str_starts_with($v, 'payments/'))) {
+            // Reject anything that looks like a storage file path (those values become downloadable attachments),
+            // while still allowing normal answers such as dates "15/09/2026" or addresses "Plot 12/B"
+            if (is_string($v) && (str_contains($v, '\\') || str_contains($v, '..') || preg_match('#^(orders|deliveries|payments|services|settings)/#i', $v) || preg_match('#^[\w\-]+(/[\w\-.]+)+\.[A-Za-z0-9]{2,5}$#', trim($v)))) {
                 continue;
             }
             $inputData[strip_tags(trim($k))] = is_string($v) ? strip_tags(trim($v)) : $v;
         }
 
-        // Validate all dynamic uploaded files (e.g. file_aadhaar_file)
+        // Validate all dynamic uploaded files (e.g. file_aadhaar_file) before anything is stored
         $allowedMimes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
         $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf'];
         $maxSizeBytes = 10 * 1024 * 1024; // 10MB
 
-        foreach ($request->allFiles() as $key => $file) {
-            if (str_starts_with($key, 'file_')) {
-                if (!$file->isValid()) {
-                    throw ValidationException::withMessages([
-                        $key => ["File upload error on field [{$key}]."]
-                    ]);
-                }
+        $uploads = array_filter($request->allFiles(), fn ($key) => str_starts_with($key, 'file_'), ARRAY_FILTER_USE_KEY);
 
-                $ext = strtolower($file->getClientOriginalExtension());
-                $mime = $file->getMimeType();
-
-                if (!in_array($ext, $allowedExtensions) || !in_array($mime, $allowedMimes)) {
-                    throw ValidationException::withMessages([
-                        $key => ["Invalid file type on [{$key}]. Only PDF, JPG, and PNG citizen documents are allowed."]
-                    ]);
-                }
-
-                if ($file->getSize() > $maxSizeBytes) {
-                    throw ValidationException::withMessages([
-                        $key => ["Uploaded file [{$key}] exceeds the maximum allowed size of 10MB."]
-                    ]);
-                }
-
-                $fieldName = substr($key, 5);
-                $path = $file->store('orders/customer_inputs', 'local');
-                $inputData[$fieldName] = $path;
+        foreach ($uploads as $key => $file) {
+            if (!$file->isValid()) {
+                throw ValidationException::withMessages([
+                    $key => ["File upload error on field [{$key}]."]
+                ]);
             }
+
+            $ext = strtolower($file->getClientOriginalExtension());
+            $mime = $file->getMimeType();
+
+            if (!in_array($ext, $allowedExtensions) || !in_array($mime, $allowedMimes)) {
+                throw ValidationException::withMessages([
+                    $key => ["Invalid file type on [{$key}]. Only PDF, JPG, and PNG citizen documents are allowed."]
+                ]);
+            }
+
+            if ($file->getSize() > $maxSizeBytes) {
+                throw ValidationException::withMessages([
+                    $key => ["Uploaded file [{$key}] exceeds the maximum allowed size of 10MB."]
+                ]);
+            }
+        }
+
+        $this->validateServiceInputs($request, $service, $inputData);
+
+        foreach ($uploads as $key => $file) {
+            $inputData[substr($key, 5)] = $file->store('orders/customer_inputs', 'local');
         }
 
         $orderNumber = 'UTK-' . date('Y') . '-' . strtoupper(Str::random(6));
 
-        // Case 1: Payment via Wallet
-        if ($request->payment_method === 'wallet') {
-            return DB::transaction(function () use ($user, $service, $amount, $inputData, $orderNumber) {
-                // Pessimistic lock on user balance to prevent race-condition double spending
-                $lockedUser = User::lockForUpdate()->findOrFail($user->id);
+        return DB::transaction(function () use ($user, $service, $amount, $inputData, $orderNumber) {
+            // Pessimistic lock on user balance to prevent race-condition double spending
+            $lockedUser = User::lockForUpdate()->findOrFail($user->id);
 
-                if ($lockedUser->wallet_balance < $amount) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Insufficient wallet balance. Please recharge your wallet or choose Direct UPI payment.'
-                    ], 422);
-                }
-
-                // Deduct wallet
-                $lockedUser->wallet_balance -= $amount;
-                $lockedUser->save();
-
-                // Create Order
-                $order = ServiceOrder::create([
-                    'order_number' => $orderNumber,
-                    'user_id' => $lockedUser->id,
-                    'service_id' => $service->id,
-                    'input_data' => $inputData,
-                    'amount' => $amount,
-                    'payment_method' => 'wallet',
-                    'payment_status' => 'approved',
-                    'order_status' => 'processing',
-                ]);
-
-                // Create Wallet Debit Ledger
-                WalletTransaction::create([
-                    'user_id' => $lockedUser->id,
-                    'type' => 'debit',
-                    'amount' => $amount,
-                    'balance_after' => $lockedUser->wallet_balance,
-                    'description' => "Payment for Order #{$orderNumber} ({$service->name})",
-                    'status' => 'approved',
-                ]);
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Order placed successfully! Amount deducted from wallet.',
-                    'data' => $order->load('service'),
-                    'wallet_balance' => (float) $lockedUser->wallet_balance,
-                ], 201);
-            });
-        }
-
-        // Case 2: Payment via Razorpay
-        if ($request->payment_method === 'razorpay') {
-            if (!$this->razorpayService->isConfigured()) {
+            if ($lockedUser->wallet_balance < $amount) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Online payment gateway is not configured yet. Please choose Wallet or Direct UPI.'
-                ], 503);
+                    'code' => 'insufficient_balance',
+                    'message' => 'Insufficient wallet balance. Please add money to your wallet to place this order.',
+                    'required_amount' => (float) $amount,
+                    'wallet_balance' => (float) $lockedUser->wallet_balance,
+                ], 422);
             }
 
+            // Deduct wallet
+            $lockedUser->wallet_balance -= $amount;
+            $lockedUser->save();
+
+            // Create Order
             $order = ServiceOrder::create([
                 'order_number' => $orderNumber,
-                'user_id' => $user->id,
+                'user_id' => $lockedUser->id,
                 'service_id' => $service->id,
                 'input_data' => $inputData,
                 'amount' => $amount,
-                'payment_method' => 'razorpay',
-                'payment_status' => 'pending',
-                'order_status' => 'pending',
+                'payment_method' => 'wallet',
+                'payment_status' => 'approved',
+                'order_status' => 'processing',
             ]);
 
-            try {
-                $rzpOrder = $this->razorpayService->createOrder(
-                    $amount,
-                    $orderNumber,
-                    [
-                        'service_order_id' => (string) $order->id,
-                        'order_number' => $orderNumber,
-                        'type' => 'service_order',
-                    ]
-                );
+            // Create Wallet Debit Ledger
+            WalletTransaction::create([
+                'user_id' => $lockedUser->id,
+                'type' => 'debit',
+                'amount' => $amount,
+                'balance_after' => $lockedUser->wallet_balance,
+                'description' => "Payment for Order #{$orderNumber} ({$service->name})",
+                'status' => 'approved',
+            ]);
 
-                $order->update(['razorpay_order_id' => $rzpOrder['id']]);
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Order initiated! Please complete payment.',
-                    'requires_payment' => true,
-                    'razorpay' => [
-                        'key_id' => $this->razorpayService->getKeyId(),
-                        'order_id' => $rzpOrder['id'],
-                        'amount' => $rzpOrder['amount'], // in paise
-                        'currency' => $rzpOrder['currency'],
-                        'name' => 'Utkal Print Portal',
-                        'description' => "Order #{$orderNumber} ({$service->name})",
-                        'prefill' => [
-                            'name' => $user->name,
-                            'email' => $user->email,
-                            'contact' => $user->phone ?? '',
-                        ],
-                    ],
-                    'data' => $order->load('service'),
-                ], 201);
-            } catch (\Exception $e) {
-                $order->delete();
-                Log::error('Razorpay service order creation failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Failed to initialize online payment. Please try again.'
-                ], 500);
-            }
-        }
-
-        // Case 3: Payment via Direct UPI
-        if ($request->filled('utr_number')) {
-            $cleanUtr = trim($request->utr_number);
-            $duplicateOrder = ServiceOrder::where('utr_number', $cleanUtr)
-                ->where('payment_status', '!=', 'rejected')
-                ->exists();
-            $duplicateTx = WalletTransaction::where('utr_number', $cleanUtr)
-                ->where('status', '!=', 'rejected')
-                ->exists();
-
-            if ($duplicateOrder || $duplicateTx) {
-                throw ValidationException::withMessages([
-                    'utr_number' => ['This UTR / Transaction Reference number has already been submitted or processed.']
-                ]);
-            }
-        }
-
-        $proofPath = null;
-        if ($request->hasFile('payment_proof')) {
-            $proofPath = $request->file('payment_proof')->store('payments/orders', 'local');
-        }
-
-        $order = ServiceOrder::create([
-            'order_number' => $orderNumber,
-            'user_id' => $user->id,
-            'service_id' => $service->id,
-            'input_data' => $inputData,
-            'amount' => $amount,
-            'payment_method' => 'direct_upi',
-            'payment_status' => 'pending',
-            'order_status' => 'pending',
-            'utr_number' => $request->utr_number ? trim($request->utr_number) : null,
-            'payment_proof_image' => $proofPath,
-        ]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Order placed successfully! Admin will verify payment and process the request.',
-            'data' => $order->load('service'),
-        ], 201);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Order placed successfully! Amount deducted from wallet.',
+                'data' => $order->load('service'),
+                'wallet_balance' => (float) $lockedUser->wallet_balance,
+            ], 201);
+        });
     }
 
     /**
@@ -384,6 +276,49 @@ class OrderController extends Controller
     public function signedDownload(Request $request, $id, $type = 'delivery')
     {
         return $this->serveOrderFile($request, ServiceOrder::findOrFail($id), $type);
+    }
+
+    /**
+     * Enforce the admin-defined input fields of a service (required answers, dropdown choices, required uploads)
+     */
+    protected function validateServiceInputs(Request $request, Service $service, array $inputData): void
+    {
+        $errors = [];
+
+        foreach ((array) $service->required_fields as $field) {
+            $name = is_array($field) ? ($field['name'] ?? null) : null;
+            if (!$name) {
+                continue;
+            }
+
+            $label = $field['label'] ?? $name;
+            $type = $field['type'] ?? 'text';
+
+            if ($type === 'file') {
+                if (!empty($field['required']) && !$request->hasFile("file_{$name}")) {
+                    $errors[$name] = ["{$label} is required."];
+                }
+                continue;
+            }
+
+            $value = $inputData[$name] ?? null;
+            $isEmpty = $value === null || (is_string($value) && trim($value) === '');
+
+            if ($isEmpty) {
+                if (!empty($field['required'])) {
+                    $errors[$name] = ["{$label} is required."];
+                }
+                continue;
+            }
+
+            if ($type === 'select' && !in_array($value, (array) ($field['options'] ?? []), true)) {
+                $errors[$name] = ["Please choose a valid option for {$label}."];
+            }
+        }
+
+        if ($errors) {
+            throw ValidationException::withMessages($errors);
+        }
     }
 
     protected function canAccessOrder(User $user, ServiceOrder $order): bool

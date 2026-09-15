@@ -48,6 +48,7 @@ class PortalApiTest extends TestCase
     {
         $user = User::where('email', 'demo@utkalprint.com')->first();
         $service = Service::where('slug', 'aadhaar-smart-card-pvc-print')->first(); // Price: 50
+        $service->update(['required_fields' => []]); // this test is about wallet debits, not the service's input form
         $initialBalance = $user->wallet_balance; // 105
 
         $token = $user->createToken('test_token')->plainTextToken;

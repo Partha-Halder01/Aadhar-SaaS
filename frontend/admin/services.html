@@ -287,6 +287,35 @@
             </div>
           </div>
 
+          <!-- Customer Input Fields Builder Card -->
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+              <div>
+                <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                  <i class="fa-solid fa-list-check" style="color: #0066cc;"></i> Customer Input Fields
+                </div>
+                <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px;">Details the user must fill in when applying for this service</div>
+              </div>
+              <button type="button" class="btn-secondary" onclick="addServiceField()" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 8px;">
+                <i class="fa-solid fa-plus"></i> Add Field
+              </button>
+            </div>
+
+            <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">Quick Add:</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;">
+              <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="addServiceField('aadhaar')"><i class="fa-solid fa-id-card"></i> Aadhaar No.</button>
+              <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="addServiceField('name')"><i class="fa-solid fa-user"></i> Full Name</button>
+              <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="addServiceField('mobile')"><i class="fa-solid fa-mobile-screen"></i> Mobile No.</button>
+              <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="addServiceField('dob')"><i class="fa-solid fa-cake-candles"></i> Date of Birth</button>
+              <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="addServiceField('epic')"><i class="fa-solid fa-person-booth"></i> EPIC / Voter ID</button>
+              <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="addServiceField('address')"><i class="fa-solid fa-location-dot"></i> Address</button>
+              <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="addServiceField('document')"><i class="fa-solid fa-file-arrow-up"></i> Document Upload</button>
+              <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;" onclick="addServiceField('photo')"><i class="fa-solid fa-camera"></i> Photo Upload</button>
+            </div>
+
+            <div id="srvFieldsList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+          </div>
+
           <!-- Corner Icon / Image Customizer Card -->
           <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 18px;">
             <div style="margin-bottom: 14px;">
@@ -1170,6 +1199,98 @@
       }
     }
 
+    // ---- Customer Input Fields Builder (per service) ----
+    const FIELD_TYPE_OPTIONS = [
+      ['text', 'Short Text'], ['number', 'Number'], ['tel', 'Mobile / Phone'], ['email', 'Email'],
+      ['date', 'Date'], ['textarea', 'Long Text'], ['select', 'Dropdown'], ['file', 'File Upload']
+    ];
+    const FIELD_PRESETS = {
+      aadhaar: { label: 'Aadhaar Number', type: 'text', placeholder: 'XXXX XXXX XXXX', required: true },
+      name: { label: 'Full Name', type: 'text', placeholder: 'Name as on document', required: true },
+      mobile: { label: 'Mobile Number', type: 'tel', placeholder: '10-digit mobile number', required: true },
+      dob: { label: 'Date of Birth', type: 'date', placeholder: '', required: false },
+      epic: { label: 'EPIC / Voter ID Number', type: 'text', placeholder: 'e.g. ABC1234567', required: true },
+      address: { label: 'Address', type: 'textarea', placeholder: 'Full address with PIN code', required: false },
+      document: { label: 'Upload Document', type: 'file', placeholder: '', required: true },
+      photo: { label: 'Upload Photo', type: 'file', placeholder: '', required: false }
+    };
+    let serviceFields = [];
+
+    function setServiceFields(fields) {
+      serviceFields = (Array.isArray(fields) ? fields : []).map(f => ({
+        name: f.name || '',
+        label: f.label || '',
+        type: f.type || 'text',
+        placeholder: f.placeholder || '',
+        required: !!f.required,
+        options: Array.isArray(f.options) ? f.options.join(', ') : (f.options || '')
+      }));
+      renderServiceFields();
+    }
+
+    function addServiceField(presetKey) {
+      const base = FIELD_PRESETS[presetKey] || { label: '', type: 'text', placeholder: '', required: true };
+      serviceFields.push({ name: '', options: '', ...base });
+      renderServiceFields();
+      const labels = document.querySelectorAll('#srvFieldsList .srv-field-label');
+      if (labels.length && !presetKey) labels[labels.length - 1].focus();
+    }
+
+    function updateServiceField(index, key, value) {
+      if (!serviceFields[index]) return;
+      serviceFields[index][key] = value;
+      if (key === 'type') renderServiceFields();
+    }
+
+    function moveServiceField(index, direction) {
+      const target = index + direction;
+      if (target < 0 || target >= serviceFields.length) return;
+      [serviceFields[index], serviceFields[target]] = [serviceFields[target], serviceFields[index]];
+      renderServiceFields();
+    }
+
+    function removeServiceField(index) {
+      serviceFields.splice(index, 1);
+      renderServiceFields();
+    }
+
+    function renderServiceFields() {
+      const list = document.getElementById('srvFieldsList');
+      if (!serviceFields.length) {
+        list.innerHTML = `
+          <div style="border: 1.5px dashed #cbd5e1; border-radius: 10px; padding: 14px; text-align: center; font-size: 0.8rem; color: #64748b;">
+            No custom fields yet — users will see the default form for this category.<br>Add fields to collect exactly what this service needs.
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = serviceFields.map((f, i) => `
+        <div style="border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 10px; padding: 10px 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
+            <span style="font-size: 0.72rem; font-weight: 800; color: #64748b; letter-spacing: 0.04em;">FIELD ${i + 1}</span>
+            <div style="display: flex; gap: 4px;">
+              <button type="button" class="btn-icon-action" title="Move up" onclick="moveServiceField(${i}, -1)" ${i === 0 ? 'disabled style="opacity:0.4;"' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+              <button type="button" class="btn-icon-action" title="Move down" onclick="moveServiceField(${i}, 1)" ${i === serviceFields.length - 1 ? 'disabled style="opacity:0.4;"' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+              <button type="button" class="btn-icon-action danger" title="Remove field" onclick="removeServiceField(${i})"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; align-items: center;">
+            <input type="text" class="form-control srv-field-label" maxlength="100" placeholder="Field label (e.g. Aadhaar Number)" value="${escapeHtml(f.label)}" oninput="updateServiceField(${i}, 'label', this.value)">
+            <select class="form-control" onchange="updateServiceField(${i}, 'type', this.value)">
+              ${FIELD_TYPE_OPTIONS.map(([value, text]) => `<option value="${value}" ${f.type === value ? 'selected' : ''}>${text}</option>`).join('')}
+            </select>
+            ${f.type === 'select' ? `
+              <input type="text" class="form-control" style="grid-column: 1 / -1;" placeholder="Dropdown options, comma separated (e.g. New, Correction, Reprint)" value="${escapeHtml(f.options)}" oninput="updateServiceField(${i}, 'options', this.value)">` : ''}
+            ${f.type === 'file' || f.type === 'date' ? '<span></span>' : `
+              <input type="text" class="form-control" maxlength="150" placeholder="Hint shown inside the box (optional)" value="${escapeHtml(f.placeholder)}" oninput="updateServiceField(${i}, 'placeholder', this.value)">`}
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; color: #334155; cursor: pointer; margin: 0;">
+              <input type="checkbox" ${f.required ? 'checked' : ''} onchange="updateServiceField(${i}, 'required', this.checked)"> Required
+            </label>
+          </div>
+        </div>
+      `).join('');
+    }
+
     function openServiceModal() {
       document.getElementById('serviceId').value = '';
       document.getElementById('serviceForm').reset();
@@ -1194,6 +1315,7 @@
       document.getElementById('srvImageBgColor').value = '#ffffff';
       document.getElementById('srvBtnText').value = '';
       document.getElementById('srvBtnIcon').value = '';
+      setServiceFields([]);
 
       switchIconType('icon');
       document.getElementById('serviceModalTitle').textContent = 'Add New Service';
@@ -1213,6 +1335,7 @@
       document.getElementById('srvDesc').value = s.description || '';
       document.getElementById('srvBtnText').value = s.btn_text || '';
       document.getElementById('srvBtnIcon').value = s.btn_icon || '';
+      setServiceFields(s.required_fields);
 
       document.getElementById('removeIconImage').value = '0';
       tempImagePreviewSrc = null;
@@ -1313,6 +1436,26 @@
       const iconImageUrl = document.getElementById('srvIconImageUrl').value.trim();
       const removeIconImage = document.getElementById('removeIconImage').value;
 
+      for (const [i, f] of serviceFields.entries()) {
+        if (!f.label.trim()) {
+          showToast(`Customer input field ${i + 1} needs a label.`, 'error');
+          document.querySelectorAll('#srvFieldsList .srv-field-label')[i]?.focus();
+          return;
+        }
+        if (f.type === 'select' && !f.options.split(',').some(o => o.trim())) {
+          showToast(`Add at least one option for the dropdown "${f.label.trim()}".`, 'error');
+          return;
+        }
+      }
+      const requiredFields = serviceFields.map(f => ({
+        name: f.name,
+        label: f.label.trim(),
+        type: f.type,
+        placeholder: f.placeholder.trim(),
+        required: f.required,
+        ...(f.type === 'select' ? { options: f.options.split(',').map(o => o.trim()).filter(Boolean) } : {})
+      }));
+
       btn.disabled = true;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
@@ -1329,6 +1472,7 @@
         formData.append('icon_color', iconColor);
         formData.append('btn_text', btnText);
         formData.append('btn_icon', btnIcon);
+        formData.append('required_fields', JSON.stringify(requiredFields));
 
         const fileInput = document.getElementById('srvIconFile');
         if (fileInput && fileInput.files[0]) {

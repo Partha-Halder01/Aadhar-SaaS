@@ -2,14 +2,23 @@
  * Utkal Print Portal - Auth Guard, Mobile Navigation & Page Decorator
  */
 
+// Pages are served without the .html extension in production. Normalise the
+// location so every "is this page X.html" check below keeps working on both
+// /login and /login.html.
+function currentPagePath() {
+  const p = currentPagePath();
+  if (/\.[a-z0-9]+$/i.test(p)) return p;
+  if (p === '/' || p.endsWith('/')) return p + 'index.html';
+  return p + '.html';
+}
 function getAppPath(path) {
-  const isFrontendDir = window.location.pathname.includes('/frontend/');
+  const isFrontendDir = currentPagePath().includes('/frontend/');
   const clean = path.startsWith('/') ? path.substring(1) : path;
   return isFrontendDir ? `/frontend/${clean}` : `/${clean}`;
 }
 
 (function initAuthGuard() {
-  const currentPath = window.location.pathname;
+  const currentPath = currentPagePath();
   const isAuthPage = currentPath.includes('login.html') || currentPath.includes('admin.html') || currentPath.includes('register.html');
   const isUserPage = currentPath.includes('/user/');
   const isAdminPage = currentPath.includes('/admin/') && !currentPath.includes('/admin/login.html') && !currentPath.includes('/admin/index.html');
@@ -258,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
       link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
         if (href) {
-          const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+          const currentPage = currentPagePath().split('/').pop() || 'dashboard.html';
           if (href === currentPage || href === './' + currentPage) {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -276,9 +285,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Inject Mobile Bottom Navigation for User Portal
-  const isUserPortal = window.location.pathname.includes('/user/');
+  const isUserPortal = currentPagePath().includes('/user/');
   if (isUserPortal && !document.querySelector('.mobile-bottom-bar')) {
-    const currentPath = window.location.pathname;
+    const currentPath = currentPagePath();
     const isDashboard = currentPath.includes('dashboard.html');
     const isServices = currentPath.includes('services.html') || currentPath.includes('print-list.html') || currentPath.includes('pan-find.html');
     const isOrders = currentPath.includes('orders.html');
@@ -313,9 +322,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Inject Mobile Bottom Navigation for Admin Portal
-  const isAdminPortal = window.location.pathname.includes('/admin/');
+  const isAdminPortal = currentPagePath().includes('/admin/');
   if (isAdminPortal && !document.querySelector('.mobile-bottom-bar')) {
-    const currentPath = window.location.pathname;
+    const currentPath = currentPagePath();
     const isDashboard = currentPath.includes('dashboard.html');
     const isOrders = currentPath.includes('orders.html');
     const isWalletReq = currentPath.includes('wallet-requests.html');

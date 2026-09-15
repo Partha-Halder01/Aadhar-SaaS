@@ -240,7 +240,7 @@
             </div>
             <div class="wallet-card-action">
               <button onclick="openRechargeModal()" class="wallet-recharge-cta-btn">
-                <i class="fa-solid fa-qrcode"></i> Recharge Wallet via UPI
+                <i class="fa-solid fa-bolt"></i> Add Money to Wallet
               </button>
             </div>
           </div>
@@ -255,13 +255,13 @@
               </div>
               <div>
                 <h2 class="topup-title">Instant Wallet Top-Up</h2>
-                <p class="topup-subtitle">Select a preset or enter a custom amount to generate verified UPI QR code</p>
+                <p class="topup-subtitle">Select a preset or enter a custom amount and pay securely via Razorpay</p>
               </div>
             </div>
             <div class="topup-header-badges">
-              <span class="topup-trust-tag"><i class="fa-solid fa-shield-check"></i> 0% Fee</span>
-              <span class="topup-trust-tag"><i class="fa-solid fa-clock-rotate-left"></i> ~2 Min Credit</span>
-              <span class="topup-live-badge"><i class="fa-solid fa-bolt"></i> Instant QR</span>
+              <span class="topup-trust-tag"><i class="fa-solid fa-shield-check"></i> Secure</span>
+              <span class="topup-trust-tag"><i class="fa-solid fa-clock-rotate-left"></i> Instant Credit</span>
+              <span class="topup-live-badge"><i class="fa-solid fa-bolt"></i> Razorpay</span>
             </div>
           </div>
 
@@ -297,9 +297,6 @@
                   <span><i class="fa-solid fa-bolt"></i> Pay Online</span>
                   <span class="cta-amount-pill" id="topupCtaAmountPreview">₹500</span>
                   <i class="fa-solid fa-arrow-right"></i>
-                </button>
-                <button type="button" class="btn-secondary" id="btnQuickTopupManual" onclick="proceedQuickTopup()" style="padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 0.86rem; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;" title="Scan UPI QR & submit UTR">
-                  <i class="fa-solid fa-qrcode"></i> UPI QR
                 </button>
               </div>
 
@@ -349,8 +346,8 @@
                   <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div class="benefit-text-box">
-                  <div class="benefit-highlight">Direct UTR Reconciliation</div>
-                  <div class="benefit-desc">Scan QR on next step & enter 12-digit UTR for automatic ledger credit</div>
+                  <div class="benefit-highlight">Secure Razorpay Checkout</div>
+                  <div class="benefit-desc">Pay with UPI, Cards or NetBanking — balance is credited automatically once payment succeeds</div>
                 </div>
               </div>
 
@@ -428,8 +425,8 @@
             <i class="fa-solid fa-wallet"></i>
           </div>
           <div>
-            <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color: #0f172a; font-family: 'Outfit', sans-serif;">Recharge Wallet via UPI</h3>
-            <span style="color: #03a93a; font-weight: 700; font-size: 0.84rem;">Zero processing fee • Verified in ~2 mins</span>
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color: #0f172a; font-family: 'Outfit', sans-serif;">Add Money to Wallet</h3>
+            <span style="color: #03a93a; font-weight: 700; font-size: 0.84rem;">Secure Razorpay checkout • Instant credit</span>
           </div>
         </div>
         <button type="button" onclick="closeRechargeModal()" class="btn-icon-action" title="Close" style="border-radius: 50%;">
@@ -439,63 +436,24 @@
 
       <form id="rechargeWalletForm">
         <div class="modal-body-custom" style="padding: 24px 26px;">
-          <!-- Instant Razorpay Option -->
-          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-            <div>
-              <strong style="color: #0066cc; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Instant Online Payment (Razorpay)</strong>
-              <span style="font-size: 0.78rem; color: #475569;">Auto-credit in seconds via UPI, Cards, NetBanking</span>
-            </div>
-            <button type="button" onclick="payWalletViaRazorpay(document.getElementById('rechargeAmount').value)" class="btn-rz-primary" style="padding: 8px 16px; font-size: 0.84rem; width: auto; background: #0066cc;">
-              <i class="fa-solid fa-bolt"></i> Pay via Razorpay
-            </button>
-          </div>
-
-          <div style="text-align: center; margin: 12px 0 16px; font-size: 0.8rem; color: #94a3b8; font-weight: 700;">
-            <span>— OR PAY MANUALLY VIA UPI QR & SUBMIT UTR —</span>
-          </div>
-
-          <!-- Step 1: QR Display -->
-          <div class="qr-preview-box" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 18px;">
-            <img id="modalQrImage" src="" alt="Admin UPI QR" class="qr-image-display" style="width: 170px; height: 170px; border-radius: 12px; border: 1px solid #cbd5e1; margin: 0 auto 12px; display: block;">
-            <div style="font-size: 0.98rem; font-weight: 800; color: #0f172a;" id="modalUpiName">Utkal Print Portal</div>
-            <div style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; border: 1px solid #e2e8f0; padding: 5px 14px; border-radius: 9999px; margin-top: 8px;">
-              <span style="font-size: 0.84rem; color: #64748b;">UPI ID:</span>
-              <strong id="modalUpiId" style="color: #0066cc; font-family: 'JetBrains Mono', monospace; font-size: 0.92rem;">utkalprint@upi</strong>
-              <button type="button" onclick="copyUpiId()" style="background: none; border: none; color: #0066cc; cursor: pointer; font-size: 0.92rem;" title="Copy UPI ID">
-                <i class="fa-solid fa-copy"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- Step 2: Recharge Inputs -->
           <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label" for="rechargeAmount">Amount Paid (₹) <span style="color: #ef4444;">*</span></label>
+            <label class="form-label" for="rechargeAmount">Amount to Add (₹) <span style="color: #ef4444;">*</span></label>
             <div style="position: relative;">
               <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-weight: 800; color: #64748b;">₹</span>
-              <input type="number" id="rechargeAmount" class="form-control" placeholder="500" min="10" required style="padding-left: 32px; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.1rem; color: #0f172a;">
+              <input type="number" id="rechargeAmount" class="form-control" placeholder="500" value="500" min="10" max="50000" required style="padding-left: 32px; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.1rem; color: #0f172a;">
             </div>
           </div>
 
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label class="form-label" for="rechargeUtr">12-Digit UTR / UPI Reference Number <span style="color: #ef4444;">*</span></label>
-            <input type="text" id="rechargeUtr" class="form-control" placeholder="e.g. 423987123456" required style="font-family: 'JetBrains Mono', monospace;">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="rechargeProof">Upload Payment Proof / Screenshot <span style="color: #ef4444;">*</span></label>
-            <div class="file-dropzone" onclick="this.querySelector('input[type=file]').click()" style="border: 2px dashed #bfdbfe; border-radius: 14px; padding: 22px 16px; background: #eff6ff; text-align: center; cursor: pointer; transition: all 0.2s ease;">
-              <i class="fa-solid fa-cloud-arrow-up upload-icon" style="font-size: 1.8rem; color: #0066cc; margin-bottom: 6px;"></i>
-              <div style="font-size: 0.88rem; font-weight: 700; color: #0f172a;">Click to browse or drop payment screenshot</div>
-              <small style="color: #64748b;">Supports JPG, PNG, PDF (Max 10MB)</small>
-              <input type="file" id="rechargeProof" required accept="image/*,.pdf" style="display:none;" onchange="const f=this.files[0]; if(f){ this.previousElementSibling.textContent = 'Selected: ' + f.name; this.previousElementSibling.style.color='#03a93a'; }">
-            </div>
+          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid fa-shield-halved" style="color: #0066cc; font-size: 1.2rem;"></i>
+            <span style="font-size: 0.8rem; color: #475569;">Pay with UPI, Cards or NetBanking. Your wallet is credited automatically after a successful payment.</span>
           </div>
         </div>
 
         <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 18px 26px;">
           <button type="button" onclick="closeRechargeModal()" class="btn-rz-secondary">Cancel</button>
           <button type="submit" id="btnSubmitRecharge" class="btn-rz-primary" style="width: auto; padding: 11px 24px;">
-            <i class="fa-solid fa-paper-plane"></i> Submit Top-up Request
+            <i class="fa-solid fa-bolt"></i> Pay via Razorpay
           </button>
         </div>
       </form>
@@ -506,8 +464,6 @@
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    let publicSettings = {};
-
     // Instant Zero-Lag Hydration (0ms)
     try {
       const cachedTxs = API.cache.get('wallet_txs');
@@ -518,7 +474,7 @@
     } catch (e) {}
 
     document.addEventListener('DOMContentLoaded', () => {
-      Promise.all([loadWalletSettings(), loadWalletHistory()]);
+      loadWalletHistory();
 
       // Initialize Top-Up form events
       const quickInput = document.getElementById('quickTopupInput');
@@ -529,7 +485,7 @@
         quickInput.addEventListener('keydown', (e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
-            proceedQuickTopup();
+            payWalletViaRazorpay();
           }
         });
       }
@@ -691,35 +647,6 @@
       }
     }
 
-    function proceedQuickTopup() {
-      const input = document.getElementById('quickTopupInput');
-      let amount = parseInt(input?.value, 10);
-      if (!amount || isNaN(amount) || amount < 10) {
-        amount = 500;
-        if (input) input.value = 500;
-      }
-      openRechargeModal(amount);
-    }
-
-    async function loadWalletSettings() {
-      try {
-        publicSettings = await API.getPublicSettings();
-        if (publicSettings.upi_id) {
-          document.getElementById('modalUpiId').textContent = publicSettings.upi_id;
-        }
-        if (publicSettings.upi_name) {
-          document.getElementById('modalUpiName').textContent = publicSettings.upi_name;
-        }
-        if (publicSettings.qr_code) {
-          document.getElementById('modalQrImage').src = `${STORAGE_BASE_URL}/${publicSettings.qr_code}`;
-        } else {
-          document.getElementById('modalQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=' + encodeURIComponent(publicSettings.upi_id || 'utkalprint@upi');
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
     async function loadWalletHistory() {
       try {
         const res = await API.getWalletTransactions();
@@ -862,44 +789,9 @@
       document.getElementById('rechargeWalletForm').reset();
     }
 
-    function copyUpiId() {
-      const upiId = document.getElementById('modalUpiId').textContent;
-      navigator.clipboard.writeText(upiId).then(() => {
-        showToast('UPI ID copied to clipboard!', 'success');
-      });
-    }
-
-    document.getElementById('rechargeWalletForm').addEventListener('submit', async (e) => {
+    document.getElementById('rechargeWalletForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      const amount = document.getElementById('rechargeAmount').value;
-      const utr = document.getElementById('rechargeUtr').value.trim();
-      const proof = document.getElementById('rechargeProof').files[0];
-      const btn = document.getElementById('btnSubmitRecharge');
-
-      if (!amount || !utr || !proof) {
-        showToast('Please fill all fields and upload payment proof', 'error');
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('amount', amount);
-      formData.append('utr_number', utr);
-      formData.append('payment_proof', proof);
-
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
-
-      try {
-        const res = await API.requestWalletTopup(formData);
-        showToast(res.message || 'Top-up request submitted! Admin will verify soon.', 'success');
-        closeRechargeModal();
-        loadWalletHistory();
-      } catch (err) {
-        showToast(err.message || 'Failed to submit top-up request', 'error');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Top-up Request';
-      }
+      payWalletViaRazorpay(document.getElementById('rechargeAmount').value);
     });
   </script>
 </body>

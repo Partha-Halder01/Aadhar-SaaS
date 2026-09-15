@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 
 class WalletController extends Controller
 {
@@ -26,58 +24,5 @@ class WalletController extends Controller
             'data' => $transactions,
             'transactions' => $transactions,
         ]);
-    }
-
-    /**
-     * Submit wallet recharge request with UPI proof
-     */
-    public function recharge(Request $request)
-    {
-        $user = $request->user();
-
-        $request->validate([
-            'amount' => 'required|numeric|min:10|max:50000',
-            'utr_number' => ['required', 'string', 'regex:/^[A-Za-z0-9]{6,30}$/'],
-            'payment_proof' => 'required|file|mimes:jpeg,png,jpg,pdf|max:5120',
-        ]);
-
-        $cleanUtr = trim($request->utr_number);
-
-        $tx = DB::transaction(function () use ($user, $cleanUtr, $request) {
-            // Pessimistic check inside transaction to prevent double-spend race conditions
-            $duplicateTx = WalletTransaction::where('utr_number', $cleanUtr)
-                ->where('status', '!=', 'rejected')
-                ->lockForUpdate()
-                ->exists();
-            $duplicateOrder = \App\Models\ServiceOrder::where('utr_number', $cleanUtr)
-                ->where('payment_status', '!=', 'rejected')
-                ->lockForUpdate()
-                ->exists();
-
-            if ($duplicateTx || $duplicateOrder) {
-                throw ValidationException::withMessages([
-                    'utr_number' => ['This UTR / Transaction Reference number has already been submitted or processed.']
-                ]);
-            }
-
-            $proofPath = $request->file('payment_proof')->store('payments/wallet', 'local');
-
-            return WalletTransaction::create([
-                'user_id' => $user->id,
-                'type' => 'credit',
-                'amount' => $request->amount,
-                'balance_after' => $user->wallet_balance, // balance unchanged until approved
-                'description' => 'Wallet Top-up (Pending Verification)',
-                'proof_image' => $proofPath,
-                'utr_number' => $cleanUtr,
-                'status' => 'pending',
-            ]);
-        });
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Wallet recharge request submitted successfully! Admin will verify and credit your balance.',
-            'data' => $tx,
-        ], 201);
     }
 }

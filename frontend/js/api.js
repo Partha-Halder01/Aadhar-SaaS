@@ -14,8 +14,17 @@ const BACKEND_ORIGIN = LOCAL_HOSTS.includes(window.location.hostname)
 const API_BASE_URL = BACKEND_ORIGIN + '/api';
 const STORAGE_BASE_URL = BACKEND_ORIGIN + '/storage';
 
+// Pages are served without the .html extension in production. Normalise the
+// location so every "is this page X.html" check below keeps working on both
+// /login and /login.html.
+function currentPagePath() {
+  const p = currentPagePath();
+  if (/\.[a-z0-9]+$/i.test(p)) return p;
+  if (p === '/' || p.endsWith('/')) return p + 'index.html';
+  return p + '.html';
+}
 function getAppPath(path) {
-  const isFrontendDir = window.location.pathname.includes('/frontend/');
+  const isFrontendDir = currentPagePath().includes('/frontend/');
   const clean = path.startsWith('/') ? path.substring(1) : path;
   return isFrontendDir ? `/frontend/${clean}` : `/${clean}`;
 }
@@ -158,9 +167,9 @@ const API = {
 
       if (!response.ok) {
         if (response.status === 401 && !endpoint.includes('/login')) {
-          const isAdmin = window.location.pathname.includes('/admin/');
+          const isAdmin = currentPagePath().includes('/admin/');
           this.clearAuth();
-          if (!window.location.pathname.includes('login.html') && !window.location.pathname.includes('admin.html')) {
+          if (!currentPagePath().includes('login.html') && !currentPagePath().includes('admin.html')) {
             window.location.href = getAppPath(isAdmin ? 'admin.html' : 'login.html');
           }
         }
@@ -229,7 +238,7 @@ const API = {
   },
 
   async logout() {
-    const isAdmin = window.location.pathname.includes('/admin/');
+    const isAdmin = currentPagePath().includes('/admin/');
     try {
       await this.request('/auth/logout', { method: 'POST' });
     } catch (e) { }
@@ -344,21 +353,7 @@ const API = {
     return await this.getWallet();
   },
 
-  async rechargeWallet(formData) {
-    const res = await this.request('/wallet/recharge', {
-      method: 'POST',
-      body: formData
-    });
-    this.cache.invalidate('wallet');
-    this.cache.invalidate('wallet_txs');
-    return res;
-  },
-
-  async requestWalletTopup(formData) {
-    return await this.rechargeWallet(formData);
-  },
-
-  // Razorpay Online Payments
+  // Razorpay Online Payments (the only way to add money to the wallet)
   async createRazorpayWalletOrder(amount) {
     return await this.request('/payment/razorpay/create-wallet-order', {
       method: 'POST',
@@ -700,6 +695,45 @@ function formatDate(dateStr) {
 }
 
 // Utility: Escape HTML string to prevent XSS and rendering breakages
+// Utility: Render one admin-defined service input field inside a customer order form
+function renderServiceFormField(f) {
+  const name = escapeHtml(f.name);
+  const req = f.required ? 'required' : '';
+  const placeholder = escapeHtml(f.placeholder || '');
+  const label = `<label class="form-label">${escapeHtml(f.label)} ${f.required ? '<span style="color:red">*</span>' : ''}</label>`;
+  let control;
+
+  switch (f.type) {
+    case 'file':
+      // The real input stays in the layout (visually hidden) so the browser can point at it when a required upload is missing
+      control = `
+        <div class="file-dropzone" onclick="this.querySelector('input[type=file]').click()" style="position: relative; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 18px; text-align: center; cursor: pointer; background: #ffffff;">
+          <i class="fa-solid fa-cloud-arrow-up upload-icon" style="font-size: 1.8rem; color: #0066cc; margin-bottom: 6px; display: block;"></i>
+          <div style="font-size: 0.88rem; font-weight: 700; color: #1e293b;">Click to browse or drop file</div>
+          <small style="color: #64748b; font-size: 0.74rem;">Supports PDF, JPG, PNG (Max 10MB)</small>
+          <input type="file" name="${name}" ${req} accept=".pdf,image/*" style="position: absolute; left: 50%; bottom: 0; width: 1px; height: 1px; opacity: 0;" onchange="const f=this.files[0]; if(f){ this.previousElementSibling.textContent = 'Selected: ' + f.name; this.previousElementSibling.style.color='#03a93a'; }">
+        </div>`;
+      break;
+    case 'textarea':
+      control = `<textarea name="${name}" class="form-control" rows="3" placeholder="${placeholder}" ${req}></textarea>`;
+      break;
+    case 'select':
+      control = `
+        <select name="${name}" class="form-control" ${req}>
+          <option value="">${placeholder || 'Select an option'}</option>
+          ${(f.options || []).map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('')}
+        </select>`;
+      break;
+    default: {
+      const type = ['text', 'number', 'tel', 'email', 'date'].includes(f.type) ? f.type : 'text';
+      const extra = type === 'tel' ? 'inputmode="numeric" maxlength="15"' : '';
+      control = `<input type="${type}" name="${name}" class="form-control" placeholder="${placeholder}" ${extra} ${req}>`;
+    }
+  }
+
+  return `<div class="form-group" style="margin-bottom: 16px;">${label}${control}</div>`;
+}
+
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)

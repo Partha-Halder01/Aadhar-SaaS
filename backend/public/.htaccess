@@ -3,6 +3,8 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    DirectoryIndex index.html index.php
+
     RewriteEngine On
 
     # Handle Authorization Header
@@ -12,6 +14,24 @@
     # Handle X-XSRF-Token Header
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # --- Clean URLs -------------------------------------------------------
+    # Tests THE_REQUEST (the original request line) rather than the rewritten
+    # path, so the internal rewrite below can never bounce back through here.
+
+    # /index.html -> /   and   /user/index.html -> /user/
+    RewriteCond %{THE_REQUEST} \s/+(.*?)index\.html[\s?] [NC]
+    RewriteRule ^ /%1 [R=301,L,NE]
+
+    # /login.html -> /login
+    RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+    RewriteRule ^ /%1 [R=301,L,NE]
+
+    # Serve the matching .html file for an extensionless URL.
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}\.html -f
+    RewriteRule ^(.+?)/?$ $1.html [L]
+    # ----------------------------------------------------------------------
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d

@@ -304,48 +304,21 @@
 
           <!-- Payment Mode Selection -->
           <div style="margin-top: 22px; border-top: 1px solid #f1f5f9; padding-top: 20px;">
-            <label class="form-label" style="font-weight: 800; font-size: 0.88rem; color: #0f172a; margin-bottom: 12px; display: block;">Select Payment Method</label>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">
-              <label style="border: 2px solid #0066cc; background: #eff6ff; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s ease;" id="labelPayWallet">
-                <input type="radio" name="payment_method" value="wallet" checked onchange="togglePaymentFields()">
+            <label class="form-label" style="font-weight: 800; font-size: 0.88rem; color: #0f172a; margin-bottom: 12px; display: block;">Payment Method</label>
+
+            <div style="border: 2px solid #0066cc; background: #eff6ff; border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fa-solid fa-wallet" style="font-size: 1.3rem; color: #0066cc;"></i>
                 <div>
                   <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">Prepaid Wallet</div>
-                  <small style="color: #03a93a; font-weight: 800;" class="user-wallet-display">₹0 Balance</small>
+                  <small style="color: #03a93a; font-weight: 800;"><span class="user-wallet-display">₹0</span> available</small>
                 </div>
-              </label>
-
-              <label style="border: 2px solid #e2e8f0; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s ease;" id="labelPayDirect">
-                <input type="radio" name="payment_method" value="direct_upi" onchange="togglePaymentFields()">
-                <div>
-                  <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">UPI QR Scan</div>
-                  <small style="color: #64748b; font-weight: 600;">Instant QR Pay</small>
-                </div>
-              </label>
+              </div>
+              <a href="wallet.html?recharge=true" style="font-size: 0.8rem; font-weight: 700; color: #0066cc; text-decoration: none; white-space: nowrap;">
+                <i class="fa-solid fa-plus"></i> Add Money
+              </a>
             </div>
-
-            <!-- Direct UPI Details Box -->
-            <div id="directUpiBox" style="display: none;">
-              <div class="qr-preview-box" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 16px;">
-                <img id="adminQrImage" src="" alt="Admin UPI QR" class="qr-image-display" style="width: 170px; height: 170px; border-radius: 12px; border: 1px solid #cbd5e1; margin: 0 auto 12px; display: block;">
-                <div style="font-size: 0.98rem; font-weight: 800; color: #0f172a;" id="adminUpiName">Utkal Print Portal</div>
-                <div style="font-size: 0.86rem; color: #64748b; margin-top: 6px;">
-                  Payee UPI: <strong id="adminUpiId" style="color: #0066cc; font-family: 'JetBrains Mono', monospace;">utkalprint@upi</strong>
-                </div>
-              </div>
-
-              <!-- UTR Number -->
-              <div class="form-group" style="margin-bottom: 14px;">
-                <label class="form-label" for="orderUtr">12-Digit UTR / UPI Reference Number <span style="color: #ef4444;">*</span></label>
-                <input type="text" id="orderUtr" class="form-control" placeholder="e.g. 423987123456" style="font-family: 'JetBrains Mono', monospace;">
-              </div>
-
-              <!-- Payment Screenshot -->
-              <div class="form-group">
-                <label class="form-label" for="orderProof">Upload Payment Proof / Screenshot <span style="color: #ef4444;">*</span></label>
-                <input type="file" id="orderProof" class="form-control" accept="image/*,.pdf">
-              </div>
-            </div>
+            <small style="display: block; margin-top: 8px; color: #64748b; font-size: 0.76rem;">The service fee is deducted from your wallet balance.</small>
           </div>
         </div>
 
@@ -398,13 +371,6 @@
         ]);
 
         publicSettings = settings || {};
-        if (publicSettings.upi_id) document.getElementById('adminUpiId').textContent = publicSettings.upi_id;
-        if (publicSettings.upi_name) document.getElementById('adminUpiName').textContent = publicSettings.upi_name;
-        if (publicSettings.qr_code) {
-          document.getElementById('adminQrImage').src = `${STORAGE_BASE_URL}/${publicSettings.qr_code}`;
-        } else {
-          document.getElementById('adminQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=' + encodeURIComponent(publicSettings.upi_id || 'utkalprint@upi');
-        }
 
         panServices = res.data || [];
         try {
@@ -633,12 +599,7 @@
         { name: 'dob', label: 'Date of Birth (DD/MM/YYYY)', type: 'text', placeholder: 'DD/MM/YYYY', required: false }
       ];
 
-      container.innerHTML = fields.map(f => `
-        <div class="form-group" style="margin-bottom:16px;">
-          <label class="form-label">${escapeHtml(f.label)} ${f.required ? '<span style="color:red">*</span>' : ''}</label>
-          <input type="${f.type || 'text'}" name="${escapeHtml(f.name)}" class="form-control" placeholder="${escapeHtml(f.placeholder || '')}" ${f.required ? 'required' : ''}>
-        </div>
-      `).join('');
+      container.innerHTML = fields.map(renderServiceFormField).join('');
 
       document.getElementById('applyModal').classList.add('active');
     }
@@ -646,56 +607,17 @@
     function closeApplyModal() {
       document.getElementById('applyModal').classList.remove('active');
       document.getElementById('applyServiceForm').reset();
-      togglePaymentFields();
     }
 
-    function togglePaymentFields() {
-      const method = document.querySelector('input[name="payment_method"]:checked').value;
-      const directBox = document.getElementById('directUpiBox');
-      const utrInput = document.getElementById('orderUtr');
-      const proofInput = document.getElementById('orderProof');
-      const walletLabel = document.getElementById('labelPayWallet');
-      const directLabel = document.getElementById('labelPayDirect');
-
-      if (method === 'direct_upi') {
-        directBox.style.display = 'block';
-        utrInput.required = true;
-        proofInput.required = true;
-        directLabel.style.borderColor = '#0066cc';
-        directLabel.style.background = '#eff6ff';
-        walletLabel.style.borderColor = '#e2e8f0';
-        walletLabel.style.background = 'transparent';
-      } else {
-        directBox.style.display = 'none';
-        utrInput.required = false;
-        proofInput.required = false;
-        walletLabel.style.borderColor = '#0066cc';
-        walletLabel.style.background = '#eff6ff';
-        directLabel.style.borderColor = '#e2e8f0';
-        directLabel.style.background = 'transparent';
-      }
-    }
-
+    // Submit PAN search (always paid from wallet balance)
     document.getElementById('applyServiceForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const serviceId = document.getElementById('modalServiceId').value;
-      const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
       const btn = document.getElementById('btnSubmitOrder');
 
       const formData = new FormData();
       formData.append('service_id', serviceId);
-      formData.append('payment_method', paymentMethod);
-
-      if (paymentMethod === 'direct_upi') {
-        const utr = document.getElementById('orderUtr').value.trim();
-        const proof = document.getElementById('orderProof').files[0];
-        if (!utr || !proof) {
-          showToast('Please provide UTR number and payment screenshot', 'error');
-          return;
-        }
-        formData.append('utr_number', utr);
-        formData.append('payment_proof', proof);
-      }
+      formData.append('payment_method', 'wallet');
 
       const dynamicContainer = document.getElementById('dynamicFormFields');
       const inputs = dynamicContainer.querySelectorAll('input, select, textarea');
@@ -720,14 +642,15 @@
         showToast(res.message || 'PAN search submitted successfully!', 'success');
         closeApplyModal();
         loadPanOrders();
-        
-        if (paymentMethod === 'wallet') {
-          API.getProfile().then(user => {
-            document.querySelectorAll('.user-wallet-display').forEach(el => el.textContent = formatINR(user.wallet_balance || 0));
-          });
-        }
+
+        API.getProfile().then(user => {
+          document.querySelectorAll('.user-wallet-display').forEach(el => el.textContent = formatINR(user.wallet_balance || 0));
+        });
       } catch (err) {
         showToast(err.message || 'Failed to submit search request', 'error');
+        if (/insufficient wallet balance/i.test(err.message || '')) {
+          setTimeout(() => { window.location.href = 'wallet.html?recharge=true'; }, 1800);
+        }
       } finally {
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Submit PAN Search';

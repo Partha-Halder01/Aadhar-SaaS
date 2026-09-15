@@ -99,49 +99,52 @@ class RazorpayPaymentTest extends TestCase
             ->assertJsonValidationErrors(['amount']);
     }
 
-    public function test_service_order_calculates_price_strictly_from_database(): void
+    public function test_service_order_cannot_be_paid_directly_via_razorpay(): void
     {
         $service = Service::where('slug', 'aadhaar-smart-card-pvc-print')->first() ?: Service::first();
-        $actualDbPrice = (float) $service->price;
-
-        $mockRazorpay = Mockery::mock(RazorpayService::class);
-        $mockRazorpay->shouldReceive('isConfigured')->andReturn(true);
-        $mockRazorpay->shouldReceive('getKeyId')->andReturn('rzp_test_dummy_key_123');
-        $mockRazorpay->shouldReceive('createOrder')
-            ->once()
-            ->with($actualDbPrice, Mockery::type('string'), Mockery::type('array'))
-            ->andReturn([
-                'id' => 'order_srv_test_002',
-                'amount' => (int) round($actualDbPrice * 100),
-                'currency' => 'INR',
-            ]);
-
-        $this->app->instance(RazorpayService::class, $mockRazorpay);
 
         $response = $this->withHeader('Authorization', 'Bearer ' . $this->token)
             ->postJson('/api/orders', [
                 'service_id' => $service->id,
                 'payment_method' => 'razorpay',
+                'input_data' => json_encode(['aadhaar_number' => '123456789012']),
+            ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['payment_method']);
+
+        $this->assertDatabaseMissing('service_orders', [
+            'user_id' => $this->user->id,
+            'payment_method' => 'razorpay',
+        ]);
+    }
+
+    public function test_service_order_calculates_price_strictly_from_database(): void
+    {
+        $service = Service::where('slug', 'aadhaar-smart-card-pvc-print')->first() ?: Service::first();
+        $actualDbPrice = (float) $service->price;
+        $service->update(['required_fields' => []]);
+        $this->user->forceFill(['wallet_balance' => $actualDbPrice + 100])->save();
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $this->token)
+            ->postJson('/api/orders', [
+                'service_id' => $service->id,
+                'payment_method' => 'wallet',
                 'amount' => 1, // Tampered client-side amount (must be ignored)
                 'input_data' => json_encode(['aadhaar_number' => '123456789012']),
             ]);
 
-        $response->assertStatus(201)
-            ->assertJsonFragment([
-                'status' => 'success',
-                'requires_payment' => true,
-                'order_id' => 'order_srv_test_002',
-            ]);
+        $response->assertStatus(201);
 
         // Verify that database record has actual service price, NOT the tampered amount
         $this->assertDatabaseHas('service_orders', [
             'user_id' => $this->user->id,
             'service_id' => $service->id,
             'amount' => $actualDbPrice,
-            'payment_method' => 'razorpay',
-            'payment_status' => 'pending',
-            'razorpay_order_id' => 'order_srv_test_002',
+            'payment_method' => 'wallet',
+            'payment_status' => 'approved',
         ]);
+        $this->assertEquals(100.0, (float) $this->user->fresh()->wallet_balance);
     }
 
     public function test_payment_verification_with_valid_signature_credits_wallet_atomically(): void

@@ -3,6 +3,49 @@
    Designed for Indian Digital Retailers, CSC Centers & Cyber Cafes
    ============================================================ */
 
+/* ------------------------------------------------------------
+   Mobile tap feedback
+   Mobile browsers (Chrome on Android, Safari on iOS) paint a blue
+   box over anything tapped. Remove it everywhere, and hide the focus
+   ring for touch/mouse taps while keeping it for keyboard users.
+   ------------------------------------------------------------ */
+html,
+*,
+*::before,
+*::after {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a,
+button,
+label,
+summary,
+input,
+select,
+textarea,
+[role="button"],
+[onclick] {
+  touch-action: manipulation;
+}
+
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+label:focus:not(:focus-visible),
+summary:focus:not(:focus-visible),
+[role="button"]:focus:not(:focus-visible),
+[tabindex]:focus:not(:focus-visible),
+[onclick]:focus:not(:focus-visible) {
+  outline: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
 
 :root {
   /* Brand Identity - Derived from Instant Online Seva Logo */
@@ -2117,13 +2160,23 @@ button:disabled::before,
   line-height: 1.65;
 }
 
-/* Footer - Brand Navy Blue Theme */
+/* Footer - Soft Dark Slate Theme */
 .footer-modern {
-  background: linear-gradient(180deg, #01316b 0%, #001f47 100%);
+  position: relative;
+  background: linear-gradient(180deg, #1e293b 0%, #111827 100%);
   color: #cbd5e1;
-  padding: 70px 20px 30px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 64px 20px 24px;
   margin-top: auto;
+}
+
+.footer-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0066cc 0%, #fd5c00 50%, #03a93a 100%);
 }
 
 .footer-container {
@@ -2133,9 +2186,9 @@ button:disabled::before,
 
 .footer-top-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
   gap: 40px;
-  margin-bottom: 50px;
+  margin-bottom: 44px;
 }
 
 .footer-brand h4 {
@@ -2147,22 +2200,37 @@ button:disabled::before,
 
 .footer-brand p {
   font-size: 0.9rem;
-  line-height: 1.65;
-  color: #cbd5e1;
+  line-height: 1.7;
+  color: #94a3b8;
   max-width: 320px;
-  margin-bottom: 20px;
+  margin: 0;
 }
 
 .footer-col-title {
-  color: #ffffff;
-  font-size: 1rem;
+  position: relative;
+  color: #f8fafc;
+  font-size: 0.95rem;
   font-weight: 700;
-  margin-bottom: 18px;
+  margin: 0 0 16px;
+  padding-bottom: 10px;
   letter-spacing: 0.02em;
+}
+
+.footer-col-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 28px;
+  height: 2px;
+  border-radius: 2px;
+  background: #38bdf8;
 }
 
 .footer-links-list {
   list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -2172,7 +2240,7 @@ button:disabled::before,
   color: #cbd5e1;
   text-decoration: none;
   font-size: 0.9rem;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, padding-left 0.2s ease;
 }
 
 .footer-links-list a:hover {
@@ -2183,14 +2251,30 @@ button:disabled::before,
 .footer-contact-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-size: 0.9rem;
   margin-bottom: 12px;
   color: #e2e8f0;
+  min-width: 0;
 }
 
-.footer-contact-item a {
+.footer-contact-item > i {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.85rem;
+}
+
+.footer-contact-item a,
+.footer-contact-item > span {
   color: inherit;
+  min-width: 0;
+  overflow-wrap: anywhere;
   transition: color 0.2s ease;
 }
 
@@ -2199,13 +2283,13 @@ button:disabled::before,
 }
 
 .footer-bottom-bar {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px 24px;
   font-size: 0.84rem;
   color: #94a3b8;
 }
@@ -2218,6 +2302,32 @@ button:disabled::before,
 
 .footer-bottom-bar a:hover {
   color: #ffffff;
+}
+
+.footer-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.footer-legal-links a {
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.footer-dev-credit {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.footer-dev-credit a {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 /* ============================================================
@@ -8786,17 +8896,32 @@ input:checked + .toggle-slider:before {
 
   /* Footer on Mobile */
   .footer-modern {
-    padding: 40px 16px 20px;
+    padding: 44px 16px 20px;
   }
   .footer-top-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 18px;
+    margin-bottom: 32px;
+  }
+  .footer-top-grid > .footer-brand,
+  .footer-top-grid > .footer-contact-col {
+    grid-column: 1 / -1;
   }
   .footer-bottom-bar {
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     text-align: center;
     font-size: 0.78rem;
+  }
+  .footer-legal-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+    width: 100%;
+  }
+  .footer-legal-links a {
+    white-space: normal;
+    font-size: 0.8rem;
   }
 }
 

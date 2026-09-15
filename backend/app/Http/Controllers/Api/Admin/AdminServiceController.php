@@ -7,9 +7,89 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class AdminServiceController extends Controller
 {
+    private const FIELD_TYPES = ['text', 'number', 'tel', 'email', 'date', 'textarea', 'select', 'file'];
+
+    private const MAX_FIELDS = 30;
+
+    /**
+     * Clean the admin-defined customer input fields for a service into a safe, predictable schema
+     */
+    private function normalizeRequiredFields($raw): array
+    {
+        if ($raw === null || $raw === '') {
+            return [];
+        }
+
+        if (is_string($raw)) {
+            $raw = json_decode($raw, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $raw = null;
+            }
+        }
+
+        if (!is_array($raw)) {
+            throw ValidationException::withMessages(['required_fields' => ['Customer input fields are not valid.']]);
+        }
+
+        if (count($raw) > self::MAX_FIELDS) {
+            throw ValidationException::withMessages(['required_fields' => ['A service can have at most ' . self::MAX_FIELDS . ' input fields.']]);
+        }
+
+        $fields = [];
+        $usedNames = [];
+
+        foreach (array_values($raw) as $index => $field) {
+            $position = $index + 1;
+            $label = is_array($field) ? Str::limit(trim(strip_tags((string) ($field['label'] ?? ''))), 100, '') : '';
+
+            if ($label === '') {
+                throw ValidationException::withMessages(['required_fields' => ["Field #{$position} needs a label."]]);
+            }
+
+            $type = in_array($field['type'] ?? 'text', self::FIELD_TYPES, true) ? $field['type'] : 'text';
+
+            // Keep an existing field's key stable so earlier orders still line up; otherwise derive it from the label
+            $baseName = Str::limit(Str::slug((string) ($field['name'] ?? '') ?: $label, '_'), 50, '') ?: 'field';
+            $name = $baseName;
+            for ($suffix = 2; in_array($name, $usedNames, true); $suffix++) {
+                $name = "{$baseName}_{$suffix}";
+            }
+            $usedNames[] = $name;
+
+            $entry = [
+                'name' => $name,
+                'label' => $label,
+                'type' => $type,
+                'required' => filter_var($field['required'] ?? false, FILTER_VALIDATE_BOOLEAN),
+                'placeholder' => Str::limit(trim(strip_tags((string) ($field['placeholder'] ?? ''))), 150, ''),
+            ];
+
+            if ($type === 'select') {
+                $options = $field['options'] ?? [];
+                if (is_string($options)) {
+                    $options = explode(',', $options);
+                }
+                $options = array_values(array_unique(array_filter(
+                    array_map(fn ($option) => Str::limit(trim(strip_tags((string) $option)), 100, ''), (array) $options),
+                    fn ($option) => $option !== ''
+                )));
+
+                if (!$options) {
+                    throw ValidationException::withMessages(['required_fields' => ["Dropdown field \"{$label}\" needs at least one option."]]);
+                }
+                $entry['options'] = array_slice($options, 0, 50);
+            }
+
+            $fields[] = $entry;
+        }
+
+        return $fields;
+    }
+
     private function clearServiceCache(): void
     {
         Cache::forget('active_services_all');
@@ -58,12 +138,7 @@ class AdminServiceController extends Controller
             'btn_icon' => 'nullable|string|max:100',
         ]);
 
-        if (isset($validated['required_fields']) && is_string($validated['required_fields'])) {
-            $decoded = json_decode($validated['required_fields'], true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $validated['required_fields'] = $decoded;
-            }
-        }
+        $validated['required_fields'] = $this->normalizeRequiredFields($request->input('required_fields'));
 
         $iconImagePath = null;
         if ($request->hasFile('icon_image')) {
@@ -83,7 +158,7 @@ class AdminServiceController extends Controller
             'category' => strtolower(trim(preg_replace('/\s+/', '_', $validated['category']))),
             'price' => $validated['price'],
             'description' => $validated['description'] ?? null,
-            'required_fields' => $validated['required_fields'] ?? null,
+            'required_fields' => $validated['required_fields'],
             'icon_type' => $validated['icon_type'] ?? 'icon',
             'icon' => $validated['icon'] ?? null,
             'icon_image' => $iconImagePath,
@@ -126,11 +201,11 @@ class AdminServiceController extends Controller
 
         $validated['category'] = strtolower(trim(preg_replace('/\s+/', '_', $validated['category'])));
 
-        if (isset($validated['required_fields']) && is_string($validated['required_fields'])) {
-            $decoded = json_decode($validated['required_fields'], true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $validated['required_fields'] = $decoded;
-            }
+        // Only touch the field list when the admin form sends it, so partial updates don't wipe it
+        if ($request->has('required_fields')) {
+            $validated['required_fields'] = $this->normalizeRequiredFields($request->input('required_fields'));
+        } else {
+            unset($validated['required_fields']);
         }
 
         if ($request->hasFile('icon_image')) {

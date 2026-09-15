@@ -40,6 +40,94 @@
       transition: all 0.3s ease;
     }
 
+    /* Back to landing page */
+    .auth-back-home {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .auth-back-home:hover,
+    .auth-back-home:focus-visible {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #0066cc;
+    }
+
+    @media (max-width: 480px) {
+      .auth-card .auth-header {
+        padding-top: 58px;
+      }
+    }
+
+    /* Password creation guide */
+    .password-guide {
+      margin: -2px 0 6px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+    }
+
+    .password-guide-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .password-rules {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 6px 14px;
+    }
+
+    .password-rules li {
+      font-size: 0.78rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .password-rules li i {
+      color: #94a3b8;
+    }
+
+    .password-rules li.is-met {
+      color: #03a93a;
+      font-weight: 600;
+    }
+
+    .password-rules li.is-met i {
+      color: #03a93a;
+    }
+
+    .password-guide-tip {
+      margin-top: 8px;
+      font-size: 0.74rem;
+      color: #64748b;
+    }
+
     .auth-card::before {
       content: '';
       position: absolute;
@@ -357,6 +445,9 @@
   <div class="auth-container">
     <div class="auth-card">
       <div class="auth-header">
+        <a href="index.html" class="auth-back-home" title="Back to home page">
+          <i class="fa-solid fa-arrow-left"></i> Home
+        </a>
         <a href="index.html" class="auth-logo-link">
           <img src="logo .png" alt="Instant Online Seva" class="auth-logo-img">
         </a>
@@ -407,7 +498,7 @@
               <label class="form-label" for="regPassword">Password <span style="color:#ef4444">*</span></label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-lock icon-lead"></i>
-                <input type="password" id="regPassword" class="form-control" placeholder="Min 6 chars" minlength="6" required>
+                <input type="password" id="regPassword" class="form-control" placeholder="Min 8 characters" minlength="8" autocomplete="new-password" aria-describedby="passwordGuide" required>
               </div>
             </div>
 
@@ -415,8 +506,24 @@
               <label class="form-label" for="regPasswordConfirm">Confirm <span style="color:#ef4444">*</span></label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-shield-halved icon-lead"></i>
-                <input type="password" id="regPasswordConfirm" class="form-control" placeholder="Repeat" minlength="6" required>
+                <input type="password" id="regPasswordConfirm" class="form-control" placeholder="Re-enter password" minlength="8" autocomplete="new-password" required>
               </div>
+            </div>
+          </div>
+
+          <!-- Password creation instructions (ticks update as the user types) -->
+          <div class="password-guide" id="passwordGuide">
+            <div class="password-guide-title">
+              <i class="fa-solid fa-circle-info" style="color: #0066cc;"></i> Your password must have:
+            </div>
+            <ul class="password-rules" id="passwordRules" aria-live="polite">
+              <li data-rule="length"><i class="fa-regular fa-circle"></i> At least 8 characters</li>
+              <li data-rule="letter"><i class="fa-regular fa-circle"></i> At least one letter (A–Z)</li>
+              <li data-rule="number"><i class="fa-regular fa-circle"></i> At least one number (0–9)</li>
+              <li data-rule="match"><i class="fa-regular fa-circle"></i> Both passwords match</li>
+            </ul>
+            <div class="password-guide-tip">
+              Tip: avoid your name, mobile number or easy patterns like <strong>12345678</strong>. Example format: <strong>Rahul@2026</strong> (don't use this exact one).
             </div>
           </div>
 
@@ -764,6 +871,33 @@
         }
       }
     }
+  </script>
+  <script>
+    // Live password checklist for the registration form
+    (function () {
+      const pwd = document.getElementById('regPassword');
+      const confirmPwd = document.getElementById('regPasswordConfirm');
+      if (!pwd || !confirmPwd) return;
+
+      const checks = {
+        length: v => v.length >= 8,
+        letter: v => /[A-Za-z]/.test(v),
+        number: v => /[0-9]/.test(v),
+        match: v => confirmPwd.value !== '' && confirmPwd.value === v
+      };
+
+      function updatePasswordRules() {
+        document.querySelectorAll('#passwordRules li').forEach(li => {
+          const met = checks[li.dataset.rule](pwd.value);
+          li.classList.toggle('is-met', met);
+          li.querySelector('i').className = met ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle';
+        });
+      }
+
+      pwd.addEventListener('input', updatePasswordRules);
+      confirmPwd.addEventListener('input', updatePasswordRules);
+      updatePasswordRules();
+    })();
   </script>
 </body>
 </html>

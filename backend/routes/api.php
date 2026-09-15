@@ -78,9 +78,8 @@ Route::middleware('api.auth')->group(function () {
     Route::get('/orders/{id}/download-link/{type?}', [OrderController::class, 'downloadLink']);
     Route::post('/orders/{id}/submit-document', [OrderController::class, 'submitDocument'])->middleware('throttle:15,1');
 
-    // Wallet
+    // Wallet (top-ups happen only through Razorpay below)
     Route::get('/wallet', [WalletController::class, 'index']);
-    Route::post('/wallet/recharge', [WalletController::class, 'recharge'])->middleware('throttle:10,1');
 
     // Razorpay Online Payments & Verification
     Route::post('/payment/razorpay/create-wallet-order', [RazorpayPaymentController::class, 'createWalletOrder'])->middleware('throttle:15,1');

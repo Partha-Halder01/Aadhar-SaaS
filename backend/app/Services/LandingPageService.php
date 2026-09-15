@@ -206,8 +206,8 @@ class LandingPageService
                 'enabled' => true,
                 'badge' => 'LIVE 2.0',
                 'text' => 'Instant Aadhaar HD PVC Formatting & UPI Fast Approvals under 2 mins!',
-                'helpline_text' => 'Helpline: +91 98765 43210',
-                'helpline_link' => 'tel:+919876543210',
+                'helpline_text' => 'Helpline: +91 97358 00298',
+                'helpline_link' => 'tel:+919735800298',
                 'safe_text' => 'Secure Document Handling',
             ],
             'hero' => [
@@ -222,11 +222,7 @@ class LandingPageService
                 'cta_primary_link' => 'register.html',
                 'cta_secondary_text' => 'User Login',
                 'cta_secondary_link' => 'login.html',
-                'trust_items' => [
-                    ['text' => '50,000+ PVC Cards Formatted', 'icon' => 'fa-circle-check'],
-                    ['text' => 'Auto UPI QR Recharge', 'icon' => 'fa-bolt'],
-                    ['text' => 'Pay Per Use • No Monthly Fees', 'icon' => 'fa-shield-halved'],
-                ],
+                'trust_items' => [],
             ],
             'showcase' => [
                 'chip1_title' => 'PAN Extracted',
@@ -465,9 +461,9 @@ class LandingPageService
             ],
             'footer' => [
                 'slogan' => "India's foremost digital print formatting and PAN retrieval suite designed for retailers, cyber cafes, and customer service centers.",
-                'phone' => '+91 98765 43210',
-                'whatsapp' => '+91 98765 43210',
-                'email' => 'support@utkalprint.com',
+                'phone' => '+91 97358 00298',
+                'whatsapp' => '+91 97358 00298',
+                'email' => 'mominulonlinetelicom@gmail.com',
                 'hours' => 'Mon - Sat: 8:00 AM - 10:00 PM',
                 'copyright' => '© 2026 Instant Online Seva. All rights reserved. Built for Indian Digital Retailers.',
                 'facebook_link' => '#',

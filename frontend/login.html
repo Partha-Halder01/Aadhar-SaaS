@@ -41,6 +41,39 @@
       transition: all 0.3s ease;
     }
 
+    /* Back to landing page */
+    .auth-back-home {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .auth-back-home:hover,
+    .auth-back-home:focus-visible {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #0066cc;
+    }
+
+    @media (max-width: 480px) {
+      .auth-card .auth-header {
+        padding-top: 58px;
+      }
+    }
+
     .auth-card::before {
       content: '';
       position: absolute;
@@ -457,6 +490,9 @@
   <div class="auth-container">
     <div class="auth-card">
       <div class="auth-header">
+        <a href="index.html" class="auth-back-home" title="Back to home page">
+          <i class="fa-solid fa-arrow-left"></i> Home
+        </a>
         <a href="index.html" class="auth-logo-link">
           <img src="logo .png" alt="Instant Online Seva" class="auth-logo-img">
         </a>
@@ -655,7 +691,7 @@
             <label class="form-label" for="forgotNewPassword">New Password (Min 8 characters)</label>
             <div class="input-wrapper">
               <i class="fa-solid fa-lock icon-lead"></i>
-              <input type="password" id="forgotNewPassword" class="form-control" placeholder="At least 8 characters" minlength="8" required>
+              <input type="password" id="forgotNewPassword" class="form-control" placeholder="8+ characters, with a letter & a number" minlength="8" autocomplete="new-password" required>
               <i class="fa-solid fa-eye toggle-password" id="toggleForgotPwdBtn"></i>
             </div>
           </div>
