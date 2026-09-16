@@ -204,6 +204,165 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.06);
     }
 
+    /* ============================================================
+       Tile cards (categories + services) - compact 2-up grid with a
+       gradient ring around the icon and a full-width action button.
+       ============================================================ */
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+      gap: 18px;
+      margin-bottom: 34px;
+    }
+    .tile-card {
+      background: #ffffff;
+      border: 1px solid #eef2f7;
+      border-radius: 22px;
+      padding: 22px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 18px -8px rgba(15, 23, 42, 0.12);
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
+    }
+    /* soft sheen in the bottom-right corner */
+    .tile-card::after {
+      content: '';
+      position: absolute;
+      right: -42px;
+      bottom: -58px;
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.10), rgba(236, 72, 153, 0.06));
+      pointer-events: none;
+    }
+    /* Same card, two accents: indigo = a category, teal/green = a service */
+    .tile-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      z-index: 2;
+    }
+    .tile-card.is-category::before {
+      background: linear-gradient(90deg, #4f46e5, #8b5cf6, #ec4899);
+    }
+    .tile-card.is-service::before {
+      background: linear-gradient(90deg, #0ea5e9, #22c55e, #a3e635);
+    }
+    .tile-card.is-service::after {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.10), rgba(14, 165, 233, 0.06));
+    }
+    .tile-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 34px -10px rgba(15, 23, 42, 0.18);
+    }
+    .tile-ring {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      padding: 4px;
+      background: conic-gradient(from 210deg, #f59e0b, #ef4444, #ec4899, #8b5cf6, #3b82f6, #22d3ee, #22c55e, #f59e0b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .tile-ring-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .tile-ring-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
+    }
+    .tile-ring-inner i { font-size: 2.1rem; }
+    .tile-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.3;
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    .tile-sub {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .tile-price {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #047857;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 999px;
+      padding: 3px 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .tile-btn {
+      margin-top: auto;
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 11px 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 45%, #8b5cf6 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px -5px rgba(79, 70, 229, 0.55);
+      transition: filter 0.2s ease, transform 0.15s ease;
+      position: relative;
+      z-index: 1;
+    }
+    .tile-btn.green {
+      background: linear-gradient(135deg, #059669 0%, #10b981 55%, #34d399 100%);
+      box-shadow: 0 6px 14px -5px rgba(5, 150, 105, 0.55);
+    }
+    .tile-card:hover .tile-btn { filter: brightness(1.08); }
+    .tile-btn:active { transform: scale(0.98); }
+    @media (max-width: 640px) {
+      .tile-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .tile-card { padding: 18px 12px 14px; border-radius: 18px; }
+      .tile-ring { width: 82px; height: 82px; margin-bottom: 11px; }
+      .tile-ring-inner i { font-size: 1.8rem; }
+      .tile-title { font-size: 0.9rem; }
+      .tile-btn { font-size: 0.78rem; padding: 10px 8px; }
+    }
+
     /* Structured Category Card */
     .cat-card-structured {
       background: #ffffff;
@@ -825,51 +984,6 @@
              ============================================================ -->
         <section id="viewCategoriesOverview" style="display: block;">
           
-          <!-- Structured Hero Banner -->
-          <div class="services-hero-banner">
-            <div style="flex: 1; min-width: 280px;">
-              <div class="hero-super-badge">
-                <i class="fa-solid fa-bolt" style="color: #fd5c00;"></i> Instant Citizen Services & Smart Prints
-              </div>
-              <h2 class="hero-main-title">Citizen Services Catalog</h2>
-              <p class="hero-subtitle">
-                Order automated high-definition PVC smart cards, retrieve lost PAN numbers, and request official digital documents with instant processing.
-              </p>
-            </div>
-            
-            <div class="hero-stats-strip">
-              <div class="hero-stat-item">
-                <div class="hero-stat-icon" style="background:#eff6ff; color:#0066cc;">
-                  <i class="fa-solid fa-shapes"></i>
-                </div>
-                <div>
-                  <div class="hero-stat-val" id="statTotalCategories">3 Verticals</div>
-                  <div class="hero-stat-lbl">Active Categories</div>
-                </div>
-              </div>
-
-              <div class="hero-stat-item">
-                <div class="hero-stat-icon" style="background:#f0fdf4; color:#03a93a;">
-                  <i class="fa-solid fa-bolt"></i>
-                </div>
-                <div>
-                  <div class="hero-stat-val" id="statTotalServices">6 Services</div>
-                  <div class="hero-stat-lbl">Automated Delivery</div>
-                </div>
-              </div>
-
-              <div class="hero-stat-item">
-                <div class="hero-stat-icon" style="background:#fff7ed; color:#ea580c;">
-                  <i class="fa-solid fa-clock"></i>
-                </div>
-                <div>
-                  <div class="hero-stat-val">2-5 Mins</div>
-                  <div class="hero-stat-lbl">Average TAT</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <!-- Structured Filter & Search Toolbar -->
           <div class="categories-toolbar">
             <div class="toolbar-search-box">
@@ -888,7 +1002,7 @@
           </div>
 
           <!-- Category Cards Grid -->
-          <div id="categoriesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin-bottom: 34px;">
+          <div id="categoriesGrid" class="tile-grid">
             <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px; color: #94a3b8;">
               <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.8rem; margin-bottom: 12px; color: #0066cc;"></i>
               <div style="font-weight: 700;">Loading Service Categories...</div>
@@ -935,7 +1049,7 @@
 
           <!-- Services Grid -->
           <div style="margin-bottom: 34px;">
-            <div id="servicesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)); gap: 22px;">
+            <div id="servicesGrid" class="tile-grid" style="margin-bottom: 0;">
               <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
                 <i class="fa-solid fa-spinner fa-spin"></i> Loading services...
               </div>
@@ -946,7 +1060,7 @@
         <!-- ============================================================
              SERVICE ORDERS LEDGER (STRUCTURED ACCORDION ORDERS SECTION)
              ============================================================ -->
-        <div class="glass-card structured-ledger-table" style="padding: 24px 26px;">
+        <div id="ledgerSection" class="glass-card structured-ledger-table" style="padding: 24px 26px; display: none;">
           <div class="ledger-header-wrapper">
             <div class="ledger-title-group">
               <div class="ledger-title-icon">
@@ -1098,12 +1212,6 @@
         categoriesList = (catsRes && catsRes.data) ? catsRes.data : [];
         allServices = (srvRes && srvRes.data) ? srvRes.data : [];
 
-        // Update Stat Badges in Hero Banner
-        const catCountEl = document.getElementById('statTotalCategories');
-        const srvCountEl = document.getElementById('statTotalServices');
-        if (catCountEl) catCountEl.textContent = `${categoriesList.length} Verticals`;
-        if (srvCountEl) srvCountEl.textContent = `${allServices.length} Services`;
-
         // Render Toolbar Filter Tabs & Cards Grid
         renderOverviewCategoryFilterTabs(categoriesList);
         renderCategoriesGrid(categoriesList);
@@ -1219,132 +1327,24 @@
 
         const serviceCount = typeof c.services_count !== 'undefined' ? c.services_count : catServices.length;
 
-        // Thematic Visual Styles
-        let bgGradient = 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)';
-        let watermarkIcon = 'fa-solid fa-layer-group';
-        let iconBg = c.icon_bg || '#eff6ff';
-        let iconColor = c.icon_color || '#0066cc';
-        let iconClass = c.icon || 'fa-solid fa-layer-group';
-        let specFormat = 'Digital Document';
-        let defaultChips = ['Instant TAT', 'Automated Seva'];
+        const iconColor = c.icon_color || '#0066cc';
+        const iconClass = c.icon || 'fa-solid fa-layer-group';
 
-        if (c.slug === 'print') {
-          bgGradient = 'linear-gradient(135deg, #ea580c 0%, #f97316 60%, #fb923c 100%)';
-          watermarkIcon = 'fa-solid fa-id-card';
-          iconBg = '#fff7ed';
-          iconColor = '#ea580c';
-          iconClass = c.icon || 'fa-solid fa-id-card';
-          specFormat = '300 DPI Smart PVC';
-          defaultChips = ['Aadhaar PVC', 'Voter ID Smart', 'PAN Card Print', 'Ayushman Card'];
-        } else if (c.slug === 'pan_find' || c.slug === 'pan') {
-          bgGradient = 'linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #0d9488 100%)';
-          watermarkIcon = 'fa-solid fa-magnifying-glass-location';
-          iconBg = '#eff6ff';
-          iconColor = '#0066cc';
-          iconClass = c.icon || 'fa-solid fa-magnifying-glass';
-          specFormat = 'Instant PAN Number';
-          defaultChips = ['Aadhaar to PAN', 'Demographic Match', 'Instant Retrieval'];
-        } else if (c.slug === 'document') {
-          bgGradient = 'linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #8b5cf6 100%)';
-          watermarkIcon = 'fa-solid fa-file-invoice';
-          iconBg = '#f0fdf4';
-          iconColor = '#16a34a';
-          iconClass = c.icon || 'fa-solid fa-file-lines';
-          specFormat = 'Official PDF Format';
-          defaultChips = ['Digital Certificates', 'Govt Verification', 'Instant PDF'];
-        }
-
-        // Feature Chips
-        let chipsHtml = '';
-        if (catServices.length > 0) {
-          chipsHtml = catServices.slice(0, 3).map(s => `
-            <span class="svc-feature-chip">
-              <i class="fa-solid fa-check"></i> ${escapeHtml(s.name)}
-            </span>
-          `).join('');
-          if (catServices.length > 3) {
-            chipsHtml += `<span class="svc-feature-chip more-chip">+${catServices.length - 3} more</span>`;
-          }
-        } else {
-          chipsHtml = defaultChips.map(ch => `
-            <span class="svc-feature-chip">
-              <i class="fa-solid fa-bolt"></i> ${ch}
-            </span>
-          `).join('');
-        }
-
-        // Banner Image vs Vector Graphic
-        let bannerMediaHtml = '';
-        if (c.image_url) {
-          bannerMediaHtml = `
-            <img src="${escapeHtml(c.image_url)}" alt="${escapeHtml(c.name)}" onerror="this.remove();">
-          `;
-        }
+        // Circular media: category image when one is uploaded, else its icon.
+        const mediaHtml = c.image_url
+          ? `<img src="${escapeHtml(c.image_url)}" alt="${escapeHtml(c.name)}" onerror="this.onerror=null; this.outerHTML='<i class=\\'${safeToken(iconClass)}\\' style=\\'color:${safeToken(iconColor)}\\'></i>';">`
+          : `<i class="${iconClass}" style="color: ${iconColor};"></i>`;
 
         return `
-          <div class="cat-card-structured" onclick="openCategoryView('${safeToken(c.slug)}')">
-            <!-- Top Banner (Image or Gradient with Vector Watermark) -->
-            <div class="cat-card-banner" style="background: ${bgGradient};">
-              ${bannerMediaHtml}
-              <div class="cat-banner-overlay"></div>
-              <i class="${watermarkIcon} cat-watermark-icon"></i>
-
-              <div class="cat-banner-top-bar">
-                <span class="cat-badge-status">
-                  <span class="pulse-indicator"></span> Verified Seva
-                </span>
-                <span class="cat-badge-counter">
-                  <i class="fa-solid fa-bolt" style="color: #fd5c00;"></i> ${serviceCount} Services
-                </span>
-              </div>
+          <div class="tile-card is-category" onclick="openCategoryView('${safeToken(c.slug)}')">
+            <div class="tile-ring">
+              <div class="tile-ring-inner">${mediaHtml}</div>
             </div>
-
-            <!-- Floating Squircle Icon -->
-            <div class="cat-icon-container">
-              <div class="cat-icon-squircle" style="background: ${iconBg}; color: ${iconColor};">
-                <i class="${iconClass}"></i>
-              </div>
-              <div class="cat-turnaround-pill">
-                <i class="fa-solid fa-bolt"></i> Instant TAT
-              </div>
-            </div>
-
-            <!-- Card Body Content -->
-            <div class="cat-card-body">
-              <h3 class="cat-card-title">${escapeHtml(c.name)}</h3>
-              <p class="cat-card-desc">${escapeHtml(c.description || 'Explore available government and digital services.')}</p>
-
-              <!-- Feature Chips -->
-              <div class="cat-chips-wrapper">
-                ${chipsHtml}
-              </div>
-
-              <!-- Micro Specifications -->
-              <div class="cat-specs-row">
-                <div class="cat-spec-item">
-                  <span class="cat-spec-label">TAT:</span>
-                  <strong class="cat-spec-val">Instant (2m)</strong>
-                </div>
-                <div class="cat-spec-divider"></div>
-                <div class="cat-spec-item">
-                  <span class="cat-spec-label">Format:</span>
-                  <strong class="cat-spec-val">${specFormat}</strong>
-                </div>
-                <div class="cat-spec-divider"></div>
-                <div class="cat-spec-item">
-                  <span class="cat-spec-label">Payment:</span>
-                  <strong class="cat-spec-val">Prepaid / UPI</strong>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card Footer Action -->
-            <div class="cat-card-footer">
-              <button type="button" class="btn-explore-category">
-                <span>Explore ${serviceCount} Services</span>
-                <i class="fa-solid fa-arrow-right"></i>
-              </button>
-            </div>
+            <h3 class="tile-title">${escapeHtml(c.name)}</h3>
+            <div class="tile-sub">${serviceCount} ${serviceCount === 1 ? 'Service' : 'Services'}</div>
+            <button type="button" class="tile-btn">
+              Open Service <i class="fa-solid fa-chevron-right"></i>
+            </button>
           </div>
         `;
       }).join('');
@@ -1483,33 +1483,26 @@
       }
 
       grid.innerHTML = services.map(s => {
-        const badgeHtml = getServiceBadgeHtml(s, 44, '1.35rem');
-        const defaultBtnText = (s.category === 'pan_find' || s.category === 'pan') ? 'Search Lost PAN' : 'Order Service';
-        const defaultBtnIcon = (s.category === 'pan_find' || s.category === 'pan') ? 'fa-solid fa-magnifying-glass' : 'fa-solid fa-paper-plane';
-        const btnText = s.btn_text || defaultBtnText;
-        const btnIcon = s.btn_icon || defaultBtnIcon;
-        const btnContent = btnIcon ? `<i class="${btnIcon}"></i> ${btnText}` : btnText;
-
         const isPan = s.category === 'pan_find' || s.category === 'pan';
-        const btnClass = isPan ? 'btn-primary-green' : 'btn-rz-primary';
+        const btnText = s.btn_text || (isPan ? 'Search PAN' : 'Open Service');
+        const iconColor = s.icon_color || '#0066cc';
+        const iconClass = s.icon || 'fa-solid fa-id-card';
+        const iconType = s.icon_type || (s.icon_image ? 'image' : 'icon');
+        const imgUrl = s.icon_image_url || (s.icon_image && (s.icon_image.startsWith('http') ? s.icon_image : `${STORAGE_BASE_URL}/${s.icon_image}`));
+
+        const mediaHtml = (iconType === 'image' && imgUrl)
+          ? `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(s.name)}" onerror="this.onerror=null; this.outerHTML='<i class=\\'${safeToken(iconClass)}\\' style=\\'color:${safeToken(iconColor)}\\'></i>';">`
+          : `<i class="${iconClass}" style="color: ${iconColor};"></i>`;
 
         return `
-          <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between; padding: 22px; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 28px -6px rgba(15,23,42,0.08)';" onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)';">
-            <div>
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
-                ${badgeHtml}
-                <div style="text-align: right;">
-                  <span style="font-size: 1.35rem; font-weight: 800; font-family: 'Outfit', sans-serif; color: #03a93a;">${formatINR(s.price)}</span>
-                  <div style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Service Fee</div>
-                </div>
-              </div>
-              <h3 style="font-size: 1.12rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">${escapeHtml(s.name)}</h3>
-              <p style="color: #64748b; font-size: 0.86rem; line-height: 1.5; margin-bottom: 18px;">
-                ${escapeHtml(s.description || 'Fast, automated citizen identification and digital document fulfillment.')}
-              </p>
+          <div class="tile-card is-service" onclick="openApplyModal(${s.id})">
+            <div class="tile-ring">
+              <div class="tile-ring-inner">${mediaHtml}</div>
             </div>
-            <button onclick="openApplyModal(${s.id})" class="${btnClass}" style="width: 100%; justify-content: center; padding: 11px; border-radius: 10px;">
-              ${btnContent}
+            <h3 class="tile-title">${escapeHtml(s.name)}</h3>
+            <div class="tile-price">${formatINR(s.price)}</div>
+            <button type="button" class="tile-btn${isPan ? ' green' : ''}">
+              ${escapeHtml(btnText)} <i class="fa-solid fa-chevron-right"></i>
             </button>
           </div>
         `;
@@ -1667,6 +1660,16 @@
 
     function renderLedgerOrders(orders, categorySlug, updateCache = true) {
       if (updateCache) cachedAllLedgerOrders = orders;
+
+      // The ledger only earns its space once the retailer has actually ordered
+      // something. An empty filter still shows it, so the tabs stay reachable.
+      const ledgerSection = document.getElementById('ledgerSection');
+      if (ledgerSection) {
+        const hasAnyOrders = Array.isArray(cachedAllLedgerOrders) && cachedAllLedgerOrders.length > 0;
+        ledgerSection.style.display = hasAnyOrders ? 'block' : 'none';
+        if (!hasAnyOrders) return;
+      }
+
       const tbody = document.getElementById('ordersTbody');
       const mobileContainer = document.getElementById('ordersMobileContainer');
       const catName = categorySlug ? (categoriesList.find(c => c.slug === categorySlug)?.name || categorySlug) : 'All Services';
