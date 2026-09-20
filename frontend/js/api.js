@@ -473,6 +473,16 @@ const API = {
       return res;
     },
 
+    // Approve / reject go through verify-payment: it is the one endpoint that also
+    // performs the automatic wallet refund when an order is rejected.
+    async approveOrder(orderId) {
+      return await API.admin.verifyPayment(orderId, 'approve');
+    },
+
+    async rejectOrder(orderId, rejectionReason = '') {
+      return await API.admin.verifyPayment(orderId, 'reject', { rejection_reason: rejectionReason });
+    },
+
     async fulfillOrder(orderId, formData) {
       const res = await API.request(`/admin/orders/${orderId}/fulfill`, {
         method: 'POST',
