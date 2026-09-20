@@ -10,6 +10,14 @@
     # automatic trailing-slash redirect off is safe here.
     DirectorySlash Off
 
+    # App JS/CSS is replaced on every deploy. Without this, browsers keep serving
+    # the cached copy and the page runs old code against new markup.
+    <IfModule mod_headers.c>
+        <FilesMatch "\.(js|css)$">
+            Header set Cache-Control "no-cache, must-revalidate"
+        </FilesMatch>
+    </IfModule>
+
     RewriteEngine On
 
     # Handle Authorization Header
