@@ -787,7 +787,7 @@
           <div class="stat-card">
             <div class="stat-icon blue"><i class="fa-solid fa-gear fa-spin"></i></div>
             <div>
-              <div class="stat-label">In Processing / Printing</div>
+              <div class="stat-label">In Processing</div>
               <div class="stat-value" id="statProcessingOrders">0</div>
             </div>
           </div>
@@ -795,7 +795,7 @@
           <div class="stat-card">
             <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
             <div>
-              <div class="stat-label">Completed / Printed</div>
+              <div class="stat-label">Completed Orders</div>
               <div class="stat-value" id="statCompletedOrders">0</div>
             </div>
           </div>
@@ -814,7 +814,7 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
             <div>
               <h2 style="font-size: 1.18rem; font-weight: 800; color: #0f172a; margin: 0;">Order Process & Status Tracker</h2>
-              <small style="color: #64748b;">Inspect live workflow stages, PVC printing progress, pickup alerts, and digital downloads</small>
+              <small style="color: #64748b;">Inspect live workflow stages, completed downloads, remarks, and digital certificates</small>
             </div>
             <button onclick="loadUserOrders()" class="btn-secondary" style="font-size: 0.84rem; padding: 7px 14px;">
               <i class="fa-solid fa-rotate-right" id="refreshIcon"></i> Refresh
@@ -835,7 +835,7 @@
                 In Processing (<span id="countProcessing">0</span>)
               </button>
               <button onclick="filterByStatus('completed')" class="tab-btn" data-status="completed" style="padding: 7px 14px; font-size: 0.82rem; font-weight: 600; border-radius: 8px; border: none; background: transparent; color: #64748b; cursor: pointer; white-space:nowrap;">
-                Completed / Printed (<span id="countCompleted">0</span>)
+                Completed (<span id="countCompleted">0</span>)
               </button>
               <button onclick="filterByStatus('pending')" class="tab-btn" data-status="pending" style="padding: 7px 14px; font-size: 0.82rem; font-weight: 600; border-radius: 8px; border: none; background: transparent; color: #64748b; cursor: pointer; white-space:nowrap;">
                 Pending (<span id="countPending">0</span>)
@@ -1000,9 +1000,15 @@
       }
     } catch (e) {}
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function initOrdersPage() {
       loadUserOrders();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initOrdersPage);
+    } else {
+      initOrdersPage();
+    }
 
     async function loadUserOrders() {
       const refreshIcon = document.getElementById('refreshIcon');
@@ -1268,16 +1274,18 @@
           } else if (o.order_status === 'completed') {
             statusPillClass = 'status-completed';
             dotClass = 'dot-green';
-            statusText = isPrintService ? 'Printed (Ready)' : 'Delivered';
-            if (o.doc_request_status === 'submitted') {
-              subStatusHtml = `<div class="substatus-note text-blue" style="margin-top: 4px;"><i class="fa-solid fa-check-double"></i> Additional Doc Sent</div>`;
-            } else if (isPrintService) {
-              subStatusHtml = `<div class="substatus-note text-green" style="margin-top: 4px;"><i class="fa-solid fa-store"></i> Ready for Pickup</div>`;
+            statusText = 'Completed';
+            if (o.delivery_file) {
+              subStatusHtml = `<div class="substatus-note text-green" style="margin-top: 4px;"><i class="fa-solid fa-file-circle-check"></i> Document Ready</div>`;
+            } else if (o.admin_notes) {
+              subStatusHtml = `<div class="substatus-note text-green" style="margin-top: 4px;"><i class="fa-solid fa-message"></i> Remarks Available</div>`;
+            } else {
+              subStatusHtml = `<div class="substatus-note text-green" style="margin-top: 4px;"><i class="fa-solid fa-circle-check"></i> Fulfilled</div>`;
             }
           } else if (o.order_status === 'processing') {
             statusPillClass = 'status-processing';
             dotClass = 'dot-blue';
-            statusText = isPrintService ? 'Printing PVC Card' : 'In Processing';
+            statusText = 'In Processing';
             if (o.doc_request_status === 'submitted') {
               subStatusHtml = `<div class="substatus-note text-blue" style="margin-top: 4px;"><i class="fa-solid fa-check-double"></i> Additional Doc Sent</div>`;
             }
@@ -1285,6 +1293,7 @@
             statusPillClass = 'status-rejected';
             dotClass = 'dot-red';
             statusText = 'Rejected';
+            subStatusHtml = `<div class="substatus-note" style="color:#b91c1c; background:#fef2f2; border:1px solid #fecaca; margin-top:4px;"><i class="fa-solid fa-wallet"></i> ${formatINR(o.amount)} Refunded</div>`;
           } else {
             statusPillClass = 'status-pending';
             dotClass = 'dot-gray';
@@ -1301,16 +1310,16 @@
           let progressExplanation = '';
           if (o.payment_status === 'rejected' || o.order_status === 'rejected') {
             dot2 = 'error';
-            progressText = 'Rejected';
-            progressExplanation = `Order could not proceed. Reason: ${escapeHtml(o.rejection_reason || 'Payment or document verification failed.')}`;
+            progressText = 'Rejected & Refunded';
+            progressExplanation = `Order rejected: "${escapeHtml(o.rejection_reason || 'Application could not be verified.')}". ${formatINR(o.amount)} has been refunded back to your wallet.`;
           } else if (o.order_status === 'completed') {
             dot2 = 'done';
             dot3 = 'done';
             dot4 = 'done';
-            progressText = isPrintService ? 'Printed (Pickup)' : 'Delivered';
-            progressExplanation = isPrintService 
-              ? 'PVC smart card print is complete and safely packed. Ready for pickup at our center.' 
-              : 'Service fulfilled successfully. Final output file is ready for download.';
+            progressText = o.delivery_file ? 'Ready for Download' : 'Completed';
+            progressExplanation = o.admin_notes 
+              ? escapeHtml(o.admin_notes) 
+              : (o.delivery_file ? 'Service fulfilled successfully. Final document file is ready for download.' : 'Service fulfilled and completed successfully.');
           } else if (o.doc_request_status === 'pending') {
             dot2 = 'done';
             dot3 = 'current';
@@ -1319,8 +1328,8 @@
           } else if (o.order_status === 'processing') {
             dot2 = 'done';
             dot3 = 'current';
-            progressText = isPrintService ? 'Printing card...' : 'Processing...';
-            progressExplanation = isPrintService ? 'Application verified. Physical PVC card printing is underway.' : 'Application is currently being processed by center operators.';
+            progressText = 'Processing...';
+            progressExplanation = 'Application is currently being processed by center operators.';
           } else {
             progressText = 'Verifying payment';
             progressExplanation = 'Order submitted. Awaiting center admin payment approval.';
@@ -1350,7 +1359,9 @@
             `;
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            resultAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-action-download" download title="Download Finished File"><i class="fa-solid fa-download"></i> Get File</a>`;
+            resultAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-action-download" download title="Download Final Delivered Document"><i class="fa-solid fa-download"></i> Download</a>`;
+          } else if (o.order_status === 'completed') {
+            resultAction = `<span style="font-size:0.75rem; color:#03a93a; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 10px; border-radius:6px; display:inline-flex; align-items:center; gap:4px;"><i class="fa-solid fa-circle-check"></i> Completed</span>`;
           }
 
           return `
@@ -1410,6 +1421,37 @@
                 <div class="order-dropdown-content">
                   <div class="dropdown-grid">
                     
+                    ${o.order_status === 'completed' ? `
+                    <!-- Delivered Document Banner inside Dropdown -->
+                    <div style="grid-column: 1 / -1; background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1.5px solid #86efac; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; box-shadow: 0 3px 12px rgba(3, 169, 58, 0.08); margin-bottom: 4px; flex-wrap: wrap;">
+                      <div style="display:flex; align-items:center; gap: 14px;">
+                        <div style="width: 42px; height: 42px; border-radius: 10px; background: #03a93a; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; box-shadow: 0 2px 6px rgba(3, 169, 58, 0.3);">
+                          <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                          <div style="font-weight: 800; font-size: 0.95rem; color: #14532d; display:flex; align-items:center; gap:8px;">
+                            <span>Service Completed Successfully</span>
+                            <span style="font-size: 0.68rem; background: #03a93a; color: white; padding: 2px 8px; border-radius: 12px; font-weight: 700;">COMPLETED</span>
+                          </div>
+                          ${o.admin_notes ? `
+                            <div style="font-size: 0.85rem; color: #14532d; margin-top: 4px; background: rgba(255,255,255,0.7); padding: 5px 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
+                              <strong>Admin Message / Remarks:</strong> ${escapeHtml(o.admin_notes)}
+                            </div>
+                          ` : `
+                            <div style="font-size: 0.8rem; color: #166534; margin-top: 2px;">
+                              Your service application has been verified and completed successfully by center admin.
+                            </div>
+                          `}
+                        </div>
+                      </div>
+                      ${o.delivery_file ? `
+                        <a href="${escapeHtml(API.getDownloadUrl(o.id, 'delivery', false))}" target="_blank" class="btn-action-download" style="padding: 0 18px; height: 38px; font-size: 0.84rem; text-decoration: none; border-radius: 8px; flex-shrink: 0; display:inline-flex; align-items:center; gap:6px;" download>
+                          <i class="fa-solid fa-download"></i> Download Document
+                        </a>
+                      ` : ''}
+                    </div>
+                    ` : ''}
+
                     <!-- Section 1: Process Progress & Workflow Stages -->
                     <div class="dropdown-section-card">
                       <div>
@@ -1433,10 +1475,20 @@
                     <div class="dropdown-section-card">
                       <div>
                         <div class="dropdown-card-header">
-                          <span><i class="fa-solid fa-folder-open" style="color: #ea580c;"></i> Attached Documents (${customerDocs.length})</span>
+                          <span><i class="fa-solid fa-folder-open" style="color: #ea580c;"></i> Attached Documents (${customerDocs.length + (o.delivery_file ? 1 : 0)})</span>
                           <small style="color: #03a93a; font-weight: 700;"><i class="fa-solid fa-shield-halved"></i> Preserved</small>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 6px; max-height: 120px; overflow-y: auto;">
+                        <div style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto;">
+                          ${o.delivery_file ? `
+                            <div style="display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 6px 10px; font-size: 0.78rem;">
+                              <span style="font-weight: 800; color: #15803d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;">
+                                <i class="fa-solid fa-file-circle-check text-success"></i> Delivered File
+                              </span>
+                              <a href="${escapeHtml(API.getDownloadUrl(o.id, 'delivery', false))}" target="_blank" class="btn-action-download" style="height: 24px; padding: 0 8px; font-size: 0.72rem; text-decoration: none;" download>
+                                <i class="fa-solid fa-download"></i> Download
+                              </a>
+                            </div>
+                          ` : ''}
                           ${customerDocs.length ? customerDocs.map(cd => `
                             <div style="display: flex; align-items: center; justify-content: space-between; background: ${cd.type === 'requested' ? '#f0fdf4' : '#f8fafc'}; border: 1px solid ${cd.type === 'requested' ? '#bbf7d0' : '#e2e8f0'}; border-radius: 8px; padding: 6px 10px; font-size: 0.78rem;">
                               <span style="font-weight: 700; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;" title="${escapeHtml(cd.label)}">
@@ -1471,6 +1523,17 @@
                           <div style="display: flex; justify-content: space-between;"><strong>Total Amount:</strong> <span style="font-weight: 800; color: #03a93a;">${formatINR(o.amount)}</span></div>
                         </div>
                       </div>
+                      ${o.order_status === 'rejected' ? `
+                        <div style="margin-top: 10px; padding: 10px 12px; background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; font-size: 0.78rem; color: #991b1b;">
+                          <div style="font-weight: 800; display:flex; align-items:center; gap:5px;"><i class="fa-solid fa-ban"></i> Application Rejected</div>
+                          <div style="margin-top: 3px; color: #7f1d1d;"><strong>Reason:</strong> ${escapeHtml(o.rejection_reason || 'Could not be processed.')}</div>
+                          ${o.payment_method === 'wallet' ? `
+                            <div style="margin-top: 6px; color: #166534; font-weight: 700; background: #dcfce7; padding: 3px 8px; border-radius: 5px; display: inline-flex; align-items: center; gap: 5px;">
+                              <i class="fa-solid fa-wallet"></i> ${formatINR(o.amount)} Refunded to Wallet
+                            </div>
+                          ` : ''}
+                        </div>
+                      ` : ''}
                       ${o.admin_notes ? `
                         <div style="margin-top: 8px; padding: 6px 10px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; font-size: 0.75rem; color: #92400e;">
                           <strong>Center Note:</strong> ${escapeHtml(o.admin_notes)}
@@ -1489,15 +1552,11 @@
       // 2. Mobile Responsive Cards Rendering
       if (mobileContainer) {
         mobileContainer.innerHTML = orders.map(o => {
-          const isPrintService = o.service && o.service.category === 'print';
-          
           let statusBadge = '';
           if (o.doc_request_status === 'pending') {
             statusBadge = '<span class="badge-status" style="font-size:0.72rem; padding: 2px 8px; background:#fef3c7; color:#b45309; border:1px solid #fde68a; font-weight:800;"><i class="fa-solid fa-triangle-exclamation"></i> Action Required</span>';
           } else if (o.order_status === 'completed') {
-            statusBadge = isPrintService
-              ? '<span class="badge-status badge-completed" style="font-size:0.72rem; padding: 2px 8px; background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>'
-              : '<span class="badge-status badge-completed" style="font-size:0.72rem; padding: 2px 8px;">Completed</span>';
+            statusBadge = '<span class="badge-status badge-completed" style="font-size:0.72rem; padding: 2px 8px;"><i class="fa-solid fa-circle-check"></i> Completed</span>';
           } else if (o.order_status === 'processing') {
             statusBadge = '<span class="badge-status badge-processing" style="font-size:0.72rem; padding: 2px 8px;"><i class="fa-solid fa-gear fa-spin"></i> Processing</span>';
           } else if (o.order_status === 'rejected') {
@@ -1509,11 +1568,13 @@
           let resultAction = '';
           if (o.doc_request_status === 'pending') {
             resultAction = `<button onclick="openSubmitDocModal(${o.id})" class="btn-rz-primary" style="background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); padding: 5px 12px; font-size: 0.75rem; border-radius: 6px;"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Doc</button>`;
-          } else if (isPrintService && o.order_status === 'completed') {
-            resultAction = '<span style="font-size:0.75rem; color:#03a93a; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-store"></i> Collect at center</span>';
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            resultAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 5px 12px; font-size: 0.75rem; border-radius: 6px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+            resultAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-action-download" style="padding: 0 12px; height: 30px; font-size: 0.75rem; border-radius: 6px; text-decoration:none; display:inline-flex; align-items:center; gap:5px;" download><i class="fa-solid fa-download"></i> Download</a>`;
+          } else if (o.order_status === 'completed') {
+            resultAction = '<span style="font-size:0.75rem; color:#03a93a; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-circle-check"></i> Completed</span>';
+          } else if (o.order_status === 'rejected') {
+            resultAction = '<span style="font-size:0.75rem; color:#dc2626; font-weight:700;"><i class="fa-solid fa-ban"></i> Rejected</span>';
           }
 
           return `
@@ -1525,6 +1586,22 @@
               <div class="mobile-ledger-card-body">
                 <div class="mobile-ledger-title">${escapeHtml(o.service ? o.service.name : 'Citizen Service')}</div>
                 ${o.doc_request_status === 'pending' ? `<div style="font-size: 0.78rem; font-weight: 700; color: #b45309; margin-top: 3px;"><i class="fa-solid fa-triangle-exclamation"></i> Missing: ${escapeHtml(o.doc_request_title || 'Document')}</div>` : ''}
+                ${o.delivery_file ? `
+                  <div style="margin-top: 6px; padding: 6px 10px; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                    <div style="font-size: 0.76rem; font-weight: 800; color: #15803d; display:flex; align-items:center; gap:5px;">
+                      <i class="fa-solid fa-file-circle-check"></i> Document Ready
+                    </div>
+                    <a href="${escapeHtml(API.getDownloadUrl(o.id, 'delivery', false))}" target="_blank" class="btn-action-download" style="height: 24px; padding: 0 8px; font-size: 0.72rem; text-decoration:none;" download>
+                      <i class="fa-solid fa-download"></i> Download
+                    </a>
+                  </div>
+                ` : ''}
+                ${o.admin_notes ? `
+                  <div style="margin-top: 6px; padding: 6px 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; font-size: 0.76rem; color: #166534;">
+                    <strong><i class="fa-solid fa-comment-dots"></i> Admin Remarks:</strong> ${escapeHtml(o.admin_notes)}
+                  </div>
+                ` : ''}
+                ${o.order_status === 'rejected' ? `<div style="font-size: 0.76rem; font-weight: 700; color: #b91c1c; margin-top: 4px; background:#fef2f2; padding:4px 8px; border-radius:6px; border:1px solid #fecaca;"><i class="fa-solid fa-ban"></i> Reason: ${escapeHtml(o.rejection_reason || 'Rejected')} &bull; <span style="color:#15803d;"><i class="fa-solid fa-wallet"></i> Refunded</span></div>` : ''}
                 <div class="mobile-ledger-meta">
                   <span><i class="fa-regular fa-clock"></i> ${formatDate(o.created_at)}</span>
                   <span>&bull;</span>
@@ -1556,106 +1633,72 @@
         }).catch(() => {
           showToast('Order ID: ' + text, 'info');
         });
+      } else {
+        showToast('Order ID: ' + text, 'info');
       }
     }
 
     function openProcessModal(orderId) {
-      const order = userOrders.find(o => o.id === orderId);
+      const order = (allOrders || []).find(o => o.id == orderId);
       if (!order) return;
 
       document.getElementById('modalOrderNumber').textContent = order.order_number;
+      document.getElementById('modalOrderDate').textContent = formatDate(order.created_at);
 
-      const isPrintService = order.service && order.service.category === 'print';
-      const isDocService = order.service && order.service.category === 'document';
-      const isPanService = order.service && order.service.category === 'pan_find';
+      // Determine Lifecycle Steps
+      let s1 = 'completed'; // Order Submitted
+      let s2 = 'waiting';   // Payment Verified / Admin Approved
+      let s3 = 'waiting';   // Processing
+      let s4 = 'waiting';   // Completed / Delivered
 
-      // Update Header Status Badge
-      const statusBadgeContainer = document.getElementById('modalProcessStatusBadge');
-      if (statusBadgeContainer) {
-        if (order.order_status === 'completed') {
-          statusBadgeContainer.innerHTML = `<span style="background:#dcfce7; color:#15803d; border:1.5px solid #86efac; font-size:0.75rem; font-weight:800; padding:3px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:5px;"><i class="fa-solid fa-circle-check"></i> ${isPrintService ? 'Ready for Pickup' : 'Completed'}</span>`;
-        } else if (order.doc_request_status === 'pending') {
-          statusBadgeContainer.innerHTML = `<span style="background:#fff7ed; color:#c2410c; border:1.5px solid #fdba74; font-size:0.75rem; font-weight:800; padding:3px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:5px;"><i class="fa-solid fa-triangle-exclamation"></i> Action Required</span>`;
-        } else if (order.order_status === 'processing') {
-          statusBadgeContainer.innerHTML = `<span style="background:#eff6ff; color:#1d4ed8; border:1.5px solid #93c5fd; font-size:0.75rem; font-weight:800; padding:3px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:5px;"><i class="fa-solid fa-spinner fa-spin"></i> Processing</span>`;
-        } else if (order.order_status === 'rejected') {
-          statusBadgeContainer.innerHTML = `<span style="background:#fef2f2; color:#b91c1c; border:1.5px solid #fca5a5; font-size:0.75rem; font-weight:800; padding:3px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:5px;"><i class="fa-solid fa-circle-xmark"></i> Rejected</span>`;
-        } else {
-          statusBadgeContainer.innerHTML = `<span style="background:#f8fafc; color:#475569; border:1.5px solid #cbd5e1; font-size:0.75rem; font-weight:800; padding:3px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:5px;"><i class="fa-solid fa-clock"></i> Placed &bull; Reviewing Payment</span>`;
-        }
-      }
-
-      // 4-Step Stepper State
-      let s1 = 'completed'; // Placed
-      let s2 = 'completed'; // Payment
-      let s3 = 'completed'; // Processing
-      let s4 = 'completed'; // Delivery/Pickup
-      let progressWidth = '100%';
-
-      if (order.order_status === 'rejected' || order.payment_status === 'rejected') {
+      if (order.order_status === 'rejected') {
         s2 = 'rejected';
-        s3 = '';
-        s4 = '';
-        progressWidth = '33.3%';
-      } else if (order.order_status === 'completed') {
-        s1 = 'completed';
+        s3 = 'rejected';
+        s4 = 'rejected';
+      } else if (order.payment_status === 'approved') {
         s2 = 'completed';
-        s3 = 'completed';
-        s4 = 'completed';
-        progressWidth = '100%';
-      } else if (order.order_status === 'processing') {
-        s1 = 'completed';
-        s2 = 'completed';
-        s3 = 'active';
-        s4 = '';
-        progressWidth = '66.6%';
+        if (order.order_status === 'completed') {
+          s3 = 'completed';
+          s4 = 'completed';
+        } else if (order.order_status === 'processing') {
+          s3 = 'current';
+        }
+      } else if (order.payment_status === 'rejected') {
+        s2 = 'rejected';
       } else {
-        // Pending
-        s1 = 'completed';
-        s2 = 'active';
-        s3 = '';
-        s4 = '';
-        progressWidth = '15%';
+        s2 = 'current';
       }
 
-      const step3Title = isPrintService ? 'PVC Printing' : (isPanService ? 'PAN Verification' : 'Processing');
-      const step3Desc = order.order_status === 'completed' ? 'Finished' : (isPrintService ? 'Card being printed' : 'Processing application');
-
-      const step4Title = isPrintService ? 'Ready for Pickup' : 'Ready for Download';
-      const step4Desc = order.order_status === 'completed' ? (isPrintService ? 'Ready at center' : 'Ready to download') : (isPrintService ? 'Collect from center' : 'Final file delivery');
+      const step4Title = order.delivery_file ? 'Document Ready' : 'Service Completed';
+      const step4Desc = order.delivery_file
+        ? 'Final document uploaded & ready for download'
+        : 'Service completed successfully';
 
       const stepperHtml = `
-        <div class="process-stepper-container">
+        <div class="process-lifecycle">
           <div class="process-stepper">
-            <div class="process-stepper-track">
-              <div class="process-stepper-fill" style="width: ${progressWidth};"></div>
-            </div>
-            
             <div class="step-item ${s1}">
               <div class="step-circle"><i class="fa-solid fa-check"></i></div>
-              <div class="step-label">Order Placed</div>
-              <div class="step-sub">${formatDate(order.created_at)}</div>
+              <div class="step-label">Order Submitted</div>
+              <div class="step-sub">Created by customer</div>
             </div>
-
             <div class="step-item ${s2}">
               <div class="step-circle">
                 ${s2 === 'completed' ? '<i class="fa-solid fa-check"></i>' : (s2 === 'rejected' ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-wallet"></i>')}
               </div>
-              <div class="step-label">Payment</div>
-              <div class="step-sub">${order.payment_status === 'approved' ? 'Verified' : (order.payment_status === 'rejected' ? 'Rejected' : 'Under Review')}</div>
+              <div class="step-label">Approved & Verified</div>
+              <div class="step-sub">${order.payment_method === 'wallet' ? 'Prepaid Wallet' : 'Payment Verification'}</div>
             </div>
-
             <div class="step-item ${s3}">
               <div class="step-circle">
-                ${s3 === 'completed' ? '<i class="fa-solid fa-check"></i>' : `<i class="fa-solid ${isPrintService ? 'fa-print' : 'fa-gear'}"></i>`}
+                ${s3 === 'completed' ? '<i class="fa-solid fa-check"></i>' : (s3 === 'current' ? '<i class="fa-solid fa-gear fa-spin"></i>' : '<i class="fa-solid fa-gear"></i>')}
               </div>
-              <div class="step-label">${step3Title}</div>
-              <div class="step-sub">${step3Desc}</div>
+              <div class="step-label">Processing</div>
+              <div class="step-sub">Official processing</div>
             </div>
-
             <div class="step-item ${s4}">
               <div class="step-circle">
-                ${s4 === 'completed' ? `<i class="fa-solid ${isPrintService ? 'fa-store' : 'fa-check'}"></i>` : `<i class="fa-solid ${isPrintService ? 'fa-store' : 'fa-circle-check'}"></i>`}
+                ${s4 === 'completed' ? `<i class="fa-solid ${order.delivery_file ? 'fa-download' : 'fa-check'}"></i>` : '<i class="fa-solid fa-circle-check"></i>'}
               </div>
               <div class="step-label">${step4Title}</div>
               <div class="step-sub">${step4Desc}</div>
@@ -1666,52 +1709,55 @@
 
       // Status Notification Banner
       let pickupBannerHtml = '';
-      if (isPrintService && order.order_status === 'completed') {
+      if (order.order_status === 'completed') {
+        const fileUrl = order.delivery_file ? API.getDownloadUrl(order.id, 'delivery', false) : null;
         pickupBannerHtml = `
           <div style="margin: 0 0 20px; padding: 18px 20px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1.5px solid #86efac; border-radius: 14px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 4px 14px rgba(3, 169, 58, 0.08);">
-            <div style="display: flex; align-items: flex-start; gap: 14px;">
-              <div style="width: 46px; height: 46px; border-radius: 12px; background: #03a93a; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(3, 169, 58, 0.25);">
-                <i class="fa-solid fa-store"></i>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 1rem; color: #14532d; display: flex; align-items: center; gap: 8px;">
-                  <span>Printed Successfully &bull; Ready for Pickup</span>
-                  <span style="font-size: 0.7rem; background: #03a93a; color: #ffffff; padding: 2px 8px; border-radius: 20px; font-weight: 700;">FINISHED</span>
-                </div>
-                <p style="margin: 5px 0 0; font-size: 0.86rem; color: #166534; line-height: 1.5;">
-                  Your smart PVC card print is finished and safely packed. Please visit our center with Order Number <strong>(${escapeHtml(order.order_number)})</strong> to collect your physical card!
-                </p>
-              </div>
-            </div>
-          </div>
-        `;
-      } else if (order.delivery_file) {
-        const fileUrl = API.getDownloadUrl(order.id, 'delivery', false);
-        pickupBannerHtml = `
-          <div style="margin: 0 0 20px; padding: 18px 20px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1.5px solid #86efac; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 4px 14px rgba(3, 169, 58, 0.08);">
-            <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="display: flex; align-items: flex-start; gap: 14px; flex: 1;">
               <div style="width: 44px; height: 44px; border-radius: 12px; background: #03a93a; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                <i class="fa-solid fa-file-arrow-down"></i>
+                <i class="fa-solid fa-circle-check"></i>
               </div>
-              <div>
-                <div style="font-weight: 800; font-size: 0.98rem; color: #14532d;">Document Ready for Download</div>
-                <div style="font-size: 0.84rem; color: #166534; margin-top: 2px;">High-definition printable file prepared by our center</div>
+              <div style="flex: 1;">
+                <div style="font-weight: 800; font-size: 1rem; color: #14532d; display:flex; align-items:center; gap:8px;">
+                  <span>Service Completed Successfully</span>
+                  <span style="font-size: 0.68rem; background: #03a93a; color: #ffffff; padding: 2px 8px; border-radius: 20px; font-weight: 700;">COMPLETED</span>
+                </div>
+                <div style="font-size: 0.85rem; color: #166534; margin-top: 4px;">
+                  ${order.delivery_file ? 'Your service order has been fulfilled. You can download the completed document below.' : 'Your service order has been successfully processed and fulfilled by our team.'}
+                </div>
+                ${order.admin_notes ? `
+                  <div style="margin-top: 10px; padding: 10px 14px; background: rgba(255, 255, 255, 0.85); border: 1.5px solid #86efac; border-radius: 8px; font-size: 0.86rem; color: #14532d; line-height: 1.5;">
+                    <div style="font-weight: 800; font-size: 0.78rem; color: #15803d; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 3px; display: flex; align-items: center; gap: 5px;">
+                      <i class="fa-solid fa-comment-dots"></i> Admin Message / Remarks
+                    </div>
+                    ${escapeHtml(order.admin_notes)}
+                  </div>
+                ` : ''}
               </div>
             </div>
-            <a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-rz-green" style="padding: 9px 20px; font-size: 0.86rem; font-weight: 700; text-decoration: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;" download>
-              <i class="fa-solid fa-download"></i> Download File
-            </a>
+            ${fileUrl ? `
+              <a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-rz-green" style="padding: 10px 22px; font-size: 0.88rem; font-weight: 700; text-decoration: none; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(3, 169, 58, 0.25); white-space: nowrap;" download>
+                <i class="fa-solid fa-download"></i> Download Document
+              </a>
+            ` : ''}
           </div>
         `;
       } else if (order.order_status === 'rejected') {
         pickupBannerHtml = `
-          <div style="margin: 0 0 20px; padding: 16px 20px; background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 14px; color: #991b1b; display: flex; align-items: flex-start; gap: 14px;">
-            <div style="width: 42px; height: 42px; border-radius: 10px; background: #ef4444; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-              <i class="fa-solid fa-triangle-exclamation"></i>
+          <div style="margin: 0 0 20px; padding: 16px 20px; background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 14px; color: #991b1b; display: flex; align-items: flex-start; gap: 14px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.08);">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: #ef4444; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;">
+              <i class="fa-solid fa-circle-xmark"></i>
             </div>
-            <div>
-              <div style="font-weight: 800; font-size: 0.96rem; color: #991b1b;">Application Rejected</div>
-              <div style="font-size: 0.86rem; margin-top: 4px; color: #7f1d1d;">Reason: ${escapeHtml(order.rejection_reason || 'Could not be processed by center.')}</div>
+            <div style="flex: 1;">
+              <div style="font-weight: 800; font-size: 0.98rem; color: #991b1b;">Application Rejected & Fee Refunded</div>
+              <div style="font-size: 0.88rem; margin-top: 4px; color: #7f1d1d; line-height: 1.45;">
+                <strong>Reason:</strong> ${escapeHtml(order.rejection_reason || 'Could not be processed by center.')}
+              </div>
+              ${order.payment_method === 'wallet' ? `
+                <div style="margin-top: 8px; font-size: 0.82rem; color: #166534; font-weight: 700; background: #dcfce7; border: 1px solid #bbf7d0; padding: 5px 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-wallet"></i> ${formatINR(order.amount)} has been credited back to your wallet balance.
+                </div>
+              ` : ''}
             </div>
           </div>
         `;

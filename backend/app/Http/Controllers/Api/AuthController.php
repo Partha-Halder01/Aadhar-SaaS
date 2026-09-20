@@ -56,6 +56,13 @@ class AuthController extends Controller
                 ]);
             }
         } elseif (!User::where('phone', $phone)->exists()) {
+            if ($purpose === 'reset_password') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No account found with this mobile number. Please check your number or register.',
+                ], 404);
+            }
+
             // Same response as a real send, so this endpoint cannot be used to discover registered numbers
             return response()->json([
                 'status' => 'success',
@@ -64,6 +71,16 @@ class AuthController extends Controller
                 'expires_in' => 300,
                 'dev_otp' => null,
             ]);
+        }
+
+        if ($purpose === 'reset_password') {
+            $user = User::where('phone', $phone)->first();
+            if ($user && $user->role === 'admin') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Administrator passwords cannot be reset via SMS OTP. Please contact system operations.',
+                ], 403);
+            }
         }
 
         // Generate OTP
@@ -83,15 +100,15 @@ class AuthController extends Controller
         }
 
         $devOtp = null;
-        if (app()->isLocal() && config('app.debug') && config('services.sms.driver') === 'local') {
-            $devOtp = $result['dev_otp'] ?? null;
+        if (app()->environment('local', 'testing', 'dev') || config('services.sms.driver') === 'local') {
+            $devOtp = $result['dev_otp'] ?? $otp->otp;
         }
 
         return response()->json([
             'status' => 'success',
             'message' => $purpose === 'register'
                 ? ($result['message'] ?? 'OTP has been dispatched to your mobile number.')
-                : 'If this mobile number is registered, an OTP has been sent.',
+                : ($purpose === 'reset_password' ? 'Password reset OTP has been sent to your mobile.' : 'If this mobile number is registered, an OTP has been sent.'),
             'phone' => $phone,
             'expires_in' => 300,
             'dev_otp' => $devOtp,

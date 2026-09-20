@@ -577,13 +577,9 @@
       // 1. Desktop Table rendering (100% untouched)
       if (tbody) {
         tbody.innerHTML = orders.map(o => {
-          const isPrintService = o.service && o.service.category === 'print';
-
           let statusBadge = '';
           if (o.order_status === 'completed') {
-            statusBadge = isPrintService 
-              ? '<span class="badge-status badge-completed" style="background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>'
-              : '<span class="badge-status badge-completed">Completed</span>';
+            statusBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-circle-check"></i> Completed</span>';
           } else if (o.order_status === 'processing') {
             statusBadge = '<span class="badge-status badge-processing">Processing</span>';
           } else if (o.order_status === 'rejected') {
@@ -593,19 +589,15 @@
           }
 
           let downloadAction = '-';
-          if (isPrintService && o.order_status === 'completed') {
-            downloadAction = `
-              <div style="display:inline-flex; flex-direction:column; gap:3px;">
-                <span style="display:inline-flex; align-items:center; gap:6px; color:#03a93a; font-weight:700; font-size:0.8rem; background:#f0fdf4; border:1.5px solid #bbf7d0; padding:6px 12px; border-radius:8px; line-height:1.25;">
-                  <i class="fa-solid fa-store" style="font-size:0.95rem; color:#03a93a;"></i>
-                  <span>Printed Successfully &bull; Collect from our center</span>
-                </span>
-                ${o.delivery_file ? `<a href="${API.getDownloadUrl(o.id, 'delivery', false)}" target="_blank" style="font-size:0.75rem; color:#2563eb; text-decoration:underline; font-weight:600;"><i class="fa-solid fa-download"></i> View File Copy</a>` : ''}
-              </div>
-            `;
-          } else if (o.delivery_file) {
+          if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            downloadAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+            downloadAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.78rem; border-radius: 8px; text-decoration: none; display:inline-flex; align-items:center; gap:5px; font-weight:700;" download><i class="fa-solid fa-download"></i> Download</a>`;
+          } else if (o.order_status === 'completed') {
+            downloadAction = `
+              <span style="display:inline-flex; align-items:center; gap:5px; color:#03a93a; font-weight:700; font-size:0.8rem; background:#f0fdf4; border:1.5px solid #bbf7d0; padding:6px 12px; border-radius:8px;" ${o.admin_notes ? `title="${escapeHtml(o.admin_notes)}"` : ''}>
+                <i class="fa-solid fa-circle-check"></i> Completed
+              </span>
+            `;
           } else if (o.rejection_reason) {
             downloadAction = `<span style="color:#dc2626; font-size:0.8rem; font-weight:600;">Reason: ${escapeHtml(o.rejection_reason)}</span>`;
           } else if (o.order_status === 'processing') {
@@ -617,7 +609,10 @@
           return `
             <tr>
               <td><span class="order-id-chip">${escapeHtml(o.order_number)}</span></td>
-              <td><strong style="color:#0f172a;">${escapeHtml(o.service ? o.service.name : 'Print Card')}</strong></td>
+              <td>
+                <strong style="color:#0f172a;">${escapeHtml(o.service ? o.service.name : 'Print Card')}</strong>
+                ${o.admin_notes && o.order_status === 'completed' ? `<div style="font-size:0.75rem; color:#166534; margin-top:2px;"><strong>Remarks:</strong> ${escapeHtml(o.admin_notes)}</div>` : ''}
+              </td>
               <td style="color:#64748b; font-size:0.85rem;">${formatDate(o.created_at)}</td>
               <td style="font-weight: 800; font-family:'Outfit',sans-serif; color:#0f172a;">${formatINR(o.amount)}</td>
               <td>
@@ -635,13 +630,9 @@
       // 2. Mobile Responsive Cards rendering
       if (mobileContainer) {
         mobileContainer.innerHTML = orders.map(o => {
-          const isPrintService = o.service && o.service.category === 'print';
-
           let statusBadge = '';
           if (o.order_status === 'completed') {
-            statusBadge = isPrintService
-              ? '<span class="badge-status badge-completed" style="background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>'
-              : '<span class="badge-status badge-completed">Completed</span>';
+            statusBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-circle-check"></i> Completed</span>';
           } else if (o.order_status === 'processing') {
             statusBadge = '<span class="badge-status badge-processing">Processing</span>';
           } else if (o.order_status === 'rejected') {
@@ -651,15 +642,11 @@
           }
 
           let downloadAction = '';
-          if (isPrintService && o.order_status === 'completed') {
-            downloadAction = `
-              <div style="color:#03a93a; font-weight:700; font-size:0.76rem; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:5px;">
-                <i class="fa-solid fa-store"></i> Printed &bull; Collect from center
-              </div>
-            `;
-          } else if (o.delivery_file) {
+          if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            downloadAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+            downloadAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 8px; text-decoration: none; display:inline-flex; align-items:center; gap:5px; font-weight:700;" download><i class="fa-solid fa-download"></i> Download</a>`;
+          } else if (o.order_status === 'completed') {
+            downloadAction = '<span style="color:#03a93a; font-weight:700; font-size:0.75rem; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-circle-check"></i> Completed</span>';
           } else if (o.rejection_reason) {
             downloadAction = `<span style="color:#dc2626; font-size:0.78rem; font-weight:600;">Reason: ${escapeHtml(o.rejection_reason)}</span>`;
           } else {
@@ -678,6 +665,11 @@
               </div>
               <div class="mobile-ledger-card-body">
                 <div class="mobile-ledger-title">${escapeHtml(o.service ? o.service.name : 'Print Card')}</div>
+                ${o.admin_notes && o.order_status === 'completed' ? `
+                  <div style="margin-top: 6px; padding: 6px 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; font-size: 0.76rem; color: #166534;">
+                    <strong><i class="fa-solid fa-comment-dots"></i> Remarks:</strong> ${escapeHtml(o.admin_notes)}
+                  </div>
+                ` : ''}
                 <div class="mobile-ledger-meta">
                   <span><i class="fa-regular fa-clock"></i> ${formatDate(o.created_at)}</span>
                   <span>&bull;</span>

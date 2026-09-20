@@ -1171,6 +1171,7 @@
     </div>
   </div>
 
+  <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
@@ -1183,16 +1184,24 @@
     // Instant Zero-Lag Hydration from cache
     try {
       const cachedCats = API.cache.get('service_categories_list');
-      if (cachedCats && cachedCats.data) {
-        categoriesList = cachedCats.data;
+      const list = (cachedCats && Array.isArray(cachedCats.data)) ? cachedCats.data : (Array.isArray(cachedCats) ? cachedCats : null);
+      if (list && list.length) {
+        categoriesList = list;
+        renderOverviewCategoryFilterTabs(categoriesList);
         renderCategoriesGrid(categoriesList);
       }
     } catch (e) {}
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      await loadInitialData();
+    function initServicesPage() {
+      loadInitialData();
       handleUrlParams();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initServicesPage);
+    } else {
+      initServicesPage();
+    }
 
     // Handle browser back/forward navigation
     window.addEventListener('popstate', () => {
@@ -1202,21 +1211,36 @@
     async function loadInitialData() {
       try {
         const [settings, catsRes, srvRes] = await Promise.all([
-          API.getPublicSettings(),
-          API.getServiceCategories(),
-          API.getServices()
+          API.getPublicSettings().catch(err => { console.warn('Public settings load failed:', err); return {}; }),
+          API.getServiceCategories().catch(err => { console.warn('Service categories load failed:', err); return { data: [] }; }),
+          API.getServices().catch(err => { console.warn('Services load failed:', err); return { data: [] }; })
         ]);
 
         publicSettings = settings || {};
 
-        categoriesList = (catsRes && catsRes.data) ? catsRes.data : [];
-        allServices = (srvRes && srvRes.data) ? srvRes.data : [];
+        categoriesList = (catsRes && Array.isArray(catsRes.data)) ? catsRes.data : (Array.isArray(catsRes) ? catsRes : []);
+        allServices = (srvRes && Array.isArray(srvRes.data)) ? srvRes.data : (Array.isArray(srvRes) ? srvRes : []);
 
-        // Render Toolbar Filter Tabs & Cards Grid
+        // Render Toolbar Filter Tabs
         renderOverviewCategoryFilterTabs(categoriesList);
-        renderCategoriesGrid(categoriesList);
+
+        // If URL has ?category=slug, immediately open and display that category's services
+        const urlParams = new URLSearchParams(window.location.search);
+        const catParam = urlParams.get('category');
+        if (catParam) {
+          openCategoryView(catParam, false);
+        } else {
+          renderCategoriesGrid(categoriesList);
+        }
       } catch (err) {
         console.error('Initialization error:', err);
+        const urlParams = new URLSearchParams(window.location.search);
+        const catParam = urlParams.get('category');
+        if (catParam) {
+          openCategoryView(catParam, false);
+        } else {
+          renderCategoriesGrid(categoriesList || []);
+        }
       }
     }
 
@@ -1731,8 +1755,6 @@
           if (o.order_status === 'completed') {
             if (isPanService) {
               statusBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-circle-check"></i> Found</span>';
-            } else if (isPrintService) {
-              statusBadge = '<span class="badge-status badge-completed" style="background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>';
             } else {
               statusBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-circle-check"></i> Completed</span>';
             }
@@ -1747,15 +1769,15 @@
           let actionResult = '-';
           if (isPanService && o.delivery_file) {
             actionResult = `<span style="font-family:'JetBrains Mono', monospace; font-size:0.92rem; font-weight:800; color:#028a2f; background:#f0fdf4; padding:4px 10px; border-radius:8px; border:1px solid #bbf7d0; display:inline-flex; align-items:center; gap:6px;"><i class="fa-solid fa-id-card"></i> ${o.delivery_file}</span>`;
-          } else if (isPrintService && o.order_status === 'completed') {
-            actionResult = `
-              <div style="color:#03a93a; font-weight:700; font-size:0.78rem; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:5px;">
-                <i class="fa-solid fa-store"></i> Ready at Center
-              </div>
-            `;
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            actionResult = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 8px; text-decoration: none;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+            actionResult = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.8rem; border-radius: 8px; text-decoration: none; display:inline-flex; align-items:center; gap:5px; font-weight:700;" download><i class="fa-solid fa-download"></i> Download</a>`;
+          } else if (o.order_status === 'completed') {
+            actionResult = `
+              <div style="color:#03a93a; font-weight:700; font-size:0.78rem; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:5px;" ${o.admin_notes ? `title="${escapeHtml(o.admin_notes)}"` : ''}>
+                <i class="fa-solid fa-circle-check"></i> Completed
+              </div>
+            `;
           } else if (o.rejection_reason) {
             actionResult = `<span style="color:#dc2626; font-size:0.82rem; font-weight:600;">${escapeHtml(o.rejection_reason)}</span>`;
           } else {
@@ -1836,6 +1858,12 @@
                     <div class="drawer-item-lbl">Payment Mode & Ref</div>
                     <div class="drawer-item-val">${o.payment_method === 'wallet' ? 'Prepaid Wallet' : (utrNum !== '-' ? 'UPI Ref: ' + utrNum : 'UPI Direct')}</div>
                   </div>
+                  ${o.admin_notes ? `
+                  <div style="grid-column: 1/-1;">
+                    <div class="drawer-item-lbl" style="color: #15803d;"><i class="fa-solid fa-comment-dots"></i> Admin Message / Remarks</div>
+                    <div class="drawer-item-val" style="color: #166534; background: #f0fdf4; padding: 8px 12px; border-radius: 6px; border: 1px solid #bbf7d0;">${escapeHtml(o.admin_notes)}</div>
+                  </div>
+                  ` : ''}
                   ${o.rejection_reason ? `
                   <div style="grid-column: 1/-1;">
                     <div class="drawer-item-lbl" style="color: #dc2626;">Rejection Note / Remarks</div>
@@ -1869,11 +1897,13 @@
           let actionResult = '';
           if (isPanService && o.delivery_file) {
             actionResult = `<span style="font-family:'JetBrains Mono', monospace; font-size:0.85rem; font-weight:800; color:#028a2f; background:#f0fdf4; padding:3px 8px; border-radius:6px; border:1px solid #bbf7d0;"><i class="fa-solid fa-id-card"></i> ${o.delivery_file}</span>`;
-          } else if (isPrintService && o.order_status === 'completed') {
-            actionResult = '<span style="color:#03a93a; font-weight:700; font-size:0.75rem;"><i class="fa-solid fa-store"></i> Ready</span>';
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            actionResult = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 5px 12px; font-size: 0.78rem;" download><i class="fa-solid fa-download"></i> File</a>`;
+            actionResult = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 5px 12px; font-size: 0.78rem; display:inline-flex; align-items:center; gap:4px; font-weight:700; text-decoration:none;" download><i class="fa-solid fa-download"></i> Download</a>`;
+          } else if (o.order_status === 'completed') {
+            actionResult = '<span style="color:#03a93a; font-weight:700; font-size:0.75rem;"><i class="fa-solid fa-circle-check"></i> Completed</span>';
+          } else if (o.order_status === 'rejected') {
+            actionResult = '<span style="color:#dc2626; font-size:0.75rem; font-weight:700;"><i class="fa-solid fa-ban"></i> Rejected</span>';
           } else {
             actionResult = '<span style="color:#94a3b8; font-size:0.78rem;">In Progress</span>';
           }
@@ -1890,7 +1920,18 @@
               </div>
               <div class="mobile-ledger-card-body" style="margin-bottom: 12px;">
                 <div class="mobile-ledger-title" style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">${escapeHtml(o.service ? o.service.name : 'Service')}</div>
-                <div class="mobile-ledger-meta" style="font-size: 0.78rem; color: #64748b; margin-top: 4px; display: flex; gap: 8px; align-items: center;">
+                ${o.admin_notes && o.order_status === 'completed' ? `
+                  <div style="margin-top: 6px; padding: 6px 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; font-size: 0.76rem; color: #166534;">
+                    <strong><i class="fa-solid fa-comment-dots"></i> Remarks:</strong> ${escapeHtml(o.admin_notes)}
+                  </div>
+                ` : ''}
+                ${o.order_status === 'rejected' ? `
+                  <div style="font-size: 0.76rem; font-weight: 700; color: #b91c1c; margin-top: 6px; background:#fef2f2; padding:6px 10px; border-radius:8px; border:1px solid #fecaca;">
+                    <i class="fa-solid fa-ban"></i> Reason: ${escapeHtml(o.rejection_reason || 'Rejected by Admin')}
+                    ${o.payment_method === 'wallet' ? ` &bull; <span style="color:#15803d;"><i class="fa-solid fa-wallet"></i> Refunded</span>` : ''}
+                  </div>
+                ` : ''}
+                <div class="mobile-ledger-meta" style="font-size: 0.78rem; color: #64748b; margin-top: 6px; display: flex; gap: 8px; align-items: center;">
                   <span><i class="fa-regular fa-clock"></i> ${formatDate(o.created_at)}</span>
                   <span>&bull;</span>
                   <span>${payMethod}</span>

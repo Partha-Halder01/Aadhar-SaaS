@@ -558,7 +558,7 @@
     }
     .dropdown-grid {
       display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 16px;
       align-items: stretch;
     }
@@ -670,7 +670,7 @@
         <li class="sidebar-item">
           <a href="settings.html" class="sidebar-link">
             <i class="fa-solid fa-sliders" style="color:#64748b;"></i>
-            <span>UPI & Global Settings</span>
+            <span>Security & Global Settings</span>
           </a>
         </li>
       </ul>
@@ -863,11 +863,11 @@
       <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 22px 26px;">
         <div style="display:flex; align-items:center; gap: 14px;">
           <div style="width: 44px; height: 44px; border-radius: 12px; background:#f0fdf4; color:#03a93a; border: 1.5px solid #bbf7d0; display:flex; align-items:center; justify-content:center; font-size:1.25rem;">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <i class="fa-solid fa-circle-check"></i>
           </div>
           <div>
-            <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color:#0f172a; font-family:'Outfit', sans-serif;">Deliver Ready Document</h3>
-            <small style="color: #64748b;" id="fulfillOrderSubtitle">Upload finalized PDF or Card image</small>
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color:#0f172a; font-family:'Outfit', sans-serif;">Complete Service Order</h3>
+            <small style="color: #64748b;" id="fulfillOrderSubtitle">Write note/remarks for customer and optionally upload completed document</small>
           </div>
         </div>
         <button onclick="closeModal('modalFulfill')" class="btn-icon-action" style="border-radius: 50%;" title="Close">
@@ -879,27 +879,39 @@
         <div class="modal-body-custom" style="padding: 24px 26px;">
           <input type="hidden" id="fulfillOrderId">
 
-          <div class="form-group">
-            <label class="form-label" for="deliveryFileInput">Upload Completed File (PDF / JPEG / PNG) <span style="color: #ef4444;">*</span></label>
-            <div style="border: 2px dashed #bfdbfe; border-radius: 14px; padding: 26px 20px; text-align: center; background: #eff6ff; cursor: pointer; transition: all 0.2s ease;" onclick="document.getElementById('deliveryFileInput').click()" onmouseover="this.style.borderColor='#0066cc'; this.style.background='#e0f2fe';" onmouseout="this.style.borderColor='#bfdbfe'; this.style.background='#eff6ff';">
-              <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.2rem; color: #0066cc; margin-bottom: 8px;"></i>
-              <div style="font-weight: 700; font-size: 0.92rem; color: #0f172a;">Click to select delivery file</div>
-              <small style="color: #64748b;">Max size: 10 MB (PDF, JPG, PNG)</small>
-              <div id="selectedFileName" style="margin-top: 8px; font-weight: 800; color: #03a93a; font-size: 0.85rem;"></div>
-            </div>
-            <input type="file" id="deliveryFileInput" class="form-control" accept=".pdf,image/*" required style="display:none;" onchange="handleFileSelected(this)">
+          <!-- 1. Text Note / Message for Customer -->
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label" for="adminNotesInput" style="font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-message" style="color: #0066cc;"></i> Message / Remarks for Customer <span style="color: #64748b; font-weight: 500; font-size: 0.8rem;">(Shown to User)</span>
+            </label>
+            <textarea id="adminNotesInput" class="form-control" rows="3" placeholder="e.g. Your Aadhaar / PAN card has been processed successfully. Please download your document file below or see details."></textarea>
+            <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 4px;">This text will be clearly visible to the customer on their order card and details.</small>
           </div>
 
-          <div class="form-group" style="margin-top: 16px;">
-            <label class="form-label" for="adminNotesInput">Admin Remarks / Notes for Customer (Optional)</label>
-            <textarea id="adminNotesInput" class="form-control" rows="2" placeholder="e.g. Document verified with digital seal & ready for instant download."></textarea>
+          <!-- 2. Document Upload (Optional) -->
+          <div class="form-group">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <label class="form-label" for="deliveryFileInput" style="margin-bottom: 0; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-file-arrow-up" style="color: #03a93a;"></i> Upload Completed Document <span style="color: #64748b; font-weight: 500; font-size: 0.8rem;">(PDF / JPEG / PNG) (Optional)</span>
+              </label>
+              <button type="button" id="btnClearSelectedFile" onclick="clearSelectedDeliveryFile(event)" style="display:none; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; cursor: pointer; align-items: center; gap: 4px;">
+                <i class="fa-solid fa-xmark"></i> Remove File
+              </button>
+            </div>
+            <div style="border: 2px dashed #bfdbfe; border-radius: 14px; padding: 22px 20px; text-align: center; background: #eff6ff; cursor: pointer; transition: all 0.2s ease;" onclick="document.getElementById('deliveryFileInput').click()" onmouseover="this.style.borderColor='#0066cc'; this.style.background='#e0f2fe';" onmouseout="this.style.borderColor='#bfdbfe'; this.style.background='#eff6ff';">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.2rem; color: #0066cc; margin-bottom: 8px;"></i>
+              <div style="font-weight: 700; font-size: 0.92rem; color: #0f172a;">Click or drop completed file here (Optional)</div>
+              <small style="color: #64748b;">Max size: 10 MB (PDF, JPG, PNG) &bull; Leave empty if no file attachment is needed</small>
+              <div id="selectedFileName" style="margin-top: 8px; font-weight: 800; color: #03a93a; font-size: 0.85rem;"></div>
+            </div>
+            <input type="file" id="deliveryFileInput" class="form-control" accept=".pdf,image/*" style="display:none;" onchange="handleFileSelected(this)">
           </div>
         </div>
 
         <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 18px 26px;">
           <button type="button" class="btn-rz-secondary" onclick="closeModal('modalFulfill')">Cancel</button>
-          <button type="submit" id="btnSubmitFulfill" class="btn-rz-primary">
-            <i class="fa-solid fa-check-double"></i> Complete & Deliver Order
+          <button type="submit" id="btnSubmitFulfill" class="btn-rz-primary" style="background: linear-gradient(135deg, #03a93a 0%, #028a2f 100%);">
+            <i class="fa-solid fa-check-double"></i> Submit & Complete Service
           </button>
         </div>
       </form>
@@ -958,6 +970,69 @@
           <button type="button" class="btn-rz-secondary" onclick="closeModal('modalRequestDoc')">Cancel</button>
           <button type="submit" id="btnSubmitReqDoc" class="btn-rz-primary" style="background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);">
             <i class="fa-solid fa-paper-plane"></i> Send Alert to Customer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reject Order & Refund Wallet Modal -->
+  <div class="modal-backdrop-custom" id="modalRejectOrder">
+    <div class="modal-dialog-custom" style="max-width: 580px;">
+      <div class="modal-header-custom" style="background: #ffffff; border-bottom: 1px solid #f1f5f9; padding: 22px 26px;">
+        <div style="display:flex; align-items:center; gap: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background:#fef2f2; color:#ef4444; border: 1.5px solid #fecaca; display:flex; align-items:center; justify-content:center; font-size:1.25rem;">
+            <i class="fa-solid fa-ban"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color:#0f172a; font-family:'Outfit', sans-serif;">Reject Order & Refund Wallet</h3>
+            <small style="color: #64748b;" id="rejectOrderSubtitle">State reason for customer and immediately refund wallet</small>
+          </div>
+        </div>
+        <button onclick="closeModal('modalRejectOrder')" class="btn-icon-action" style="border-radius: 50%;" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="rejectOrderForm" onsubmit="handleRejectOrderSubmit(event)">
+        <div class="modal-body-custom" style="padding: 24px 26px;">
+          <input type="hidden" id="rejectOrderId">
+
+          <!-- Wallet refund alert notification box -->
+          <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 12px 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: #03a93a; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0;">
+              <i class="fa-solid fa-wallet"></i>
+            </div>
+            <div>
+              <div style="font-weight: 800; font-size: 0.88rem; color: #14532d;">Instant Customer Wallet Refund</div>
+              <div style="font-size: 0.8rem; color: #166534; margin-top: 1px;" id="rejectOrderRefundNote">
+                Amount will automatically be credited back into customer's wallet balance upon rejection.
+              </div>
+            </div>
+          </div>
+
+          <!-- Preset Rejection Reasons -->
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" style="font-size:0.82rem; font-weight:700; color:#475569; margin-bottom:8px; display:block;">Select Common Rejection Reason:</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" class="preset-pill-btn" onclick="applyRejectPreset('Uploaded Document Unclear / Blurry scan')">Document Unclear</button>
+              <button type="button" class="preset-pill-btn" onclick="applyRejectPreset('Name / DOB / Details mismatch with government database')">Details Mismatch</button>
+              <button type="button" class="preset-pill-btn" onclick="applyRejectPreset('Citizen record or application number not found in UIDAI/PAN portal')">Record Not Found</button>
+              <button type="button" class="preset-pill-btn" onclick="applyRejectPreset('Duplicate application already exists / already processed')">Duplicate Order</button>
+              <button type="button" class="preset-pill-btn" onclick="applyRejectPreset('Service center cannot fulfill this request at this time')">Cannot Fulfill</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="rejectOrderReason">Rejection Reason for Customer <span style="color: #ef4444;">*</span></label>
+            <textarea id="rejectOrderReason" class="form-control" rows="3" required placeholder="State clearly why this order is being rejected so the customer understands..." style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.92rem; box-sizing: border-box;"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 18px 26px; display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-rz-secondary" onclick="closeModal('modalRejectOrder')">Cancel</button>
+          <button type="submit" id="btnSubmitRejectOrder" class="btn-rz-primary" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+            <i class="fa-solid fa-ban"></i> Confirm Rejection & Refund Wallet
           </button>
         </div>
       </form>
@@ -1211,41 +1286,42 @@
         if (order.order_status === 'processing') {
           statusPillClass = 'status-processing';
           dotClass = 'dot-blue';
-          statusText = isPrintService ? 'Printing Card' : 'Processing';
+          statusText = 'Processing';
         } else if (order.order_status === 'completed') {
           statusPillClass = 'status-completed';
           dotClass = 'dot-green';
-          statusText = isPrintService ? 'Printed (Ready)' : 'Delivered';
+          statusText = 'Completed';
         } else if (order.order_status === 'rejected') {
           statusPillClass = 'status-rejected';
           dotClass = 'dot-red';
           statusText = 'Rejected';
+          if (order.rejection_reason) {
+            subStatusHtml = `<div class="substatus-note" style="color:#b91c1c; background:#fef2f2; border:1px solid #fecaca; margin-top:3px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(order.rejection_reason)}"><i class="fa-solid fa-ban"></i> ${escapeHtml(order.rejection_reason)}</div>`;
+          }
         }
 
         // Action Buttons Setup
-        const isPendingPayment = order.payment_status === 'pending';
+        const isPendingOrder = (order.order_status === 'pending' || order.payment_status === 'pending');
         const isProcessing = order.order_status === 'processing';
         const isDelivered = order.order_status === 'completed';
+        const isRejected = order.order_status === 'rejected';
         const canRequestDoc = order.order_status !== 'rejected';
         const isDocPending = order.doc_request_status === 'pending';
 
         let quickActionBtn = '';
-        if (isPendingPayment) {
+        if (isPendingOrder) {
           quickActionBtn = `
-            <button onclick="verifyPaymentModal(${order.id}, 'approve')" class="btn-action-approve" title="Approve Payment">
+            <button onclick="approveOrderAction(${order.id})" class="btn-action-approve" title="Approve Order & Move to Processing">
               <i class="fa-solid fa-check"></i> Approve
             </button>
-          `;
-        } else if (isProcessing && isPrintService) {
-          quickActionBtn = `
-            <button onclick="markOrderPrinted(${order.id})" class="btn-action-print" title="Mark as Printed & Ready">
-              <i class="fa-solid fa-print"></i> Printed
+            <button onclick="openRejectOrderModal(${order.id})" class="btn-action-reject" title="Reject Order & Refund Wallet">
+              <i class="fa-solid fa-xmark"></i> Reject
             </button>
           `;
-        } else if (isProcessing && !isPrintService) {
+        } else if (isProcessing) {
           quickActionBtn = `
-            <button onclick="openFulfillModal(${order.id})" class="btn-action-deliver" title="Deliver Output File">
-              <i class="fa-solid fa-upload"></i> Deliver
+            <button onclick="openFulfillModal(${order.id})" class="btn-action-deliver" title="Complete Order, Write Note & Upload Doc">
+              <i class="fa-solid fa-check-double"></i> Complete
             </button>
           `;
         } else {
@@ -1323,39 +1399,6 @@
               <div class="order-dropdown-content">
                 <div class="dropdown-grid">
                   
-                  <!-- Card 1: Customer Uploaded Documents -->
-                  <div class="dropdown-section-card">
-                    <div>
-                      <div class="dropdown-card-header">
-                        <span><i class="fa-solid fa-folder-open" style="color: #ea580c;"></i> Attached Documents (${customerDocs.length})</span>
-                        <span class="badge-cat-pill" style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0;"><i class="fa-solid fa-shield-halved"></i> Preserved</span>
-                      </div>
-                      <div style="display: flex; flex-direction: column; gap: 7px; max-height: 140px; overflow-y: auto;">
-                        ${customerDocs.length ? customerDocs.map((cd, i) => `
-                          <div style="display: flex; align-items: center; justify-content: space-between; background: ${cd.type === 'requested' ? '#f0fdf4' : '#ffffff'}; border: 1px solid ${cd.type === 'requested' ? '#bbf7d0' : '#e2e8f0'}; border-radius: 8px; padding: 7px 10px; font-size: 0.78rem;">
-                            <div style="min-width: 0; flex: 1; padding-right: 8px;">
-                              <div style="font-weight: 700; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(cd.label)}">
-                                <i class="fa-solid ${cd.type === 'requested' ? 'fa-file-circle-plus' : 'fa-file'}" style="color: ${cd.type === 'requested' ? '#16a34a' : '#0066cc'}; margin-right: 4px;"></i>
-                                ${escapeHtml(cd.label)}
-                              </div>
-                              ${cd.notes ? `<div style="font-size: 0.72rem; color: #64748b; font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">"${escapeHtml(cd.notes)}"</div>` : ''}
-                            </div>
-                            <a href="${escapeHtml(API.getDownloadUrl(order.id, 'file', true, cd.file))}" target="_blank" class="btn-action-download-sm" title="View Document">
-                              <i class="fa-solid fa-arrow-up-right-from-square"></i> View
-                            </a>
-                          </div>
-                        `).join('') : '<div style="font-size: 0.8rem; color: #94a3b8; padding: 8px 0;">No customer documents attached.</div>'}
-                      </div>
-                    </div>
-                    ${canRequestDoc ? `
-                      <div class="dropdown-card-footer">
-                        <button onclick="openRequestDocModal(${order.id})" class="btn-action-secondary-w100" style="background:#fff7ed; color:#ea580c; border:1px solid #fed7aa;">
-                          <i class="fa-solid fa-file-circle-question"></i> ${isDocPending ? 'Send Reminder / New Alert' : 'Request Missing Document'}
-                        </button>
-                      </div>
-                    ` : ''}
-                  </div>
-
                   <!-- Card 2: Operations & Order Actions -->
                   <div class="dropdown-section-card">
                     <div>
@@ -1364,40 +1407,41 @@
                         <span style="font-size:0.72rem; color:#64748b; font-weight:600;">Fast Action</span>
                       </div>
                       <div style="display: flex; flex-direction: column; gap: 8px;">
-                        ${isPendingPayment ? `
+                        ${isPendingOrder ? `
                           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <button onclick="verifyPaymentModal(${order.id}, 'approve')" class="btn-action-approve" style="justify-content: center; height: 34px;">
+                            <button onclick="approveOrderAction(${order.id})" class="btn-action-approve" style="justify-content: center; height: 34px;">
                               <i class="fa-solid fa-check"></i> Approve
                             </button>
-                            <button onclick="verifyPaymentModal(${order.id}, 'reject')" class="btn-action-reject" style="justify-content: center; height: 34px;">
+                            <button onclick="openRejectOrderModal(${order.id})" class="btn-action-reject" style="justify-content: center; height: 34px;">
                               <i class="fa-solid fa-xmark"></i> Reject
                             </button>
                           </div>
                         ` : ''}
 
-                        ${isProcessing ? (
-                          (order.service && order.service.category === 'print') ? `
-                            <button onclick="markOrderPrinted(${order.id})" class="btn-action-print" style="width: 100%; justify-content: center; height: 34px;">
-                              <i class="fa-solid fa-print"></i> Mark Printed & Ready for Pickup
-                            </button>
-                          ` : `
-                            <button onclick="openFulfillModal(${order.id})" class="btn-action-deliver" style="width: 100%; justify-content: center; height: 34px;">
-                              <i class="fa-solid fa-upload"></i> Upload Finished File & Fulfill
-                            </button>
-                          `
-                        ) : ''}
+                        ${isRejected ? `
+                          <div style="padding: 9px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; font-size: 0.77rem; color: #991b1b; line-height: 1.4;">
+                            <div style="font-weight: 800; display:flex; align-items:center; gap:5px;"><i class="fa-solid fa-ban"></i> Rejected Application</div>
+                            <div style="margin-top: 3px;"><strong>Reason:</strong> ${escapeHtml(order.rejection_reason || 'Rejected by Admin')}</div>
+                            <div style="margin-top: 4px; color: #15803d; font-weight: 700;"><i class="fa-solid fa-wallet"></i> Refunded to Customer Wallet</div>
+                          </div>
+                        ` : ''}
 
-                        ${isDelivered ? (
-                          order.delivery_file ? `
-                            <a href="${API.getDownloadUrl(order.id, 'delivery', true)}" target="_blank" class="btn-action-download-sm" style="display: flex; align-items: center; justify-content: center; gap: 6px; height: 34px; text-decoration: none;">
-                              <i class="fa-solid fa-download"></i> View Delivered Result File
-                            </a>
-                          ` : `
-                            <div style="font-size: 0.78rem; color: #028a2f; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px 10px; font-weight: 700;">
-                              <i class="fa-solid fa-circle-check"></i> Completed & Printed
-                            </div>
-                          `
-                        ) : ''}
+                        ${isProcessing ? `
+                          <button onclick="openFulfillModal(${order.id})" class="btn-action-deliver" style="width: 100%; justify-content: center; height: 36px; font-weight: 700;">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Complete Service & Deliver
+                          </button>
+                        ` : ''}
+
+                        ${isDelivered ? `
+                          <div style="font-size: 0.82rem; color: #028a2f; background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 8px; padding: 10px 12px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                            <span style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-circle-check"></i> Service Completed</span>
+                            ${order.delivery_file ? `
+                              <a href="${API.getDownloadUrl(order.id, 'delivery', false)}" target="_blank" class="btn-action-download-sm" style="height: 28px; padding: 0 10px; font-size: 0.74rem; text-decoration: none;" download>
+                                <i class="fa-solid fa-download"></i> View / Download Doc
+                              </a>
+                            ` : ''}
+                          </div>
+                        ` : ''}
 
                         <button onclick="openOrderDetailsModal(${order.id})" class="btn-action-secondary-w100">
                           <i class="fa-solid fa-sliders"></i> Full Order Details & Timeline
@@ -1419,11 +1463,19 @@
                         <div style="display: flex; justify-content: space-between;"><strong>Payment Mode:</strong> <span>${order.payment_method === 'wallet' ? 'Prepaid Wallet' : 'Direct UPI'}</span></div>
                         ${order.utr_number ? `<div style="display: flex; justify-content: space-between;"><strong>UTR Ref:</strong> <span style="font-family:monospace; font-weight:700; color:#0284c7;">${escapeHtml(order.utr_number)}</span></div>` : ''}
                         <div style="display: flex; justify-content: space-between;"><strong>Total Amount:</strong> <span style="font-weight: 800; color: #03a93a;">${formatINR(order.amount)}</span></div>
+                        ${customerDocs.length > 0 ? `
+                          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 4px; border-top: 1px dashed #e2e8f0; margin-top: 2px;">
+                            <strong>Customer Documents:</strong>
+                            <a href="#" onclick="openOrderDetailsModal(${order.id}); return false;" style="color: #0066cc; font-weight: 700; text-decoration: none; font-size: 0.78rem;">
+                              <i class="fa-solid fa-paperclip"></i> ${customerDocs.length} ${customerDocs.length === 1 ? 'Doc' : 'Docs'} (View in Details)
+                            </a>
+                          </div>
+                        ` : ''}
                       </div>
                     </div>
                     ${order.admin_notes ? `
-                      <div style="margin-top: 8px; padding: 6px 10px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; font-size: 0.74rem; color: #92400e;">
-                        <strong>Your Note:</strong> ${escapeHtml(order.admin_notes)}
+                      <div style="margin-top: 8px; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #03a93a; border-radius: 6px; font-size: 0.76rem; color: #1e293b;">
+                        <strong style="color: #03a93a;">Admin Message / Remarks:</strong> ${escapeHtml(order.admin_notes)}
                       </div>
                     ` : ''}
                   </div>
@@ -1642,74 +1694,55 @@
 
         ${paymentProofHtml}
 
-        ${(order.service && order.service.category === 'print' && order.order_status === 'completed') ? `
+        ${order.order_status === 'completed' ? `
           <div style="margin-top: 16px; padding: 14px 16px; background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 10px;">
-            <div style="font-weight: 800; color: #166534; font-size: 0.92rem; display:flex; align-items:center; gap:8px;">
-              <i class="fa-solid fa-store" style="font-size:1.15rem; color:#03a93a;"></i>
-              <span>Printed Successfully &bull; Ready for customer pickup at center</span>
+            <div style="font-weight: 800; color: #166534; font-size: 0.92rem; display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+              <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-circle-check" style="font-size:1.15rem; color:#03a93a;"></i> Service Completed Successfully</span>
+              ${order.delivery_file ? `<a href="${API.getDownloadUrl(order.id, 'delivery', false)}" target="_blank" class="btn-success-soft" style="display:inline-flex; padding:5px 12px; font-size:0.8rem; text-decoration:none;" download><i class="fa-solid fa-download"></i> Download Delivered File</a>` : ''}
             </div>
-            <div style="font-size: 0.84rem; color: #15803d; margin-top: 4px;">
-              Customer can collect physical PVC card from your center.
-            </div>
-            ${order.admin_notes ? `<div style="margin-top: 6px; font-size: 0.82rem; color: #166534;"><strong>Note:</strong> ${escapeHtml(order.admin_notes)}</div>` : ''}
+            ${order.admin_notes ? `<div style="margin-top: 8px; font-size: 0.84rem; color: #14532d; background: rgba(255,255,255,0.7); padding: 8px 12px; border-radius: 6px; border: 1px solid #bbf7d0;"><strong>Admin Message / Remarks:</strong> ${escapeHtml(order.admin_notes)}</div>` : ''}
           </div>
         ` : ''}
 
-        ${order.delivery_file ? `
-          <div style="margin-top: 16px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;">
-            <div style="font-weight: 700; color: #166534; font-size: 0.85rem; margin-bottom: 4px;">
-              <i class="fa-solid fa-circle-check"></i> Delivered Document File:
+        ${order.order_status === 'rejected' ? `
+          <div style="margin-top: 16px; padding: 14px 16px; background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 10px;">
+            <div style="font-weight: 800; color: #991b1b; font-size: 0.92rem; display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-ban" style="font-size:1.15rem; color:#dc2626;"></i>
+              <span>Order Rejected by Admin</span>
             </div>
-            <a href="${API.getDownloadUrl(order.id, 'delivery', false)}" target="_blank" class="btn-success-soft" style="display:inline-flex;">
-              <i class="fa-solid fa-download"></i> Download / View Final File
-            </a>
-            ${order.admin_notes ? `<div style="margin-top: 6px; font-size: 0.82rem; color: #15803d;"><strong>Note:</strong> ${escapeHtml(order.admin_notes)}</div>` : ''}
+            <div style="font-size: 0.85rem; color: #7f1d1d; margin-top: 5px;">
+              <strong>Reason Given to Customer:</strong> ${escapeHtml(order.rejection_reason || 'Application details could not be verified.')}
+            </div>
+            ${order.payment_method === 'wallet' ? `
+              <div style="margin-top: 8px; font-size: 0.8rem; color: #166534; font-weight: 700; background: #dcfce7; border: 1px solid #bbf7d0; padding: 5px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-wallet"></i> ${formatINR(order.amount)} refunded to customer's wallet balance
+              </div>
+            ` : ''}
           </div>
         ` : ''}
       `;
 
       let footerActions = `
-        <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails'); openRequestDocModal(${order.id})" style="color: #ea580c; border-color: #fed7aa; margin-right: auto;">
-          <i class="fa-solid fa-file-circle-question"></i> ${order.doc_request_status === 'pending' ? 'Re-request Doc' : 'Request Missing Doc'}
-        </button>
         <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
       `;
 
-      if (order.payment_status === 'pending') {
+      if (order.order_status === 'pending' || order.payment_status === 'pending') {
         footerActions = `
-          <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails'); openRequestDocModal(${order.id})" style="color: #ea580c; border-color: #fed7aa; margin-right: auto;">
-            <i class="fa-solid fa-file-circle-question"></i> Request Doc
+          <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
+          <button type="button" class="btn-danger-soft" onclick="closeModal('modalOrderDetails'); openRejectOrderModal(${order.id})">
+            <i class="fa-solid fa-ban"></i> Reject Order
           </button>
-          <button type="button" class="btn-danger-soft" onclick="closeModal('modalOrderDetails'); verifyPaymentModal(${order.id}, 'reject')">
-            <i class="fa-solid fa-xmark"></i> Reject Payment
-          </button>
-          <button type="button" class="btn-success-soft" onclick="closeModal('modalOrderDetails'); verifyPaymentModal(${order.id}, 'approve')">
-            <i class="fa-solid fa-check"></i> Approve Payment
+          <button type="button" class="btn-success-soft" onclick="closeModal('modalOrderDetails'); approveOrderAction(${order.id})">
+            <i class="fa-solid fa-check"></i> Approve Order
           </button>
         `;
       } else if (order.order_status === 'processing') {
-        const isPrintService = order.service && order.service.category === 'print';
-        if (isPrintService) {
-          footerActions = `
-            <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails'); openRequestDocModal(${order.id})" style="color: #ea580c; border-color: #fed7aa; margin-right: auto;">
-              <i class="fa-solid fa-file-circle-question"></i> Request Doc
-            </button>
-            <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
-            <button type="button" class="btn-rz-green" onclick="markOrderPrinted(${order.id})">
-              <i class="fa-solid fa-print"></i> Printed (Ready for Pickup)
-            </button>
-          `;
-        } else {
-          footerActions = `
-            <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails'); openRequestDocModal(${order.id})" style="color: #ea580c; border-color: #fed7aa; margin-right: auto;">
-              <i class="fa-solid fa-file-circle-question"></i> Request Doc
-            </button>
-            <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
-            <button type="button" class="btn-rz-primary" onclick="closeModal('modalOrderDetails'); openFulfillModal(${order.id})">
-              <i class="fa-solid fa-upload"></i> Deliver Order Document
-            </button>
-          `;
-        }
+        footerActions = `
+          <button type="button" class="btn-rz-secondary" onclick="closeModal('modalOrderDetails')">Close</button>
+          <button type="button" class="btn-rz-primary" onclick="closeModal('modalOrderDetails'); openFulfillModal(${order.id})">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Complete & Deliver Order
+          </button>
+        `;
       }
 
       document.getElementById('modalOrderFooter').innerHTML = footerActions;
@@ -1763,39 +1796,84 @@
       }
     }
 
-    async function markOrderPrinted(orderId) {
-      const order = allOrders.find(o => o.id === orderId);
-      if (!order) return;
+    function markOrderPrinted(orderId) {
+      openFulfillModal(orderId);
+    }
 
-      if (!confirm(`Are you sure you want to mark Order #${escapeHtml(order.order_number)} as Printed?\n\nThe customer will see: "Printed Successfully - Collect from our center".`)) {
+    async function approveOrderAction(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      const ordNum = order ? `#${order.order_number}` : 'this order';
+      if (!confirm(`Are you sure you want to approve Order ${ordNum}?\n\nThis moves the order into Processing so you can fulfill it.`)) {
         return;
       }
 
       try {
-        const res = await API.admin.markOrderPrinted(orderId);
-        showToast(res.message || 'Order marked as printed successfully!', 'success');
+        const res = await API.admin.approveOrder(orderId);
+        showToast(res.message || 'Order approved successfully!', 'success');
         closeModal('modalOrderDetails');
         loadOrders();
       } catch (err) {
-        showToast(err.message || 'Failed to update order status', 'error');
+        showToast(err.message || 'Failed to approve order', 'error');
+      }
+    }
+
+    function openRejectOrderModal(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      document.getElementById('rejectOrderId').value = order.id;
+      document.getElementById('rejectOrderSubtitle').textContent = `Order #${escapeHtml(order.order_number)} (${escapeHtml(order.user ? order.user.name : 'Customer')})`;
+      
+      const refundNote = document.getElementById('rejectOrderRefundNote');
+      if (refundNote) {
+        if (order.payment_method === 'wallet' && order.amount > 0) {
+          refundNote.innerHTML = `<strong>${formatINR(order.amount)}</strong> will immediately be credited back into <strong>${escapeHtml(order.user ? order.user.name : 'customer')}</strong>'s wallet balance.`;
+        } else {
+          refundNote.textContent = 'Direct UPI / Offline payment. Mark order as rejected without wallet debit.';
+        }
+      }
+
+      document.getElementById('rejectOrderReason').value = '';
+      openModal('modalRejectOrder');
+    }
+
+    function applyRejectPreset(reasonText) {
+      document.getElementById('rejectOrderReason').value = reasonText;
+    }
+
+    async function handleRejectOrderSubmit(e) {
+      e.preventDefault();
+      const orderId = document.getElementById('rejectOrderId').value;
+      const reason = document.getElementById('rejectOrderReason').value.trim();
+      const btn = document.getElementById('btnSubmitRejectOrder');
+
+      if (!reason) {
+        showToast('Please provide a rejection reason for the customer.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing Rejection & Refund...';
+
+      try {
+        const res = await API.admin.rejectOrder(orderId, reason);
+        showToast(res.message || 'Order rejected and wallet refunded successfully!', 'success');
+        closeModal('modalRejectOrder');
+        closeModal('modalOrderDetails');
+        loadOrders();
+      } catch (err) {
+        showToast(err.message || 'Failed to reject order', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-ban"></i> Confirm Rejection & Refund Wallet';
       }
     }
 
     async function verifyPaymentModal(orderId, action) {
-      let reason = '';
       if (action === 'reject') {
-        reason = prompt('Please enter the rejection reason for customer:', 'Payment proof could not be verified.');
-        if (reason === null) return;
+        openRejectOrderModal(orderId);
       } else {
-        if (!confirm('Are you sure you want to approve this payment and move order to Processing?')) return;
-      }
-
-      try {
-        const res = await API.admin.verifyPayment(orderId, action, { rejection_reason: reason });
-        showToast(res.message || 'Payment status updated', 'success');
-        loadOrders();
-      } catch (err) {
-        showToast(err.message || 'Failed to update payment status', 'error');
+        approveOrderAction(orderId);
       }
     }
 
@@ -1808,13 +1886,31 @@
       document.getElementById('fulfillOrderSubtitle').textContent = `Order: #${orderNumber}`;
       document.getElementById('deliveryFileInput').value = '';
       document.getElementById('selectedFileName').textContent = '';
+      const clearBtn = document.getElementById('btnClearSelectedFile');
+      if (clearBtn) clearBtn.style.display = 'none';
       document.getElementById('adminNotesInput').value = '';
       openModal('modalFulfill');
     }
 
+    function clearSelectedDeliveryFile(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      document.getElementById('deliveryFileInput').value = '';
+      document.getElementById('selectedFileName').textContent = '';
+      const clearBtn = document.getElementById('btnClearSelectedFile');
+      if (clearBtn) clearBtn.style.display = 'none';
+    }
+
     function handleFileSelected(input) {
+      const clearBtn = document.getElementById('btnClearSelectedFile');
       if (input.files && input.files[0]) {
         document.getElementById('selectedFileName').textContent = `Selected: ${escapeHtml(input.files[0].name)} (${(input.files[0].size / 1024).toFixed(1)} KB)`;
+        if (clearBtn) clearBtn.style.display = 'inline-flex';
+      } else {
+        document.getElementById('selectedFileName').textContent = '';
+        if (clearBtn) clearBtn.style.display = 'none';
       }
     }
 
@@ -1825,25 +1921,24 @@
       const notes = document.getElementById('adminNotesInput').value.trim();
       const btn = document.getElementById('btnSubmitFulfill');
 
-      if (!file) {
-        showToast('Please select a file to deliver', 'error');
-        return;
+      const formData = new FormData();
+      if (file) {
+        formData.append('delivery_file', file);
+      }
+      if (notes) {
+        formData.append('admin_notes', notes);
       }
 
-      const formData = new FormData();
-      formData.append('delivery_file', file);
-      if (notes) formData.append('admin_notes', notes);
-
       btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading & Delivering...';
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ' + (file ? 'Uploading & Delivering...' : 'Completing Order...');
 
       try {
         const res = await API.admin.fulfillOrder(orderId, formData);
-        showToast(res.message || 'Order fulfilled successfully!', 'success');
+        showToast(res.message || 'Order completed successfully!', 'success');
         closeModal('modalFulfill');
         loadOrders();
       } catch (err) {
-        showToast(err.message || 'Failed to fulfill order', 'error');
+        showToast(err.message || 'Failed to complete order', 'error');
       } finally {
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-check-double"></i> Complete & Deliver Order';

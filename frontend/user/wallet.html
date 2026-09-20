@@ -696,7 +696,11 @@
         tbody.innerHTML = txs.map(t => {
           let typeBadge = '';
           let amountDisplay = '';
-          if (t.type === 'credit' || t.type === 'topup') {
+          const isRefund = (t.description || '').toLowerCase().includes('refund');
+          if (isRefund) {
+            typeBadge = '<span class="badge-status" style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; font-weight:700;"><i class="fa-solid fa-rotate-left"></i> Order Refund</span>';
+            amountDisplay = `<strong style="color:#03a93a; font-size:1.02rem; font-family:'Outfit',sans-serif;">+ ${formatINR(t.amount)}</strong>`;
+          } else if (t.type === 'credit' || t.type === 'topup') {
             typeBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-arrow-down"></i> Top-Up Credit</span>';
             amountDisplay = `<strong style="color:#03a93a; font-size:1.02rem; font-family:'Outfit',sans-serif;">+ ${formatINR(t.amount)}</strong>`;
           } else {
@@ -734,9 +738,15 @@
       if (mobileContainer) {
         mobileContainer.innerHTML = txs.map(t => {
           const isCredit = (t.type === 'credit' || t.type === 'topup');
-          const typeBadge = isCredit
-            ? '<span class="badge-status badge-completed"><i class="fa-solid fa-arrow-down"></i> Top-Up Credit</span>'
-            : '<span class="badge-status badge-rejected"><i class="fa-solid fa-arrow-up"></i> Order Debit</span>';
+          const isRefund = (t.description || '').toLowerCase().includes('refund');
+          let typeBadge = '';
+          if (isRefund) {
+            typeBadge = '<span class="badge-status" style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; font-weight:700;"><i class="fa-solid fa-rotate-left"></i> Order Refund</span>';
+          } else if (isCredit) {
+            typeBadge = '<span class="badge-status badge-completed"><i class="fa-solid fa-arrow-down"></i> Top-Up Credit</span>';
+          } else {
+            typeBadge = '<span class="badge-status badge-rejected"><i class="fa-solid fa-arrow-up"></i> Order Debit</span>';
+          }
 
           let statusBadge = '';
           if (t.status === 'completed' || t.status === 'approved') {

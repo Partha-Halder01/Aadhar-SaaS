@@ -12,6 +12,300 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" type="image/png" href="../logo-icon.png">
   <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    /* Login Greeting & Notice Popup (Attractive Modern White Theme) */
+    .login-notice-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(15, 23, 42, 0.62);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .login-notice-dialog {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 26px;
+      padding: 26px 24px 24px;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.9), 0 8px 24px rgba(0, 102, 204, 0.1);
+      animation: loginNoticePop 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    @keyframes loginNoticePop {
+      0% { opacity: 0; transform: scale(0.92) translateY(18px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .login-notice-glow {
+      position: absolute;
+      top: -70px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 240px;
+      height: 130px;
+      background: radial-gradient(circle, rgba(0, 102, 204, 0.12) 0%, rgba(13, 148, 136, 0.05) 50%, transparent 75%);
+      filter: blur(20px);
+      pointer-events: none;
+    }
+    .login-notice-pill {
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      color: #0066cc;
+      font-size: 0.66rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .login-notice-greeting-pill {
+      background: #fdf4ff;
+      border: 1.5px solid #f0abfc;
+      color: #a21caf;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      display: inline-block;
+    }
+    .login-notice-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: all 0.15s ease;
+    }
+    .login-notice-close-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+      transform: scale(1.06);
+    }
+    .login-notice-message-box {
+      background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+      border: 1.5px solid #bfdbfe;
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 14px rgba(0, 102, 204, 0.05);
+      position: relative;
+    }
+    .login-notice-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #0066cc;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .login-notice-card-text {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.55;
+      white-space: pre-line;
+      margin: 0;
+    }
+    .login-notice-btn-dismiss {
+      flex: 1;
+      background: linear-gradient(135deg, #0066cc 0%, #004fb0 100%);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.92rem;
+      padding: 12px 18px;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 18px -3px rgba(0, 102, 204, 0.38);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    }
+    .login-notice-btn-dismiss:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px -3px rgba(0, 102, 204, 0.45);
+    }
+    .login-notice-btn-action {
+      flex: 1;
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.92rem;
+      padding: 12px 18px;
+      border-radius: 9999px;
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 18px -3px rgba(22, 163, 74, 0.38);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    }
+    .login-notice-btn-action:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px -3px rgba(22, 163, 74, 0.45);
+      color: #ffffff;
+    }
+  
+    /* Showcase Tile Cards (Exact match to Citizen Services Catalog) */
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+      gap: 18px;
+      margin-bottom: 8px;
+    }
+    .tile-card {
+      background: #ffffff;
+      border: 1px solid #eef2f7;
+      border-radius: 22px;
+      padding: 22px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 18px -8px rgba(15, 23, 42, 0.12);
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
+      box-sizing: border-box;
+    }
+    .tile-card::after {
+      content: '';
+      position: absolute;
+      right: -42px;
+      bottom: -58px;
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.10), rgba(236, 72, 153, 0.06));
+      pointer-events: none;
+    }
+    .tile-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      z-index: 2;
+    }
+    .tile-card.is-category::before {
+      background: linear-gradient(90deg, #4f46e5, #8b5cf6, #ec4899);
+    }
+    .tile-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 34px -10px rgba(15, 23, 42, 0.18);
+    }
+    .tile-ring {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      padding: 4px;
+      background: conic-gradient(from 210deg, #f59e0b, #ef4444, #ec4899, #8b5cf6, #3b82f6, #22d3ee, #22c55e, #f59e0b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .tile-ring-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .tile-ring-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
+    }
+    .tile-ring-inner i { font-size: 2.1rem; }
+    .tile-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.3;
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    .tile-sub {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .tile-btn {
+      margin-top: auto;
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 11px 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 45%, #8b5cf6 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px -5px rgba(79, 70, 229, 0.55);
+      transition: filter 0.2s ease, transform 0.15s ease;
+      position: relative;
+      z-index: 1;
+    }
+    .tile-card:hover .tile-btn { filter: brightness(1.08); }
+    .tile-btn:active { transform: scale(0.98); }
+    @media (max-width: 640px) {
+      .tile-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .tile-card { padding: 18px 12px 14px; border-radius: 18px; }
+      .tile-ring { width: 82px; height: 82px; margin-bottom: 11px; }
+      .tile-ring-inner i { font-size: 1.8rem; }
+      .tile-title { font-size: 0.9rem; }
+      .tile-btn { font-size: 0.78rem; padding: 10px 8px; }
+    }
+
+  </style>
 </head>
 <body>
 
@@ -263,55 +557,38 @@
           </div>
         </div>
 
-        <!-- Quick Action Shortcuts -->
+        <!-- Dynamic Service Categories Section -->
         <div class="glass-card" style="margin-bottom: 28px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
             <div>
-              <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Quick Services</h2>
-              <small style="color: #64748b;">Instant 1-click access to most frequent citizen orders</small>
+              <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 9px;">
+                <i class="fa-solid fa-layer-group" style="color: #0066cc;"></i>
+                <span>Service Categories</span>
+              </h2>
+              <small style="color: #64748b;">Browse all official service categories &bull; Click any category to view and order services</small>
             </div>
+            <a href="services.html" class="btn-outline-custom" style="padding: 7px 16px; font-size: 0.84rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+              <span>View All Services</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
-            <a href="services.html?category=print" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #fff7ed; border: 1.5px solid #fed7aa; display: flex; align-items: center; gap: 14px; color: #e04d00; font-weight: 700; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(253, 92, 0,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
-              <div id="quickBadgePrint" style="width: 44px; height: 44px; min-width: 44px; border-radius: 12px; background: #ffedd5; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden;">
-                <i class="fa-solid fa-id-card"></i>
+          <div id="dashboardCategoriesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+            <!-- Instant Skeleton / Loading state -->
+            <div style="padding: 16px 18px; border-radius: 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; display: flex; align-items: center; gap: 14px;">
+              <div style="width: 46px; height: 46px; border-radius: 12px; background: #e2e8f0;"></div>
+              <div style="flex: 1;">
+                <div style="width: 70%; height: 16px; background: #e2e8f0; border-radius: 4px; margin-bottom: 6px;"></div>
+                <div style="width: 45%; height: 12px; background: #f1f5f9; border-radius: 4px;"></div>
               </div>
-              <div>
-                <div style="font-size: 1rem; color: #9a3412;">PVC Print Services</div>
-                <small style="color: #c2410c; font-weight: 500;">Aadhaar, Voter & Smart Cards</small>
+            </div>
+            <div style="padding: 16px 18px; border-radius: 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; display: flex; align-items: center; gap: 14px;">
+              <div style="width: 46px; height: 46px; border-radius: 12px; background: #e2e8f0;"></div>
+              <div style="flex: 1;">
+                <div style="width: 65%; height: 16px; background: #e2e8f0; border-radius: 4px; margin-bottom: 6px;"></div>
+                <div style="width: 40%; height: 12px; background: #f1f5f9; border-radius: 4px;"></div>
               </div>
-            </a>
-
-            <a href="services.html?category=pan_find" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #f0fdf4; border: 1.5px solid #bbf7d0; display: flex; align-items: center; gap: 14px; color: #03a93a; font-weight: 700; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(3, 169, 58,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
-              <div id="quickBadgePan" style="width: 44px; height: 44px; min-width: 44px; border-radius: 12px; background: #d1fae5; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden;">
-                <i class="fa-solid fa-magnifying-glass-location"></i>
-              </div>
-              <div>
-                <div style="font-size: 1rem; color: #028a2f;">PAN Find & Recovery</div>
-                <small style="color: #028a2f; font-weight: 500;">Recover Lost PAN by Aadhaar</small>
-              </div>
-            </a>
-
-            <a href="wallet.html?recharge=true" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #f5f3ff; border: 1.5px solid #ddd6fe; display: flex; align-items: center; gap: 14px; color: #7c3aed; font-weight: 700; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(124,58,237,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
-              <div style="width: 44px; height: 44px; min-width: 44px; border-radius: 12px; background: #ede9fe; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden;">
-                <i class="fa-solid fa-bolt"></i>
-              </div>
-              <div>
-                <div style="font-size: 1rem; color: #5b21b6;">Recharge Wallet</div>
-                <small style="color: #6d28d9; font-weight: 500;">Instant Razorpay Top-Up</small>
-              </div>
-            </a>
-
-            <a href="documents.html" style="text-decoration: none; padding: 18px; border-radius: 14px; background: #f0f9ff; border: 1.5px solid #bae6fd; display: flex; align-items: center; gap: 14px; color: #0284c7; font-weight: 700; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0, 102, 204,0.15)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
-              <div id="quickBadgeDoc" style="width: 44px; height: 44px; min-width: 44px; border-radius: 12px; background: #e0f2fe; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden;">
-                <i class="fa-solid fa-file-arrow-down"></i>
-              </div>
-              <div>
-                <div style="font-size: 1rem; color: #0369a1;">My Documents</div>
-                <small style="color: #0284c7; font-weight: 500;">Download Ready PDF/PNG Cards</small>
-              </div>
-            </a>
+            </div>
           </div>
         </div>
 
@@ -396,9 +673,9 @@
   <script>
     // Instant Cache-First Hydration (0ms)
     try {
-      const cachedServices = JSON.parse(localStorage.getItem('utkal_services_cache') || '[]');
-      if (cachedServices && cachedServices.length) {
-        updateQuickServicesBadges(cachedServices);
+      const cachedCats = JSON.parse(localStorage.getItem('utkal_categories_cache') || '[]');
+      if (cachedCats && cachedCats.length) {
+        renderDashboardCategories(cachedCats);
       }
     } catch (e) {}
 
@@ -418,92 +695,77 @@
       }
     } catch (e) {}
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function initDashboardPage() {
       loadDashboard();
-    });
+    }
 
-    function updateQuickServicesBadges(services) {
-      if (!services || !services.length) return;
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initDashboardPage);
+    } else {
+      initDashboardPage();
+    }
 
-      // 1. Print List badge (Priority: service with image, else first print service)
-      const printSrv = services.find(s => s.category === 'print' && (s.icon_image || s.icon_type === 'image')) 
-                    || services.find(s => s.category === 'print');
-      const badgePrint = document.getElementById('quickBadgePrint');
-      if (printSrv && badgePrint) {
-        const iconType = printSrv.icon_type || (printSrv.icon_image ? 'image' : 'icon');
-        const imgUrl = printSrv.icon_image_url || (printSrv.icon_image && (printSrv.icon_image.startsWith('http') ? printSrv.icon_image : `${STORAGE_BASE_URL}/${printSrv.icon_image}`));
-        
-        if (iconType === 'image' && imgUrl) {
-          badgePrint.innerHTML = `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(printSrv.name)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${safeToken(printSrv.icon || 'fa-solid fa-id-card')}\\'></i>';">`;
-          badgePrint.style.background = printSrv.icon_bg || '#ffedd5';
-          badgePrint.style.padding = '5px';
-          badgePrint.style.border = '1.5px solid rgba(0,0,0,0.06)';
-          badgePrint.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
-        } else {
-          badgePrint.innerHTML = `<i class="${safeToken(printSrv.icon || 'fa-solid fa-id-card')}"></i>`;
-          if (printSrv.icon_bg) badgePrint.style.background = printSrv.icon_bg;
-          if (printSrv.icon_color) badgePrint.style.color = printSrv.icon_color;
-        }
+    function renderDashboardCategories(categories) {
+      const container = document.getElementById('dashboardCategoriesGrid');
+      if (!container) return;
+
+      if (!categories || categories.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 32px 20px; color: #64748b; font-size: 0.9rem; background:#f8fafc; border-radius:18px; border:1px dashed #cbd5e1;">
+            <i class="fa-solid fa-layer-group" style="font-size: 1.8rem; margin-bottom: 8px; display: block; color: #94a3b8;"></i>
+            No service categories available at this moment.
+          </div>
+        `;
+        return;
       }
 
-      // 2. PAN Find List badge
-      const panSrv = services.find(s => s.category === 'pan_find' && (s.icon_image || s.icon_type === 'image')) 
-                  || services.find(s => s.category === 'pan_find');
-      const badgePan = document.getElementById('quickBadgePan');
-      if (panSrv && badgePan) {
-        const iconType = panSrv.icon_type || (panSrv.icon_image ? 'image' : 'icon');
-        const imgUrl = panSrv.icon_image_url || (panSrv.icon_image && (panSrv.icon_image.startsWith('http') ? panSrv.icon_image : `${STORAGE_BASE_URL}/${panSrv.icon_image}`));
-        
-        if (iconType === 'image' && imgUrl) {
-          badgePan.innerHTML = `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(panSrv.name)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${safeToken(panSrv.icon || 'fa-solid fa-magnifying-glass-location')}\\'></i>';">`;
-          badgePan.style.background = panSrv.icon_bg || '#f0fdf4';
-          badgePan.style.padding = '5px';
-          badgePan.style.border = '1.5px solid rgba(0,0,0,0.06)';
-          badgePan.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
-        } else {
-          badgePan.innerHTML = `<i class="${safeToken(panSrv.icon || 'fa-solid fa-magnifying-glass-location')}"></i>`;
-          if (panSrv.icon_bg) badgePan.style.background = panSrv.icon_bg;
-          if (panSrv.icon_color) badgePan.style.color = panSrv.icon_color;
-        }
-      }
+      container.innerHTML = categories.map(cat => {
+        const name = escapeHtml(cat.name || 'Citizen Service');
+        const srvCount = typeof cat.services_count !== 'undefined' ? cat.services_count : 0;
+        const countText = `${srvCount} ${srvCount === 1 ? 'Service' : 'Services'}`;
 
-      // 3. Document badge
-      const docSrv = services.find(s => s.category === 'document' && (s.icon_image || s.icon_type === 'image')) 
-                  || services.find(s => s.category === 'document');
-      const badgeDoc = document.getElementById('quickBadgeDoc');
-      if (docSrv && badgeDoc) {
-        const iconType = docSrv.icon_type || (docSrv.icon_image ? 'image' : 'icon');
-        const imgUrl = docSrv.icon_image_url || (docSrv.icon_image && (docSrv.icon_image.startsWith('http') ? docSrv.icon_image : `${STORAGE_BASE_URL}/${docSrv.icon_image}`));
-        
-        if (iconType === 'image' && imgUrl) {
-          badgeDoc.innerHTML = `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(docSrv.name)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'${safeToken(docSrv.icon || 'fa-solid fa-file-arrow-down')}\\'></i>';">`;
-          badgeDoc.style.background = docSrv.icon_bg || '#f0f9ff';
-          badgeDoc.style.padding = '5px';
-          badgeDoc.style.border = '1.5px solid rgba(0,0,0,0.06)';
-          badgeDoc.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
-        } else if (docSrv.icon) {
-          badgeDoc.innerHTML = `<i class="${safeToken(docSrv.icon)}"></i>`;
-          if (docSrv.icon_bg) badgeDoc.style.background = docSrv.icon_bg;
-          if (docSrv.icon_color) badgeDoc.style.color = docSrv.icon_color;
-        }
-      }
+        const iconColor = cat.icon_color || '#0066cc';
+        const iconClass = safeToken(cat.icon || 'fa-solid fa-layer-group');
+
+        // Circular media matching Citizen Services Catalog:
+        // uses uploaded category image if present, else fallback icon inside white circle
+        const mediaHtml = cat.image_url
+          ? `<img src="${escapeHtml(cat.image_url)}" alt="${name}" onerror="this.onerror=null; this.outerHTML='<i class=\\'${iconClass}\\' style=\\'color:${iconColor}; font-size:2.1rem;\\'></i>';">`
+          : `<i class="${iconClass}" style="color: ${iconColor};"></i>`;
+
+        return `
+          <div class="tile-card is-category" onclick="window.location.href='services.html?category=${encodeURIComponent(cat.slug)}'">
+            <div class="tile-ring">
+              <div class="tile-ring-inner">${mediaHtml}</div>
+            </div>
+            <h3 class="tile-title">${name}</h3>
+            <div class="tile-sub">${countText}</div>
+            <button type="button" class="tile-btn">
+              Open Service <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
     }
 
     async function loadDashboard() {
       try {
         API.getPublicSettings().then(settings => {
-          if (settings && settings.notice_board) {
-            document.getElementById('noticeContent').textContent = settings.notice_board;
-            document.getElementById('noticeBanner').style.display = 'block';
+          if (settings) {
+            if (settings.notice_board) {
+              document.getElementById('noticeContent').textContent = settings.notice_board;
+              document.getElementById('noticeBanner').style.display = 'block';
+            }
+            openLoginNoticeModal(settings);
           }
         }).catch(() => {});
 
-        // Fetch services to connect Quick Services badges with images/icons
-        API.getServices().then(res => {
-          const services = res.data || [];
-          localStorage.setItem('utkal_services_cache', JSON.stringify(services));
-          updateQuickServicesBadges(services);
-        }).catch(err => console.error('Failed to load services:', err));
+        // Fetch all active categories dynamically
+        API.getServiceCategories().then(res => {
+          const cats = (res && Array.isArray(res.data)) ? res.data : (Array.isArray(res) ? res : []);
+          localStorage.setItem('utkal_categories_cache', JSON.stringify(cats));
+          renderDashboardCategories(cats);
+        }).catch(err => console.error('Failed to load categories:', err));
 
         const res = await API.getOrders({ limit: 20 });
         const orders = res.data || [];
@@ -699,17 +961,13 @@
       // 1. Desktop Table Render
       if (tbody) {
         tbody.innerHTML = orders.map(o => {
-          const isPrintService = o.service && o.service.category === 'print';
-
           let statusBadge = '';
           if (o.doc_request_status === 'pending') {
             statusBadge = '<span class="badge-status" style="background:#fffbeb; color:#b45309; border:1px solid #fde68a; font-weight:800;"><i class="fa-solid fa-triangle-exclamation"></i> Action Required</span>';
           } else if (o.doc_request_status === 'submitted') {
             statusBadge = '<span class="badge-status" style="background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; font-weight:700;"><i class="fa-solid fa-file-circle-check"></i> Doc Submitted</span>';
           } else if (o.order_status === 'completed') {
-            statusBadge = isPrintService
-              ? '<span class="badge-status badge-completed" style="background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>'
-              : '<span class="badge-status badge-completed">Completed</span>';
+            statusBadge = '<span class="badge-status badge-completed" style="background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Completed</span>';
           } else if (o.order_status === 'processing') {
             statusBadge = '<span class="badge-status badge-processing">Processing</span>';
           } else if (o.order_status === 'rejected') {
@@ -721,17 +979,22 @@
           let downloadAction = '-';
           if (o.doc_request_status === 'pending') {
             downloadAction = `<button onclick="openSubmitDocModal(${o.id})" class="btn-rz-primary" style="padding: 5px 12px; font-size: 0.78rem; border-radius: 8px; background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); white-space:nowrap;"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Doc</button>`;
-          } else if (isPrintService && o.order_status === 'completed') {
-            downloadAction = `
-              <span style="display:inline-flex; align-items:center; gap:5px; color:#03a93a; font-weight:700; font-size:0.78rem; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 10px; border-radius:6px;">
-                <i class="fa-solid fa-store"></i> Collect from center
-              </span>
-            `;
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            downloadAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 5px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Get File</a>`;
+            downloadAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 700;" download><i class="fa-solid fa-download"></i> Download</a>`;
+          } else if (o.order_status === 'completed') {
+            downloadAction = `
+              <span style="display:inline-flex; align-items:center; gap:5px; color:#03a93a; font-weight:700; font-size:0.78rem; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 10px; border-radius:6px;" ${o.admin_notes ? `title="${escapeHtml(o.admin_notes)}"` : ''}>
+                <i class="fa-solid fa-circle-check"></i> Completed
+              </span>
+            `;
           } else if (o.order_status === 'rejected') {
-            downloadAction = `<span style="font-size:0.8rem; color:#dc2626; font-weight:600;">${escapeHtml(o.rejection_reason || 'Rejected')}</span>`;
+            downloadAction = `
+              <div style="display:flex; flex-direction:column; gap:3px;">
+                <span style="font-size:0.78rem; color:#dc2626; font-weight:700;"><i class="fa-solid fa-ban"></i> ${escapeHtml(o.rejection_reason || 'Rejected')}</span>
+                <span style="font-size:0.72rem; color:#166534; font-weight:700;"><i class="fa-solid fa-wallet"></i> Refunded to Wallet</span>
+              </div>
+            `;
           } else {
             downloadAction = '<span style="color:#94a3b8; font-size:0.82rem; font-weight:600;"><i class="fa-solid fa-clock" style="font-size:0.75rem;"></i> In Progress</span>';
           }
@@ -739,7 +1002,10 @@
           return `
             <tr>
               <td><span class="order-id-chip">${escapeHtml(o.order_number)}</span></td>
-              <td><strong style="color:#0f172a;">${escapeHtml(o.service ? o.service.name : 'Citizen Service')}</strong></td>
+              <td>
+                <strong style="color:#0f172a;">${escapeHtml(o.service ? o.service.name : 'Citizen Service')}</strong>
+                ${o.admin_notes && o.order_status === 'completed' ? `<div style="font-size:0.75rem; color:#166534; margin-top:2px;"><strong>Remarks:</strong> ${escapeHtml(o.admin_notes)}</div>` : ''}
+              </td>
               <td style="color:#64748b; font-size:0.85rem;">${formatDate(o.created_at)}</td>
               <td style="font-weight: 800; font-family:'Outfit',sans-serif; font-size:0.95rem; color:#0f172a;">${formatINR(o.amount)}</td>
               <td>
@@ -757,17 +1023,13 @@
       // 2. Mobile Responsive Cards Render
       if (mobileContainer) {
         mobileContainer.innerHTML = orders.map(o => {
-          const isPrintService = o.service && o.service.category === 'print';
-
           let statusBadge = '';
           if (o.doc_request_status === 'pending') {
             statusBadge = '<span class="badge-status" style="background:#fffbeb; color:#b45309; border:1px solid #fde68a; font-size:0.72rem; padding: 2px 8px; font-weight:800;"><i class="fa-solid fa-triangle-exclamation"></i> Action Required</span>';
           } else if (o.doc_request_status === 'submitted') {
             statusBadge = '<span class="badge-status" style="background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; font-size:0.72rem; padding: 2px 8px; font-weight:700;"><i class="fa-solid fa-file-circle-check"></i> Doc Submitted</span>';
           } else if (o.order_status === 'completed') {
-            statusBadge = isPrintService
-              ? '<span class="badge-status badge-completed" style="font-size:0.72rem; padding: 2px 8px; background:#f0fdf4; color:#03a93a; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> Printed</span>'
-              : '<span class="badge-status badge-completed" style="font-size:0.72rem; padding: 2px 8px;">Completed</span>';
+            statusBadge = '<span class="badge-status badge-completed" style="font-size:0.72rem; padding: 2px 8px;"><i class="fa-solid fa-circle-check"></i> Completed</span>';
           } else if (o.order_status === 'processing') {
             statusBadge = '<span class="badge-status badge-processing" style="font-size:0.72rem; padding: 2px 8px;">Processing</span>';
           } else if (o.order_status === 'rejected') {
@@ -779,13 +1041,18 @@
           let downloadAction = '';
           if (o.doc_request_status === 'pending') {
             downloadAction = `<button onclick="openSubmitDocModal(${o.id})" class="btn-rz-primary" style="padding: 5px 12px; font-size: 0.75rem; border-radius: 8px; background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); white-space:nowrap;"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Doc</button>`;
-          } else if (isPrintService && o.order_status === 'completed') {
-            downloadAction = '<span style="font-size:0.75rem; color:#03a93a; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-store"></i> Collect from center</span>';
           } else if (o.delivery_file) {
             const fileUrl = API.getDownloadUrl(o.id, 'delivery', false);
-            downloadAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 8px;" download><i class="fa-solid fa-download"></i> Download</a>`;
+            downloadAction = `<a href="${escapeHtml(fileUrl)}" target="_blank" class="btn-tiranga" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; font-weight: 700;" download><i class="fa-solid fa-download"></i> Download</a>`;
+          } else if (o.order_status === 'completed') {
+            downloadAction = '<span style="font-size:0.75rem; color:#03a93a; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-circle-check"></i> Completed</span>';
           } else if (o.order_status === 'rejected') {
-            downloadAction = `<span style="font-size:0.75rem; color:#dc2626; font-weight:600;">${escapeHtml(o.rejection_reason || 'Rejected')}</span>`;
+            downloadAction = `
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+                <span style="font-size:0.74rem; color:#dc2626; font-weight:700;"><i class="fa-solid fa-ban"></i> ${escapeHtml(o.rejection_reason || 'Rejected')}</span>
+                <span style="font-size:0.68rem; color:#166534; font-weight:700;"><i class="fa-solid fa-wallet"></i> Refunded</span>
+              </div>
+            `;
           } else {
             downloadAction = '<span style="color:#94a3b8; font-size:0.78rem; font-weight:600;"><i class="fa-solid fa-clock"></i> In Progress</span>';
           }
@@ -798,6 +1065,11 @@
               </div>
               <div class="mobile-order-card-body">
                 <div class="mobile-order-service-name">${escapeHtml(o.service ? o.service.name : 'Citizen Service')}</div>
+                ${o.admin_notes && o.order_status === 'completed' ? `
+                  <div style="margin-top: 6px; padding: 5px 8px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; font-size: 0.74rem; color: #166534;">
+                    <strong><i class="fa-solid fa-comment-dots"></i> Remarks:</strong> ${escapeHtml(o.admin_notes)}
+                  </div>
+                ` : ''}
                 <div class="mobile-order-meta">
                   <span><i class="fa-regular fa-clock" style="font-size:0.72rem;"></i> ${formatDate(o.created_at)}</span>
                   <span>&bull;</span>
@@ -815,6 +1087,98 @@
     }
 
     // ==========================================
+    
+    // ==========================================
+    // User Login Notice & Greeting Modal Logic
+    // ==========================================
+    function getTimeGreeting() {
+      const h = new Date().getHours();
+      if (h >= 5 && h < 12) return { text: 'Good Morning', icon: '☀️' };
+      if (h >= 12 && h < 17) return { text: 'Good Afternoon', icon: '🌤️' };
+      if (h >= 17 && h < 21) return { text: 'Good Evening', icon: '🌆' };
+      return { text: 'Good Night', icon: '🌙' };
+    }
+
+    function openLoginNoticeModal(settings) {
+      if (!settings) return;
+      if (settings.login_popup_enabled === '0' || settings.login_popup_enabled === 0 || settings.login_popup_enabled === false) {
+        return;
+      }
+      try {
+        if (sessionStorage.getItem('login_popup_seen') === '1') {
+          return;
+        }
+      } catch (e) {}
+
+      const modal = document.getElementById('loginNoticeModal');
+      if (!modal) return;
+
+      let userName = 'VALUED MEMBER';
+      try {
+        const u = (typeof API !== 'undefined' && API.getUser) ? API.getUser() : null;
+        if (u && u.name) {
+          userName = u.name.toUpperCase();
+        }
+      } catch (e) {}
+
+      const userNameEl = document.getElementById('loginNoticeUserName');
+      if (userNameEl) userNameEl.textContent = userName;
+
+      const greeting = getTimeGreeting();
+      const greetingEl = document.getElementById('loginNoticeGreeting');
+      if (greetingEl) greetingEl.textContent = `${greeting.icon} ${greeting.text}`;
+
+      if (settings.login_popup_badge) {
+        const badgeEl = document.getElementById('loginNoticeBadge');
+        if (badgeEl) badgeEl.textContent = settings.login_popup_badge;
+      }
+      if (settings.login_popup_welcome_title) {
+        const welcomeEl = document.getElementById('loginNoticeWelcome');
+        if (welcomeEl) welcomeEl.textContent = settings.login_popup_welcome_title;
+      }
+      if (settings.login_popup_card_title) {
+        const titleEl = document.getElementById('loginNoticeCardTitle');
+        if (titleEl) titleEl.textContent = settings.login_popup_card_title;
+      }
+      if (settings.login_popup_card_message) {
+        const msgEl = document.getElementById('loginNoticeCardMessage');
+        if (msgEl) msgEl.textContent = settings.login_popup_card_message;
+      }
+      if (settings.login_popup_btn1_text) {
+        const btn1 = document.getElementById('loginNoticeBtn1');
+        if (btn1) btn1.textContent = settings.login_popup_btn1_text;
+      }
+      if (settings.login_popup_btn2_text) {
+        const btn2Text = document.getElementById('loginNoticeBtn2Text');
+        if (btn2Text) btn2Text.textContent = settings.login_popup_btn2_text;
+      }
+      if (settings.login_popup_btn2_link) {
+        const btn2 = document.getElementById('loginNoticeBtn2');
+        if (btn2) btn2.href = settings.login_popup_btn2_link;
+      }
+
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLoginNoticeModal() {
+      const modal = document.getElementById('loginNoticeModal');
+      if (modal) modal.style.display = 'none';
+      document.body.style.overflow = '';
+      try {
+        sessionStorage.setItem('login_popup_seen', '1');
+      } catch (e) {}
+    }
+
+    window.openLoginNoticeModal = openLoginNoticeModal;
+    window.closeLoginNoticeModal = closeLoginNoticeModal;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeLoginNoticeModal();
+      }
+    });
+
     // Dashboard User Review Modal Handlers
     // ==========================================
     function openUserReviewModal() {
@@ -1123,6 +1487,53 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- User Login Greeting & Notice Modal (Attractive Modern White Theme) -->
+  <div id="loginNoticeModal" class="login-notice-backdrop" onclick="if(event.target===this)closeLoginNoticeModal()">
+    <div class="login-notice-dialog" role="dialog" aria-modal="true" aria-labelledby="loginNoticeUserHeading">
+      <div class="login-notice-glow"></div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 16px; position: relative;">
+        <span id="loginNoticeBadge" class="login-notice-pill">OFFICIAL NOTICE</span>
+        <span id="loginNoticeGreeting" class="login-notice-greeting-pill">🌙 Good Night</span>
+        <button type="button" onclick="closeLoginNoticeModal()" class="login-notice-close-btn" aria-label="Dismiss Modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 18px; position: relative;">
+        <h2 id="loginNoticeUserHeading" style="font-family: 'Outfit', sans-serif; font-size: 1.45rem; font-weight: 800; color: #0f172a; margin: 0 0 6px;">
+          Hello <span id="loginNoticeUserName" style="color: #0066cc;">VALUED MEMBER</span> 👋
+        </h2>
+        <div id="loginNoticeWelcome" style="font-family: Georgia, serif; font-style: italic; font-size: 1.05rem; font-weight: 700; color: #475569;">
+          Welcome 🤗 Dear Valued Members
+        </div>
+      </div>
+
+      <div class="login-notice-message-box">
+        <div class="login-notice-card-header">
+          <span style="width: 22px; height: 22px; border-radius: 6px; background: #dbeafe; color: #0066cc; display: flex; align-items: center; justify-content: center; font-size: 0.72rem;">
+            <i class="fa-solid fa-bullhorn"></i>
+          </span>
+          <span id="loginNoticeCardTitle">IMPORTANT MESSAGE</span>
+        </div>
+        <div id="loginNoticeCardMessage" class="login-notice-card-text">
+          All Services Working Fine 💯 🤝
+Join Channel For Updates
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px; position: relative;">
+        <button type="button" onclick="closeLoginNoticeModal()" id="loginNoticeBtn1" class="login-notice-btn-dismiss">
+          Got it ✅
+        </button>
+        <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" id="loginNoticeBtn2" class="login-notice-btn-action">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span id="loginNoticeBtn2Text">Join Channel</span>
+        </a>
+      </div>
     </div>
   </div>
 </body>

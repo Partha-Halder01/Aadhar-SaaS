@@ -1085,6 +1085,11 @@
         return;
       }
 
+      if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
+        showToast('Password must contain at least one letter and one number', 'error');
+        return;
+      }
+
       if (password !== password_confirmation) {
         showToast('Passwords do not match', 'error');
         return;
@@ -1094,7 +1099,7 @@
       btnSubmitResetPassword.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Resetting Password...';
 
       try {
-        const res = await API.post('/auth/reset-password', {
+        const res = await API.resetPassword({
           phone,
           otp,
           password,

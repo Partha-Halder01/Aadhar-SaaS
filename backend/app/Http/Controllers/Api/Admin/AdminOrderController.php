@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ServiceOrder;
+use App\Models\User;
+use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminOrderController extends Controller
 {
@@ -48,7 +51,7 @@ class AdminOrderController extends Controller
     }
 
     /**
-     * Verify / Reject Order Payment
+     * Approve or Reject Service Order (with automated wallet refund on rejection)
      */
     public function verifyPayment(Request $request, $id)
     {
@@ -68,55 +71,108 @@ class AdminOrderController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Payment approved! Order moved to processing.',
-                'data' => $order,
+                'message' => "Order #{$order->order_number} approved! Moved to Processing.",
+                'data' => $order->fresh(['user', 'service']),
             ]);
         }
 
-        // Action === reject
-        $order->update([
-            'payment_status' => 'rejected',
-            'order_status' => 'rejected',
-            'rejection_reason' => $request->rejection_reason ?: 'Payment proof could not be verified.',
-        ]);
+        // Action === reject: handle inside DB transaction with automated wallet refund
+        return DB::transaction(function () use ($order, $request) {
+            $reason = trim($request->input('rejection_reason', ''));
+            if (empty($reason)) {
+                $reason = 'Application details could not be verified by administrator.';
+            }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Order payment marked as rejected.',
-            'data' => $order,
-        ]);
+            $order->update([
+                'payment_status' => 'rejected',
+                'order_status' => 'rejected',
+                'rejection_reason' => $reason,
+            ]);
+
+            $refunded = false;
+            $refundAmount = 0;
+
+            // If customer paid via wallet and amount > 0, credit the money back to user wallet
+            if ($order->payment_method === 'wallet' && (float) $order->amount > 0) {
+                // Ensure idempotency: check if refund transaction already exists for this order
+                $alreadyRefunded = WalletTransaction::where('user_id', $order->user_id)
+                    ->where('type', 'credit')
+                    ->where('description', 'like', "%#{$order->order_number}%")
+                    ->exists();
+
+                if (!$alreadyRefunded) {
+                    $user = User::lockForUpdate()->find($order->user_id);
+                    if ($user) {
+                        $user->wallet_balance = (float) $user->wallet_balance + (float) $order->amount;
+                        $user->save();
+
+                        WalletTransaction::create([
+                            'user_id' => $user->id,
+                            'type' => 'credit',
+                            'amount' => $order->amount,
+                            'balance_after' => $user->wallet_balance,
+                            'description' => "Refund for Rejected Order #{$order->order_number} (Reason: {$reason})",
+                            'status' => 'approved',
+                        ]);
+
+                        $refunded = true;
+                        $refundAmount = (float) $order->amount;
+                    }
+                }
+            }
+
+            $message = $refunded
+                ? "Order #{$order->order_number} rejected. ₹{$refundAmount} has been refunded to customer's wallet."
+                : "Order #{$order->order_number} marked as rejected.";
+
+            return response()->json([
+                'status' => 'success',
+                'message' => $message,
+                'data' => $order->fresh(['user', 'service']),
+                'refunded' => $refunded,
+                'refund_amount' => $refundAmount,
+            ]);
+        });
     }
 
     /**
-     * Fulfill order by uploading delivery PDF/card and admin notes
+     * Fulfill order by uploading delivery PDF/card and admin notes (delivery_file is optional)
      */
     public function fulfill(Request $request, $id)
     {
         $order = ServiceOrder::findOrFail($id);
 
         $request->validate([
-            'delivery_file' => 'required|file|mimes:jpeg,png,jpg,pdf|max:10240',
-            'admin_notes' => 'nullable|string|max:500',
+            'delivery_file' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:10240',
+            'admin_notes' => 'nullable|string|max:1000',
         ]);
 
-        $filePath = $request->file('delivery_file')->store('deliveries', 'local');
-
-        $order->update([
-            'delivery_file' => $filePath,
-            'admin_notes' => $request->admin_notes,
+        $updateData = [
             'payment_status' => 'approved',
             'order_status' => 'completed',
-        ]);
+        ];
+
+        if ($request->hasFile('delivery_file')) {
+            $updateData['delivery_file'] = $request->file('delivery_file')->store('deliveries', 'local');
+        }
+
+        if ($request->filled('admin_notes')) {
+            $updateData['admin_notes'] = $request->admin_notes;
+        }
+
+        $order->update($updateData);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Document uploaded & order fulfilled successfully! User can now download the file.',
+            'message' => $request->hasFile('delivery_file')
+                ? 'Document uploaded & order fulfilled successfully! User can now download the file.'
+                : 'Order marked as completed successfully!',
             'data' => $order,
         ]);
     }
 
     /**
-     * Mark print service order as printed (customer collects physical card)
+     * Mark service order as completed
      */
     public function markPrinted(Request $request, $id)
     {
@@ -132,12 +188,12 @@ class AdminOrderController extends Controller
         $order->update([
             'payment_status' => 'approved',
             'order_status' => 'completed',
-            'admin_notes' => $request->input('admin_notes', 'Printed successfully. Collect from our center.'),
+            'admin_notes' => $request->input('admin_notes', 'Service completed successfully.'),
         ]);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Order marked as printed successfully! Customer notified to collect.',
+            'message' => 'Order marked as completed successfully!',
             'data' => $order,
         ]);
     }

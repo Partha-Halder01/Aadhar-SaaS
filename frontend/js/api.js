@@ -108,6 +108,7 @@ const API = {
   clearAuth() {
     localStorage.removeItem('utkal_token');
     localStorage.removeItem('utkal_user');
+    try { sessionStorage.removeItem('login_popup_seen'); } catch (e) {}
     this.cache.invalidate();
   },
 
@@ -189,7 +190,30 @@ const API = {
     }
   },
 
+  // Convenience HTTP methods
+  async get(endpoint, options = {}) {
+    return await this.request(endpoint, {
+      method: 'GET',
+      ...options
+    });
+  },
+
+  async post(endpoint, body, options = {}) {
+    return await this.request(endpoint, {
+      method: 'POST',
+      body,
+      ...options
+    });
+  },
+
   // Auth Endpoints
+  async resetPassword(data) {
+    return await this.request('/auth/reset-password', {
+      method: 'POST',
+      body: data
+    });
+  },
+
   async login(credentials) {
     const res = await this.request('/auth/login', {
       method: 'POST',
@@ -197,6 +221,7 @@ const API = {
     });
     this.setToken(res.token);
     this.setUser(res.user);
+    try { sessionStorage.removeItem('login_popup_seen'); } catch (e) {}
     this.cache.invalidate();
     return res;
   },
@@ -222,6 +247,7 @@ const API = {
     });
     this.setToken(res.token);
     this.setUser(res.user);
+    try { sessionStorage.removeItem('login_popup_seen'); } catch (e) {}
     this.cache.invalidate();
     return res;
   },
@@ -233,6 +259,7 @@ const API = {
     });
     this.setToken(res.token);
     this.setUser(res.user);
+    try { sessionStorage.removeItem('login_popup_seen'); } catch (e) {}
     this.cache.invalidate();
     return res;
   },

@@ -155,7 +155,9 @@ Now open **[http://127.0.0.1:3000](http://127.0.0.1:3000)** in your web browser.
 
 | Role | Email | Password | Access URL |
 |---|---|---|---|
-| **Super Admin** | `admin@utkalprint.com` | `cd` | `http://127.0.0.1:3000/admin-login.html` |
+Email ID	admin@utkalprint.com
+Registered Mobile	9876543210 (can also be used as Identifier)
+Password	Admin@123
 | **Retailer / User** | `retailer@utkalprint.com` | `password123` | `http://127.0.0.1:3000/login.html` |
 
 *(You can also register a new user account directly via `register.html`)*

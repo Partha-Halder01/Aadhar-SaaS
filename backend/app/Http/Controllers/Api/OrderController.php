@@ -72,7 +72,12 @@ class OrderController extends Controller
         $amount = $service->price;
 
         // Process input_data JSON & sanitize to prevent path injection / IDOR
-        $rawInput = json_decode($request->input('input_data', '{}'), true) ?: [];
+        $rawInput = $request->input('input_data', []);
+        if (is_string($rawInput)) {
+            $rawInput = json_decode($rawInput, true) ?: [];
+        } elseif (!is_array($rawInput)) {
+            $rawInput = [];
+        }
         $inputData = [];
         foreach ($rawInput as $k => $v) {
             // Reject anything that looks like a storage file path (those values become downloadable attachments),
@@ -148,7 +153,7 @@ class OrderController extends Controller
                 'amount' => $amount,
                 'payment_method' => 'wallet',
                 'payment_status' => 'approved',
-                'order_status' => 'processing',
+                'order_status' => 'pending',
             ]);
 
             // Create Wallet Debit Ledger

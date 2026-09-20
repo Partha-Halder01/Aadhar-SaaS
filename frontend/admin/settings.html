@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Settings - Admin Portal</title>
+  <title>Security & Settings - Admin Portal</title>
   
   <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,7 +93,7 @@
         <li class="sidebar-item active">
           <a href="settings.html" class="sidebar-link active">
             <i class="fa-solid fa-sliders" style="color:#0066cc;"></i>
-            <span>UPI & Global Settings</span>
+            <span>Security & Global Settings</span>
           </a>
         </li>
       </ul>
@@ -132,44 +132,63 @@
       </header>
 
       <div class="portal-content">
-        <form id="settingsForm">
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; align-items: start;">
-            <!-- Payment Configuration Card -->
-            <div class="glass-card">
-              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(226,232,240,0.8);">
-                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(253, 92, 0,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
-                  <i class="fa-solid fa-qrcode"></i>
-                </div>
-                <div>
-                  <h2 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0;">UPI Gateway Configuration</h2>
-                  <div style="color: #64748b; font-size: 0.8rem;">Direct payment details rendered on user recharge screen</div>
-                </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; align-items: start;">
+          <!-- Admin Password Change Card -->
+          <div class="glass-card">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(226,232,240,0.8);">
+              <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(220, 38, 38, 0.1); color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 1.15rem;">
+                <i class="fa-solid fa-shield-halved"></i>
               </div>
-
-              <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label" for="settingUpiId">Primary UPI VPA Identifier <span style="color:red">*</span></label>
-                <input type="text" id="settingUpiId" class="form-control" placeholder="e.g. yourbusiness@upi" required>
-              </div>
-
-              <div class="form-group" style="margin-bottom: 16px;">
-                <label class="form-label" for="settingUpiName">Payee Merchant Legal Name <span style="color:red">*</span></label>
-                <input type="text" id="settingUpiName" class="form-control" placeholder="e.g. Utkal Print Services" required>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="settingQrCode">Upload Custom UPI QR Image (Optional)</label>
-                <div class="file-dropzone" style="padding: 16px; min-height: auto;" onclick="document.getElementById('settingQrCode').click()">
-                  <input type="file" id="settingQrCode" accept="image/*" style="display: none;" onchange="handleQrSelect(this)">
-                  <i class="fa-solid fa-cloud-arrow-up file-dropzone-icon" style="font-size: 1.5rem; margin-bottom: 6px;"></i>
-                  <div class="file-dropzone-text" id="qrDropzoneLabel" style="font-size: 0.82rem;">Click to upload merchant BharatQR / PhonePe / Paytm QR</div>
-                </div>
-
-                <div id="currentQrContainer" style="display:none; margin-top: 14px; text-align: center; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 14px;">
-                  <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px;">Currently Active Live QR</div>
-                  <img id="currentQrImg" src="" alt="Active QR" class="qr-current-preview" style="margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-                </div>
+              <div>
+                <h2 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0;">Change Admin Password</h2>
+                <div style="color: #64748b; font-size: 0.8rem;">Update root console credentials for account security</div>
               </div>
             </div>
+
+            <form id="adminPasswordForm" onsubmit="handleAdminPasswordChange(event)">
+              <div id="adminPasswordAlert" style="display: none; padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 0.84rem; font-weight: 600;"></div>
+
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label class="form-label" for="adminCurrentPassword">Current Password <span style="color:red">*</span></label>
+                <div style="position: relative;">
+                  <input type="password" id="adminCurrentPassword" class="form-control" placeholder="Enter current admin password" required autocomplete="current-password" style="padding-right: 42px;">
+                  <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('adminCurrentPassword', this)" aria-label="Toggle Current Password">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label class="form-label" for="adminNewPassword">New Password <span style="color:red">*</span></label>
+                <div style="position: relative;">
+                  <input type="password" id="adminNewPassword" class="form-control" placeholder="Enter new password (min. 8 characters)" required minlength="8" autocomplete="new-password" style="padding-right: 42px;">
+                  <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('adminNewPassword', this)" aria-label="Toggle New Password">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                </div>
+                <small style="color: #64748b; font-size: 0.76rem; margin-top: 4px; display: block;">
+                  <i class="fa-solid fa-circle-info" style="color:#0066cc;"></i> Minimum 8 characters with both letters & numbers.
+                </small>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 22px;">
+                <label class="form-label" for="adminConfirmPassword">Confirm New Password <span style="color:red">*</span></label>
+                <div style="position: relative;">
+                  <input type="password" id="adminConfirmPassword" class="form-control" placeholder="Re-enter new password" required minlength="8" autocomplete="new-password" style="padding-right: 42px;">
+                  <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('adminConfirmPassword', this)" aria-label="Toggle Confirm Password">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" id="btnChangeAdminPassword" class="btn-rz-primary" style="width: 100%; justify-content: center; padding: 13px; font-size: 0.96rem; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">
+                <i class="fa-solid fa-key"></i> Update Admin Password
+              </button>
+            </form>
+          </div>
+
+          <!-- Portal Settings Form (Notice Board + Login Notice Popup) -->
+          <form id="settingsForm" style="display: contents;">
 
             <!-- Portal Notice Board & Announcement Card -->
             <div class="glass-card">
@@ -197,9 +216,112 @@
                 </div>
               </div>
 
-              <button type="submit" id="btnSaveSettings" class="btn-rz-primary" style="width: 100%; justify-content: center; padding: 13px; font-size: 0.96rem;">
+              <button type="submit" id="btnSaveSettingsTop" class="btn-rz-primary" style="width: 100%; justify-content: center; padding: 13px; font-size: 0.96rem;">
                 <i class="fa-solid fa-floppy-disk"></i> Save Portal Configuration
               </button>
+            </div>
+
+            <!-- User Login Notice & Greeting Popup Card (Full Width) -->
+            <div class="glass-card" style="grid-column: 1/-1; margin-top: 6px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid rgba(226,232,240,0.8); flex-wrap: wrap; gap: 14px;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(147, 51, 234, 0.12); color: #9333ea; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                    <i class="fa-solid fa-bell"></i>
+                  </div>
+                  <div>
+                    <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">User Login Greeting & Notice Popup</h2>
+                    <div style="color: #64748b; font-size: 0.82rem;">Manage the interactive greeting modal shown to users upon login</div>
+                  </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+                  <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; font-weight: 700; font-size: 0.88rem; color: #1e293b; background: #f1f5f9; padding: 7px 14px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                    <input type="checkbox" id="settingLoginPopupEnabled" style="width: 18px; height: 18px; accent-color: #9333ea; cursor: pointer;" checked>
+                    <span>Enable Popup on Login</span>
+                  </label>
+                  <button type="button" onclick="openAdminPopupPreview()" class="btn-secondary" style="padding: 7px 16px; font-size: 0.84rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 7px;">
+                    <i class="fa-solid fa-eye" style="color: #9333ea;"></i> Test Fullscreen
+                  </button>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 26px; align-items: start;">
+                <!-- Form Controls -->
+                <div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                    <div class="form-group">
+                      <label class="form-label" for="settingLoginPopupBadge">Top Pill Badge Text</label>
+                      <input type="text" id="settingLoginPopupBadge" class="form-control" placeholder="e.g. OFFICIAL NOTICE" value="OFFICIAL NOTICE">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="settingLoginPopupWelcome">Welcome Sub-Heading</label>
+                      <input type="text" id="settingLoginPopupWelcome" class="form-control" placeholder="e.g. Welcome 🤗 Dear Valued Members" value="Welcome 🤗 Dear Valued Members">
+                    </div>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 14px;">
+                    <label class="form-label" for="settingLoginPopupCardTitle">Inner Box Header</label>
+                    <input type="text" id="settingLoginPopupCardTitle" class="form-control" placeholder="e.g. IMPORTANT MESSAGE" value="IMPORTANT MESSAGE">
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 14px;">
+                    <label class="form-label" for="settingLoginPopupCardMessage">Message Content (Emojis & line breaks supported)</label>
+                    <textarea id="settingLoginPopupCardMessage" class="form-control" rows="3" placeholder="All Services Working Fine 💯 🤝&#10;Join Channel For Updates">All Services Working Fine 💯 🤝
+Join Channel For Updates</textarea>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                    <div class="form-group">
+                      <label class="form-label" for="settingLoginPopupBtn1">Dismiss Button Label</label>
+                      <input type="text" id="settingLoginPopupBtn1" class="form-control" placeholder="e.g. Got it ✅" value="Got it ✅">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="settingLoginPopupBtn2">Action Button Label</label>
+                      <input type="text" id="settingLoginPopupBtn2" class="form-control" placeholder="e.g. Join Channel" value="Join Channel">
+                    </div>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 18px;">
+                    <label class="form-label" for="settingLoginPopupBtn2Link">Action Button Link (WhatsApp Channel / Group / Support)</label>
+                    <input type="url" id="settingLoginPopupBtn2Link" class="form-control" placeholder="https://whatsapp.com/channel/..." value="https://whatsapp.com">
+                  </div>
+
+                  <button type="submit" id="btnSaveSettings" class="btn-rz-primary" style="padding: 12px 24px; font-size: 0.94rem; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-floppy-disk"></i> Save All Portal Settings
+                  </button>
+                </div>
+
+                <!-- Live Mini Preview (White Theme) -->
+                <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 22px; padding: 22px 20px; box-shadow: 0 14px 35px rgba(0,0,0,0.06); position: relative; overflow: hidden;">
+                  <div style="position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 220px; height: 120px; background: radial-gradient(circle, rgba(0, 102, 204, 0.12) 0%, transparent 70%); filter: blur(20px); pointer-events: none;"></div>
+                  
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 14px; position: relative;">
+                    <span id="prevPopupBadge" style="background: #eff6ff; border: 1.5px solid #bfdbfe; color: #0066cc; font-size: 0.62rem; font-weight: 800; padding: 3px 10px; border-radius: 9999px; letter-spacing: 0.06em; text-transform: uppercase;">OFFICIAL NOTICE</span>
+                    <span id="prevPopupGreetingPill" style="background: #fdf4ff; border: 1.5px solid #f0abfc; color: #a21caf; font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 9999px;">🌙 Good Night</span>
+                    <span style="width: 26px; height: 26px; border-radius: 50%; background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.76rem;"><i class="fa-solid fa-xmark"></i></span>
+                  </div>
+
+                  <div style="text-align: center; margin-bottom: 14px; position: relative;">
+                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 4px;">Hello <span style="color:#0066cc;">DEMO USER</span> 👋</h3>
+                    <div id="prevPopupWelcome" style="font-family: Georgia, serif; font-style: italic; font-size: 0.95rem; font-weight: 700; color: #475569;">Welcome 🤗 Dear Valued Members</div>
+                  </div>
+
+                  <div style="background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%); border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 14px; margin-bottom: 18px; position: relative; box-shadow: 0 2px 8px rgba(0, 102, 204, 0.05);">
+                    <div style="display: flex; align-items: center; gap: 7px; font-size: 0.68rem; font-weight: 800; color: #0066cc; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px;">
+                      <span style="width: 18px; height: 18px; border-radius: 5px; background: #dbeafe; color: #0066cc; display: flex; align-items: center; justify-content: center; font-size: 0.65rem;"><i class="fa-solid fa-bullhorn"></i></span>
+                      <span id="prevPopupCardTitle">IMPORTANT MESSAGE</span>
+                    </div>
+                    <div id="prevPopupCardMessage" style="font-size: 0.88rem; font-weight: 700; color: #0f172a; line-height: 1.5; white-space: pre-line;">All Services Working Fine 💯 🤝
+Join Channel For Updates</div>
+                  </div>
+
+                  <div style="display: flex; align-items: center; gap: 10px; position: relative;">
+                    <div id="prevPopupBtn1" style="flex: 1; text-align: center; background: linear-gradient(135deg, #0066cc 0%, #004fb0 100%); color: #fff; font-weight: 800; font-size: 0.84rem; padding: 9px 14px; border-radius: 9999px; box-shadow: 0 4px 14px rgba(0, 102, 204, 0.28);">Got it ✅</div>
+                    <div id="prevPopupBtn2" style="flex: 1; text-align: center; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #fff; font-weight: 800; font-size: 0.84rem; padding: 9px 14px; border-radius: 9999px; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.28); display: flex; align-items: center; justify-content: center; gap: 6px;"><i class="fa-brands fa-whatsapp"></i> <span>Join Channel</span></div>
+                  </div>
+                </div>
+
+              </div>
             </div>
           </div>
         </form>
@@ -207,22 +329,185 @@
     </main>
   </div>
 
+  <!-- Test Fullscreen Modal Overlay for Admin (White Theme) -->
+  <div id="adminTestModalOverlay" style="display:none; position: fixed; inset: 0; z-index: 99999; background: rgba(15, 23, 42, 0.62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 16px;">
+    <div style="position: relative; width: 100%; max-width: 440px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 26px; padding: 26px 24px 24px; box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.9), 0 8px 24px rgba(0, 102, 204, 0.1); overflow: hidden;">
+      <div style="position: absolute; top: -70px; left: 50%; transform: translateX(-50%); width: 240px; height: 130px; background: radial-gradient(circle, rgba(0, 102, 204, 0.12) 0%, transparent 70%); filter: blur(20px); pointer-events: none;"></div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 16px; position: relative;">
+        <span id="testModalBadge" style="background: #eff6ff; border: 1.5px solid #bfdbfe; color: #0066cc; font-size: 0.66rem; font-weight: 800; padding: 4px 12px; border-radius: 9999px; letter-spacing: 0.06em; text-transform: uppercase;">OFFICIAL NOTICE</span>
+        <span id="testModalGreeting" style="background: #fdf4ff; border: 1.5px solid #f0abfc; color: #a21caf; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 9999px;">🌙 Good Night</span>
+        <button type="button" onclick="closeAdminPopupPreview()" style="width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.88rem; transition: all 0.15s ease;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 18px; position: relative;">
+        <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.45rem; font-weight: 800; color: #0f172a; margin: 0 0 6px;">Hello <span style="color:#0066cc;">ADMINISTRATOR</span> 👋</h2>
+        <div id="testModalWelcome" style="font-family: Georgia, serif; font-style: italic; font-size: 1.05rem; font-weight: 700; color: #475569;">Welcome 🤗 Dear Valued Members</div>
+      </div>
+
+      <div style="background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%); border: 1.5px solid #bfdbfe; border-radius: 16px; padding: 16px 18px; margin-bottom: 22px; box-shadow: 0 4px 14px rgba(0, 102, 204, 0.05); position: relative;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.72rem; font-weight: 800; color: #0066cc; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px;">
+          <span style="width: 22px; height: 22px; border-radius: 6px; background: #dbeafe; color: #0066cc; display: flex; align-items: center; justify-content: center; font-size: 0.72rem;"><i class="fa-solid fa-bullhorn"></i></span>
+          <span id="testModalCardTitle">IMPORTANT MESSAGE</span>
+        </div>
+        <div id="testModalCardMessage" style="font-size: 0.96rem; font-weight: 700; color: #0f172a; line-height: 1.55; white-space: pre-line;">All Services Working Fine 💯 🤝
+Join Channel For Updates</div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px; position: relative;">
+        <button type="button" onclick="closeAdminPopupPreview()" id="testModalBtn1" style="flex: 1; background: linear-gradient(135deg, #0066cc 0%, #004fb0 100%); color: #ffffff; font-weight: 800; font-size: 0.92rem; padding: 12px 18px; border-radius: 9999px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 18px -3px rgba(0, 102, 204, 0.38);">Got it ✅</button>
+        <a href="https://whatsapp.com" target="_blank" id="testModalBtn2" style="flex: 1; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; font-weight: 800; font-size: 0.92rem; padding: 12px 18px; border-radius: 9999px; border: none; text-decoration: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 18px -3px rgba(22, 163, 74, 0.38);"><i class="fa-brands fa-whatsapp"></i> <span id="testModalBtn2Text">Join Channel</span></a>
+      </div>
+    </div>
+  </div>
+
   <script src="../js/config.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    function handleQrSelect(input) {
-      const label = document.getElementById('qrDropzoneLabel');
-      if (input.files && input.files[0]) {
-        label.innerHTML = `<strong>Selected:</strong> ${escapeHtml(input.files[0].name)} (${(input.files[0].size / 1024).toFixed(1)} KB)`;
-        label.style.color = '#03a93a';
+    function getTimeGreeting() {
+      const h = new Date().getHours();
+      if (h >= 5 && h < 12) return { text: 'Good Morning', icon: '☀️' };
+      if (h >= 12 && h < 17) return { text: 'Good Afternoon', icon: '🌤️' };
+      if (h >= 17 && h < 21) return { text: 'Good Evening', icon: '🌆' };
+      return { text: 'Good Night', icon: '🌙' };
+    }
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          document.getElementById('currentQrImg').src = e.target.result;
-          document.getElementById('currentQrContainer').style.display = 'block';
-        };
-        reader.readAsDataURL(input.files[0]);
+    function updateAdminPopupPreview() {
+      const badge = document.getElementById('settingLoginPopupBadge').value.trim() || 'OFFICIAL NOTICE';
+      const welcome = document.getElementById('settingLoginPopupWelcome').value.trim() || 'Welcome 🤗 Dear Valued Members';
+      const cardTitle = document.getElementById('settingLoginPopupCardTitle').value.trim() || 'IMPORTANT MESSAGE';
+      const cardMsg = document.getElementById('settingLoginPopupCardMessage').value.trim() || 'All Services Working Fine 💯 🤝\nJoin Channel For Updates';
+      const btn1 = document.getElementById('settingLoginPopupBtn1').value.trim() || 'Got it ✅';
+      const btn2 = document.getElementById('settingLoginPopupBtn2').value.trim() || 'Join Channel';
+      const btn2Link = document.getElementById('settingLoginPopupBtn2Link').value.trim() || 'https://whatsapp.com';
+      const greeting = getTimeGreeting();
+
+      // Mini preview
+      document.getElementById('prevPopupBadge').textContent = badge;
+      document.getElementById('prevPopupGreetingPill').textContent = `${greeting.icon} ${greeting.text}`;
+      document.getElementById('prevPopupWelcome').textContent = welcome;
+      document.getElementById('prevPopupCardTitle').textContent = cardTitle;
+      document.getElementById('prevPopupCardMessage').textContent = cardMsg;
+      document.getElementById('prevPopupBtn1').textContent = btn1;
+      document.getElementById('prevPopupBtn2').innerHTML = `<i class="fa-brands fa-whatsapp"></i> <span>${escapeHtml(btn2)}</span>`;
+
+      // Fullscreen preview
+      document.getElementById('testModalBadge').textContent = badge;
+      document.getElementById('testModalGreeting').textContent = `${greeting.icon} ${greeting.text}`;
+      document.getElementById('testModalWelcome').textContent = welcome;
+      document.getElementById('testModalCardTitle').textContent = cardTitle;
+      document.getElementById('testModalCardMessage').textContent = cardMsg;
+      document.getElementById('testModalBtn1').textContent = btn1;
+      document.getElementById('testModalBtn2Text').textContent = btn2;
+      document.getElementById('testModalBtn2').href = btn2Link;
+    }
+
+    function openAdminPopupPreview() {
+      updateAdminPopupPreview();
+      const modal = document.getElementById('adminTestModalOverlay');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeAdminPopupPreview() {
+      const modal = document.getElementById('adminTestModalOverlay');
+      if (modal) modal.style.display = 'none';
+    }
+
+    ['settingLoginPopupBadge', 'settingLoginPopupWelcome', 'settingLoginPopupCardTitle', 'settingLoginPopupCardMessage', 'settingLoginPopupBtn1', 'settingLoginPopupBtn2', 'settingLoginPopupBtn2Link'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', updateAdminPopupPreview);
+    });
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (icon) {
+          icon.classList.remove('fa-eye');
+          icon.classList.add('fa-eye-slash');
+        }
+      } else {
+        input.type = 'password';
+        if (icon) {
+          icon.classList.remove('fa-eye-slash');
+          icon.classList.add('fa-eye');
+        }
+      }
+    }
+
+    async function handleAdminPasswordChange(e) {
+      e.preventDefault();
+      const alertEl = document.getElementById('adminPasswordAlert');
+      const btn = document.getElementById('btnChangeAdminPassword');
+      const currentPassword = document.getElementById('adminCurrentPassword').value;
+      const newPassword = document.getElementById('adminNewPassword').value;
+      const confirmPassword = document.getElementById('adminConfirmPassword').value;
+
+      if (alertEl) {
+        alertEl.style.display = 'none';
+        alertEl.textContent = '';
+      }
+
+      if (newPassword.length < 8) {
+        showPasswordAlert('New password must be at least 8 characters long.', 'error');
+        return;
+      }
+
+      if (!/(?=.*[a-zA-Z])(?=.*[0-9])/.test(newPassword)) {
+        showPasswordAlert('New password must contain both letters and numbers.', 'error');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        showPasswordAlert('New passwords do not match. Please re-enter.', 'error');
+        return;
+      }
+
+      if (currentPassword === newPassword) {
+        showPasswordAlert('New password cannot be identical to the current password.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating Password...';
+
+      try {
+        const res = await API.changePassword({
+          current_password: currentPassword,
+          password: newPassword,
+          password_confirmation: confirmPassword
+        });
+
+        showPasswordAlert(res.message || 'Password changed successfully! Keep your new credentials safe.', 'success');
+        showToast('Admin password changed successfully!', 'success');
+        document.getElementById('adminPasswordForm').reset();
+      } catch (err) {
+        const errMsg = err.message || (err.errors ? Object.values(err.errors).flat().join(' ') : 'Failed to change password');
+        showPasswordAlert(errMsg, 'error');
+        showToast(errMsg, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-key"></i> Update Admin Password';
+      }
+    }
+
+    function showPasswordAlert(msg, type) {
+      const alertEl = document.getElementById('adminPasswordAlert');
+      if (!alertEl) return;
+      alertEl.style.display = 'block';
+      if (type === 'success') {
+        alertEl.style.background = '#dcfce7';
+        alertEl.style.color = '#166534';
+        alertEl.style.border = '1.5px solid #86efac';
+        alertEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${escapeHtml(msg)}`;
+      } else {
+        alertEl.style.background = '#fee2e2';
+        alertEl.style.color = '#991b1b';
+        alertEl.style.border = '1.5px solid #fca5a5';
+        alertEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${escapeHtml(msg)}`;
       }
     }
 
@@ -239,16 +524,21 @@
       try {
         const settings = await API.admin.getSettings();
         if (settings) {
-          document.getElementById('settingUpiId').value = settings.upi_id || '';
-          document.getElementById('settingUpiName').value = settings.upi_name || '';
           document.getElementById('settingNotice').value = settings.notice_board || '';
           const p = document.getElementById('noticePreviewText');
           if (p && settings.notice_board) p.textContent = settings.notice_board;
 
-          if (settings.qr_code) {
-            document.getElementById('currentQrImg').src = `${STORAGE_BASE_URL}/${settings.qr_code}`;
-            document.getElementById('currentQrContainer').style.display = 'block';
-          }
+          // Login popup fields
+          document.getElementById('settingLoginPopupEnabled').checked = settings.login_popup_enabled !== '0';
+          if (settings.login_popup_badge) document.getElementById('settingLoginPopupBadge').value = settings.login_popup_badge;
+          if (settings.login_popup_welcome_title) document.getElementById('settingLoginPopupWelcome').value = settings.login_popup_welcome_title;
+          if (settings.login_popup_card_title) document.getElementById('settingLoginPopupCardTitle').value = settings.login_popup_card_title;
+          if (settings.login_popup_card_message) document.getElementById('settingLoginPopupCardMessage').value = settings.login_popup_card_message;
+          if (settings.login_popup_btn1_text) document.getElementById('settingLoginPopupBtn1').value = settings.login_popup_btn1_text;
+          if (settings.login_popup_btn2_text) document.getElementById('settingLoginPopupBtn2').value = settings.login_popup_btn2_text;
+          if (settings.login_popup_btn2_link) document.getElementById('settingLoginPopupBtn2Link').value = settings.login_popup_btn2_link;
+
+          updateAdminPopupPreview();
         }
       } catch (err) {
         console.error(err);
@@ -257,22 +547,31 @@
 
     document.getElementById('settingsForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const upi_id = document.getElementById('settingUpiId').value.trim();
-      const upi_name = document.getElementById('settingUpiName').value.trim();
       const notice_board = document.getElementById('settingNotice').value.trim();
-      const qr_file = document.getElementById('settingQrCode').files[0];
       const btn = document.getElementById('btnSaveSettings');
+      const btnTop = document.getElementById('btnSaveSettingsTop');
 
       const formData = new FormData();
-      formData.append('upi_id', upi_id);
-      formData.append('upi_name', upi_name);
       formData.append('notice_board', notice_board);
-      if (qr_file) {
-        formData.append('qr_code', qr_file);
-      }
 
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving Settings...';
+      // Append login popup settings
+      formData.append('login_popup_enabled', document.getElementById('settingLoginPopupEnabled').checked ? '1' : '0');
+      formData.append('login_popup_badge', document.getElementById('settingLoginPopupBadge').value.trim());
+      formData.append('login_popup_welcome_title', document.getElementById('settingLoginPopupWelcome').value.trim());
+      formData.append('login_popup_card_title', document.getElementById('settingLoginPopupCardTitle').value.trim());
+      formData.append('login_popup_card_message', document.getElementById('settingLoginPopupCardMessage').value.trim());
+      formData.append('login_popup_btn1_text', document.getElementById('settingLoginPopupBtn1').value.trim());
+      formData.append('login_popup_btn2_text', document.getElementById('settingLoginPopupBtn2').value.trim());
+      formData.append('login_popup_btn2_link', document.getElementById('settingLoginPopupBtn2Link').value.trim());
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving Settings...';
+      }
+      if (btnTop) {
+        btnTop.disabled = true;
+        btnTop.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+      }
 
       try {
         const res = await API.admin.updateSettings(formData);
@@ -281,8 +580,14 @@
       } catch (err) {
         showToast(err.message || 'Failed to update settings', 'error');
       } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Portal Settings';
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save All Portal Settings';
+        }
+        if (btnTop) {
+          btnTop.disabled = false;
+          btnTop.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Portal Configuration';
+        }
       }
     });
   </script>
