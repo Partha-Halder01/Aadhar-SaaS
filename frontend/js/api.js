@@ -1,5 +1,5 @@
 /**
- * Utkal Print Portal - Ultra-High-Speed Unified API Client & Utilities
+ * Online Digital Service - Ultra-High-Speed Unified API Client & Utilities
  * Features: Zero-Lag In-Memory & Storage Cache, Stale-While-Revalidate (SWR), Instant Response
  */
 

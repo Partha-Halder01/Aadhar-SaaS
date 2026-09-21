@@ -1,5 +1,5 @@
 /**
- * Utkal Print Portal - Auth Guard, Mobile Navigation & Page Decorator
+ * Online Digital Service - Auth Guard, Mobile Navigation & Page Decorator
  */
 
 // Pages are served without the .html extension in production. Normalise the

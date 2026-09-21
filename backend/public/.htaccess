@@ -16,6 +16,9 @@
         <FilesMatch "\.(js|css)$">
             Header set Cache-Control "no-cache, must-revalidate"
         </FilesMatch>
+        <FilesMatch "^(logo|favicon)[^/]*\.(png|webp|ico)$">
+            Header set Cache-Control "no-cache, must-revalidate"
+        </FilesMatch>
     </IfModule>
 
     RewriteEngine On

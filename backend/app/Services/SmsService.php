@@ -25,9 +25,9 @@ class SmsService
 
         // Standard message template
         $message = match ($purpose) {
-            'login' => "Your Utkal Print Portal login OTP is {$otp}. Valid for 5 minutes. Do not share it.",
-            'reset_password' => "Your Utkal Print Portal password reset code is {$otp}. Valid for 5 minutes.",
-            default => "Your Utkal Print Portal registration code is {$otp}. Valid for 5 minutes. Do not share it.",
+            'login' => "Your Online Digital Service login OTP is {$otp}. Valid for 5 minutes. Do not share it.",
+            'reset_password' => "Your Online Digital Service password reset code is {$otp}. Valid for 5 minutes.",
+            default => "Your Online Digital Service registration code is {$otp}. Valid for 5 minutes. Do not share it.",
         };
 
         return match ($this->driver) {

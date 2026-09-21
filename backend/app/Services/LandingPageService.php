@@ -398,10 +398,10 @@ class LandingPageService
             'testimonials' => [
                 'tag' => 'Verified Feedback',
                 'title' => 'Trusted By 12,000+ Cyber Cafe Owners',
-                'desc' => 'Hear why CSC operators and digital centers across India rely on Instant Online Seva.',
+                'desc' => 'Hear why CSC operators and digital centers across India rely on Online Digital Service.',
                 'items' => [
                     [
-                        'quote' => 'Instant Online Seva has changed how our Cyber Cafe operates. The PVC card dimensions are always 100% accurate and our customers are delighted with the HD 300 DPI print quality.',
+                        'quote' => 'Online Digital Service has changed how our Cyber Cafe operates. The PVC card dimensions are always 100% accurate and our customers are delighted with the HD 300 DPI print quality.',
                         'author' => 'Soumya Ranjan Panda',
                         'role' => 'Maa Tarini Cyber Cafe, Bhubaneswar',
                         'initials' => 'SP',
@@ -465,7 +465,7 @@ class LandingPageService
                 'whatsapp' => '+91 97358 00298',
                 'email' => 'mominulonlinetelicom@gmail.com',
                 'hours' => 'Mon - Sat: 8:00 AM - 10:00 PM',
-                'copyright' => '© 2026 Instant Online Seva. All rights reserved. Built for Indian Digital Retailers.',
+                'copyright' => '© 2026 Online Digital Service. All rights reserved. Built for Indian Digital Retailers.',
                 'facebook_link' => '#',
                 'twitter_link' => '#',
                 'whatsapp_link' => '#',
