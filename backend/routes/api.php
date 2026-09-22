@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Admin\AdminServiceController;
 use App\Http\Controllers\Api\Admin\AdminSettingController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\Admin\AdminWalletController;
+use App\Http\Controllers\Api\AllApiPaymentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ComplaintController;
 use App\Http\Controllers\Api\DocumentController;
@@ -51,6 +52,9 @@ Route::post('/reviews', [ReviewController::class, 'store'])->middleware('throttl
 // Razorpay Webhook (idempotent, verified via signature)
 Route::post('/webhooks/razorpay', [RazorpayWebhookController::class, 'handle']);
 
+// AllAPI Webhook (keyed URL; every payment is re-confirmed with the AllAPI status API)
+Route::match(['get', 'post'], '/webhooks/allapi', [AllApiPaymentController::class, 'webhook'])->middleware('throttle:60,1');
+
 // Short-lived signed file links, issued by the authenticated *-link endpoints below
 Route::middleware(['signed:relative', 'throttle:60,1'])->group(function () {
     Route::get('/files/orders/{id}/{type?}', [OrderController::class, 'signedDownload'])->name('files.order');
@@ -84,6 +88,10 @@ Route::middleware('api.auth')->group(function () {
     // Razorpay Online Payments & Verification
     Route::post('/payment/razorpay/create-wallet-order', [RazorpayPaymentController::class, 'createWalletOrder'])->middleware('throttle:15,1');
     Route::post('/payment/razorpay/verify', [RazorpayPaymentController::class, 'verifyPayment'])->middleware('throttle:30,1');
+
+    // AllAPI UPI Payments (wallet top-up)
+    Route::post('/payment/allapi/create-wallet-order', [AllApiPaymentController::class, 'createWalletOrder'])->middleware('throttle:15,1');
+    Route::post('/payment/allapi/verify', [AllApiPaymentController::class, 'verify'])->middleware('throttle:30,1');
 
     // Documents
     Route::get('/documents', [DocumentController::class, 'index']);

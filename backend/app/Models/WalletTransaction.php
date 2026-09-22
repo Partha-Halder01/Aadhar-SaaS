@@ -21,6 +21,8 @@ class WalletTransaction extends Model
         'razorpay_order_id',
         'razorpay_payment_id',
         'razorpay_signature',
+        'gateway_order_id',
+        'gateway_reference',
         'status',
         'approved_by',
         'rejection_reason',

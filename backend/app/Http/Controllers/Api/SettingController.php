@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Services\AllApiService;
+use App\Services\RazorpayService;
 use Illuminate\Support\Facades\Cache;
 
 class SettingController extends Controller
@@ -31,6 +33,11 @@ class SettingController extends Controller
                 'login_popup_btn2_link' => $all['login_popup_btn2_link'] ?? 'https://whatsapp.com',
             ];
         });
+
+        // Which online gateway the wallet page should use (read live, not cached, so .env changes apply at once)
+        $settings['wallet_gateway'] = app(AllApiService::class)->isConfigured()
+            ? 'allapi'
+            : (app(RazorpayService::class)->isConfigured() ? 'razorpay' : null);
 
         return response()->json($settings);
     }

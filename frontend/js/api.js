@@ -380,7 +380,25 @@ const API = {
     return await this.getWallet();
   },
 
-  // Razorpay Online Payments (the only way to add money to the wallet)
+  // AllAPI UPI Payments (wallet top-up via hosted UPI payment page)
+  async createAllApiWalletOrder(amount) {
+    return await this.request('/payment/allapi/create-wallet-order', {
+      method: 'POST',
+      body: { amount }
+    });
+  },
+
+  async verifyAllApiPayment(orderId) {
+    const res = await this.request('/payment/allapi/verify', {
+      method: 'POST',
+      body: { order_id: orderId }
+    });
+    this.cache.invalidate('wallet');
+    this.cache.invalidate('wallet_txs');
+    return res;
+  },
+
+  // Razorpay Online Payments
   async createRazorpayWalletOrder(amount) {
     return await this.request('/payment/razorpay/create-wallet-order', {
       method: 'POST',

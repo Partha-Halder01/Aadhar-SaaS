@@ -10,9 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="icon" type="image/png" href="../logo-icon.png?v=20260921b">
-  <link rel="stylesheet" href="../css/style.css?v=20260921b">
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <link rel="icon" type="image/png" href="../logo-icon.png?v=20260923a">
+  <link rel="stylesheet" href="../css/style.css?v=20260923a">
 </head>
 <body>
 
@@ -21,8 +20,8 @@
     <aside class="portal-sidebar">
       <div class="sidebar-header">
         <a href="dashboard.html" class="brand-logo">
-          <img src="../logo .png?v=20260921b" alt="Online Digital Service" class="brand-logo-img">
-          <img src="../logo-icon.png?v=20260921b" alt="Online Digital Service" class="brand-logo-icon-img">
+          <img src="../logo .png?v=20260923a" alt="Online Digital Service" class="brand-logo-img">
+          <img src="../logo-icon.png?v=20260923a" alt="Online Digital Service" class="brand-logo-icon-img">
         </a>
       </div>
 
@@ -255,13 +254,13 @@
               </div>
               <div>
                 <h2 class="topup-title">Instant Wallet Top-Up</h2>
-                <p class="topup-subtitle">Select a preset or enter a custom amount and pay securely via Razorpay</p>
+                <p class="topup-subtitle">Select a preset or enter a custom amount and pay securely with any UPI app</p>
               </div>
             </div>
             <div class="topup-header-badges">
               <span class="topup-trust-tag"><i class="fa-solid fa-shield-check"></i> Secure</span>
-              <span class="topup-trust-tag"><i class="fa-solid fa-clock-rotate-left"></i> Instant Credit</span>
-              <span class="topup-live-badge"><i class="fa-solid fa-bolt"></i> Razorpay</span>
+              <span class="topup-trust-tag"><i class="fa-solid fa-clock-rotate-left"></i> Auto Credit</span>
+              <span class="topup-live-badge"><i class="fa-solid fa-bolt"></i> UPI</span>
             </div>
           </div>
 
@@ -293,7 +292,7 @@
                   </button>
                 </div>
 
-                <button type="button" class="topup-proceed-cta" id="btnQuickTopupRazorpay" onclick="payWalletViaRazorpay()" style="background: linear-gradient(135deg, #0066cc 0%, #0284c7 100%);">
+                <button type="button" class="topup-proceed-cta" id="btnQuickTopupRazorpay" onclick="payWalletOnline()" style="background: linear-gradient(135deg, #0066cc 0%, #0284c7 100%);">
                   <span><i class="fa-solid fa-bolt"></i> Pay Online</span>
                   <span class="cta-amount-pill" id="topupCtaAmountPreview">₹500</span>
                   <i class="fa-solid fa-arrow-right"></i>
@@ -346,8 +345,8 @@
                   <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div class="benefit-text-box">
-                  <div class="benefit-highlight">Secure Razorpay Checkout</div>
-                  <div class="benefit-desc">Pay with UPI, Cards or NetBanking — balance is credited automatically once payment succeeds</div>
+                  <div class="benefit-highlight">Secure UPI Payment</div>
+                  <div class="benefit-desc">Pay with GPay, PhonePe, Paytm or any UPI app — balance is credited automatically once the payment is confirmed</div>
                 </div>
               </div>
 
@@ -426,7 +425,7 @@
           </div>
           <div>
             <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 2px; color: #0f172a; font-family: 'Outfit', sans-serif;">Add Money to Wallet</h3>
-            <span style="color: #03a93a; font-weight: 700; font-size: 0.84rem;">Secure Razorpay checkout • Instant credit</span>
+            <span style="color: #03a93a; font-weight: 700; font-size: 0.84rem;">Secure UPI payment • Auto credit</span>
           </div>
         </div>
         <button type="button" onclick="closeRechargeModal()" class="btn-icon-action" title="Close" style="border-radius: 50%;">
@@ -446,23 +445,23 @@
 
           <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px;">
             <i class="fa-solid fa-shield-halved" style="color: #0066cc; font-size: 1.2rem;"></i>
-            <span style="font-size: 0.8rem; color: #475569;">Pay with UPI, Cards or NetBanking. Your wallet is credited automatically after a successful payment.</span>
+            <span style="font-size: 0.8rem; color: #475569;">Pay with GPay, PhonePe, Paytm or any UPI app. Your wallet is credited automatically once the payment is confirmed.</span>
           </div>
         </div>
 
         <div class="modal-footer-custom" style="background: #f8fafc; border-top: 1px solid #f1f5f9; padding: 18px 26px;">
           <button type="button" onclick="closeRechargeModal()" class="btn-rz-secondary">Cancel</button>
           <button type="submit" id="btnSubmitRecharge" class="btn-rz-primary" style="width: auto; padding: 11px 24px;">
-            <i class="fa-solid fa-bolt"></i> Pay via Razorpay
+            <i class="fa-solid fa-bolt"></i> Pay Now
           </button>
         </div>
       </form>
     </div>
   </div>
 
-  <script src="../js/config.js?v=20260921b"></script>
-  <script src="../js/api.js?v=20260921b"></script>
-  <script src="../js/auth.js?v=20260921b"></script>
+  <script src="../js/config.js?v=20260923a"></script>
+  <script src="../js/api.js?v=20260923a"></script>
+  <script src="../js/auth.js?v=20260923a"></script>
   <script>
     // Instant Zero-Lag Hydration (0ms)
     try {
@@ -485,14 +484,21 @@
         quickInput.addEventListener('keydown', (e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
-            payWalletViaRazorpay();
+            payWalletOnline();
           }
         });
       }
       updateTopupUI(500);
 
-      // Auto-open recharge modal if navigated with ?recharge=true
       const urlParams = new URLSearchParams(window.location.search);
+
+      // Returning from the UPI payment page: confirm the payment with the server
+      const returnedOrderId = urlParams.get('allapi_order');
+      if (returnedOrderId) {
+        confirmAllApiReturn(returnedOrderId);
+      }
+
+      // Auto-open recharge modal if navigated with ?recharge=true
       if (urlParams.get('recharge') === 'true' || window.location.hash === '#recharge') {
         openRechargeModal();
       }
@@ -565,6 +571,93 @@
         input.focus();
       }
       updateTopupUI(0);
+    }
+
+    // Online top-up: use whichever gateway the backend has configured (AllAPI UPI or Razorpay)
+    let walletGatewayPromise = null;
+
+    function getWalletGateway() {
+      if (!walletGatewayPromise) {
+        walletGatewayPromise = API.getPublicSettings()
+          .then(s => (s && s.wallet_gateway) || null)
+          .catch(() => null);
+      }
+      return walletGatewayPromise;
+    }
+
+    async function payWalletOnline(customAmount) {
+      const gateway = await getWalletGateway();
+      if (gateway === 'razorpay') {
+        return payWalletViaRazorpay(customAmount);
+      }
+      if (gateway === 'allapi') {
+        return payWalletViaAllApi(customAmount);
+      }
+      showToast('Online payment is not available right now. Please contact support.', 'error');
+    }
+
+    async function payWalletViaAllApi(customAmount) {
+      const input = document.getElementById('quickTopupInput');
+      const amount = customAmount ? parseInt(customAmount, 10) : (input ? parseInt(input.value, 10) : 0);
+      if (!amount || isNaN(amount) || amount < 10) {
+        showToast('Please enter an amount of at least ₹10', 'error');
+        return;
+      }
+
+      const buttons = [document.getElementById('btnQuickTopupRazorpay'), document.getElementById('btnSubmitRecharge')].filter(Boolean);
+      const originals = buttons.map(b => b.innerHTML);
+      buttons.forEach(b => {
+        b.disabled = true;
+        b.innerHTML = '<span><i class="fa-solid fa-spinner fa-spin"></i> Opening payment page...</span>';
+      });
+
+      try {
+        const res = await API.createAllApiWalletOrder(amount);
+        if (!res || !res.payment_url) {
+          throw new Error((res && res.message) || 'Could not start the payment.');
+        }
+        window.location.href = res.payment_url;
+      } catch (err) {
+        showToast(err.message || 'Could not start the payment', 'error');
+        buttons.forEach((b, i) => {
+          b.disabled = false;
+          b.innerHTML = originals[i];
+        });
+      }
+    }
+
+    async function confirmAllApiReturn(orderId) {
+      // Drop the order id from the address bar so a refresh doesn't re-run this
+      history.replaceState(null, '', window.location.pathname);
+      showToast('Checking your payment...', 'info');
+
+      for (let attempt = 0; attempt < 8; attempt++) {
+        try {
+          const res = await API.verifyAllApiPayment(orderId);
+          if (res.payment_status === 'approved') {
+            showToast(res.message || 'Payment confirmed! Funds added to your wallet.', 'success');
+            if (res.wallet_balance !== undefined) {
+              document.querySelectorAll('.user-wallet-display').forEach(el => {
+                el.textContent = formatINR(res.wallet_balance);
+              });
+            }
+            loadWalletHistory();
+            return;
+          }
+          if (res.payment_status === 'failed') {
+            showToast(res.message || 'Payment was not completed.', 'error');
+            loadWalletHistory();
+            return;
+          }
+        } catch (err) {
+          showToast(err.message || 'Could not check the payment status.', 'error');
+          return;
+        }
+        await new Promise(resolve => setTimeout(resolve, 4000));
+      }
+
+      showToast('Payment is still being confirmed. Your wallet will update automatically — please refresh in a few minutes.', 'info');
+      loadWalletHistory();
     }
 
     async function payWalletViaRazorpay(customAmount) {
@@ -801,7 +894,7 @@
 
     document.getElementById('rechargeWalletForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      payWalletViaRazorpay(document.getElementById('rechargeAmount').value);
+      payWalletOnline(document.getElementById('rechargeAmount').value);
     });
   </script>
 </body>
